@@ -41,7 +41,9 @@
     "node-sass": "^4.9.2",
     "sass-loader": "^7.0.3",
     "vue-template-compiler": "^2.5.16",
-    "webpack-cli": "^3.1.2"
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.3.1"
   },
   "description": "A premium Vue.js admin dashboard for bootstrap. Coded by Cristi Jora, designed by Creative Tim.",
   "author": "cristi.jora <joracristi@gmail.com>",
