@@ -9,6 +9,12 @@ import locale from 'element-ui/lib/locale'
 import App from './App.vue'
 
 // Plugins
+import {Select, Option, Row, Col} from 'element-ui'
+Vue.use(Select)
+Vue.use(Option)
+Vue.use(Row)
+Vue.use(Col)
+
 import GlobalComponents from './globalComponents'
 import GlobalDirectives from './globalDirectives'
 import SideBar from './components/UIComponents/SidebarPlugin'
@@ -24,6 +30,7 @@ import './assets/sass/demo.scss'
 //  plugins import
 import axiosWrapper from './plugins/axios'
 import oAuthWrapper from './plugins/oAuth'
+import oAuthKycWrapper from './plugins/oAuthKyc'
 import sidebarLinks from './sidebarLinks'
 
 // configs
@@ -44,7 +51,18 @@ Vue.use(VueNotify)
 Vue.use(SideBar, {sidebarLinks: sidebarLinks})
 Vue.use(VeeValidate)
 Vue.use(Tooltip)
+
 Vue.use(oAuthWrapper, oAuthConfig)
+
+Vue.use(oAuthKycWrapper, {
+    BASE_URL: 'https://auth.dev.transact24.com/auth',
+    REALM: 'ceevo-realm',
+    CLIENT_ID: 'kyc-svc',
+    CLIENT_SECRET: '299a61f7-dd99-4533-8db7-a43ad062a6dd',
+    TIMEOUT: 30 * 60,
+    TOKEN_EXPIRED_TIME_LESS_THAN: 2 * 60,
+    SHORTCUT: '$oAuthKyc'    
+})
 Vue.use(axiosWrapper, axiosConfig)
 
 // config lang

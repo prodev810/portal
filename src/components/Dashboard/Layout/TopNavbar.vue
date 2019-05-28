@@ -4,17 +4,21 @@
       <div class="navbar-minimize">
         <button
           id="minimizeSidebar"
-          class="btn btn-icon btn-success btn-round"
+          class="btn btn-icon btn-success btn-round btn-xl"
           @click="minimizeSidebar"
         >
-          <i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>
-          <i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>
+          <img src="../../../../public/static/img/ellipsis-dot.svg" alt="collapse-icon" />
+          <!-- <i class="text-center fa fa-ellipsis-v visible-on-sidebar-mini"></i>
+          <i class="text-center fa fa-ellipsis-v visible-on-sidebar-regular"></i> -->
         </button>
       </div>
       <div class="navbar-toggle">
         <navbar-toggle-button @click.native="toggleSidebar"></navbar-toggle-button>
       </div>
       <span class="navbar-brand">{{mainMenuTitle}}</span>
+      <div class="search-field">
+        <fg-input placeholder="Search..." addon-right-icon="fa fa-search"></fg-input>
+      </div>
     </div>
     <!--    <template slot="navbar-menu">
           <form>
@@ -70,7 +74,7 @@
             </li>
           </ul>-->
     <!--   </template>-->
-    <div class="w-100 d-flex">
+    <div class="w-100 d-flex" v-if="showLogoutBtn">
       <p-button class="ml-auto" @click="logout" type="danger">{{ $t('common.top_navbar.logout') }}</p-button>
     </div>
   </navbar>
@@ -88,11 +92,17 @@
     data() {
       return {
         activeNotifications: false,
-        showNavbar: false
+        showNavbar: false,
+        showLogoutBtn: true
       };
     }, computed: {
       mainMenuTitle() {
-        return this.$route.path.split('/')[1].replace(/-/g, ' ').toUpperCase();
+        if (this.$route.path.split('/').slice(-1)[0] == "workflow") {
+          this.showLogoutBtn = false;
+          return "Work flow";
+        } else {
+          return this.$route.path.split('/')[1].replace(/-/g, ' ').toUpperCase();
+        }
       }
     },
     methods: {
@@ -134,5 +144,19 @@
 <style>
   .navbar-brand {
     color: #2ed684;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    text-transform: none!important;
+    font-size: 40px!important;
+    margin: 0;
+    margin-right: 57px;
+  }
+
+  .search-field {
+    width: 326px;
+  }
+
+  .search-field i {
+    color: #C2C7CE;
   }
 </style>

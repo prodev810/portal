@@ -21,6 +21,7 @@
     "nprogress": "^0.2.0",
     "perfect-scrollbar": "0.7.1",
     "qs": "latest",
+    "query-string": "^6.5.0",
     "sweetalert2": "^6.11.4",
     "vee-validate": "^2.1.0-beta.6",
     "vue": "^2.5.16",
@@ -31,7 +32,8 @@
     "vue-notifyjs": "^0.4.3",
     "vue-router": "^3.0.1",
     "vue2-transitions": "^0.2.3",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "webpack": "^4.31.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-rc.11",

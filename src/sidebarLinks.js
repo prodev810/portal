@@ -83,19 +83,32 @@ export default [
         permission: permission.UNALLOCATED_FLOAT_VIEW
       }
     ]
-  }, {
+  }, 
+  {
     name: 'KYC Module',
     i18n: 'menu.kyc_module',
-    permission: '',
+    permission: permission.NAV_KYC_MODULE,
     image: 'ic_kyc_module.svg',
     collapsed: true,
     children: [
       {
+        path: '/kyc/dashboard',
+        name: 'KYC Dashboard',
+        i18n: 'menu.kyc_dashboard',
+        permission: permission.NAV_KYC_MODULE // !!! change permission
+      },
+      {
         path: '/kyc/register',
         name: 'KYC Register',
         i18n: 'menu.kyc_register',
+        permission: permission.NAV_KYC_MODULE // !!! change permission
+      },
+      {
+        path: '/kyc/workflow',
+        name: 'Work Flow',
+        i18n: 'menu.kyc_workflow',
         permission: ''
-      }
+      },
     ]
   },
 ];

@@ -20,6 +20,9 @@ import ResellerInvoice from '../components/Dashboard/pages/Resller/Invoice';
 import Invoicesdetails from "../components/Dashboard/pages/Resller/Invoicesdetails";
 import SearchInvoices from "../components/Dashboard/pages/Resller/SearchInvoices";
 import Kyc from "../components/Dashboard/pages/Kyc/Kyc";
+import KycDashboard from "../components/Dashboard/pages/Kyc/KycDashboard";
+import Workflow from "../components/Dashboard/pages/Kyc/Workflow";
+
 // Reseller
 import ResellerView from '../components/Dashboard/pages/Resller/View';
 // GeneralViews
@@ -192,9 +195,25 @@ const kyc = {
   component: DashboardLayout,
   children: [
     {
+      path: '/kyc/dashboard',
+      name: 'KYC Dashboard',
+      component:KycDashboard,
+      meta: {
+        permission: permission.RESELLER_INVOICE_VIEW // !!! change
+      }
+    },
+    {
       path: '/kyc/register',
       name: 'KYC Register',
       component:Kyc,
+      meta: {
+        permission: permission.RESELLER_INVOICE_VIEW
+      }
+    },
+    {
+      path: '/kyc/workflow',
+      name: 'KYC Work Flow',
+      component:Workflow,
       meta: {
         permission: permission.RESELLER_INVOICE_VIEW
       }

@@ -1,102 +1,112 @@
 <template>
   <div>
     <div :class="{
-'ceevo__table--bordered':bordered,
-'ceevo__table--responsive':responsive,
-'ceevo__table--condensed':true,
-  'ceevo__table--striped':striped,
-   'ceevo__table-edit':editId ||editAll}"
+          'ceevo__table--bordered':bordered,
+          'ceevo__table--responsive':responsive,
+          'ceevo__table--condensed':true,
+          'ceevo__table--striped':striped,
+          'ceevo__table-edit':editId ||editAll}"
          class="table__wrapper ceevo__table--auto-height "
     >
-      <table class="ceevo__table table" v-if="allData.length > 0">
+      <table border="1" class="ceevo__table table" v-if="allData.length > 0">
         <thead>
-        <tr>
-          <th :key="heading.name" v-for="heading in renderHeadings">
-            <div class="ceevo__heading-label"> {{heading.i18n ? $t(heading.i18n) : heading.label}}
-              <fade-transition><span v-if="heading.required&&editId" class="required-field-sympol"> *</span></fade-transition>
-            </div>
-          </th>
-          <th :key="heading.name" v-for="heading in addToHeaders">
-            <div class="ceevo__heading-label">{{heading.i18n ? $t(heading.i18n) : heading.label}}
-            </div>
-          </th>
-          <th v-for="(itemindex,index) in extraHeadings" :key="index+'extra label'"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <slot name="balance"></slot>
-        <!--  row is an object [{row ,row }]<- table data-->
-        <tr v-for="(row,index) in allData" :key="row.id">
-          <th scope="row" v-for="heading in renderHeadings" :key="(row.id ||JSON.stringify(row))+heading.name" :class="{'ceevo__table_selected':row.edit}">
-            <div class="cell">
-              <template v-if="row.edit && !heading.readOnly">
-                <fg-input v-if="!heading.input && (heading.$domAttri ||{}).type !=='number'"
-                          size="sm"
-                          :disabled="heading.read"
-                          @input.native.prevent="handleInputChange(row.id, $event.target.value, heading.name,null,$event.target)"
-                          :value="row[heading.name] ? row[heading.name].value: ''"
-                          :placeholder="heading.i18n ? $t(heading.i18n) : heading.label"
-                          v-bind="(heading.$domAttri ||{})"
-                          :addonRightIcon="heading.addonRightIcon"
-                          :error="row[heading.name]? (row[heading.name].dirty ? row[heading.name].errors[0] :'') : '' "
-                          @focus="dirtifyInput(row.id,heading.name,$event.target.value)">
-                </fg-input>
-                <decimals-input
-                  v-if="!heading.input && (heading.$domAttri ||{}).type === 'number'"
-                  :value="row[heading.name] ? row[heading.name].value: ''"
-                  @input="handleInputChange(row.id, $event, heading.name,null)"
-                  :placeholder="heading.i18n ? $t(heading.i18n) : heading.label"
-                  :addonRightIcon="heading.addonRightIcon"
-                  :error="row[heading.name]? (row[heading.name].dirty ? row[heading.name].errors[0] :'') : '' "
-                  @focus="dirtifyInput(row.id,heading.name,$event.target.value)"
+          <tr>
+            <th :key="heading.name" v-for="heading in renderHeadings">
+              <div class="ceevo__heading-label"
+                  :class="{'sortable':heading.sortable}"
+                  @click="sortTable(heading.name)"
                 >
-                </decimals-input>
-                <template v-if="heading.input === 'select'">
-                  <el-select class="select-default"
-                             size="small"
-                             :placeholder="heading.i18n ? $t(heading.i18n) : heading.label"
-                             @input="handleInputChange(row.id, $event, heading.name,true)"
-                             :value="row[heading.name] !== void 0 ? row[heading.name].value: '' "
-                             @blur="dirtifyInput(row.id,heading.name,$event.target.value)"
+                {{heading.i18n ? $t(heading.i18n) : heading.label}}
+                <fade-transition><span v-if="heading.required&&editId" class="required-field-sympol"> * </span></fade-transition>
+                <span class="sort-button"
+                      :class="sort_dir"
+                      v-if="heading.sortable && heading.sortable === true"></span>
+              </div>
+            </th>
+            <th :key="heading.name" v-for="heading in addToHeaders">
+              <div class="ceevo__heading-label">{{heading.i18n ? $t(heading.i18n) : heading.label}}
+              </div>
+            </th>
+            <th v-for="(itemindex,index) in extraHeadings" :key="index+'extra label'"></th>
+          </tr>
+        </thead>
+        <tbody style="outline: thin solid rgb(194, 170, 239);">
+          <slot name="balance"></slot>
+          <!--  row is an object [{row ,row }]<- table data-->
+          <tr v-for="(row,index) in allData" :key="row.id">
+            <td scope="row" v-for="heading in renderHeadings" :key="(row.id ||JSON.stringify(row))+heading.name" :class="{'ceevo__table_info':heading.info,'ceevo__table_danger':heading.danger,'ceevo__table_action':heading.button}">
+              <div class="cell" >
+                <template v-if="row.edit && !heading.readOnly">
+                  <fg-input v-if="!heading.input && (heading.$domAttri ||{}).type !=='number'"
+                            size="sm"
+                            :disabled="heading.read"
+                            @input.native.prevent="handleInputChange(row.id, $event.target.value, heading.name,null,$event.target)"
+                            :value="row[heading.name] ? row[heading.name].value: ''"
+                            :placeholder="heading.i18n ? $t(heading.i18n) : heading.label"
+                            v-bind="(heading.$domAttri ||{})"
+                            :addonRightIcon="heading.addonRightIcon"
+                            :error="row[heading.name]? (row[heading.name].dirty ? row[heading.name].errors[0] :'') : '' "
+                            @focus="dirtifyInput(row.id,heading.name,$event.target.value)">
+                  </fg-input>
+                  <decimals-input
+                    v-if="!heading.input && (heading.$domAttri ||{}).type === 'number'"
+                    :value="row[heading.name] ? row[heading.name].value: ''"
+                    @input="handleInputChange(row.id, $event, heading.name,null)"
+                    :placeholder="heading.i18n ? $t(heading.i18n) : heading.label"
+                    :addonRightIcon="heading.addonRightIcon"
+                    :error="row[heading.name]? (row[heading.name].dirty ? row[heading.name].errors[0] :'') : '' "
+                    @focus="dirtifyInput(row.id,heading.name,$event.target.value)"
+                  >
+                  </decimals-input>
+                  <template v-if="heading.input === 'select'">
+                    <el-select class="select-default"
+                              size="small"
+                              :placeholder="heading.i18n ? $t(heading.i18n) : heading.label"
+                              @input="handleInputChange(row.id, $event, heading.name,true)"
+                              :value="row[heading.name] !== void 0 ? row[heading.name].value: '' "
+                              @blur="dirtifyInput(row.id,heading.name,$event.target.value)"
+                    >
+                      <el-option v-for="option in heading.selectKeys"
+                                class="select-success"
+                                :value="option.value"
+                                :label="option.name"
+                                :key="option.value + row.id+heading.name +index">
+                      </el-option>
+                    </el-select>
+                  </template>
+                  <el-select v-if="heading.input === 'multiple'" class="select-default"
+                            size="small"
+                            :placeholder="heading.i18n ? $t(heading.i18n) : heading.label"
+                            multiple
+                            @input="handleInputChange(row.id, $event, heading.name,true)"
+                            :value="row[heading.name] ? row[heading.name].value: '' "
+                            collapse-tags
                   >
                     <el-option v-for="option in heading.selectKeys"
-                               class="select-success"
-                               :value="option.value"
-                               :label="option.name"
-                               :key="option.value + row.id+heading.name +index">
+                              class="select-success"
+                              :value="option.value"
+                              :label="option.name"
+                              :key="option.value + row.id + heading.name + index">
                     </el-option>
                   </el-select>
                 </template>
-                <el-select v-if="heading.input === 'multiple'" class="select-default"
-                           size="small"
-                           :placeholder="heading.i18n ? $t(heading.i18n) : heading.label"
-                           multiple
-                           @input="handleInputChange(row.id, $event, heading.name,true)"
-                           :value="row[heading.name] ? row[heading.name].value: '' "
-                           collapse-tags
-                >
-                  <el-option v-for="option in heading.selectKeys"
-                             class="select-success"
-                             :value="option.value"
-                             :label="option.name"
-                             :key="option.value + row.id+heading.name +index">
-                  </el-option>
-                </el-select>
-              </template>
-              <template v-else>
-                <template v-if="heading.mapViewData">
-                  <span>  {{row[heading.mapViewData]? row[heading.mapViewData].value : '---' }}</span>
+                <template v-else-if="heading.name === 'action'">
+                  <button class="action-button" type="button">Action</button>
                 </template>
                 <template v-else>
-                  <div class="div-max-length" v-html="handleViewDisplayData(row, heading)"></div>
+                  <template v-if="heading.mapViewData">
+                    <span>  {{row[heading.mapViewData]? row[heading.mapViewData].value : '---' }}</span>
+                  </template>
+                  <template v-else>
+                      <div class="div-max-length" v-html="handleViewDisplayData(row, heading)"></div>
+                  </template>
                 </template>
-              </template>
-            </div>
-          </th>
-          <!--todo pass the id of the row-->
-          <slot :index="{index,id:row.id}"></slot>
-        </tr>
-        <slot name="total"></slot>
+              </div>
+            </td>
+            <!--todo pass the id of the row-->
+            <slot :index="{index,id:row.id}"></slot>
+          </tr>
+          <slot name="total"></slot>
         </tbody>
       </table>
       <div v-else>
@@ -116,7 +126,7 @@
   import DecimalsInput from "../../ABAComponents/DecimalsInput/Decimals";
   import {amountFormatAlignRight} from "@/utils/moneyFormat";
   import { inArray } from "@/utils/common"
-  
+
   export default {
     name: 'RegularTable',
     components: {
@@ -125,11 +135,12 @@
       [Input.name]: Input,
       [Option.name]: Option,
       [Select.name]: Select,
-    }, 
+    },
     data() {
       return {
         allData: [],
         maskedInput: {},
+        sort_dir: 'ascend'
       }
     },
 
@@ -140,7 +151,8 @@
       },
       editId: {
         type: String,
-      }, uneditableFields: {
+      },
+      uneditableFields: {
         type: Array,
         default: () => []
       },
@@ -156,14 +168,11 @@
       headings: {
         type: Array,
         default: () => []
-
       },
       // array of objects object[table row name] =>
       value: {
         type: Array,
         default: () => []
-
-
       },
       context: {
         type: String,
@@ -204,11 +213,10 @@
         }
       },
       renderHeadings() {
-        return this.headings.map(heading => !!this.uneditableFields
-          .find(i => heading.name === i) ?
-          {...heading, readOnly: true} : heading)
+        return this.headings.map(heading => !!this.uneditableFields.find(i => heading.name === i) ? {...heading, readOnly: true} : heading);
       }
-    }, watch: {
+    },
+    watch: {
       parentData(newVal) {
         if (!newVal) return;
         if (newVal.length === 0) return this.allData = [];
@@ -227,11 +235,17 @@
             valid: this.verifyTable()
           })
         }
-      }, allData(newVal, oldVal) {
+      },
+      allData(newVal, oldVal) {
         if (newVal.length === oldVal.length) return;
         this.$emit('input', {
           value: this.value,
           valid: this.verifyTable()
+        })
+        this.headings.map(heading => {
+          if (heading.sortable) {
+            this.sortTable(heading.name);
+          }
         })
       }
     },
@@ -263,13 +277,46 @@
           return '---'
         }
       },
+      // Sort Table Function
+      sortTable(tableName) {
+        const sortable = this.headings.find(head => head.name === tableName).sortable;
+        if (sortable) { // Check if this column should be sorted
+          // Toggle Sorting Direction
+          if (this.sort_dir == "decend") {
+            this.sort_dir = "ascend";
+          } else if (this.sort_dir == "ascend") {
+            this.sort_dir = "decend";
+          }
+          const sort_dir = this.sort_dir;
+          // Sort Table Data
+          this.allData.sort(function (a, b){
+            if (sort_dir == "decend") {
+              if (a[tableName].value > b[tableName].value) {
+                return 1;
+              }
+              if (a[tableName].value < b[tableName].value) {
+                return -1;
+              }
+            } else if (sort_dir == "ascend") {
+              if (a[tableName].value > b[tableName].value) {
+                return -1;
+              }
+              if (a[tableName].value < b[tableName].value) {
+                return 1;
+              }
+            }
+            return 0;
+          });
+        }
+      },
       handleMassagedVal(key, value) {
         const _thisHeading = this.headings.find(heading => heading.name === key)
         if (!_thisHeading) return value
         if (!_thisHeading.mask) return value
         if (typeof _thisHeading.mask === "function") return _thisHeading.mask(value)
-        return value
-      }, massageToFormValidation(data) {
+          return value;
+      },
+      massageToFormValidation(data) {
         if (this.parentData.length === 0) {
           console.log('empty');
           return this.allData = [];
@@ -308,7 +355,7 @@
           }
           return newDataLabel
         })
-      }, 
+      },
       dirtifyInput(id, fieldName, value, noTEvent) {
         const errors = this.getValidationSate(fieldName, value)
         this.allData = this.allData.map(field => field.id === id ? {
@@ -321,14 +368,14 @@
           }
         } : field)
         return errors
-      }, 
+      },
       getValidationSate(fieldName, value = '') {
         const field = this.headings.find(i => i.name === fieldName);
         if (!field) return ''
         if (!field.required && value === '') return '';
         if (!field.validator) return requiredField(value);
         return requiredField(value) === '' ? this.executeValidators(field.validator, value) : requiredField(value)
-      }, 
+      },
       executeValidators(validators = [], value, i = 0) {
         if (!(validators instanceof Array)) return validators(value);
         let error = typeof validators[i] === 'function' ? validators[i](value) : '';
@@ -357,7 +404,7 @@
             }
             value = mask ? mask(value) : value;
           }
-  */
+        */
         const newValue = this.parentData.map(i => {
           if (i.id === id) {
             if (!isSelect && typeof value !== "boolean") {
@@ -381,7 +428,8 @@
           dirty = true;
         }
         this.$emit('input', {value: newValue, valid, dirty})
-      }, verifyTable() {
+      },
+      verifyTable() {
         let valid = true
         loop1:
           for (const heading of this.renderHeadings) {
@@ -395,8 +443,8 @@
           }
         return valid;
       }
-
-    }, updated() {
+    },
+    updated() {
       /* if (this.maskedInput.value !== void 0) {
          if (this.maskedInput.selectionEnd !== void 0) {
            // if this is the first key store the user made we mask the value
@@ -404,34 +452,109 @@
            this.maskedInput = {}
          }
        }*/
-    }, mounted() {
+    },
+    mounted() {
       if (this.parentData.length === 0) return;
       this.massageToFormValidation(this.parentData)
     }
   }
 </script>
 <style lang="scss">
-  .ceevo__table .el-select {
-    width: 170px !important;
-    /*border-radius: .4rem;*/
-    padding: 0 .1rem;
-    overflow: hidden;
+  .table__wrapper {
+    &::-webkit-scrollbar {
+      width: 28px;
+      border: 5px solid white;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: white;
+      background-clip: padding-box;
+      border: 5px solid #292929;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: #292929;
+    }
+    /* Buttons */
+    &::-webkit-scrollbar-button:single-button {
+      background-color: white;
+      display: block;
+      border-style: solid;
+      height: 0px;
+      width: 0px;
+    }
+    /* Left */
+    &::-webkit-scrollbar-button:horizontal:decrement::before
+    {
+      content: " ";
+      border-width: 7px 14px 7px 0;
+      border-color: transparent white transparent transparent;
+    }
+
+    /* Right */
+    &::-webkit-scrollbar-button:horizontal:increment::before
+    {
+      border-width: 7px 0 7px 14px;
+      border-color: transparent transparent transparent white;
+    }
+
   }
 
-  .ceevo__table tbody .cell .el-select input {
-    border-radius: .4rem !important;
-    border: 1px solid #DDDDDD !important;
+  .ceevo__table {
+    border-spacing: 0px !important;
+    .el-select {
+      width: 170px !important;
+      padding: 0 .1rem;
+      overflow: hidden;
+    }
+    tbody {
+      td {
+        &.ceevo__table_selected {
+          background-color: #ff0000;
+        }
 
-    &:hover {
-      border: 1px solid #000 !important;
+        &.ceevo__table_info {
+          background-color: rgb(201, 244, 223);
+        }
+        &.ceevo__table_danger {
+          background-color: rgb(255, 217, 217);
+        }
+        &.ceevo__table_action {
+          background-color: rgb(255, 255, 255);
+          border: none;
+          padding: 1px 0!important;
+        }
+        .cell {
+          .action-button {
+            background: none;
+            border: 1px solid #7039DA;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            height: 40px;
+            width: 100%;
+            color: #7039DA;
+            font-weight: bold;
+            cursor: pointer;
+          }
+          .el-select {
+            input {
+              border-radius: .4rem !important;
+              border: 1px solid #DDDDDD !important;
 
+              &:hover {
+                border: 1px solid #000 !important;
+
+              }
+            }
+          }
+        }
+      }
     }
   }
 
   .ceevo__table .cell {
     font-weight: normal;
     min-width: 120px;
-    padding: 5px;
 
     .ceevo__table-edit & {
       padding: .2rem 5px 1rem;
@@ -446,15 +569,35 @@
   .ceevo__table .ceevo__heading-label {
     padding: .5rem .6rem;
     font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    &.sortable {
+      cursor: pointer;
+    }
+
+    .sort-button {
+      width: 0;
+      height: 0;
+      margin-left: 10px;
+      &.ascend {
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid #292929;
+      }
+      &.decend {
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 5px solid #292929;
+      }
+    }
   }
 
   .ceevo__table th {
     width: 220px !important;
     padding: 10px;
-  }
-
-  .ceevo__table_selected {
-    /*background-color: #bcfdff;*/
   }
 
   .ceevo__table .form-group {
@@ -480,6 +623,7 @@
     color: #ff4d57;
   }
   .div-max-length {
-    width: 100%
+    width: 100%;
+    padding : 0px 0px !important;
   }
 </style>

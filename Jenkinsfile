@@ -79,7 +79,7 @@ pipeline {
             steps {
                     withAWS(region:'eu-west-3', credentials:'AWS-135683813613-jenkins.dev-wwwpublisher') {
                         s3Upload(
-                            bucket: 'aba-test.ceevo.com',
+                            bucket: 'portal-test.ceevo.com',
                             excludePathPattern: '.travis.yml,LICENSE,README.md,gulpfile.js,package*.json,scss/**',
                             includePathPattern: '**',
                             path: '',

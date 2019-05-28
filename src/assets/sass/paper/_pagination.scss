@@ -15,11 +15,13 @@
         text-transform: uppercase;
         background: transparent;
         outline: none;
+        font-family: 'Poppins', sans-serif;
+        font-weight: bold;
 
         &:hover,
         &:focus {
             color: $black-color;
-            background-color: $opacity-gray-3;
+            background-color: $page-link-hover-color;
             border: none;
         }
 

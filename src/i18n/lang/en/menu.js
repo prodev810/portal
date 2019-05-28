@@ -10,5 +10,7 @@ export default {
   review_debit_credit: `Review Debit/Credit`,
   unallocated_float: `Unallocated Float`,
   kyc_module: `KYC Module`,
-  kyc_register: `KYC Register`
+  kyc_register: `KYC Register`,
+  kyc_dashboard: 'Dashboard',
+  kyc_workflow: `Work Flow`
 }

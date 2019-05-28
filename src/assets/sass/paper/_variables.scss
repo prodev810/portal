@@ -157,6 +157,7 @@ $border-radius-base:            4px !default;
 $border-radius-large:           6px !default;
 $border-radius-x-large:         8px !default;
 $border-radius-extreme:         12px !default;
+$btn-icon-radius-xl:            40px !default;
 
 //variables used in cards
 $card-black-color:          #252422 !default;
@@ -208,6 +209,9 @@ $padding-simple-horizontal:    17px !default;
 $padding-large-vertical:       15px !default;
 $padding-large-horizontal:     48px !default;
 
+$padding-xlarge-vertical:       25px !default;
+$padding-xlarge-horizontal:     58px !default;
+
 $padding-small-vertical:        5px !default;
 $padding-small-horizontal:     15px !default;
 
@@ -242,7 +246,9 @@ $btn-icon-font-size-regular:    0.9375rem     !default;
 $btn-icon-font-size-small:      0.6875rem      !default;
 $btn-icon-size-small:           1.875rem     !default;
 $btn-icon-font-size-lg:         1.325rem     !default;
+$btn-icon-font-size-xl:         2.325rem     !default;
 $btn-icon-size-lg:              3.6rem         !default;
+$btn-icon-size-xl:              4.4rem         !default;
 
 $font-size-h1:                 3.5em        !default; // ~ 49px
 $font-size-h2:                 2.5em        !default; // ~ 35px
@@ -257,6 +263,7 @@ $font-size-mini:               0.7142em     !default;
 $font-size-small:              0.8571em     !default;
 $font-size-base:               14px         !default;
 $font-size-large:              1rem         !default;
+$font-size-xlarge:             2rem         !default;
 $font-size-large-navbar:       20px         !default;
 $font-size-blockquote:         1.1em        !default; // ~ 15px
 $font-size-medium:             16px         !default;
@@ -403,3 +410,4 @@ $social-behance-state-color:       lighten(#1769ff, 6%) !default;
 $input-color-placeholder: #999 !default;
 
 $zindex-select-dropdown: 1060 !default; // must be higher than a modal background (1050)
+$page-link-hover-color: #2ED684 !default;

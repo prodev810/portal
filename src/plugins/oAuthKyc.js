@@ -7,6 +7,7 @@ import { inArray } from "@/utils/common"
 import permission from '@/constants/permission'
 
 const oAuthWrapper = {}
+
 oAuthWrapper.install = (Vue, configOptions = undefined) => {
   if (typeof configOptions === 'undefined') {
     throw new Error('please set oAuth config.')
@@ -17,11 +18,14 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
 
   const TOKEN_URL = `${configOptions.BASE_URL}/realms/${configOptions.REALM}/protocol/openid-connect/token`
   const LOGOUT_URL = `${configOptions.BASE_URL}/realms/${configOptions.REALM}/protocol/openid-connect/logout`
+  
+  /*
   const keycloakAuth = new ClientOAuth2({
     clientId: configOptions.CLIENT_ID,
     clientSecret: configOptions.CLIENT_SECRET,
     accessTokenUri: TOKEN_URL
   })
+  */
 
   let interval = null
   /**
@@ -29,15 +33,13 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
    * @param {String} username
    * @param {String} password
    */
+  /*
   const login = async (username, password) => {
     let tokenObject = null
     try {
       const isLoginBefore = await isAuthenticated()
       if (!isLoginBefore) {
         tokenObject = await keycloakAuth.owner.getToken(username, password)
-
-        console.log(tokenObject)
-
         saveToken(tokenObject)
         const permissions = await loadPermissions()
         await savePermissionInSessionStorage(permissions)
@@ -49,10 +51,12 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
       return false
     }
   }
+  */
 
   /**
    * public - Logout with OAuth
    */
+  /*
   const logout = async () => {
     try {
       const header = {
@@ -80,11 +84,25 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
     }
     return true
   }
+  */
 
   /**
    * public - Get authorization header value
    */
   const getAuthorizationHeader = async () => {
+
+    console.log('getAuthorizationHeader')
+
+    const { data } = await Vue.prototype.$http.post('https://auth.dev.transact24.com/auth/realms/ceevo-realm/protocol/openid-connect/token', qs.stringify({
+      grant_type: 'client_credentials',
+      client_id: 'kyc-svc',
+      client_secret: '299a61f7-dd99-4533-8db7-a43ad062a6dd'
+    })) 
+
+    console.log(data)      
+
+
+    /*
     try {
       let tokenObject = getTokenObject()
       tokenObject = await tokenObject.refresh()
@@ -92,7 +110,7 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
       return tokenObject.sign({}).headers.Authorization
     } catch (e) {
       console.error(TAG_NAME, e.message)
-    }
+    }*/
   }
 
   /**
@@ -280,22 +298,21 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
    * private - load permission after login
    */
   const loadPermissions = async () => {
-    return [permission.ALL_PERMISSION]
-    // const response = await Vue.prototype.$http.get('https://api.dev.transact24.com/mcaba/v1/v1/userprofile')
-    // const currentUserRole = response.data.roles
-    // if (currentUserRole.length > 0) {
-    //   saveRoleInSessionStorage(currentUserRole[0])
-    // }
-    // const currentResellerCode = response.data.resellerCodes
-    // if (currentResellerCode.length > 0) {
-    //   saveResellerCodeInSessionStorage(currentResellerCode[0])
-    // }
+    const response = await Vue.prototype.$http.get('https://api.dev.transact24.com/mcaba/v1/v1/userprofile')
+    const currentUserRole = response.data.roles
+    if (currentUserRole.length > 0) {
+      saveRoleInSessionStorage(currentUserRole[0])
+    }
+    const currentResellerCode = response.data.resellerCodes
+    if (currentResellerCode.length > 0) {
+      saveResellerCodeInSessionStorage(currentResellerCode[0])
+    }
     
-    // if (response.data.isSuperUser) {
-    //   return [permission.ALL_PERMISSION]
-    // } else {
-    //   return response.data.permissions
-    // }
+    if (response.data.isSuperUser) {
+      return [permission.ALL_PERMISSION]
+    } else {
+      return response.data.permissions
+    }
   }
 
   /**
@@ -322,17 +339,20 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
     // return 'QATES'
   }
 
-  Vue.prototype.$oAuth = {
+  Vue.prototype[configOptions.SHORTCUT] = {
+    /*
     login,
     logout,
-    isAuthenticated,
+    isAuthenticated,*/
     getAuthorizationHeader,
+    /*
     getUserInfo,
     lock,
     hasPermission,
     isReseller,
     getCurrentResellerCode,
     isNoPermissionForAll
+    */
   }
 }
 

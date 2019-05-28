@@ -72,6 +72,20 @@
             }
         }
 
+        &.btn-xl{
+            height: $btn-icon-size-xl;
+            min-width: $btn-icon-size-xl;
+            width: $btn-icon-size-xl;
+            border-radius: $btn-icon-radius-xl;
+
+            .fa,
+            .far,
+            .fas,
+            .nc-icon{
+                font-size: $btn-icon-font-size-xl;
+            }
+        }
+
         &:not(.btn-footer) .nc-icon,
         &:not(.btn-footer) .fa,
         &:not(.btn-footer) .far,
@@ -154,6 +168,7 @@
         pointer-events: none;
     }
 }
+
 .btn-simple{
     border: $border;
     border-color: $default-color;
@@ -187,6 +202,7 @@
 .btn-lg{
    @include btn-size($padding-large-vertical, $padding-large-horizontal, $font-size-large, $border-radius-large);
 }
+
 .btn-sm{
     @include btn-size($padding-small-vertical, $padding-small-horizontal, $font-size-small, $border-radius-small);
 }
