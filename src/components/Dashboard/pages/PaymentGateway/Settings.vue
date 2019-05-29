@@ -77,8 +77,23 @@ export default {
       pmethodData: [
         { name: 'Credit / Debit Card', code: 'CARDS', logo: '', currency: 'USD | EUR', country: 'AU | DE' },
         { name: 'SOFORT', code: 'SOFORT', logo: '', currency: 'EUR', country: 'AU | DE' }
-      ]
+      ],
+      axios: null
     }
+  },
+  mounted () {
+    // dog-nail for getting data from backend
+    this.$acchttp.get('/currencies').then((response) => {
+      console.log(response.data)
+    })
+
+    this.$acchttp.get('/countries').then((response) => {
+      console.log(response.data)
+    })
+
+    this.$acchttp.get('/payment_methods').then((response) => {
+      console.log(response.data)
+    })
   }
 }
 </script>
