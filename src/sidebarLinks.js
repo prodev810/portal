@@ -54,25 +54,25 @@ export default [
     children: [
       {
         name: 'Settings',
-        path: '/pgateway/settings',
+        path: '/payment-gateway/settings',
         i18n: 'menu.payment_gateway.settings',
         permission: permission.RESELLER_SUBSCRIPTION_EDIT
       },
       {
         name: 'Merchant',
-        path: '/pgateway/settings',
+        path: '/payment-gateway/merchant',
         i18n: 'menu.payment_gateway.merchant',
         permission: permission.RESELLER_SUBSCRIPTION_EDIT
       },
       {
         name: 'Processor',
-        path: '/pgateway/processor',
+        path: '/payment-gateway/processor',
         i18n: 'menu.payment_gateway.processor',
         permission: permission.RESELLER_SUBSCRIPTION_EDIT
       },
       {
         name: 'Transaction',
-        path: '/pgateway/transaction',
+        path: '/payment-gateway/transaction',
         i18n: 'menu.payment_gateway.transaction',
         permission: permission.RESELLER_SUBSCRIPTION_VIEW
       }
