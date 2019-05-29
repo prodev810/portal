@@ -45,6 +45,40 @@ export default [
     ]
   },
   {
+    name: 'Payment gateway',
+    i18n: 'menu.payment_gateway.top',
+    permission: permission.NAV_RESELLER,
+    icon: 'ti-panel',
+    image: 'ic_reseller.svg',
+    collapsed: true,
+    children: [
+      {
+        name: 'Settings',
+        path: '/pgateway/settings',
+        i18n: 'menu.payment_gateway.settings',
+        permission: permission.RESELLER_SUBSCRIPTION_EDIT
+      },
+      {
+        name: 'Merchant',
+        path: '/pgateway/settings',
+        i18n: 'menu.payment_gateway.merchant',
+        permission: permission.RESELLER_SUBSCRIPTION_EDIT
+      },
+      {
+        name: 'Processor',
+        path: '/pgateway/processor',
+        i18n: 'menu.payment_gateway.processor',
+        permission: permission.RESELLER_SUBSCRIPTION_EDIT
+      },
+      {
+        name: 'Transaction',
+        path: '/pgateway/transaction',
+        i18n: 'menu.payment_gateway.transaction',
+        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+      }
+    ]
+  },
+  {
     name: 'Float Balance',
     i18n: 'menu.float_balance',
     permission: permission.NAV_FLOAT_BALANCE,

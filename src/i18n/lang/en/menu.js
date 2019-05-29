@@ -12,5 +12,12 @@ export default {
   kyc_module: `KYC Module`,
   kyc_register: `KYC Register`,
   kyc_dashboard: 'Dashboard',
-  kyc_workflow: `Work Flow`
+  kyc_workflow: `Work Flow`,
+  payment_gateway: {
+    top: 'Payment gateway',
+    settings: 'Settings',
+    merchant: 'Merchant',
+    processor: 'Processor',
+    transaction: 'Transaction'
+  }
 }
