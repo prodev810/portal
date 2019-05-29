@@ -26,7 +26,13 @@
           <regular-table
             striped responsive condensed bordered
             :headings="pmethodHeader"
-            :value="pmethodData"/>
+            :value="pmethodData">
+            <template slot-scope="index">
+              <td>
+                <p-button type="primary">View</p-button>
+              </td>
+            </template>
+          </regular-table>
         </div>
       </el-col>
     </el-row>
@@ -35,11 +41,12 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import PButton from "@/components/UIComponents/Button"
 import RegularTable from "@/components/UIComponents/CeevoTables/RegularTable/RegularTable"
 
 export default {
   name: 'Settings',
-  components: { RegularTable },  
+  components: { PButton, RegularTable },  
   data () {
     return {
       currencyHeader: [
@@ -53,10 +60,9 @@ export default {
       pmethodHeader: [
         { name: 'name', label: 'Payment method' },
         { name: 'code', label: 'Method code' },
-        { name: 'logo', label: 'Logo' },
+        //{ name: 'logo', label: 'Logo' },
         { name: 'currency', label: 'Currency support' },
-        { name: 'country', label: 'Country support' },
-        { name: 'actions', label: 'Actions' }
+        { name: 'country', label: 'Country support' }
       ],
       currencyData: [
         { symbol: 'USD', name: 'US dollar' },
