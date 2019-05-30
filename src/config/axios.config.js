@@ -8,7 +8,7 @@ export default [
     OAUTH: '$oAuth'
   },
   {
-    BASE_URL: 'https://api.dev.ceevo.com/acquring/mgmt/',
+    BASE_URL: 'https://api.dev.ceevo.com/acquring/mgmt',
     VERSION: '',
     TYPE: '',
     TIMEOUT: 35000,

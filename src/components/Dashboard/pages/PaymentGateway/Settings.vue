@@ -6,7 +6,7 @@
           <regular-table width="100%"
             striped responsive condensed bordered
             :headings="currencyHeader"
-            :value="currencyData"/>
+            :value="$store.state.paymentGateway.currencies"/>
         </div>
       </el-col>
 
@@ -15,7 +15,7 @@
           <regular-table
             striped responsive condensed bordered
             :headings="countryHeader"
-            :value="countryData"/>
+            :value="$store.state.paymentGateway.countries"/>
         </div>
       </el-col>
     </el-row>
@@ -26,10 +26,10 @@
           <regular-table
             striped responsive condensed bordered
             :headings="pmethodHeader"
-            :value="pmethodData">
-            <template slot-scope="index">
+            :value="paymentMethod">
+            <template slot-scope="index">              
               <td>
-                <p-button type="primary">View</p-button>
+                <p-button type="primary">Edit</p-button>
               </td>
             </template>
           </regular-table>
@@ -40,6 +40,11 @@
 </template>
 
 <script>
+import {
+  ACTION_PG_GET_CURRENCIES,
+  ACTION_PG_GET_COUNTRIES,
+  ACTION_PG_GET_PAYMENT_METHODS
+} from '@/store/types';
 import { mapActions, mapGetters } from 'vuex'
 import PButton from "@/components/UIComponents/Button"
 import RegularTable from "@/components/UIComponents/CeevoTables/RegularTable/RegularTable"
@@ -50,50 +55,42 @@ export default {
   data () {
     return {
       currencyHeader: [
-        { name: 'symbol', label: 'Currency symbol' },
-        { name: 'name', label: 'Currency name' }
+        { name: 'currency_code', label: 'Currency symbol' },
+        { name: 'currency_name', label: 'Currency name' }
       ],
       countryHeader: [
-        { name: 'code', label: 'Country code' },
-        { name: 'name', label: 'Country name' }
+        { name: 'country_code', label: 'Country code' },
+        { name: 'country_name', label: 'Country name' }
       ],
       pmethodHeader: [
-        { name: 'name', label: 'Payment method' },
+        { name: 'logo', label: 'Logo' },
+        { name: 'payment_method', label: 'Payment method' },
         { name: 'code', label: 'Method code' },
-        //{ name: 'logo', label: 'Logo' },
-        { name: 'currency', label: 'Currency support' },
-        { name: 'country', label: 'Country support' }
-      ],
-      currencyData: [
-        { symbol: 'USD', name: 'US dollar' },
-        { symbol: 'EUR', name: 'EURO' },
-        { symbol: 'PLN', name: 'Poland zloty' }
-      ],
-      countryData: [
-        { code: 'DE', name: 'Germany' },
-        { code: 'UK', name: 'United Kingdom' },
-        { code: 'AU', name: 'Austria' }
-      ],
-      pmethodData: [
-        { name: 'Credit / Debit Card', code: 'CARDS', logo: '', currency: 'USD | EUR', country: 'AU | DE' },
-        { name: 'SOFORT', code: 'SOFORT', logo: '', currency: 'EUR', country: 'AU | DE' }
+        { name: 'currency_support', label: 'Currency support' },
+        { name: 'country_support', label: 'Country support' }
       ],
       axios: null
     }
   },
   mounted () {
-    // dog-nail for getting data from backend
-    this.$acchttp.get('/currencies').then((response) => {
-      console.log(response.data)
-    })
-
-    this.$acchttp.get('/countries').then((response) => {
-      console.log(response.data)
-    })
-
-    this.$acchttp.get('/payment_methods').then((response) => {
-      console.log(response.data)
-    })
+    // Get backend data
+    this.$store.dispatch(ACTION_PG_GET_CURRENCIES)
+    this.$store.dispatch(ACTION_PG_GET_COUNTRIES)
+    this.$store.dispatch(ACTION_PG_GET_PAYMENT_METHODS)
+  },
+  computed: {
+    paymentMethod () {
+      return this.$store.state.paymentGateway.paymentMethod.map((value, index, array) => {
+        return {
+          payment_method: value.payment_method,
+          code: value.code,
+          // transform values for displayt in table
+          currency_support: value.currency_support.map(value => value.currency_code).join(' | '),
+          country_support: value.country_support.map(value => value.country_code).join(' | '),
+          logo: `<img src="${value.logo}"/>`
+        }
+      })
+    }
   }
 }
 </script>

@@ -24,9 +24,16 @@ const reseller = {
 const ui_module = {
 }
 
+const paymentGateway = {
+  error_load_currencies: 'Error while loading currencies: ',
+  error_load_countries: 'Error while loading countries: ',
+  error_load_payment_methods: 'Error while loading payment methods: '
+}
+
 export default {
   card_program,
   float_balance,
   reseller,
-  ui_module
+  ui_module,
+  paymentGateway
 }
