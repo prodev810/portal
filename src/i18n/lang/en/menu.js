@@ -13,6 +13,7 @@ export default {
   kyc_register: `KYC Register`,
   kyc_dashboard: 'Dashboard',
   kyc_workflow: `Work Flow`,
+  kyc_search: `Search`,
   payment_gateway: {
     top: 'Payment gateway',
     settings: 'Settings',

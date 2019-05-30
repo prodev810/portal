@@ -10,14 +10,20 @@ import {
   KYC_GET_SUMMARY_REPORT,
   KYC_GET_STATISTICS,
   GETTER_All_CLIENTS,
-  GETTER_All_CLIENTS_LIST,
   GETTER_CLIENT_TYPES,
   GETTER_OUTSTANDING_APPS,
+  GETTER_APPLICATION_STATUS,
   MUTATE_All_CLIENTS,
   MUTATE_CLIENT_TYPES,
   MUTATE_OUTSTANDING_APPS,
+  MUTATE_APPLICATION_STATUS,
   GETTER_CLIENT_TYPES_LIST,
-  GETTER_OUTSTANDING_APPS_LIST
+  GETTER_All_CLIENTS_LIST,
+  GETTER_OUTSTANDING_APPS_LIST,
+  GETTER_APPLICATION_STATUS_LIST,
+  GETTER_APPLICATIONS,
+  GETTER_APPLICATION_LIST,
+  MUTATE_APPLICATIONS
 } from '../types';
 
 const state = {
@@ -25,7 +31,9 @@ const state = {
   loadingSate: 'ideal',
   allClients: [],
   clientTypes: [],
-  outstandingApps: []
+  outstandingApps: [],
+  applicationStatuses: [],
+  applications: []
 }
 
 const mutations = {
@@ -61,6 +69,12 @@ const mutations = {
   },
   [MUTATE_OUTSTANDING_APPS]: (state, {data}) => {
     state.outstandingApps = data;
+  },
+  [MUTATE_APPLICATION_STATUS]: (state, {data}) => {
+    state.applicationStatuses = data;
+  },
+  [MUTATE_APPLICATIONS]: (state, {data}) => {
+    state.applications = data;
   }
 }
 
@@ -235,6 +249,16 @@ const actions = {
     }
   }
   */
+  [GETTER_APPLICATION_STATUS_LIST]: async ({commit, dispatch}) => {
+    try {
+      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/kyc-application-statuses`);
+      console.log('application status data', data);
+      commit(MUTATE_APPLICATION_STATUS, {data});
+    } catch (e) {
+      console.log('error :', e);
+    }
+  },
+
   [GETTER_All_CLIENTS_LIST]: async ({commit, dispatch}) => {
     try {
       const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/clients/all`);
@@ -275,13 +299,47 @@ const actions = {
       console.log('error :', e);
     }
   },
+  [GETTER_APPLICATION_LIST]: async ({commit, dispatch}, {
+    appReferenceId,
+    applicationStatus,
+    clientAppRef,
+    clientReference,
+    clientType,
+    dateFrom,
+    dateTo,
+    lastName,
+    oldestFirst,
+    pageNum,
+    pageSize
+  }) => {
+    try {
+      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/applications`, {
+        appReferenceId: appReferenceId,
+        applicationStatus: applicationStatus,
+        clientAppRef: clientAppRef,
+        clientReference: clientReference,
+        clientType: clientType,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+        lastName: lastName,
+        oldestFirst: oldestFirst,
+        pageNum: pageNum,
+        pageSize: pageSize
+      });
+      commit(MUTATE_APPLICATIONS, {data});
+    } catch (e) {
+      console.log('error :', e);
+    }
+  },
 }
 
 const getters = {
   [GETTER_KYC_GET_ALL_CLIENTS]: state => state.kycClients,
   [GETTER_CLIENT_TYPES]: state => state.clientTypes,
   [GETTER_All_CLIENTS]: state => state.allClients,
-  [GETTER_OUTSTANDING_APPS]: state => state.outstandingApps
+  [GETTER_OUTSTANDING_APPS]: state => state.outstandingApps,
+  [GETTER_APPLICATION_STATUS]: state => state.applicationStatuses,
+  [GETTER_APPLICATIONS]: state => state.applications
 }
 
 const kyc = {

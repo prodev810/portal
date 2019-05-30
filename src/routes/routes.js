@@ -240,6 +240,14 @@ const kyc = {
       meta: {
         permission: permission.RESELLER_INVOICE_VIEW
       }
+    },
+    {
+      path: '/kyc/search',
+      name: 'KYC Search',
+      component: () => import('../components/Dashboard/pages/Kyc/Search'),
+      meta: {
+        permission: permission.RESELLER_INVOICE_VIEW
+      }
     }
   ]
 }

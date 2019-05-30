@@ -100,6 +100,9 @@
         if (this.$route.path.split('/').slice(-1)[0] == "workflow") {
           this.showLogoutBtn = false;
           return "Work flow";
+        } else if (this.$route.path.split('/').slice(-1)[0] == "search") {
+          this.showLogoutBtn = false;
+          return "Search";
         } else {
           return this.$route.path.split('/')[1].replace(/-/g, ' ').toUpperCase();
         }

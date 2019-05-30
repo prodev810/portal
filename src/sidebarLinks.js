@@ -143,6 +143,12 @@ export default [
         i18n: 'menu.kyc_workflow',
         permission: ''
       },
+      {
+        path: '/kyc/search',
+        name: 'Search',
+        i18n: 'menu.kyc_search',
+        permission: ''
+      },
     ]
   },
 ];
