@@ -25,6 +25,7 @@ import KycDashboard from "../components/Dashboard/pages/Kyc/KycDashboard";
 import Workflow from "../components/Dashboard/pages/Kyc/Workflow";
 // Payment gateway
 import PGSettings from '@/components/Dashboard/pages/PaymentGateway/Settings'
+import EditPaymentMethod from '@/components/Dashboard/pages/PaymentGateway/EditPaymentMethod'
 // Reseller
 import ResellerView from '../components/Dashboard/pages/Resller/View';
 // GeneralViews
@@ -145,6 +146,14 @@ let payment_gateway = {
       path: '/payment-gateway/settings',
       name: 'Payment gateway - Settings',
       component: PGSettings,
+      meta: {
+        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+      }
+    },
+    {
+      path: '/payment-gateway/payment-method/:code',
+      name: 'Payment gateway - Edit payment method',
+      component: EditPaymentMethod,
       meta: {
         permission: permission.RESELLER_SUBSCRIPTION_VIEW
       }

@@ -29,7 +29,7 @@
             :value="paymentMethod">
             <template slot-scope="index">              
               <td>
-                <p-button type="primary">Edit</p-button>
+                <p-button type="primary" @click="editPaymentMethod(index)">Edit</p-button>
               </td>
             </template>
           </regular-table>
@@ -90,6 +90,11 @@ export default {
           logo: `<img src="${value.logo}"/>`
         }
       })
+    }
+  },
+  methods: {
+    editPaymentMethod (index) {
+      this.$router.push(`/payment-gateway/payment-method/${this.paymentMethod[index.index.index].code}`)
     }
   }
 }
