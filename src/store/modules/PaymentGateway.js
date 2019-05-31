@@ -60,8 +60,6 @@ const actions = {
   [ACTION_PG_SET_PAYMENT_METHOD]: async ({commit, dispatch}, data) => {
     try {
       await Vue.prototype.$acchttp.put(`/method/${data.code}`, data)
-      //const { data } = await Vue.prototype.$acchttp.get('/methods')
-      //commit(MUTATE_PG_PAYMENT_METHODS, { data });
     } catch (e) {
       dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_set_payment_method') + e.message, status: 'danger' })
     }

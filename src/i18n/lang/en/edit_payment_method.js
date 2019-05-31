@@ -1,4 +1,5 @@
 export default {
+  header: 'Edit payment method',
   error_unknown_code: 'Unknown payment method code: ',
   cb_active: 'Active',
   input_name: 'Payment method name',

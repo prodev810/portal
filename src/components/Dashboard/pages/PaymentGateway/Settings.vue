@@ -64,19 +64,19 @@ export default {
     return {
       loading: true,
       currencyHeader: [
-        { name: 'currency_code', label: 'Currency symbol' },
-        { name: 'currency_name', label: 'Currency name' }
+        { name: 'currency_code', i18n: 'payment_gateway.settings.currencyHeader.currency_code' },
+        { name: 'currency_name', i18n: 'payment_gateway.settings.currencyHeader.currency_name' }
       ],
       countryHeader: [
-        { name: 'country_code', label: 'Country code' },
-        { name: 'country_name', label: 'Country name' }
+        { name: 'country_code', i18n: 'payment_gateway.settings.countryHeader.country_code' },
+        { name: 'country_name', i18n: 'payment_gateway.settings.countryHeader.country_name' }
       ],
       pmethodHeader: [
-        { name: 'logo', label: 'Logo' },
-        { name: 'payment_method', label: 'Payment method' },
-        { name: 'code', label: 'Method code' },
-        { name: 'currency_support', label: 'Currency support' },
-        { name: 'country_support', label: 'Country support' }
+        { name: 'logo', i18n: 'payment_gateway.settings.pmethodHeader.logo' },
+        { name: 'payment_method', i18n: 'payment_gateway.settings.pmethodHeader.payment_method' },
+        { name: 'code', i18n: 'payment_gateway.settings.pmethodHeader.code' },
+        { name: 'currency_support', i18n: 'payment_gateway.settings.pmethodHeader.currency_support' },
+        { name: 'country_support', i18n: 'payment_gateway.settings.pmethodHeader.country_support' }
       ],
       axios: null
     }

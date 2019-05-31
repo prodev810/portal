@@ -1,8 +1,10 @@
 <template>
   <div>
-    <Spinner v-if="loading"/>
-
     <div class="card p-4">
+      <h2>{{ $i18n.t('edit_payment_method.header') }}</h2>
+
+      <Spinner v-if="loading"/>
+
       <CheckBox v-model="methodData.active">{{ $i18n.t('edit_payment_method.cb_active') }}</CheckBox>
 
       <fg-input v-model="methodData.payment_method" :label="$i18n.t('edit_payment_method.input_name')" required :maxLength="50"/>      
