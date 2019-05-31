@@ -10,7 +10,8 @@ import {
   GETTER_PG_PAYMENT_METHODS,
   ACTION_PG_GET_CURRENCIES,
   ACTION_PG_GET_COUNTRIES,
-  ACTION_PG_GET_PAYMENT_METHODS
+  ACTION_PG_GET_PAYMENT_METHODS,
+  ACTION_PG_SET_PAYMENT_METHOD
 } from '../types';
 
 const state = {
@@ -54,6 +55,15 @@ const actions = {
       commit(MUTATE_PG_PAYMENT_METHODS, { data });
     } catch (e) {
       dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_load_payment_methods') + e.message, status: 'danger' })
+    }
+  },
+  [ACTION_PG_SET_PAYMENT_METHOD]: async ({commit, dispatch}, data) => {
+    try {
+      await Vue.prototype.$acchttp.put(`/method/${data.code}`, data)
+      //const { data } = await Vue.prototype.$acchttp.get('/methods')
+      //commit(MUTATE_PG_PAYMENT_METHODS, { data });
+    } catch (e) {
+      dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_set_payment_method') + e.message, status: 'danger' })
     }
   }
 }

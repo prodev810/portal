@@ -9,11 +9,12 @@ import locale from 'element-ui/lib/locale'
 import App from './App.vue'
 
 // Plugins
-import {Select, Option, Row, Col} from 'element-ui'
+import {Select, Option, Row, Col, Input} from 'element-ui'
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(Row)
 Vue.use(Col)
+Vue.use(Input)
 
 import GlobalComponents from './globalComponents'
 import GlobalDirectives from './globalDirectives'

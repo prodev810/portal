@@ -26,7 +26,8 @@
         v-bind="$attrs"
         class="form-control "
         :class="[{valid: value && !error}, inputClasses, error ? 'form-control-danger' : '']"
-        aria-describedby="addon-right addon-left">
+        aria-describedby="addon-right addon-left"
+        :maxlength="maxLength ? maxLength : false">
     </slot>
     <div v-if="addonRightIcon || $slots.addonRight" class="input-group-append">
           <span class="input-group-text">
@@ -84,6 +85,10 @@
       addonLeftIcon: {
         type: String,
         description: 'Addont left icon'
+      },
+      maxLength: {
+        type: Number,
+        description: 'Maximum field length'
       }
     },
     data() {

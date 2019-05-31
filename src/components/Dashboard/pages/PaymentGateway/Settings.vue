@@ -83,9 +83,6 @@ export default {
   },
   async mounted () {
     // Get backend data
-    //await this.$store.dispatch(ACTION_PG_GET_CURRENCIES)
-    //await this.$store.dispatch(ACTION_PG_GET_COUNTRIES)
-    //await this.$store.dispatch(ACTION_PG_GET_PAYMENT_METHODS)
     await Promise.all([
       this.$store.dispatch(ACTION_PG_GET_CURRENCIES),
       this.$store.dispatch(ACTION_PG_GET_COUNTRIES),
@@ -99,7 +96,7 @@ export default {
         return {
           payment_method: value.payment_method,
           code: value.code,
-          // transform values for displayt in table
+          // transform values for display in table
           currency_support: value.currency_support.map(value => value.currency_code).join(' | '),
           country_support: value.country_support.map(value => value.country_code).join(' | '),
           logo: `<img src="${value.logo}"/>`
