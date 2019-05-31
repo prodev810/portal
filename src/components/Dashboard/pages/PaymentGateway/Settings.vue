@@ -32,7 +32,7 @@
             :value="paymentMethod">
             <template slot-scope="index">              
               <td>
-                <p-button type="primary" @click="viewPaymentMethod(index)" size="sm" outline round wide>View</p-button>
+                <p-button type="primary" @click="viewPaymentMethod(index)" size="sm" outline round>View</p-button>
               </td>
             </template>
           </regular-table>

@@ -1,7 +1,12 @@
 <template>
   <el-row :gutter="20" align="middle" type="flex" class="pg-row pb-2">
     <el-col :xs="12" :sm="8" :md="7" :lg="4">
-      <label>{{ labelText }}</label>
+      <div class="pg-row-header">
+        <label>{{ $i18n.t(labeli18n) }}</label>
+      </div>
+      <div v-if="!viewMode && required" class="required pg-row-header">
+        *
+      </div>
     </el-col>
     <el-col :xs="12" :sm="16" :md="17" :lg="20">
       <slot name="view" v-if="viewMode"/>
@@ -32,6 +37,16 @@ export default {
 <style>
 .pg-row .form-check label.form-check-label {
   position: static !important;
+}
+div.required {
+  font-weight: bold;
+  color: rgb(112, 57, 218);
+  vertical-align: bottom;
+}
+div.pg-row-header {
+  display: inline-block;
+  margin-left: 0.3rem;
+  font-size: 120%;
 }
 </style>
 
