@@ -16,7 +16,7 @@
 
       <fg-input v-model="methodData.logo" :label="$i18n.t('edit_payment_method.input_logo')" :maxLength="255"></fg-input>
 
-      <CheckBox v-model="methodData.active">{{ $i18n.t('edit_payment_method.cb_chargeback_risk') }}</CheckBox>
+      <CheckBox v-model="methodData.chargeback_risk">{{ $i18n.t('edit_payment_method.cb_chargeback_risk') }}</CheckBox>
     </div>
 
     <!-- Buttons -->
