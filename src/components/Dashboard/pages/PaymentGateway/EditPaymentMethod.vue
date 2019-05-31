@@ -1,27 +1,51 @@
 <template>
   <div>
     <div class="card p-4">
-      <h2>{{ $i18n.t('edit_payment_method.header') }}</h2>
+      <h2>{{ $i18n.t(viewMode ? 'edit_payment_method.view_header' : 'edit_payment_method.edit_header') }}</h2>
 
       <Spinner v-if="loading"/>
 
-      <CheckBox v-model="methodData.active">{{ $i18n.t('edit_payment_method.cb_active') }}</CheckBox>
+      <div class="form-contents">
+        <PGRow labeli18n="edit_payment_method.cb_active" :viewMode="viewMode">
+          <CheckBox slot="view" v-model="methodData.active" :disabled="true"/>
+          <CheckBox slot="edit" v-model="methodData.active" :disabled="false"/>
+        </PGRow>         
 
-      <fg-input v-model="methodData.payment_method" :label="$i18n.t('edit_payment_method.input_name')" required :maxLength="50"/>      
-      <fg-input v-model="methodData.code" :label="$i18n.t('edit_payment_method.input_code')" required :maxLength="255"/>
-      <fg-input v-model="methodData.required_token" :label="$i18n.t('edit_payment_method.required_token')" required :maxLength="20"/>
+        <PGRow labeli18n="edit_payment_method.input_name" required :viewMode="viewMode">
+          <span slot="view">{{ methodData.payment_method }}</span>  
+          <fg-input slot="edit" v-model="methodData.payment_method" required :maxLength="50"/>      
+        </PGRow>  
 
-      <label>{{ $i18n.t('edit_payment_method.input_description') }}</label>
-      <el-input v-model="methodData.description" type="textarea" rows="5" maxlength="1000"/>
+        <PGRow labeli18n="edit_payment_method.input_code" required :viewMode="viewMode">
+          <span slot="view">{{ methodData.code }}</span>  
+          <fg-input slot="edit" v-model="methodData.code" required :maxLength="255"/>       
+        </PGRow>  
+        
+        <PGRow labeli18n="edit_payment_method.required_token" required :viewMode="viewMode">
+          <span slot="view">{{ methodData.required_token }}</span>  
+          <fg-input slot="edit" v-model="methodData.required_token" required :maxLength="20"/>         
+        </PGRow>    
 
-      <fg-input v-model="methodData.logo" :label="$i18n.t('edit_payment_method.input_logo')" :maxLength="255"></fg-input>
+        <PGRow labeli18n="edit_payment_method.input_description" :viewMode="viewMode">
+          <span slot="view">{{ methodData.description }}</span>  
+          <el-input slot="edit" v-model="methodData.description" type="textarea" rows="5" maxlength="1000"/>        
+        </PGRow>                          
 
-      <CheckBox v-model="methodData.chargeback_risk">{{ $i18n.t('edit_payment_method.cb_chargeback_risk') }}</CheckBox>
+        <PGRow labeli18n="edit_payment_method.input_logo" :viewMode="viewMode">
+          <span slot="view">{{ methodData.logo }}</span>  
+          <fg-input v-model="methodData.logo" :maxLength="255"/>
+        </PGRow>  
+
+        <PGRow labeli18n="edit_payment_method.cb_chargeback_risk" :viewMode="viewMode">
+          <CheckBox slot="view" v-model="methodData.chargeback_risk" :disabled="true"/>
+          <CheckBox slot="edit" v-model="methodData.chargeback_risk" :disabled="false"/>
+        </PGRow> 
+      </div>
     </div>
 
     <!-- Buttons -->
     <div class="buttons">
-      <p-button type="primary" round wide size="sm" @click="onSave" class="mr-2">{{ $i18n.t('edit_payment_method.btn_save') }}</p-button>      
+      <p-button type="primary" round wide size="sm" @click="onSave" class="mr-2">{{ $i18n.t(viewMode ? 'edit_payment_method.btn_edit' : 'edit_payment_method.btn_save') }}</p-button>      
       <p-button type="black" round wide size="sm" @click="onCancel">{{ $i18n.t('edit_payment_method.btn_cancel') }}</p-button>
     </div>
   </div>
@@ -32,17 +56,20 @@ import { SHOW_TOAST_MESSAGE, ACTION_PG_GET_PAYMENT_METHODS, ACTION_PG_SET_PAYMEN
 import PButton from "@/components/UIComponents/Button"
 import Spinner from "@/components/UIComponents/Spinner"
 import CheckBox from "@/components/UIComponents/Inputs/Checkbox"
+import PGRow from '@/components/Dashboard/pages/PaymentGateway/PGRow'
 
 export default {
   name: 'EditPaymentMethod',
   components: {
     PButton,
     Spinner,
-    CheckBox
+    CheckBox,
+    PGRow
   },
   data () {
     return {
       loading: true,
+      viewMode: true, // by default View mode
       methodData: {}
     }
   },
@@ -62,9 +89,13 @@ export default {
       }      
     },
     async onSave () {
-      await this.$store.dispatch(ACTION_PG_SET_PAYMENT_METHOD, this.methodData)
-      // go back
-      this.onCancel()
+      if (this.viewMode) {
+        this.viewMode = false
+      } else {
+        await this.$store.dispatch(ACTION_PG_SET_PAYMENT_METHOD, this.methodData)
+        // go back
+        this.onCancel()
+      }
     },
     onCancel () {
       this.$router.push('/payment-gateway/settings')
@@ -77,6 +108,13 @@ export default {
 .buttons {
   display: flex;
   justify-content: center;
+}
+.form-contents label {
+  font-weight: bold;
+  color: #000000 !important;
+}
+div.form-group {
+  margin-bottom: 0 !important;
 }
 </style>
 

@@ -32,7 +32,7 @@
             :value="paymentMethod">
             <template slot-scope="index">              
               <td>
-                <p-button type="primary" @click="editPaymentMethod(index)">Edit</p-button>
+                <p-button type="primary" @click="viewPaymentMethod(index)" size="sm" outline round wide>View</p-button>
               </td>
             </template>
           </regular-table>
@@ -105,7 +105,7 @@ export default {
     }
   },
   methods: {
-    editPaymentMethod (index) {
+    viewPaymentMethod (index) {
       this.$router.push(`/payment-gateway/settings/payment-method/${this.paymentMethod[index.index.index].code}`)
     }
   }

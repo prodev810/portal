@@ -152,7 +152,7 @@ let payment_gateway = {
     },
     {
       path: '/payment-gateway/settings/payment-method/:code',
-      name: 'Payment gateway - Edit payment method',
+      name: 'Payment gateway - View payment method',
       component: EditPaymentMethod,
       meta: {
         permission: permission.RESELLER_SUBSCRIPTION_VIEW
