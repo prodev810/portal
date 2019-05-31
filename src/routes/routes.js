@@ -151,7 +151,7 @@ let payment_gateway = {
       }
     },
     {
-      path: '/payment-gateway/payment-method/:code',
+      path: '/payment-gateway/settings/payment-method/:code',
       name: 'Payment gateway - Edit payment method',
       component: EditPaymentMethod,
       meta: {

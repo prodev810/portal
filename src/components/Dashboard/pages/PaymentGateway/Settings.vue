@@ -3,6 +3,7 @@
     <el-row :gutter="20">
       <el-col :sm="24" :md="12">
         <div class="card p-2">
+          <Spinner v-if="loading"/>
           <regular-table width="100%"
             striped responsive condensed bordered
             :headings="currencyHeader"
@@ -12,6 +13,7 @@
 
       <el-col :sm="24" :md="12">
         <div class="card p-2">
+          <Spinner v-if="loading"/>
           <regular-table
             striped responsive condensed bordered
             :headings="countryHeader"
@@ -23,6 +25,7 @@
     <el-row :gutter="20">
       <el-col :sm="24">
         <div class="card p-2">
+          <Spinner v-if="loading"/>
           <regular-table
             striped responsive condensed bordered
             :headings="pmethodHeader"
@@ -44,16 +47,22 @@ import {
   ACTION_PG_GET_CURRENCIES,
   ACTION_PG_GET_COUNTRIES,
   ACTION_PG_GET_PAYMENT_METHODS
-} from '@/store/types';
+} from '@/store/types'
 import { mapActions, mapGetters } from 'vuex'
+import Spinner from "@/components/UIComponents/Spinner"
 import PButton from "@/components/UIComponents/Button"
 import RegularTable from "@/components/UIComponents/CeevoTables/RegularTable/RegularTable"
 
 export default {
   name: 'Settings',
-  components: { PButton, RegularTable },  
+  components: { 
+    PButton, 
+    RegularTable, 
+    Spinner 
+  },  
   data () {
     return {
+      loading: true,
       currencyHeader: [
         { name: 'currency_code', label: 'Currency symbol' },
         { name: 'currency_name', label: 'Currency name' }
@@ -72,11 +81,17 @@ export default {
       axios: null
     }
   },
-  mounted () {
+  async mounted () {
     // Get backend data
-    this.$store.dispatch(ACTION_PG_GET_CURRENCIES)
-    this.$store.dispatch(ACTION_PG_GET_COUNTRIES)
-    this.$store.dispatch(ACTION_PG_GET_PAYMENT_METHODS)
+    //await this.$store.dispatch(ACTION_PG_GET_CURRENCIES)
+    //await this.$store.dispatch(ACTION_PG_GET_COUNTRIES)
+    //await this.$store.dispatch(ACTION_PG_GET_PAYMENT_METHODS)
+    await Promise.all([
+      this.$store.dispatch(ACTION_PG_GET_CURRENCIES),
+      this.$store.dispatch(ACTION_PG_GET_COUNTRIES),
+      this.$store.dispatch(ACTION_PG_GET_PAYMENT_METHODS)
+    ])
+    this.loading = false
   },
   computed: {
     paymentMethod () {
@@ -94,7 +109,7 @@ export default {
   },
   methods: {
     editPaymentMethod (index) {
-      this.$router.push(`/payment-gateway/payment-method/${this.paymentMethod[index.index.index].code}`)
+      this.$router.push(`/payment-gateway/settings/payment-method/${this.paymentMethod[index.index.index].code}`)
     }
   }
 }
