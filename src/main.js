@@ -9,18 +9,19 @@ import locale from 'element-ui/lib/locale'
 import App from './App.vue'
 
 // Plugins
-import {Select, Option, Row, Col, Input} from 'element-ui'
+// Element-UI
+import { Select, Option, Row, Col, Input, Tooltip } from 'element-ui'
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Input)
+Vue.use(Tooltip)
 
 import GlobalComponents from './globalComponents'
 import GlobalDirectives from './globalDirectives'
 import SideBar from './components/UIComponents/SidebarPlugin'
 import initProgress from './progressbar';
-// import Tooltip from 'vue-directive-tooltip';
 // router setup
 import routes from './routes/routes'
 
@@ -39,7 +40,6 @@ import axiosConfig from './config/axios.config'
 import oAuthConfig from './config/oAuth.config'
 
 import {store} from './store/store.js'
-import {Tooltip} from 'element-ui'
 import {GET_SUPPORTED_CURRENCIES} from "./store/types";
 import i18n from './i18n'
 import permission from '@/constants/permission'
@@ -51,7 +51,6 @@ Vue.use(GlobalComponents)
 Vue.use(VueNotify)
 Vue.use(SideBar, {sidebarLinks: sidebarLinks})
 Vue.use(VeeValidate)
-Vue.use(Tooltip)
 
 Vue.use(oAuthWrapper, oAuthConfig)
 

@@ -28,7 +28,8 @@ const paymentGateway = {
   error_load_currencies: 'Error while loading currencies: ',
   error_load_countries: 'Error while loading countries: ',
   error_load_payment_methods: 'Error while loading payment methods: ',
-  error_set_payment_method: 'Error while saving payment method: '
+  error_set_payment_method: 'Error while saving payment method: ',
+  error_get_merchants: 'Error while loading merchants: '
 }
 
 export default {
