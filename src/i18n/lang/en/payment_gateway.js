@@ -1,7 +1,7 @@
 export default {
   settings: {
     currencyHeader: {
-      currency_code: 'Currency code',
+      currency_code: 'Currency symbol',
       currency_name: 'Currency name'
     },
     countryHeader: {

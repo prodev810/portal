@@ -33,7 +33,7 @@
 
         <PGRow labeli18n="edit_payment_method.input_logo" :viewMode="viewMode">
           <span slot="view">{{ methodData.logo }}</span>  
-          <fg-input v-model="methodData.logo" :maxLength="255"/>
+          <fg-input slot="edit" v-model="methodData.logo" :maxLength="255"/>
         </PGRow>  
 
         <PGRow labeli18n="edit_payment_method.cb_chargeback_risk" :viewMode="viewMode">
@@ -98,7 +98,11 @@ export default {
       }
     },
     onCancel () {
-      this.$router.push('/payment-gateway/settings')
+      if (this.viewMode) {
+        this.$router.push('/payment-gateway/settings')
+      } else {
+        this.viewMode = true
+      }      
     }
   }
 }

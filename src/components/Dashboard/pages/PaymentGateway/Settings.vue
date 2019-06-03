@@ -72,9 +72,9 @@ export default {
         { name: 'country_name', i18n: 'payment_gateway.settings.countryHeader.country_name' }
       ],
       pmethodHeader: [
-        { name: 'logo', i18n: 'payment_gateway.settings.pmethodHeader.logo' },
         { name: 'payment_method', i18n: 'payment_gateway.settings.pmethodHeader.payment_method' },
         { name: 'code', i18n: 'payment_gateway.settings.pmethodHeader.code' },
+        { name: 'logo', i18n: 'payment_gateway.settings.pmethodHeader.logo' },        
         { name: 'currency_support', i18n: 'payment_gateway.settings.pmethodHeader.currency_support' },
         { name: 'country_support', i18n: 'payment_gateway.settings.pmethodHeader.country_support' }
       ],
@@ -116,5 +116,8 @@ export default {
 .pgateway-settings table {
   width: 100% !important;
   margin-bottom: 0 !important;
+}
+.pgateway-settings th {
+  text-transform: capitalize;
 }
 </style>
