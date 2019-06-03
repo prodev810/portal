@@ -19,10 +19,12 @@ import ResellerCreate from '../components/Dashboard/pages/Resller/Create';
 import ResellerInvoice from '../components/Dashboard/pages/Resller/Invoice';
 import Invoicesdetails from "../components/Dashboard/pages/Resller/Invoicesdetails";
 import SearchInvoices from "../components/Dashboard/pages/Resller/SearchInvoices";
+// Kyc
 import Kyc from "../components/Dashboard/pages/Kyc/Kyc";
 import KycDashboard from "../components/Dashboard/pages/Kyc/KycDashboard";
 import Workflow from "../components/Dashboard/pages/Kyc/Workflow";
-
+// Payment gateway
+import PGSettings from '@/components/Dashboard/pages/PaymentGateway/Settings'
 // Reseller
 import ResellerView from '../components/Dashboard/pages/Resller/View';
 // GeneralViews
@@ -131,6 +133,25 @@ let floatAccount = {
 };
 
 // reseller routes
+let payment_gateway = {
+  path: '/payment-gateway',
+  //redirect: '/payment-gateway/view',
+  component: DashboardLayout,
+  meta: {
+    permission: permission.RESELLER_SUBSCRIPTION_VIEW
+  },
+  children: [
+    {
+      path: '/payment-gateway/settings',
+      name: 'Payment gateway - Settings',
+      component: PGSettings,
+      meta: {
+        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+      }
+    }
+  ]
+};
+
 let reseller = {
   path: '/reseller',
   // redirect: '/reseller/view?page=0&per_page=10',
@@ -189,6 +210,8 @@ let reseller = {
     }
   ]
 };
+
+
 const kyc = {
   path: '/kyc',
   redirect: '/kyc/register',
@@ -214,6 +237,14 @@ const kyc = {
       path: '/kyc/workflow',
       name: 'KYC Work Flow',
       component:Workflow,
+      meta: {
+        permission: permission.RESELLER_INVOICE_VIEW
+      }
+    },
+    {
+      path: '/kyc/search',
+      name: 'KYC Search',
+      component: () => import('../components/Dashboard/pages/Kyc/Search'),
       meta: {
         permission: permission.RESELLER_INVOICE_VIEW
       }
@@ -275,6 +306,7 @@ const routes = [
   lockPage,
   floatAccount,
   reseller,
+  payment_gateway,
   kyc,
   system,
   {path: '*', component: NotFound}

@@ -6,40 +6,45 @@
         <div class="item">
           <div class="col-4 field-title">Client</div>
           <div class="col-8 select">
-            <el-select class=""
-                       size="small"
-                       placeholder="Selected a Clien Name"
-                       v-model="clientName"
+            <el-select
+              class=""
+              size="large"
+              placeholder=""
+              v-model="clientName"
             >
-              <el-option v-for="client in clients "
-                         class="select-success"
-                         :value="client.name"
-                         :label="client.name"
-                         :key="client.id"
-              >
-              </el-option>
+              <el-option
+                v-for="client in clients "
+                class="select-success"
+                :value="client.name"
+                :label="client.name"
+                :key="client.id"
+              />
             </el-select>
           </div>
         </div>
         <div class="item">
           <div class="col-4 field-title">Date</div>
           <div class="col-4 date">
-            <el-date-picker v-model="fromDate" type="date"
-                            placeholder="From">
-            </el-date-picker>
+            <el-date-picker
+              v-model="fromDate"
+              type="date"
+              placeholder="From"
+            />
           </div>
           <div class="col-4 date">
-            <el-date-picker v-model="toDate" type="date"
-                            placeholder="To">
-            </el-date-picker>
+            <el-date-picker
+              v-model="toDate"
+              type="date"
+              placeholder="To"
+            />
           </div>
         </div>
         <div class="item">
           <div class="col-4 field-title">Type</div>
           <div class="col-8 select">
             <el-select class=""
-                       size="small"
-                       placeholder="selected a card program"
+                       size="large"
+                       placeholder=""
                        v-model="selectedClientType"
             >
               <el-option v-for="clientType in clientTypes "
@@ -55,12 +60,12 @@
         <div class="item">
           <div class="col-4 field-title">Oldest first</div>
           <div class="col-8">
-            <span>Yes </span>
+            <span>No </span>
             <label class="switch">
-              <input type="checkbox" :checked="oldestFirst">
+              <input type="checkbox" v-model="oldestFirst" :checked="oldestFirst">
               <span class="slider round"></span>
             </label>
-            <span> No</span>
+            <span> Yes</span>
           </div>
         </div>
         <div class="item">
@@ -75,7 +80,7 @@
             <p-button
               type="primary"
               class="start-button"
-              @click="goForOutstandingApps"
+              @click="searchHandle"
             >
               Go
             </p-button>
@@ -86,7 +91,7 @@
     <div class="row">
       <div class="table">
         <h2 class="col-12 sub-head">Listing</h2>
-        <div class="p-1">
+        <div class="p-1 tableWrapper">
           <regular-table
             striped
             :headings="tableHeadings"
@@ -95,6 +100,7 @@
             :editAll="editAll"
             :editId="editId"
             :uneditableFields="uneditableFields"
+            :oldestFirst="oldestFirst"
           >
           </regular-table>
           <div class="table-pagination">
@@ -127,6 +133,7 @@
     },
     data() {
       return {
+        isPagination: false,
         tableHeadings: [
           {label: 'Client Name', name: 'clientName'},
           {label: 'App Received', name: 'appReceivedDate'},
@@ -173,8 +180,8 @@
         // Variables for oustanding apps api
         toDate: '',
         fromDate: '',
-        clientName: '',
-        selectedClientType: '',
+        clientName: 'ALL',
+        selectedClientType: 'ALL',
         resellerCode: 'ALL',
         oldestFirst: true,
 
@@ -211,13 +218,25 @@
       }),
       // Clients from Store
       clients () {
-        return (this.$store.state.kyc.allClients || [])
+        const clients = [];
+        const clientsAPI = (this.$store.state.kyc.allClients || [])
           .reduce((acc, i) => [...acc, i], []);
+        clients.push(
+          { name: 'ALL' },
+          ...clientsAPI
+        );
+        return clients;
       },
       // Client Types from Store
       clientTypes () {
-        return (this.$store.state.kyc.clientTypes || [])
+        const types = [];
+        const typesAPI = (this.$store.state.kyc.clientTypes || [])
           .reduce((acc, i) => [...acc, i], []);
+        types.push(
+          { name: 'ALL' },
+          ...typesAPI
+        );
+        return types;
       }
     },
     methods: {
@@ -237,18 +256,25 @@
       },
       goForOutstandingApps() {
         this.getOutstandingApps({
-          clientName: this.clientName,
-          clientType: this.selectedClientType,
+          clientReference: this.clientName === 'ALL' ? '' : this.clientName,
+          clientType: this.selectedClientType === 'ALL' ? '' : this.selectedClientType,
           dateFrom: formatDate(this.fromDate),
           dateTo: formatDate(this.toDate),
           oldestFirst: this.oldestFirst,
-          pageNum: this.currentPage - 1,
+          pageNum: this.isPagination ? this.currentPage - 1 : 0,
           pageSize: this.perPage
         });
+        if (!this.isPagination) this.currentPage = 1;
+      },
+
+      searchHandle() {
+        this.isPagination = false;
+        this.goForOutstandingApps('page');
       },
       handleInput(ev) {
         this.currentPage = ev;
-        this.goForOutstandingApps();
+        this.isPagination = true;
+        this.goForOutstandingApps('page');
       }
     },
     mounted() {
@@ -312,7 +338,6 @@
             margin-right: 17px !important;
           }
         }
-
       }
       .start-button {
         padding: 5px 60px;
@@ -393,8 +418,12 @@
       font-size: 28px;
       font-weight: bold;
     }
-
+    
     .table {
+      .tableWrapper {
+        box-shadow: 0px 10px 40px rgba(41, 41, 41, 0.15);
+        padding: 0;
+      }
       .table-pagination {
         display: flex;
         justify-content: flex-end;
@@ -402,5 +431,6 @@
       }
     }
   }
+  
 
 </style>

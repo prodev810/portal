@@ -18,9 +18,6 @@
                 >
                 {{heading.i18n ? $t(heading.i18n) : heading.label}}
                 <fade-transition><span v-if="heading.required&&editId" class="required-field-sympol"> * </span></fade-transition>
-                <span class="sort-button"
-                      :class="sort_dir"
-                      v-if="heading.sortable && heading.sortable === true"></span>
               </div>
             </th>
             <th :key="heading.name" v-for="heading in addToHeaders">
@@ -35,7 +32,7 @@
           <!--  row is an object [{row ,row }]<- table data-->
           <tr v-for="(row,index) in allData" :key="row.id">
             <td scope="row" v-for="heading in renderHeadings" :key="(row.id ||JSON.stringify(row))+heading.name" :class="{'ceevo__table_info':heading.info,'ceevo__table_danger':heading.danger,'ceevo__table_action':heading.button}">
-              <div class="cell" >
+              <div class="cell">
                 <template v-if="row.edit && !heading.readOnly">
                   <fg-input v-if="!heading.input && (heading.$domAttri ||{}).type !=='number'"
                             size="sm"
@@ -89,6 +86,9 @@
                               :key="option.value + row.id + heading.name + index">
                     </el-option>
                   </el-select>
+                </template>
+                <template v-else-if="heading.name === 'view'">
+                  <button class="action-button" type="button">View</button>
                 </template>
                 <template v-else-if="heading.name === 'action'">
                   <button class="action-button" type="button">Action</button>
@@ -197,6 +197,10 @@
       amonutAlignRightFormat: {
         type: Array,
         default: () => []
+      },
+      oldestFirst: {
+        type: Boolean,
+        default: true
       }
     },
     computed: {
@@ -282,10 +286,10 @@
         const sortable = this.headings.find(head => head.name === tableName).sortable;
         if (sortable) { // Check if this column should be sorted
           // Toggle Sorting Direction
-          if (this.sort_dir == "decend") {
-            this.sort_dir = "ascend";
-          } else if (this.sort_dir == "ascend") {
-            this.sort_dir = "decend";
+          if (this.oldestFirst) {
+            this.sort_dir = 'ascend';
+          } else {
+            this.sort_dir = 'decend';
           }
           const sort_dir = this.sort_dir;
           // Sort Table Data
@@ -507,8 +511,17 @@
       padding: 0 .1rem;
       overflow: hidden;
     }
+    thead {
+      th {
+        padding: 0 !important;
+        border-left: 1px solid #dee2e6 !important;
+        border-right: 1px solid #dee2e6 !important;
+      }
+    }
     tbody {
       td {
+        padding: 0 !important;
+
         &.ceevo__table_selected {
           background-color: #ff0000;
         }
@@ -555,15 +568,21 @@
   .ceevo__table .cell {
     font-weight: normal;
     min-width: 120px;
+    padding: .5rem .6rem;
 
     .ceevo__table-edit & {
-      padding: .2rem 5px 1rem;
+      padding: .5rem .6rem;
     }
 
     display: flex;
     align-items: center;
     position: relative;
     justify-content: center;
+    text-align: left;
+
+    &.right-align {
+      text-align: right !important;
+    }
   }
 
   .ceevo__table .ceevo__heading-label {
@@ -571,8 +590,8 @@
     font-weight: bold;
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
+    text-align: left;
 
     &.sortable {
       cursor: pointer;
