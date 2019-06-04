@@ -26,8 +26,8 @@
         </el-col>
 
         <el-col :xs="24" :lg="14" :xl="16">
-          <collapse class="pg-merchant-collapse">
-            <collapse-item title="Float account" name="1">
+          <collapse class="pg-merchant-collapse" style="margin-top: -20px">
+            <collapse-item :title="$t('payment_gateway.merchant.edit_merchant.section_float_account')" name="1">
               <PGAccordionTab @add="modalAddFloatAccount = true" :btnHistory="false">
                 <el-table slot="table" stripe
                           :data="dataFloatAccount"
@@ -41,8 +41,10 @@
               </PGAccordionTab>
             </collapse-item>
 
-            <collapse-item title="Processing Profile" name="2">
-              <PGAccordionTab @add="modalAddFloatAccount = true">
+            <collapse-item :title="$t('payment_gateway.merchant.edit_merchant.section_processing_profile')" name="2">
+              <PGAccordionTab @add="modalAddProcessingProfile = true" 
+                              @history="onProcessingProfileAddFee" 
+                              btnHistoryCaption="payment_gateway.button_add_fee">
                 <el-table slot="table" stripe
                           :data="dataProcessingProfile"
                           style="width: 100%">
@@ -61,8 +63,8 @@
               </PGAccordionTab>            
             </collapse-item>
 
-            <collapse-item title="Reserve" name="3">
-              <PGAccordionTab @add="modalAddFloatAccount = true">
+            <collapse-item :title="$t('payment_gateway.merchant.edit_merchant.section_reserve')" name="3">
+              <PGAccordionTab @add="modalAddReserve = true">
                 <el-table slot="table" stripe
                           :data="dataReserve"
                           style="width: 100%">
@@ -75,8 +77,8 @@
               </PGAccordionTab>                        
             </collapse-item>
 
-            <collapse-item title="Settlement Profile" name="4">
-              <PGAccordionTab @add="modalAddFloatAccount = true">
+            <collapse-item :title="$t('payment_gateway.merchant.edit_merchant.section_settlement_profile')" name="4">
+              <PGAccordionTab @add="modalAddSettlementProfile = true">
                 <el-table slot="table" stripe
                           :data="dataSettlementProfile"
                           style="width: 100%">
@@ -89,26 +91,26 @@
               </PGAccordionTab>                        
             </collapse-item>
 
-            <collapse-item title="Settlement Bank Account" name="5">
+            <collapse-item :title="$t('payment_gateway.merchant.edit_merchant.section_settlement_bank_account')" name="5">
               <div>
                 No data
               </div>
             </collapse-item>
           </collapse>
 
-          <!-- modals -->
-          <modal :show.sync="modalAddFloatAccount" 
+          <!-- ADD FLOAT ACCOUNT -->
+          <modal :show.sync="modalAddFloatAccount"
                  headerClasses="justify-content-center pg-merchant-modal-header" 
                  bodyClasses="pg-merchant-modal-body"
                  footerClasses="pg-merchant-modal-footer">
             <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_float_account') }}</h4>
 
             <div class="form-contents">
-              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.headerFloatAccount.name" :viewMode="false">
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.headerFloatAccount.name" :viewMode="false" required>
                 <fg-input slot="edit" v-model="newFloatAccountData.name" required :maxLength="255"/>
               </PGRow>         
 
-              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.choose_currency" :viewMode="false">
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.choose_currency" :viewMode="false" required>
                 <el-select slot="edit" class="select-default"
                            placeholder="Currency"
                            v-model="newFloatAccountData.currency">
@@ -126,7 +128,14 @@
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.date" :viewMode="false">
-                <fg-input slot="edit" v-model="newFloatAccountData.date" required :maxLength="255"/>
+                <el-date-picker v-model="newFloatAccountData.date" 
+                                type="date"
+                                slot="edit" 
+                                placeholder="Pick date"/>
+              </PGRow>         
+
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.default_float" :viewMode="false">
+                <CheckBox slot="edit" v-model="newFloatAccountData.default_float" :disabled="false"/>
               </PGRow>         
             </div>                        
 
@@ -134,6 +143,218 @@
               <p-button type="info" @click.native="modalAddFloatAccount = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>
+  
+          <!-- PROCESSING PROFILE -->
+          <modal :show.sync="modalAddProcessingProfile"
+                 headerClasses="justify-content-center pg-merchant-modal-header" 
+                 bodyClasses="pg-merchant-modal-body"
+                 footerClasses="pg-merchant-modal-footer">
+            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_processing_profile') }}</h4>
+
+            <div class="form-contents">
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.float_account" :viewMode="false" required>
+                <el-select slot="edit" class="select-default"
+                           placeholder="Float account"
+                           v-model="newProcessingProfileData.float_account">                           
+                  <el-option v-for="option in currencies"
+                            class="select-default"
+                            :value="option.value"
+                            :label="option.label"
+                            :key="option.label">
+                  </el-option>
+                </el-select>
+              </PGRow>         
+
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.processing_type" :viewMode="false" required>
+                <el-select slot="edit" class="select-default"
+                           placeholder="Processing type"
+                           v-model="newProcessingProfileData.float_account">                           
+                  <el-option v-for="option in currencies"
+                            class="select-default"
+                            :value="option.value"
+                            :label="option.label"
+                            :key="option.label">
+                  </el-option>
+                </el-select>
+              </PGRow>         
+
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.transaction_type" :viewMode="false" required>
+                <el-select slot="edit" class="select-default"
+                           placeholder="Transaction type"
+                           v-model="newProcessingProfileData.float_account">                           
+                  <el-option v-for="option in currencies"
+                            class="select-default"
+                            :value="option.value"
+                            :label="option.label"
+                            :key="option.label">
+                  </el-option>
+                </el-select>
+              </PGRow>         
+            </div>                        
+
+            <template slot="footer">
+              <p-button type="info" @click.native="modalAddProcessingProfile = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+            </template> 
+          </modal>
+
+          <!-- PROCESSING PROFILE ADD FEE -->
+          <modal :show.sync="modalAddProcessingProfileFee"
+                 headerClasses="justify-content-center pg-merchant-modal-header" 
+                 bodyClasses="pg-merchant-modal-body"
+                 footerClasses="pg-merchant-modal-footer">
+            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_fee') }}</h4>
+
+            <div class="form-contents">
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.processing_profile" :viewMode="false" required>
+                <el-select slot="edit" class="select-default"
+                           placeholder="Processing profile"
+                           v-model="newProcessingProfileFee.processing_profile">                           
+                  <el-option v-for="option in currencies"
+                            class="select-default"
+                            :value="option.value"
+                            :label="option.label"
+                            :key="option.label">
+                  </el-option>
+                </el-select>
+              </PGRow>         
+
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.apply_all" :viewMode="false">
+                <CheckBox slot="edit" v-model="newProcessingProfileFee.apply_all" :disabled="false"/>
+              </PGRow>         
+
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.fee_name" :viewMode="false" required>
+                <el-select slot="edit" class="select-default"
+                           placeholder="Fee name"
+                           v-model="newProcessingProfileFee.fee_name">                           
+                  <el-option v-for="option in currencies"
+                            class="select-default"
+                            :value="option.value"
+                            :label="option.label"
+                            :key="option.label">
+                  </el-option>
+                </el-select>
+              </PGRow>         
+
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.fee" :viewMode="false" required>
+                <fg-input slot="edit" v-model="newProcessingProfileFee.fee" required :maxLength="255"/>
+              </PGRow>         
+
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.effective_date" :viewMode="false" required>
+                <el-date-picker v-model="newProcessingProfileFee.effective_date" 
+                                type="date"
+                                slot="edit" 
+                                placeholder="Pick effective date"/>
+              </PGRow>         
+            </div>                        
+
+            <template slot="footer">
+              <p-button type="info" @click.native="modalAddProcessingProfileFee = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+            </template> 
+          </modal>
+
+          <!-- PROCESSING PROFILE FEE HISTORY -->
+          <modal :show.sync="modalProcessingProfileFeeHistory"
+                 headerClasses="justify-content-center pg-merchant-modal-header" 
+                 bodyClasses="pg-merchant-modal-body"
+                 footerClasses="pg-merchant-modal-footer">
+
+            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.fee_history') }}</h4>
+
+            <el-table stripe
+                      :data="dataProcessingProfile"
+                      style="width: 100%">
+              <el-table-column v-for="(col, index) in headerProcessingProfileFeeHistory"
+                              :key="index"
+                              :prop="col.name"
+                              :label="$i18n.t(col.i18n)">
+              </el-table-column>
+            </el-table>                  
+
+            <template slot="footer">
+              <p-button type="info" @click.native="modalProcessingProfileFeeHistory = false">{{ $i18n.t('payment_gateway.button_close') }}</p-button>
+            </template> 
+          </modal>
+
+          <!-- RESERVE -->
+          <modal :show.sync="modalAddReserve"
+                 headerClasses="justify-content-center pg-merchant-modal-header" 
+                 bodyClasses="pg-merchant-modal-body"
+                 footerClasses="pg-merchant-modal-footer">
+            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_reserve') }}</h4>
+
+            <div class="form-contents">
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.headerReserve.percentage" :viewMode="false" required>
+                <fg-input slot="edit" v-model="newReserve.percentage" required :maxLength="255"/>
+              </PGRow>         
+
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.headerReserve.retention_period" :viewMode="false" required>
+                <fg-input slot="edit" v-model="newReserve.retention_period" required :maxLength="255"/>
+              </PGRow>         
+
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.date" :viewMode="false" required>
+                <el-date-picker v-model="newReserve.date" 
+                                type="date"
+                                slot="edit" 
+                                placeholder="Pick date"/>
+              </PGRow>         
+            </div>                        
+
+            <template slot="footer">
+              <p-button type="info" @click.native="modalAddReserve = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+            </template> 
+          </modal>          
+
+          <!-- SETTLEMENT PROFILE -->
+          <modal :show.sync="modalAddSettlementProfile"
+                 headerClasses="justify-content-center pg-merchant-modal-header" 
+                 bodyClasses="pg-merchant-modal-body"
+                 footerClasses="pg-merchant-modal-footer">
+            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_settlement_profile') }}</h4>
+
+            <div class="form-contents">
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.choose_currency" :viewMode="false" required>
+                <el-select slot="edit" class="select-default"
+                           placeholder="Currency"
+                           v-model="newSettlementProfile.currency">
+                  <el-option v-for="option in currencies"
+                            class="select-default"
+                            :value="option.value"
+                            :label="option.label"
+                            :key="option.label">
+                  </el-option>
+                </el-select>
+              </PGRow>         
+
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.headerSettlementProfile.interval" :viewMode="false" required>
+                <el-select slot="edit" class="select-default"
+                           placeholder="Interval"
+                           v-model="newSettlementProfile.interval">
+                  <el-option v-for="option in currencies"
+                            class="select-default"
+                            :value="option.value"
+                            :label="option.label"
+                            :key="option.label">
+                  </el-option>
+                </el-select>
+              </PGRow>         
+
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.fee" :viewMode="false" required>
+                <fg-input slot="edit" v-model="newSettlementProfile.fee" required :maxLength="255"/>
+              </PGRow>         
+
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.effective_date" :viewMode="false" required>
+                <el-date-picker v-model="newSettlementProfile.effective_date" 
+                                type="date"
+                                slot="edit" 
+                                placeholder="Pick effective date"/>
+              </PGRow>         
+            </div>                        
+
+            <template slot="footer">
+              <p-button type="info" @click.native="modalAddSettlementProfile = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+            </template> 
+          </modal>        
+
         </el-col>
       </el-row>
     </div>
@@ -154,6 +375,7 @@ import Collapse from '@/components/UIComponents/Collapse/Collapse'
 import CollapseItem from '@/components/UIComponents/Collapse/CollapseItem'
 import Modal from '@/components/UIComponents/Modal'
 import Spinner from '@/components/UIComponents/Spinner'
+import CheckBox from "@/components/UIComponents/Inputs/Checkbox"
 import RegularTable from '@/components/UIComponents/CeevoTables/RegularTable/RegularTable'
 import PButton from "@/components/UIComponents/Button"
 import PGRow from '@/components/Dashboard/pages/PaymentGateway/PGRow'
@@ -165,6 +387,7 @@ export default {
     Collapse, 
     CollapseItem,
     Modal,
+    CheckBox,
     Spinner,
     PButton,
     PGRow,
@@ -187,9 +410,7 @@ export default {
         { name: 'masterpayment', balance: 'EUR 9999.00', last_update: '2019-03-01 11:51:43.0' }
       ],
       modalAddFloatAccount: false,
-      newFloatAccountData: {   
-
-      },
+      newFloatAccountData: {},
       // Processing profile
       headerProcessingProfile: [
         { name: 'business_type', i18n: 'payment_gateway.merchant.edit_merchant.headerProcessingProfile.business_type' },
@@ -200,6 +421,16 @@ export default {
         { business_type: 'Credit card/Refund', description: 'miki_FeeAmount @ USD 0.02', float_account: 'masterpayment' },
         { business_type: 'Credit card/Refund', description: 'beryl_FreeAmount @ USD 0.02', float_account: 'masterpayment-EUR' }
       ],
+      modalAddProcessingProfile: false,
+      newProcessingProfileData: {},
+      modalAddProcessingProfileFee: false,
+      newProcessingProfileFee: {},
+      modalProcessingProfileFeeHistory: false,
+      headerProcessingProfileFeeHistory: [
+        { name: 'business_type', i18n: 'payment_gateway.merchant.edit_merchant.headerFeeHistory.business_type' },
+        { name: 'description', i18n: 'payment_gateway.merchant.edit_merchant.headerFeeHistory.description' },
+        { name: 'effective_date', i18n: 'payment_gateway.merchant.edit_merchant.headerFeeHistory.effective_date' }
+      ],
       // Reserve
       headerReserve: [
         { name: 'percentage', i18n: 'payment_gateway.merchant.edit_merchant.headerReserve.percentage' },
@@ -209,6 +440,8 @@ export default {
       dataReserve: [
         { percentage: '10%', retention_period: '180 Days', effective_date: '2018-08-31' }
       ],
+      modalAddReserve: false,
+      newReserve: {},
       // Settlement profile
       headerSettlementProfile: [
         { name: 'interval', i18n: 'payment_gateway.merchant.edit_merchant.headerSettlementProfile.interval' },
@@ -219,6 +452,8 @@ export default {
       dataSettlementProfile: [
         { interval: '7 Day', currency: 'EUR(€)', fee: '250.00', effective_date: '2018-08-31' }
       ],
+      modalAddSettlementProfile: false,
+      newSettlementProfile: {},
       // dummy data
       currencies: [
         { value: 'EUR', label: 'Euro' },
@@ -261,7 +496,10 @@ export default {
       }      
     },
     onProcessingProfileFeeHistory (index) {
-
+      this.modalProcessingProfileFeeHistory = true
+    },
+    onProcessingProfileAddFee () {
+      this.modalAddProcessingProfileFee = true
     }
   }
 }
