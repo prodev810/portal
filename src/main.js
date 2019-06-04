@@ -10,13 +10,15 @@ import App from './App.vue'
 
 // Plugins
 // Element-UI
-import { Select, Option, Row, Col, Input, Tooltip } from 'element-ui'
+import { Select, Option, Row, Col, Input, Tooltip, Table, TableColumn } from 'element-ui'
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Input)
 Vue.use(Tooltip)
+Vue.use(Table)
+Vue.use(TableColumn)
 
 import GlobalComponents from './globalComponents'
 import GlobalDirectives from './globalDirectives'

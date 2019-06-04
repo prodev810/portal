@@ -1,7 +1,7 @@
 <template>
-  <div class="card p-2">
+  <div class="card pg-merchant p-2">
     <Spinner v-if="loading"/>
-    <RegularTable
+    <regular-table
       striped responsive condensed bordered
       :headings="merchantHeader"
       :value="merchant">
@@ -10,7 +10,7 @@
           <p-button type="primary" @click="viewMerchant(index)" size="sm" outline round>{{ $i18n.t('payment_gateway.button_view') }}</p-button>
         </td>
       </template>
-    </RegularTable>
+    </regular-table>
   </div>
 </template>
 
@@ -50,4 +50,11 @@ export default {
   }
 }
 </script>
+
+<style>
+div.pg-merchant table {
+  width: 100% !important;
+}
+</style>
+
 

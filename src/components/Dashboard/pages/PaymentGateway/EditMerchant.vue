@@ -6,7 +6,7 @@
       <Spinner v-if="loading"/>
 
       <el-row :gutter="20">
-        <el-col :xs="24" :sm="14">
+        <el-col :xs="24" :lg="10" :xl="8">
           <div class="form-contents">
             <PGRow labeli18n="payment_gateway.merchant.merchantHeader.merchant_name" required :viewMode="viewMode">
               <span slot="view">{{ merchantData.merchant_name }}</span>  
@@ -25,47 +25,82 @@
           </div>
         </el-col>
 
-        <el-col :xs="24" :sm="10">
-          <collapse>
+        <el-col :xs="24" :lg="14" :xl="16">
+          <collapse class="pg-merchant-collapse">
             <collapse-item title="Float account" name="1">
-              <PGAccordionTab headeri18="payment_gateway.merchant.edit_merchant.section_float_account" @add="modalAddFloatAccount = true" :btnHistory="false">
-                <RegularTable slot="table"
-                  striped responsive  bordered
-                  :headings="headerFloatAccount"
-                  :value="dataFloatAccount"/>
+              <PGAccordionTab @add="modalAddFloatAccount = true" :btnHistory="false">
+                <el-table slot="table" stripe
+                          :data="dataFloatAccount"
+                          style="width: 100%">
+                  <el-table-column v-for="(col, index) in headerFloatAccount"
+                                  :key="index"
+                                  :prop="col.name"
+                                  :label="$i18n.t(col.i18n)">
+                  </el-table-column>
+                </el-table>                  
               </PGAccordionTab>
             </collapse-item>
 
             <collapse-item title="Processing Profile" name="2">
-              <PGAccordionTab headeri18="payment_gateway.merchant.edit_merchant.section_float_account" @add="modalAddFloatAccount = true">
-                <RegularTable slot="table"
-                  striped responsive  bordered
-                  :headings="headerFloatAccount"
-                  :value="dataFloatAccount"/>
+              <PGAccordionTab @add="modalAddFloatAccount = true">
+                <el-table slot="table" stripe
+                          :data="dataProcessingProfile"
+                          style="width: 100%">
+                  <el-table-column v-for="(col, index) in headerProcessingProfile"
+                                  :key="index"
+                                  :prop="col.name"
+                                  :label="$i18n.t(col.i18n)">
+                  </el-table-column>
+
+                  <el-table-column fixed="right">
+                    <template slot-scope="scope">
+                      <p-button @click="onProcessingProfileFeeHistory(scope.$index)" type="primary" size="sm" outline>Fee History</p-button>
+                    </template>
+                  </el-table-column>
+                </el-table>                  
               </PGAccordionTab>            
             </collapse-item>
 
             <collapse-item title="Reserve" name="3">
-              <div>
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-              </div>
+              <PGAccordionTab @add="modalAddFloatAccount = true">
+                <el-table slot="table" stripe
+                          :data="dataReserve"
+                          style="width: 100%">
+                  <el-table-column v-for="(col, index) in headerReserve"
+                                  :key="index"
+                                  :prop="col.name"
+                                  :label="$i18n.t(col.i18n)">
+                  </el-table-column>
+                </el-table>                  
+              </PGAccordionTab>                        
             </collapse-item>
 
             <collapse-item title="Settlement Profile" name="4">
-              <div>
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-              </div>
+              <PGAccordionTab @add="modalAddFloatAccount = true">
+                <el-table slot="table" stripe
+                          :data="dataSettlementProfile"
+                          style="width: 100%">
+                  <el-table-column v-for="(col, index) in headerSettlementProfile"
+                                  :key="index"
+                                  :prop="col.name"
+                                  :label="$i18n.t(col.i18n)">
+                  </el-table-column>
+                </el-table>                  
+              </PGAccordionTab>                        
             </collapse-item>
 
             <collapse-item title="Settlement Bank Account" name="5">
               <div>
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                No data
               </div>
             </collapse-item>
           </collapse>
 
           <!-- modals -->
-          <modal :show.sync="modalAddFloatAccount" headerClasses="justify-content-center">
+          <modal :show.sync="modalAddFloatAccount" 
+                 headerClasses="justify-content-center pg-merchant-modal-header" 
+                 bodyClasses="pg-merchant-modal-body"
+                 footerClasses="pg-merchant-modal-footer">
             <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_float_account') }}</h4>
 
             <div class="form-contents">
@@ -90,11 +125,13 @@
                 <fg-input slot="edit" v-model="newFloatAccountData.opening_balance" required :maxLength="255"/>
               </PGRow>         
 
-
+              <PGRow labeli18n="payment_gateway.merchant.edit_merchant.date" :viewMode="false">
+                <fg-input slot="edit" v-model="newFloatAccountData.date" required :maxLength="255"/>
+              </PGRow>         
             </div>                        
 
             <template slot="footer">
-              <p-button type="info" class="mr-5" @click.native="modalAddFloatAccount = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="info" @click.native="modalAddFloatAccount = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>
         </el-col>
@@ -146,25 +183,46 @@ export default {
         { name: 'last_update', i18n: 'payment_gateway.merchant.edit_merchant.headerFloatAccount.last_update' }
       ],
       dataFloatAccount: [
-        { name: 'masterpayment-EUR', balance: 'EUR 9998.92', last_update: '2019-03-01 12:14:06.0' }
+        { name: 'masterpayment-EUR', balance: 'EUR 9998.92', last_update: '2019-03-01 12:14:06.0' },
+        { name: 'masterpayment', balance: 'EUR 9999.00', last_update: '2019-03-01 11:51:43.0' }
       ],
       modalAddFloatAccount: false,
-      newFloatAccountData: {      
+      newFloatAccountData: {   
+
       },
+      // Processing profile
+      headerProcessingProfile: [
+        { name: 'business_type', i18n: 'payment_gateway.merchant.edit_merchant.headerProcessingProfile.business_type' },
+        { name: 'description', i18n: 'payment_gateway.merchant.edit_merchant.headerProcessingProfile.description' },
+        { name: 'float_account', i18n: 'payment_gateway.merchant.edit_merchant.headerProcessingProfile.float_account' }
+      ],
+      dataProcessingProfile: [
+        { business_type: 'Credit card/Refund', description: 'miki_FeeAmount @ USD 0.02', float_account: 'masterpayment' },
+        { business_type: 'Credit card/Refund', description: 'beryl_FreeAmount @ USD 0.02', float_account: 'masterpayment-EUR' }
+      ],
+      // Reserve
+      headerReserve: [
+        { name: 'percentage', i18n: 'payment_gateway.merchant.edit_merchant.headerReserve.percentage' },
+        { name: 'retention_period', i18n: 'payment_gateway.merchant.edit_merchant.headerReserve.retention_period' },
+        { name: 'effective_date', i18n: 'payment_gateway.merchant.edit_merchant.headerReserve.effective_date' }
+      ],
+      dataReserve: [
+        { percentage: '10%', retention_period: '180 Days', effective_date: '2018-08-31' }
+      ],
+      // Settlement profile
+      headerSettlementProfile: [
+        { name: 'interval', i18n: 'payment_gateway.merchant.edit_merchant.headerSettlementProfile.interval' },
+        { name: 'currency', i18n: 'payment_gateway.merchant.edit_merchant.headerSettlementProfile.currency' },
+        { name: 'fee', i18n: 'payment_gateway.merchant.edit_merchant.headerSettlementProfile.fee' },
+        { name: 'effective_date', i18n: 'payment_gateway.merchant.edit_merchant.headerSettlementProfile.effective_date' }
+      ],
+      dataSettlementProfile: [
+        { interval: '7 Day', currency: 'EUR(€)', fee: '250.00', effective_date: '2018-08-31' }
+      ],
       // dummy data
       currencies: [
         { value: 'EUR', label: 'Euro' },
         { value: 'USD', label: 'US Dolllar' }
-      ],
-      // Processing profile
-      headerProcessingProfile: [
-
-      ],
-      headerReserve: [
-
-      ],
-      headerSettlementProfile: [
-
       ],
       headerSettlementBankAcoount: [
 
@@ -201,9 +259,28 @@ export default {
       } else {
         this.viewMode = true
       }      
-    }
+    },
+    onProcessingProfileFeeHistory (index) {
 
+    }
   }
 }
 </script>
 
+<style>
+.pg-merchant-modal-header {
+  padding: 0.5rem !important;  
+}
+.pg-merchant-modal-body {
+  padding: 1rem !important;
+}
+.pg-merchant-modal-footer {
+  padding: 0 1rem 0 0 !important;
+}
+.pg-merchant-collapse div.card-header {
+  font-weight: bold;
+}
+.pg-merchant-collapse div.card-body {
+  padding: 0 !important;
+}
+</style>

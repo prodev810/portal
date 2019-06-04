@@ -36,9 +36,26 @@ export default {
         balance: 'Balance',
         last_update: 'Last update'
       },
+      headerProcessingProfile: {
+        business_type: 'Business/Type',
+        description: 'Description',
+        float_account: 'Float account'
+      },
+      headerReserve: {
+        percentage: 'Percentage %',
+        retention_period: 'Retention period',
+        effective_date: 'Effective date'
+      },
+      headerSettlementProfile: {
+        interval: 'Interval',
+        currency: 'Currency',
+        fee: 'Fee',
+        effective_date: 'Effective date'        
+      },
       add_float_account: 'Add float account',
       choose_currency: 'Choose currency',
-      opening_balance: 'Opening balance'
+      opening_balance: 'Opening balance',
+      date: 'Date'
     }
   },
   button_view: 'View',

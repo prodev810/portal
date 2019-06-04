@@ -1,13 +1,8 @@
 <template>
   <div>
     <div class="pg-accordion-contents-row pg-accordion-contents-row-header">
-      <!--<div>
-        <h4>{{ $i18n.t(headeri18) }}</h4>
-      </div>
-      <div>-->
-        <p-button v-if="btnAdd" type="primary" @click="onAdd()" size="sm" round >{{ $i18n.t('payment_gateway.button_add') }}</p-button>
-        <p-button v-if="btnHistory" type="primary" @click="onHistory()" size="sm" round class="ml-2">{{ $i18n.t('payment_gateway.button_history') }}</p-button>
-      <!--</div>-->
+      <p-button v-if="btnAdd" type="primary" @click="onAdd()" size="sm" round >{{ $i18n.t('payment_gateway.button_add') }}</p-button>
+      <p-button v-if="btnHistory" type="primary" @click="onHistory()" size="sm" round class="ml-2">{{ $i18n.t('payment_gateway.button_history') }}</p-button>
     </div>
 
     <div class="pg-accordion-contents-row">
@@ -20,7 +15,6 @@
 export default {
   name: 'PGAccordionTab',
   props: {
-    headeri18: String,
     btnAdd: {
       type: Boolean,
       default: true

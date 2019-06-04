@@ -6,37 +6,37 @@
       <Spinner v-if="loading"/>
 
       <div class="form-contents">
-        <PGRow labeli18n="edit_payment_method.cb_active" :viewMode="viewMode">
+        <PGRow labeli18n="edit_payment_method.cb_active" :viewMode="viewMode" :headerColWidth="headerColWidth">
           <CheckBox slot="view" v-model="methodData.active" :disabled="true"/>
           <CheckBox slot="edit" v-model="methodData.active" :disabled="false"/>
         </PGRow>         
 
-        <PGRow labeli18n="edit_payment_method.input_name" required :viewMode="viewMode">
+        <PGRow labeli18n="edit_payment_method.input_name" required :viewMode="viewMode" :headerColWidth="headerColWidth">
           <span slot="view">{{ methodData.payment_method }}</span>  
           <fg-input slot="edit" v-model="methodData.payment_method" required :maxLength="50"/>      
         </PGRow>  
 
-        <PGRow labeli18n="edit_payment_method.input_code" required :viewMode="viewMode">
+        <PGRow labeli18n="edit_payment_method.input_code" required :viewMode="viewMode" :headerColWidth="headerColWidth">
           <span slot="view">{{ methodData.code }}</span>  
           <fg-input slot="edit" v-model="methodData.code" required :maxLength="255"/>       
         </PGRow>  
         
-        <PGRow labeli18n="edit_payment_method.required_token" required :viewMode="viewMode">
+        <PGRow labeli18n="edit_payment_method.required_token" required :viewMode="viewMode" :headerColWidth="headerColWidth">
           <span slot="view">{{ methodData.required_token }}</span>  
           <fg-input slot="edit" v-model="methodData.required_token" required :maxLength="20"/>         
         </PGRow>    
 
-        <PGRow labeli18n="edit_payment_method.input_description" :viewMode="viewMode">
+        <PGRow labeli18n="edit_payment_method.input_description" :viewMode="viewMode" :headerColWidth="headerColWidth">
           <span slot="view">{{ methodData.description }}</span>  
           <el-input slot="edit" v-model="methodData.description" type="textarea" rows="5" maxlength="1000"/>        
         </PGRow>                          
 
-        <PGRow labeli18n="edit_payment_method.input_logo" :viewMode="viewMode">
+        <PGRow labeli18n="edit_payment_method.input_logo" :viewMode="viewMode" :headerColWidth="headerColWidth">
           <span slot="view">{{ methodData.logo }}</span>  
           <fg-input slot="edit" v-model="methodData.logo" :maxLength="255"/>
         </PGRow>  
 
-        <PGRow labeli18n="edit_payment_method.cb_chargeback_risk" :viewMode="viewMode">
+        <PGRow labeli18n="edit_payment_method.cb_chargeback_risk" :viewMode="viewMode" :headerColWidth="headerColWidth">
           <CheckBox slot="view" v-model="methodData.chargeback_risk" :disabled="true"/>
           <CheckBox slot="edit" v-model="methodData.chargeback_risk" :disabled="false"/>
         </PGRow> 
@@ -70,7 +70,8 @@ export default {
     return {
       loading: true,
       viewMode: true, // by default View mode
-      methodData: {}
+      methodData: {},
+      headerColWidth: '15rem'
     }
   },
   async created () {
