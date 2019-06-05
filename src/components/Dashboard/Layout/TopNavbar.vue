@@ -104,7 +104,7 @@
           this.showLogoutBtn = false;
           return "Search";
         } else {
-          return this.$route.path.split('/')[1].replace(/-/g, ' ').toUpperCase();
+          return this.$route.path.split('/')[2].replace(/-/g, ' ');
         }
       }
     },
@@ -149,7 +149,7 @@
     color: #2ed684;
     font-family: 'Poppins', sans-serif;
     font-weight: bold;
-    text-transform: none!important;
+    text-transform: capitalize;
     font-size: 40px!important;
     margin: 0;
     margin-right: 57px;
@@ -161,5 +161,9 @@
 
   .search-field i {
     color: #C2C7CE;
+  }
+
+  .search-field /deep/ .form-group{
+    border-radius: 10px;
   }
 </style>
