@@ -16,6 +16,7 @@
   right: 0;
   bottom: 0;
   background-color: rgba(255, 255, 255, 0.6);
+  z-index: 9999;
 }
 .spinner-wrapper span {
   position: absolute;

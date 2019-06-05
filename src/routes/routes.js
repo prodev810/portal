@@ -25,6 +25,9 @@ import KycDashboard from "../components/Dashboard/pages/Kyc/KycDashboard";
 import Workflow from "../components/Dashboard/pages/Kyc/Workflow";
 // Payment gateway
 import PGSettings from '@/components/Dashboard/pages/PaymentGateway/Settings'
+import PGEditPaymentMethod from '@/components/Dashboard/pages/PaymentGateway/EditPaymentMethod'
+import PGMerchant from '@/components/Dashboard/pages/PaymentGateway/Merchant'
+import PGEditMerchant from '@/components/Dashboard/pages/PaymentGateway/EditMerchant'
 // Reseller
 import ResellerView from '../components/Dashboard/pages/Resller/View';
 // GeneralViews
@@ -132,7 +135,11 @@ let floatAccount = {
   ]
 };
 
-// reseller routes
+// payment gateway routes
+
+// !!!
+// Set correct PERMISSION constants
+
 let payment_gateway = {
   path: '/payment-gateway',
   //redirect: '/payment-gateway/view',
@@ -145,6 +152,30 @@ let payment_gateway = {
       path: '/payment-gateway/settings',
       name: 'Payment gateway - Settings',
       component: PGSettings,
+      meta: {
+        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+      }
+    },
+    {
+      path: '/payment-gateway/settings/payment-method/:code',
+      name: 'Payment gateway - View payment method',
+      component: PGEditPaymentMethod,
+      meta: {
+        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+      }
+    },
+    {
+      path: '/payment-gateway/merchant',
+      name: 'Payment gateway - Merchant',
+      component: PGMerchant,
+      meta: {
+        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+      }
+    },
+    {
+      path: '/payment-gateway/merchant/:id',
+      name: 'Payment gateway - View merchant',
+      component: PGEditMerchant,
       meta: {
         permission: permission.RESELLER_SUBSCRIPTION_VIEW
       }

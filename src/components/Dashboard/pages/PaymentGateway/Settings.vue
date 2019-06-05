@@ -3,19 +3,21 @@
     <el-row :gutter="20">
       <el-col :sm="24" :md="12">
         <div class="card p-2">
+          <Spinner v-if="loading"/>
           <regular-table width="100%"
             striped responsive condensed bordered
             :headings="currencyHeader"
-            :value="currencyData"/>
+            :value="$store.state.paymentGateway.currencies"/>
         </div>
       </el-col>
 
       <el-col :sm="24" :md="12">
         <div class="card p-2">
+          <Spinner v-if="loading"/>
           <regular-table
             striped responsive condensed bordered
             :headings="countryHeader"
-            :value="countryData"/>
+            :value="$store.state.paymentGateway.countries"/>
         </div>
       </el-col>
     </el-row>
@@ -23,13 +25,14 @@
     <el-row :gutter="20">
       <el-col :sm="24">
         <div class="card p-2">
+          <Spinner v-if="loading"/>
           <regular-table
             striped responsive condensed bordered
             :headings="pmethodHeader"
-            :value="pmethodData">
-            <template slot-scope="index">
+            :value="paymentMethod">
+            <template slot-scope="index">              
               <td>
-                <p-button type="primary">View</p-button>
+                <p-button type="primary" @click="viewPaymentMethod(index)" size="sm" outline round>{{ $i18n.t('payment_gateway.button_view') }}</p-button>
               </td>
             </template>
           </regular-table>
@@ -40,44 +43,70 @@
 </template>
 
 <script>
+import {
+  ACTION_PG_GET_CURRENCIES,
+  ACTION_PG_GET_COUNTRIES,
+  ACTION_PG_GET_PAYMENT_METHODS
+} from '@/store/types'
 import { mapActions, mapGetters } from 'vuex'
+import Spinner from "@/components/UIComponents/Spinner"
 import PButton from "@/components/UIComponents/Button"
 import RegularTable from "@/components/UIComponents/CeevoTables/RegularTable/RegularTable"
 
 export default {
   name: 'Settings',
-  components: { PButton, RegularTable },  
+  components: { 
+    PButton, 
+    RegularTable, 
+    Spinner 
+  },  
   data () {
     return {
+      loading: true,
       currencyHeader: [
-        { name: 'symbol', label: 'Currency symbol' },
-        { name: 'name', label: 'Currency name' }
+        { name: 'currency_code', i18n: 'payment_gateway.settings.currencyHeader.currency_code' },
+        { name: 'currency_name', i18n: 'payment_gateway.settings.currencyHeader.currency_name' }
       ],
       countryHeader: [
-        { name: 'code', label: 'Country code' },
-        { name: 'name', label: 'Country name' }
+        { name: 'country_code', i18n: 'payment_gateway.settings.countryHeader.country_code' },
+        { name: 'country_name', i18n: 'payment_gateway.settings.countryHeader.country_name' }
       ],
       pmethodHeader: [
-        { name: 'name', label: 'Payment method' },
-        { name: 'code', label: 'Method code' },
-        //{ name: 'logo', label: 'Logo' },
-        { name: 'currency', label: 'Currency support' },
-        { name: 'country', label: 'Country support' }
+        { name: 'payment_method', i18n: 'payment_gateway.settings.pmethodHeader.payment_method' },
+        { name: 'code', i18n: 'payment_gateway.settings.pmethodHeader.code' },
+        { name: 'logo', i18n: 'payment_gateway.settings.pmethodHeader.logo' },        
+        { name: 'currency_support', i18n: 'payment_gateway.settings.pmethodHeader.currency_support' },
+        { name: 'country_support', i18n: 'payment_gateway.settings.pmethodHeader.country_support' }
       ],
-      currencyData: [
-        { symbol: 'USD', name: 'US dollar' },
-        { symbol: 'EUR', name: 'EURO' },
-        { symbol: 'PLN', name: 'Poland zloty' }
-      ],
-      countryData: [
-        { code: 'DE', name: 'Germany' },
-        { code: 'UK', name: 'United Kingdom' },
-        { code: 'AU', name: 'Austria' }
-      ],
-      pmethodData: [
-        { name: 'Credit / Debit Card', code: 'CARDS', logo: '', currency: 'USD | EUR', country: 'AU | DE' },
-        { name: 'SOFORT', code: 'SOFORT', logo: '', currency: 'EUR', country: 'AU | DE' }
-      ]
+      axios: null
+    }
+  },
+  async mounted () {
+    // Get backend data
+    await Promise.all([
+      this.$store.dispatch(ACTION_PG_GET_CURRENCIES),
+      this.$store.dispatch(ACTION_PG_GET_COUNTRIES),
+      this.$store.dispatch(ACTION_PG_GET_PAYMENT_METHODS)
+    ])
+    this.loading = false
+  },
+  computed: {
+    paymentMethod () {
+      return this.$store.state.paymentGateway.paymentMethod.map((value, index, array) => {
+        return {
+          payment_method: value.payment_method,
+          code: value.code,
+          // transform values for display in table
+          currency_support: value.currency_support.map(value => value.currency_code).join(' | '),
+          country_support: value.country_support.map(value => value.country_code).join(' | '),
+          logo: `<img src="${value.logo}"/>`
+        }
+      })
+    }
+  },
+  methods: {
+    viewPaymentMethod (index) {
+      this.$router.push(`/payment-gateway/settings/payment-method/${this.paymentMethod[index.index.index].code}`)
     }
   }
 }
@@ -87,5 +116,8 @@ export default {
 .pgateway-settings table {
   width: 100% !important;
   margin-bottom: 0 !important;
+}
+.pgateway-settings th {
+  text-transform: capitalize;
 }
 </style>

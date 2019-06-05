@@ -14,6 +14,8 @@ import store from './store'
 import sof_uploader from './sof_uploader'
 import login from './login'
 import lock from './lock'
+import edit_payment_method from './edit_payment_method'
+import payment_gateway from './payment_gateway'
 
 export default {
   menu,
@@ -31,5 +33,7 @@ export default {
   store,
   sof_uploader,
   login,
-  lock
+  lock,
+  edit_payment_method,
+  payment_gateway
 }
