@@ -23,7 +23,7 @@ import {
   GETTER_APPLICATION_STATUS_LIST,
   GETTER_APPLICATIONS,
   GETTER_APPLICATION_LIST,
-  MUTATE_APPLICATIONS
+  MUTATE_APPLICATIONS, MUTATE_SUMMARY_REPORT, MUTATE_STATISTICS
 } from '../types';
 
 const state = {
@@ -33,7 +33,9 @@ const state = {
   clientTypes: [],
   outstandingApps: [],
   applicationStatuses: [],
-  applications: []
+  applications: [],
+  summaryReports:[],
+  statistics: [],
 }
 
 const mutations = {
@@ -75,7 +77,13 @@ const mutations = {
   },
   [MUTATE_APPLICATIONS]: (state, {data}) => {
     state.applications = data;
-  }
+  },
+  [MUTATE_SUMMARY_REPORT]: (state, {data}) => {
+    state.summaryReports = data;
+  },
+  [MUTATE_STATISTICS]: (state, {data}) => {
+    state.statistics = data;
+  },
 }
 
 const actions = {
@@ -102,7 +110,9 @@ const actions = {
 
       //commit(MUTATE_LOADINGSTATE_RESELLER, 'getting')
 
-      //const {data} = await Vue.prototype.$http.get('/kyc/clients/all');
+      const {data} = await Vue.prototype.$http.get('v1/kyc/clients/all');
+
+      commit(MUTATE_All_CLIENTS, {data})
 
       //commit(MUTATE_GET_RESELLER_SUBSCRTION_BY_ID, {data});
       //commit(MUTATE_LOADINGSTATE_RESELLER, 'ideal')
@@ -115,6 +125,25 @@ const actions = {
     }
   },
 
+  [KYC_GET_STATISTICS]: async ({commit}, payload)=> {
+    try{
+      const {data} = await Vue.prototype.$http.get('v1/kyc/dashboard/statistics', {duration: payload.duration, clientReference: payload.clientReference || null})
+      commit(MUTATE_STATISTICS, {data})
+      console.log('statistic' ,data)
+    }catch(e){
+      console.log('error :', e);
+    }
+  },
+
+  [KYC_GET_SUMMARY_REPORT]: async ({commit}, payload)=> {
+    try{
+      const {data} = await Vue.prototype.$http.get('v1/kyc/dashboard/summary-report', {duration: payload.duration})
+      commit(MUTATE_SUMMARY_REPORT, {data: data.infos})
+      console.log('summary report' ,data)
+    }catch(e){
+      console.log('error :', e);
+    }
+  },
 
   /*
   [ADD_RESELLER_SUBSCRIPTION]: async ({commit, dispatch}, {body}) => {
