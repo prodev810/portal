@@ -503,7 +503,6 @@
     }
 
   }
-
   .ceevo__table {
     border-spacing: 0px !important;
     .el-select {
@@ -512,15 +511,23 @@
       overflow: hidden;
     }
     thead {
+      border-bottom: 1px solid #dee2e6;
       th {
         padding: 0 !important;
         border-left: 1px solid #dee2e6 !important;
         border-right: 1px solid #dee2e6 !important;
       }
+      th:first-child {
+        border-left: none !important;
+      }
+      th:last-child {
+        border-right: none !important;
+      }
     }
     tbody {
       td {
         padding: 0 !important;
+        border: none !important;
 
         &.ceevo__table_selected {
           background-color: #ff0000;
@@ -592,6 +599,7 @@
     flex-direction: row;
     align-items: center;
     text-align: left;
+    padding-top: 9px !important;
 
     &.sortable {
       cursor: pointer;
@@ -644,5 +652,9 @@
   .div-max-length {
     width: 100%;
     padding : 0px 0px !important;
+  }
+
+  .table__wrapper.ceevo__table--auto-height.ceevo__table--responsive.ceevo__table--condensed.ceevo__table--striped {
+    padding: 0 0 20px 0;
   }
 </style>

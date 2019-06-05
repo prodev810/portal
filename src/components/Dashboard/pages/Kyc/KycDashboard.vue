@@ -3,14 +3,17 @@
     <el-col :sm="24" :md="11">
       <el-row class="kyc__duration">
         <b>Duration</b>
-        <el-select class="ml-2 select-default" v-model="leftPanelDuration">
+        <div class="kyc-wrap-select">
+          <i class="kyc-select-icon">&#8645;</i>
+          <el-select class="ml-2 select-default" v-model="leftPanelDuration">
           <el-option class="select-default"
                      v-for="item in durationValues"
                      :key="item.value"
                      :label="item.label"
                      :value="item.value">
           </el-option>
-        </el-select>
+          </el-select>
+        </div>
       </el-row>
 
       <el-row>
@@ -42,12 +45,17 @@
     <el-col :sm="24" :md="13">
       <el-row class="kyc__name__duration">
         <div class="kyc__duration"><b>Client</b>
-          <el-select class="ml-2 select-default" v-model="rightPanelClient">
-
-          </el-select>
+          <div class="kyc-wrap-select">
+            <i class="kyc-select-icon">&#8645;</i>
+            <el-select class="ml-2 select-default" v-model="rightPanelClient">
+            
+            </el-select>
+          </div>
         </div>
 
         <div class="kyc__duration ml-4"><b>Duration</b>
+        <div class="kyc-wrap-select">
+          <i class="kyc-select-icon">&#8645;</i>
           <el-select class="ml-2 select-default" v-model="rightPanelDuration">
             <el-option class="select-default"
                        v-for="item in durationValues"
@@ -56,6 +64,7 @@
                        :value="item.value">
             </el-option>
           </el-select>
+        </div>
         </div>
       </el-row>
       <el-row :gutter="10">
@@ -143,6 +152,9 @@
 
 <style scoped lang="scss">
   $grey-color: #8D8D8D;
+  .el-input__suffix {
+    display: none !important;
+  }
   .kyc__buttons {
     display: flex;
     align-items: flex-end;
@@ -243,6 +255,18 @@
         outline: none!important;
       }
     }
-
+  }
+  .kyc-wrap-select {
+    position: relative;
+  }
+  .kyc-select-icon {
+    position: absolute;
+    top: 4px;
+    z-index: 222;
+    right: 10px;
+    padding: 5px;
+    background: white;
+    font-style: initial;
+    pointer-events: none;
   }
 </style>

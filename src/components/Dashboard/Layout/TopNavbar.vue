@@ -163,7 +163,15 @@
     color: #C2C7CE;
   }
 
-  .search-field /deep/ .form-group{
-    border-radius: 10px;
+  .search-field /deep/ .form-group .form-control{
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-color: #8D8D8D !important;
   }
+  .search-field /deep/ .input-group-append .input-group-text, .input-group-prepend .input-group-text {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-color: #8D8D8D !important;
+}
+
 </style>
