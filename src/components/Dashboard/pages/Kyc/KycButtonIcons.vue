@@ -126,5 +126,6 @@ export default {
     position:absolute;
     top: -4px;
     left: -23px;
+    width: 20px;
   }
 </style>
