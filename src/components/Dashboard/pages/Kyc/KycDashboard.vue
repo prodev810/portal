@@ -26,17 +26,38 @@
       </el-row>
 
       <el-row class="kyc__buttons">
-        <p-button round>Work Queue</p-button>
-        <p-button round>Application Search</p-button>
+        <p-button round class="kyc-button--queue">
+          <span class="kyc-button__title">
+            <kyc-button-icons name="svg-queue" />
+            Work Queue
+          </span>
+          </p-button>
+        <p-button round class="kyc-button--glass">
+          <span class="kyc-button__title">
+          <kyc-button-icons name="svg-glass" />
+          Application Search
+          </span>
+          </p-button>
       </el-row>
+
       <el-row class="kyc__buttons kyc__buttons__bottom">
         <div>
-          <p-button round>Invoices</p-button>
+          <p-button round class="kyc-button--invoice">
+            <span class="kyc-button__title">
+              <kyc-button-icons name="svg-invoice" />
+              Invoices
+            </span>
+          </p-button>
         </div>
 
         <div class="kyc__issuing">
           <span>ISSUING ONLY</span><br/>
-          <p-button round>E-money Accounts</p-button>
+          <p-button round class="kyc-button--mobile">
+            <div class="kyc-button__title">
+            <kyc-button-icons name="svg-mobile" />
+               E-money Accounts
+            </div>
+            </p-button>
         </div>
       </el-row>
 
@@ -119,6 +140,7 @@
   import PButton from "@/components/UIComponents/Button"
   import LineChart from "@/components/UIComponents/Charts/LineChart"
   import ChartCard from "@/components/UIComponents/Cards/ChartCard"
+  import KycButtonIcons from './KycButtonIcons'
 
   const durationValues = [
     {value: 30, label: '30 Days'},
@@ -128,7 +150,7 @@
 
   export default {
     name: "KycDashboard",
-    components: {RegularTable, PButton, LineChart, ChartCard},
+    components: {RegularTable, PButton, LineChart, ChartCard, KycButtonIcons},
     data() {
       return {
         durationValues: durationValues,
@@ -364,5 +386,20 @@
     background: white;
     font-style: initial;
     pointer-events: none;
+  }
+  button.btn.kyc-button--queue {
+    padding-left: 42px;
+  }
+  button.btn.kyc-button--invoice {
+    padding-left: 42px;
+  }
+  button.btn.kyc-button--glass {
+    padding-left: 42px;
+  }
+  button.btn.kyc-button--mobile {
+    padding-left: 42px;
+  }
+  .kyc-button__title {
+    position: relative;
   }
 </style>
