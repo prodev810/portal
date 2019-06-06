@@ -104,7 +104,7 @@
           this.showLogoutBtn = false;
           return "Search";
         } else {
-          return this.$route.path.split('/')[1].replace(/-/g, ' ').toUpperCase();
+          return this.$route.path.split('/')[2].replace(/-/g, ' ');
         }
       }
     },
@@ -149,7 +149,7 @@
     color: #2ed684;
     font-family: 'Poppins', sans-serif;
     font-weight: bold;
-    text-transform: none!important;
+    text-transform: capitalize;
     font-size: 40px!important;
     margin: 0;
     margin-right: 57px;
@@ -162,4 +162,16 @@
   .search-field i {
     color: #C2C7CE;
   }
+
+  .search-field /deep/ .form-group .form-control{
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-color: #8D8D8D !important;
+  }
+  .search-field /deep/ .input-group-append .input-group-text, .input-group-prepend .input-group-text {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-color: #8D8D8D !important;
+}
+
 </style>
