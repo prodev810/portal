@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pg-edit-payment-method">
     <div class="card p-4">
       <h2>{{ $i18n.t(viewMode ? 'edit_payment_method.view_header' : 'edit_payment_method.edit_header') }}</h2>
 
@@ -110,15 +110,15 @@ export default {
 </script>
 
 <style>
-.buttons {
+.pg-edit-payment-method .buttons {
   display: flex;
   justify-content: center;
 }
-.form-contents label {
+.pg-edit-payment-method .form-contents label {
   font-weight: bold;
   color: #000000 !important;
 }
-div.form-group {
+.pg-edit-payment-method div.form-group {
   margin-bottom: 0 !important;
 }
 </style>

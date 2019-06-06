@@ -66,7 +66,17 @@ Vue.use(oAuthKycWrapper, {
     TOKEN_EXPIRED_TIME_LESS_THAN: 2 * 60,
     SHORTCUT: '$oAuthKyc'    
 })
-Vue.use(axiosWrapper, axiosConfig)
+Vue.use(axiosWrapper, [
+  axiosConfig, 
+  {
+    BASE_URL: 'https://api.dev.ceevo.com/acquring/mgmt',
+    VERSION: '',
+    TYPE: '',
+    TIMEOUT: 35000,
+    SHORTCUT: '$acchttp',
+    OAUTH: '$oAuth' // same oAuth as main
+  } 
+])
 
 // config lang
 locale.use(lang)
