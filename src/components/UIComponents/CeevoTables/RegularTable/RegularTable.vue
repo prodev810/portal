@@ -31,7 +31,17 @@
           <slot name="balance"></slot>
           <!--  row is an object [{row ,row }]<- table data-->
           <tr v-for="(row,index) in allData" :key="row.id">
-            <td scope="row" v-for="heading in renderHeadings" :key="(row.id ||JSON.stringify(row))+heading.name" :class="{'ceevo__table_info':heading.info,'ceevo__table_danger':heading.danger,'ceevo__table_action':heading.button}">
+            <td scope="row" v-for="heading in renderHeadings"
+                :key="(row.id ||JSON.stringify(row))+heading.name"
+                :class="[
+                heading.info ? 'ceevo__table_info' : '',
+                heading.danger ? 'ceevo__table_danger': '',
+                heading.button ? 'ceevo__table_action':'',
+                heading.email ? 'text-primary':'',
+                heading.status ? 'ceevo__table_status':'',
+                heading.custom ? 'ceevo__table_custom':'',
+                row.classes ? row.classes[heading.name] : ''
+                ]">
               <div class="cell">
                 <template v-if="row.edit && !heading.readOnly">
                   <fg-input v-if="!heading.input && (heading.$domAttri ||{}).type !=='number'"

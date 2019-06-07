@@ -33,6 +33,7 @@ import ResellerView from '../components/Dashboard/pages/Resller/View';
 // GeneralViews
 import NotFound from '../components/GeneralViews/NotFoundPage.vue';
 import NoPermission from '../components/Dashboard/pages/Dashboard/NoPermission.vue';
+import KycProductConfig from "../components/Dashboard/pages/Kyc/KycProductConfig";
 
 // Charts
 const Charts = () =>
@@ -277,6 +278,14 @@ const kyc = {
       name: 'KYC Search',
       component: () => import('../components/Dashboard/pages/Kyc/Search'),
       meta: {
+        permission: permission.RESELLER_INVOICE_VIEW
+      }
+    },
+    {
+      path: '/kyc/product-config',
+      name: 'KYC Product Config',
+      component: KycProductConfig,
+      meta:{
         permission: permission.RESELLER_INVOICE_VIEW
       }
     }
