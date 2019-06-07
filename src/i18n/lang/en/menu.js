@@ -20,5 +20,6 @@ export default {
     merchant: 'Merchant',
     processor: 'Processor',
     transaction: 'Transaction'
-  }
+  },
+  kyc_product_config: `Product Config`
 }

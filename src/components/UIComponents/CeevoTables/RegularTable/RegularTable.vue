@@ -1,14 +1,22 @@
 <template>
   <div>
-    <div :class="{
-          'ceevo__table--bordered':bordered,
-          'ceevo__table--responsive':responsive,
-          'ceevo__table--condensed':true,
-          'ceevo__table--striped':striped,
-          'ceevo__table-edit':editId ||editAll}"
-         class="table__wrapper ceevo__table--auto-height "
+    <div
+      :class="{
+        'ceevo__table--bordered': bordered,
+        'ceevo__table--responsive': responsive,
+        'ceevo__table--condensed': true,
+        'ceevo__table--striped': striped,
+        'ceevo__table-edit': editId ||editAll,
+        'productConfig': productConfig
+      }"
+      class="table__wrapper ceevo__table--auto-height"
     >
-      <table border="1" class="ceevo__table table" v-if="allData.length > 0">
+      <table
+        border="1"
+        class="ceevo__table table"
+        v-if="allData.length > 0"
+        :class="{ 'productConfig': productConfig }"
+      >
         <thead>
           <tr>
             <th :key="heading.name" v-for="heading in renderHeadings">
@@ -27,12 +35,24 @@
             <th v-for="(itemindex,index) in extraHeadings" :key="index+'extra label'"></th>
           </tr>
         </thead>
-        <tbody style="outline: thin solid rgb(194, 170, 239);">
+        <!-- style="outline: thin solid rgb(194, 170, 239);" -->
+        <tbody>
           <slot name="balance"></slot>
           <!--  row is an object [{row ,row }]<- table data-->
           <tr v-for="(row,index) in allData" :key="row.id">
-            <td scope="row" v-for="heading in renderHeadings" :key="(row.id ||JSON.stringify(row))+heading.name" :class="{'ceevo__table_info':heading.info,'ceevo__table_danger':heading.danger,'ceevo__table_action':heading.button}">
-              <div class="cell">
+            <td
+              scope="row"
+              v-for="heading in renderHeadings"
+              :key="(row.id ||JSON.stringify(row))+heading.name"
+              :class="{
+                'productConfigYes' : row && row.required && row.required.value === 'Yes' && productConfig,
+                'productConfigNo' : row && row.required && row.required.value === 'No' && productConfig,
+                'ceevo__table_info': heading.info,
+                'ceevo__table_danger': heading.danger,
+                'ceevo__table_action': heading.button
+              }"
+            >
+              <div class="cell" >
                 <template v-if="row.edit && !heading.readOnly">
                   <fg-input v-if="!heading.input && (heading.$domAttri ||{}).type !=='number'"
                             size="sm"
@@ -201,6 +221,10 @@
       oldestFirst: {
         type: Boolean,
         default: true
+      },
+      productConfig: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
@@ -653,4 +677,32 @@
     width: 100%;
     padding : 0px 0px !important;
   }
+
+  .table__wrapper.ceevo__table--auto-height.ceevo__table--responsive.ceevo__table--condensed.ceevo__table--striped {
+    padding: 0 0 20px 0;
+  .table__wrapper.productConfig {
+    border-radius: 10px;
+  }
+  table.productConfig {
+    margin-bottom: 0;
+    tbody {
+      tr {
+        td {
+          &.productConfigYes {
+            &:nth-child(even) {
+              background-color: rgba(46, 214, 132, 0.25);
+              border: 1px solid rgba(46, 214, 132, 0.25);
+            }
+          }
+          &.productConfigNo {
+            &:nth-child(even) {
+              background-color: rgba(255, 106, 106, 0.25);
+              border: 1px solid rgba(255, 106, 106, 0.25);
+            }
+          }
+        }
+      }
+    }
+  }
+}
 </style>

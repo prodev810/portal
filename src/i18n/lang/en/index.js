@@ -16,6 +16,7 @@ import login from './login'
 import lock from './lock'
 import edit_payment_method from './edit_payment_method'
 import payment_gateway from './payment_gateway'
+import kyc from './kyc'
 
 export default {
   menu,
@@ -35,5 +36,6 @@ export default {
   login,
   lock,
   edit_payment_method,
-  payment_gateway
+  payment_gateway,
+  kyc
 }
