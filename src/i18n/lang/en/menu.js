@@ -14,7 +14,6 @@ export default {
   kyc_dashboard: 'Dashboard',
   kyc_workflow: `Work Flow`,
   kyc_search: `Search`,
-  kyc_product_config: `Product Config`,
   payment_gateway: {
     top: 'Payment gateway',
     settings: 'Settings',
