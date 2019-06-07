@@ -653,8 +653,4 @@
     width: 100%;
     padding : 0px 0px !important;
   }
-
-  .table__wrapper.ceevo__table--auto-height.ceevo__table--responsive.ceevo__table--condensed.ceevo__table--striped {
-    padding: 0 0 20px 0;
-  }
 </style>

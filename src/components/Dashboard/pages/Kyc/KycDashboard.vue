@@ -3,9 +3,9 @@
     <el-col :sm="24" :md="11">
       <el-row class="kyc__duration">
         <b>Duration</b>
-        <div class="kyc-wrap-select">
-          <i class="kyc-select-icon">&#8645;</i>
-          <el-select class="ml-2 select-default" v-model="leftPanelDuration">
+          <el-select class="ml-2 select-default kyc__top__bottom__arrows"
+                     v-model="leftPanelDuration"
+                     @change="handleDurationSummaryReport">
             <el-option class="select-default"
                        v-for="item in durationValues"
                        :key="item.value"
@@ -13,7 +13,6 @@
                        :value="item.value">
             </el-option>
           </el-select>
-        </div>
       </el-row>
 
       <el-row>
@@ -25,63 +24,63 @@
         </div>
       </el-row>
 
-      <el-row class="kyc__buttons">
-        <p-button round class="kyc-button--queue">
-          <span class="kyc-button__title">
-            <kyc-button-icons name="svg-queue" />
-            Work Queue
-          </span>
-          </p-button>
-        <p-button round class="kyc-button--glass">
-          <span class="kyc-button__title">
-          <kyc-button-icons name="svg-glass" />
-          Application Search
-          </span>
-          </p-button>
-      </el-row>
-
-      <el-row class="kyc__buttons kyc__buttons__bottom">
-        <div>
-          <p-button round class="kyc-button--invoice">
+      <el-row>
+        <div class="kyc__buttons">
+          <p-button round class="kyc-button--queue">
             <span class="kyc-button__title">
-              <kyc-button-icons name="svg-invoice" />
-              Invoices
+              <kyc-button-icons name="svg-queue"/>
+              Work Queue
+            </span>
+          </p-button>
+          <p-button round class="kyc-button--glass">
+            <span class="kyc-button__title">
+            <kyc-button-icons name="svg-glass"/>
+            Application Search
             </span>
           </p-button>
         </div>
-
-        <div class="kyc__issuing">
-          <span>ISSUING ONLY</span><br/>
-          <p-button round class="kyc-button--mobile">
-            <div class="kyc-button__title">
-            <kyc-button-icons name="svg-mobile" />
-               E-money Accounts
-            </div>
-            </p-button>
-        </div>
       </el-row>
 
+      <el-row>
+        <div class="kyc__buttons kyc__buttons__bottom">
+          <div>
+            <p-button round class="kyc-button--invoice">
+            <span class="kyc-button__title">
+              <kyc-button-icons name="svg-invoice"/>
+              Invoices
+            </span>
+            </p-button>
+          </div>
+
+          <div class="kyc__issuing">
+            <span>ISSUING ONLY</span><br/>
+            <p-button round class="kyc-button--mobile">
+              <div class="kyc-button__title">
+                <kyc-button-icons name="svg-mobile"/>
+                E-money Accounts
+              </div>
+            </p-button>
+          </div>
+        </div>
+      </el-row>
     </el-col>
 
     <el-col :sm="24" :md="13">
       <el-row class="kyc__name__duration">
         <div class="kyc__duration"><b>Client</b>
-          <div class="kyc-wrap-select">
-            <i class="kyc-select-icon">&#8645;</i>
-            <el-select class="ml-2 select-default" v-model="rightPanelClient" @change="handleDurationStatistics">
+            <el-select class="ml-2 select-default kyc__top__bottom__arrows" v-model="rightPanelClient" @change="handleDurationStatistics">
               <el-option class="select-default"
-                         v-for="item in allClients"
+                         :label="rightPanelClientDefault.label"
+                         :value="rightPanelClientDefault.value"></el-option>
+              <el-option v-for="item in allClients"
                          :key="item.name"
                          :label="item.name"
                          :value="item.name"></el-option>
             </el-select>
-          </div>
         </div>
 
         <div class="kyc__duration ml-4"><b>Duration</b>
-          <div class="kyc-wrap-select">
-            <i class="kyc-select-icon">&#8645;</i>
-            <el-select class="ml-2 select-default" v-model="rightPanelDuration">
+            <el-select class="ml-2 select-default kyc__top__bottom__arrows" v-model="rightPanelDuration" @change="handleDurationStatistics">
               <el-option class="select-default"
                          v-for="item in durationValues"
                          :key="item.value"
@@ -89,14 +88,13 @@
                          :value="item.value">
               </el-option>
             </el-select>
-          </div>
         </div>
       </el-row>
       <el-row :gutter="10">
         <el-col :md="24" :lg="12">
           <chart-card v-if="loaded"
                       :chart-data="approvedChartData">
-            <span slot="title">Approved</span>
+            <span slot="title">Approved {{statistics.approvedApplicationStat.total}}</span>
             <span class="chart__title__duration" slot="title-label">{{rightPanelDuration}} days</span>
           </chart-card>
         </el-col>
@@ -104,7 +102,7 @@
           <chart-card v-if="loaded"
                       :chartType="'Pie'"
                       :chart-data="declinePercentChartData">
-            <span slot="title">Decline percentage</span>
+            <span slot="title">Decline percentage {{statistics.declineRate}} %</span>
             <span class="chart__title__duration" slot="title-label">{{rightPanelDuration}} days</span>
           </chart-card>
         </el-col>
@@ -114,14 +112,14 @@
         <el-col :md="24" :lg="12">
           <chart-card v-if="loaded"
                       :chart-data="declinedChartData">
-            <span slot="title">Declined</span>
+            <span slot="title">Declined {{statistics.declinedApplicationStat.total}}</span>
             <span class="chart__title__duration" slot="title-label">{{rightPanelDuration}} days</span>
           </chart-card>
         </el-col>
         <el-col :md="24" :lg="12">
           <chart-card v-if="loaded"
                       :chart-data="closedChartData">
-            <span slot="title">Closed</span>
+            <span slot="title">Closed {{statistics.closedApplicationStat.total}}</span>
             <span class="chart__title__duration" slot="title-label">{{rightPanelDuration}} days</span>
           </chart-card>
         </el-col>
@@ -156,8 +154,9 @@
         durationValues: durationValues,
 
         leftPanelDuration: durationValues[0].value,
-        rightPanelClient: null,
+        rightPanelClient: 'all',
         rightPanelDuration: durationValues[0].value,
+        rightPanelClientDefault: {label: 'All', value: 'all'},
 
         tableHeadings: [
           {name: 'clientName', label: 'Client Name'},
@@ -223,7 +222,7 @@
       handleDurationStatistics() {
         this.getStatistics({
           duration: this.rightPanelDuration,
-          clientReference: this.rightPanelClient
+          clientReference: (this.rightPanelClient === 'all') ? null : this.rightPanelClient
         })
       },
       handleDataLineCharts(values) {
@@ -258,19 +257,20 @@
 
 <style scoped lang="scss">
   $grey-color: #8D8D8D;
+  $table-border-gray: #dee2e6;
+
   .el-input__suffix {
     display: none !important;
   }
+
   .kyc__buttons {
     display: flex;
     align-items: flex-end;
-    justify-content: center;
+    justify-content: space-between;
     flex-wrap: wrap;
 
     button {
       width: 200px;
-      margin-left: 1rem;
-      margin-right: 1rem;
     }
   }
 
@@ -318,11 +318,42 @@
     color: black
   }
 
+  .el-select.select-default {
+    &.kyc__top__bottom__arrows{
+      /deep/{
+        .el-input {
+          .el-icon-arrow-up{
+            &:before{
+              font-family: FontAwesome;
+              content: "\f0dc" !important;
+              transform: translateY(-50%);
+              position: absolute;
+              font-size: 18px;
+              color: #292929;
+              width: 30px;
+              right: 0;
+              top: 50%;
+            }
+          }
+          .el-select__caret{
+            &.is-reverse{
+              transform: rotateZ(180deg);
+            }
+          }
+        }
+      }
+    }
+  }
+
   /deep/ {
     .card .numbers {
       font-size: 9px;
       color: #7039DA;
       font-weight: 900;
+    }
+
+    .card-footer{
+      display: none;
     }
 
     .select-default.el-select .el-input input,
@@ -371,12 +402,25 @@
 
       tbody {
         outline: none !important;
+        .cell{
+          border-left: 1px solid $table-border-gray;
+        }
+
+        td {
+          &:first-child {
+            .cell {
+              border: none;
+            }
+          }
+        }
       }
     }
   }
+
   .kyc-wrap-select {
     position: relative;
   }
+
   .kyc-select-icon {
     position: absolute;
     top: 4px;
@@ -387,19 +431,25 @@
     font-style: initial;
     pointer-events: none;
   }
+
   button.btn.kyc-button--queue {
     padding-left: 42px;
   }
+
   button.btn.kyc-button--invoice {
     padding-left: 42px;
   }
+
   button.btn.kyc-button--glass {
     padding-left: 42px;
   }
+
   button.btn.kyc-button--mobile {
     padding-left: 42px;
   }
+
   .kyc-button__title {
     position: relative;
+    text-transform: capitalize;
   }
 </style>
