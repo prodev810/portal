@@ -140,7 +140,7 @@
             </div>                        
 
             <template slot="footer">
-              <p-button type="info" @click.native="modalAddFloatAccount = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click.native="modalAddFloatAccount = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>
   
@@ -193,7 +193,7 @@
             </div>                        
 
             <template slot="footer">
-              <p-button type="info" @click.native="modalAddProcessingProfile = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click.native="modalAddProcessingProfile = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>
 
@@ -248,7 +248,7 @@
             </div>                        
 
             <template slot="footer">
-              <p-button type="info" @click.native="modalAddProcessingProfileFee = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click.native="modalAddProcessingProfileFee = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>
 
@@ -271,7 +271,7 @@
             </el-table>                  
 
             <template slot="footer">
-              <p-button type="info" @click.native="modalProcessingProfileFeeHistory = false">{{ $i18n.t('payment_gateway.button_close') }}</p-button>
+              <p-button type="primary" @click.native="modalProcessingProfileFeeHistory = false">{{ $i18n.t('payment_gateway.button_close') }}</p-button>
             </template> 
           </modal>
 
@@ -300,7 +300,7 @@
             </div>                        
 
             <template slot="footer">
-              <p-button type="info" @click.native="modalAddReserve = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click.native="modalAddReserve = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>          
 
@@ -351,7 +351,7 @@
             </div>                        
 
             <template slot="footer">
-              <p-button type="info" @click.native="modalAddSettlementProfile = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click.native="modalAddSettlementProfile = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>        
 
