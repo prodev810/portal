@@ -531,4 +531,7 @@ div.pg-edit-merchant .el-select,
 div.pg-edit-merchant .el-date-editor {
   width: 100%;
 }
+div.pg-edit-merchant div#accordion div.card-header i.nc-icon {
+  color: #adadad;
+}
 </style>
