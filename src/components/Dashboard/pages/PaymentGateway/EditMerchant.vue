@@ -527,4 +527,8 @@ div.pg-edit-merchant th {
 div.pg-edit-merchant h4 {
   text-transform: capitalize;
 }
+div.pg-edit-merchant .el-select,
+div.pg-edit-merchant .el-date-editor {
+  width: 100%;
+}
 </style>
