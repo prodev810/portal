@@ -37,6 +37,11 @@
                                   :prop="col.name"
                                   :label="$i18n.t(col.i18n)">
                   </el-table-column>
+                  <el-table-column :label="$i18n.t('payment_gateway.merchant.edit_merchant.headerFloatAccount.last_update')">
+                    <template slot-scope="scope">
+                      {{ formatDate(scope.row.last_update) }}
+                    </template>
+                  </el-table-column>                  
                 </el-table>                  
               </PGAccordionTab>
             </collapse-item>
@@ -380,6 +385,7 @@ import RegularTable from '@/components/UIComponents/CeevoTables/RegularTable/Reg
 import PButton from "@/components/UIComponents/Button"
 import PGRow from '@/components/Dashboard/pages/PaymentGateway/PGRow'
 import PGAccordionTab from '@/components/Dashboard/pages/PaymentGateway/PGAccordionTab'
+import moment from 'moment'
 
 export default {
   name: 'EditMerchant',
@@ -402,8 +408,7 @@ export default {
       // Float account
       headerFloatAccount: [
         { name: 'name', i18n: 'payment_gateway.merchant.edit_merchant.headerFloatAccount.name' },
-        { name: 'balance', i18n: 'payment_gateway.merchant.edit_merchant.headerFloatAccount.balance' },
-        { name: 'last_update', i18n: 'payment_gateway.merchant.edit_merchant.headerFloatAccount.last_update' }
+        { name: 'balance', i18n: 'payment_gateway.merchant.edit_merchant.headerFloatAccount.balance' }
       ],
       dataFloatAccount: [
         { name: 'masterpayment-EUR', balance: 'EUR 9998.92', last_update: '2019-03-01 12:14:06.0' },
@@ -470,6 +475,9 @@ export default {
     this.loading = false
   },
   methods: {
+    formatDate (date) {
+      return moment(date).format('YYYY-MM-DD hh:mm:ss')
+    },
     getData () {
       let pm = this.$store.state.paymentGateway.merchants.filter(value => value.merchant_id === this.$route.params.id)
 
@@ -532,6 +540,6 @@ div.pg-edit-merchant .el-date-editor {
   width: 100%;
 }
 div.pg-edit-merchant div#accordion div.card-header i.nc-icon {
-  color: #adadad;
+  color: #8d8d8d;
 }
 </style>
