@@ -116,16 +116,10 @@
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.choose_currency" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Currency"
-                           v-model="newFloatAccountData.currency">
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newFloatAccountData.currency"
+                             placeholder="Currency"
+                             :options="currencies"/>
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.opening_balance" :viewMode="false">
@@ -158,42 +152,24 @@
 
             <div class="form-contents">
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.float_account" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Float account"
-                           v-model="newProcessingProfileData.float_account">                           
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newProcessingProfileData.float_account"
+                             placeholder="Float account"
+                             :options="currencies"/>
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.processing_type" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Processing type"
-                           v-model="newProcessingProfileData.float_account">                           
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newProcessingProfileData.processing_type"
+                             placeholder="Processing type"
+                             :options="currencies"/>                
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.transaction_type" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Transaction type"
-                           v-model="newProcessingProfileData.float_account">                           
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newProcessingProfileData.transaction_type"
+                             placeholder="Transaction type"
+                             :options="currencies"/>                
               </PGRow>         
             </div>                        
 
@@ -211,16 +187,10 @@
 
             <div class="form-contents">
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.processing_profile" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Processing profile"
-                           v-model="newProcessingProfileFee.processing_profile">                           
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newProcessingProfileFee.processing_profile"
+                             placeholder="Processing profile"
+                             :options="currencies"/>                
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.apply_all" :viewMode="false">
@@ -228,16 +198,10 @@
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.fee_name" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Fee name"
-                           v-model="newProcessingProfileFee.fee_name">                           
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newProcessingProfileFee.fee_name"
+                             placeholder="Fee name"
+                             :options="currencies"/>                
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.fee" :viewMode="false" required>
@@ -318,29 +282,17 @@
 
             <div class="form-contents">
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.choose_currency" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Currency"
-                           v-model="newSettlementProfile.currency">
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newSettlementProfile.currency"
+                             placeholder="Currency"
+                             :options="currencies"/>                
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.headerSettlementProfile.interval" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Interval"
-                           v-model="newSettlementProfile.interval">
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newSettlementProfile.interval"
+                             placeholder="Interval"
+                             :options="currencies"/>                
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.fee" :viewMode="false" required>
@@ -386,6 +338,7 @@ import PButton from "@/components/UIComponents/Button"
 import PGRow from '@/components/Dashboard/pages/PaymentGateway/PGRow'
 import PGAccordionTab from '@/components/Dashboard/pages/PaymentGateway/PGAccordionTab'
 import moment from 'moment'
+import CeevoSelect from "@/components/UIComponents/CeevoSelect"
 
 export default {
   name: 'EditMerchant',
@@ -398,7 +351,8 @@ export default {
     PButton,
     PGRow,
     PGAccordionTab,
-    RegularTable
+    RegularTable,
+    CeevoSelect
   },
   data () {
     return {
