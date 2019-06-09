@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pg-edit-merchant">
     <div class="card p-4">
       <h2>{{ $i18n.t('payment_gateway.merchant.edit_merchant.' + (viewMode ? 'view_header' : 'edit_header')) }}</h2>
 
@@ -103,7 +103,7 @@
                  headerClasses="justify-content-center pg-merchant-modal-header" 
                  bodyClasses="pg-merchant-modal-body"
                  footerClasses="pg-merchant-modal-footer">
-            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_float_account') }}</h4>
+            <h4 slot="header" class="title">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_float_account') }}</h4>
 
             <div class="form-contents">
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.headerFloatAccount.name" :viewMode="false" required>
@@ -149,7 +149,7 @@
                  headerClasses="justify-content-center pg-merchant-modal-header" 
                  bodyClasses="pg-merchant-modal-body"
                  footerClasses="pg-merchant-modal-footer">
-            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_processing_profile') }}</h4>
+            <h4 slot="header" class="title">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_processing_profile') }}</h4>
 
             <div class="form-contents">
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.float_account" :viewMode="false" required>
@@ -202,7 +202,7 @@
                  headerClasses="justify-content-center pg-merchant-modal-header" 
                  bodyClasses="pg-merchant-modal-body"
                  footerClasses="pg-merchant-modal-footer">
-            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_fee') }}</h4>
+            <h4 slot="header" class="title">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_fee') }}</h4>
 
             <div class="form-contents">
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.processing_profile" :viewMode="false" required>
@@ -258,7 +258,7 @@
                  bodyClasses="pg-merchant-modal-body"
                  footerClasses="pg-merchant-modal-footer">
 
-            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.fee_history') }}</h4>
+            <h4 slot="header" class="title">{{ $i18n.t('payment_gateway.merchant.edit_merchant.fee_history') }}</h4>
 
             <el-table stripe
                       :data="dataProcessingProfile"
@@ -280,7 +280,7 @@
                  headerClasses="justify-content-center pg-merchant-modal-header" 
                  bodyClasses="pg-merchant-modal-body"
                  footerClasses="pg-merchant-modal-footer">
-            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_reserve') }}</h4>
+            <h4 slot="header" class="title">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_reserve') }}</h4>
 
             <div class="form-contents">
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.headerReserve.percentage" :viewMode="false" required>
@@ -309,7 +309,7 @@
                  headerClasses="justify-content-center pg-merchant-modal-header" 
                  bodyClasses="pg-merchant-modal-body"
                  footerClasses="pg-merchant-modal-footer">
-            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_settlement_profile') }}</h4>
+            <h4 slot="header" class="title">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_settlement_profile') }}</h4>
 
             <div class="form-contents">
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.choose_currency" :viewMode="false" required>
@@ -520,5 +520,11 @@ export default {
 }
 .pg-merchant-collapse div.card-body {
   padding: 0 !important;
+}
+div.pg-edit-merchant th {
+  text-transform: capitalize;
+}
+div.pg-edit-merchant h4 {
+  text-transform: capitalize;
 }
 </style>
