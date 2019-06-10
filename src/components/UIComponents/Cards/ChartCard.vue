@@ -20,6 +20,7 @@
       </slot>
       <slot name="subtitle"></slot>
       <component :is="chartComponent"
+                 :chart-data="chartData"
                  :labels="chartData.labels"
                  :color="color"
                  :title="chartTitle"

@@ -26,18 +26,22 @@
 
       <el-row>
         <div class="kyc__buttons">
-          <p-button round class="kyc-button--queue">
-            <span class="kyc-button__title">
-              <kyc-button-icons name="svg-queue"/>
-              Work Queue
-            </span>
-          </p-button>
-          <p-button round class="kyc-button--glass">
-            <span class="kyc-button__title">
-            <kyc-button-icons name="svg-glass"/>
-            Application Search
-            </span>
-          </p-button>
+          <router-link to="/kyc/workflow">
+            <p-button round class="kyc-button--queue">
+              <span class="kyc-button__title">
+                <kyc-button-icons name="svg-queue"/>
+                Work Queue
+              </span>
+            </p-button>
+          </router-link>
+          <router-link to="/kyc/search">
+            <p-button round class="kyc-button--glass">
+              <span class="kyc-button__title">
+              <kyc-button-icons name="svg-glass"/>
+              Application Search
+              </span>
+            </p-button>
+          </router-link>
         </div>
       </el-row>
 
@@ -93,6 +97,7 @@
       <el-row :gutter="10">
         <el-col :md="24" :lg="12">
           <chart-card v-if="loaded"
+                      :chart-options="lineChartsOptions"
                       :chart-data="approvedChartData">
             <span slot="title">Approved {{statistics.approvedApplicationStat.total}}</span>
             <span class="chart__title__duration" slot="title-label">{{rightPanelDuration}} days</span>
@@ -203,6 +208,35 @@
           return reportItem;
         })
       },
+      lineChartsOptions (){
+        return {
+          spanGaps: false,
+          scales: {
+            yAxes:[{
+              gridLines: {
+                display: false,
+                drawBorder: false,
+              },
+            }],
+            xAxes: [{
+              type: 'time',
+              gridLines: {
+                display: false,
+                drawBorder: false,
+              },
+              time:{
+                unit: 'day',
+                unitStepSize: this.rightPanelDuration,
+                displayFormats: {
+                  day: "YYYY-MM-DD"
+                },
+                min: this.handleStartCharts(this.rightPanelDuration),
+                max: this.handleEndCharts()
+              }
+            }]
+          }
+        }
+      }
     },
     methods: {
       ...mapActions({
@@ -226,14 +260,13 @@
         })
       },
       handleDataLineCharts(values) {
-        const labels = [];
         const series = [];
+
         Object.entries(values).forEach(item => {
-          labels.push(item[0])
-          series.push(item[1])
+          series.push({ x: item[0], y: item[1]})
         });
         return {
-          labels,
+          labels: [],
           datasets: [{
             data: series,
             backgroundColor: 'transparent',
@@ -241,6 +274,14 @@
             pointBorderColor: 'transparent'
           }]
         }
+      },
+      handleStartCharts(duration){
+        const dateNow = new Date()
+        return  new Date(new Date().setDate(dateNow.getDate() - duration)).toISOString().split('T')[0]
+      },
+      handleEndCharts(){
+        const dateNow = new Date()
+        return  dateNow.toISOString().split('T')[0]
       },
       handleDataPieCharts(values) {
         const approvePercent = 100 - Number(values);
