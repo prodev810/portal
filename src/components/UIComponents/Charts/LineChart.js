@@ -1,5 +1,6 @@
-import {Line} from 'vue-chartjs'
+import {Line, mixins} from 'vue-chartjs'
 import {hexToRGB} from "./utils";
+const { reactiveProp} = mixins
 
 const chartColor = "#FFFFFF";
 const gradientChartOptionsConfiguration = {
@@ -49,6 +50,7 @@ const gradientChartOptionsConfiguration = {
 export default {
   name: 'line-chart',
   extends: Line,
+  mixins: [reactiveProp],
   props: {
     labels: {
       type: [Object, Array],
@@ -75,30 +77,31 @@ export default {
       description: 'Chart title'
     },
   },
+  watch:{
+    extraOptions: function changeOption(newValue, oldValue){
+      this.renderLineCharts(this.chartData, this.setChartsOptions())
+    }
+  },
   mounted() {
-    let fallBackColor = '#f96332';
-    let color = this.color || fallBackColor;
-    const ctx = document.getElementById(this.chartId).getContext('2d');
-    const gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
-    gradientStroke.addColorStop(0, color);
-    gradientStroke.addColorStop(1, chartColor);
+    this.renderLineCharts(this.chartData, this.setChartsOptions())
+  },
+  methods:{
+    renderLineCharts(chartsData,options){
+      this.renderChart(chartsData, options)
+    },
+    setChartsOptions(){
+      let fallBackColor = '#f96332';
+      let color = this.color || fallBackColor;
+      const ctx = document.getElementById(this.chartId).getContext('2d');
+      const gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
+      gradientStroke.addColorStop(0, color);
+      gradientStroke.addColorStop(1, chartColor);
 
-    const gradientFill = ctx.createLinearGradient(0, 170, 0, 50);
-    gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
-    gradientFill.addColorStop(1, hexToRGB(color, 0.4));
+      const gradientFill = ctx.createLinearGradient(0, 170, 0, 50);
+      gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
+      gradientFill.addColorStop(1, hexToRGB(color, 0.4));
 
-    let chartOptions = Object.assign(gradientChartOptionsConfiguration, this.extraOptions || {})
-    this.renderChart({
-      labels: this.labels || [],
-      datasets: this.datasets ? this.datasets : [{
-        label: this.title || '',
-        borderColor: color,
-        pointRadius: 0,
-        pointHoverRadius: 0,
-        fill: false,
-        borderWidth: 3,
-        data: this.data || []
-      }]
-    }, chartOptions);
-  }
+      return Object.assign(gradientChartOptionsConfiguration, this.extraOptions || {})
+    }
+  },
 }
