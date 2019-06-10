@@ -18,8 +18,8 @@ export default {
   },
   merchant: {
     merchantHeader: {
-      merchant_name: 'Merchant name',
-      short_code: 'Short code',
+      merchant_name: 'Merchant Name',
+      short_code: 'Short Code',
       merchant_id: 'Merchant ID'
     },
     edit_merchant: {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pg-edit-merchant">
     <div class="card p-4">
       <h2>{{ $i18n.t('payment_gateway.merchant.edit_merchant.' + (viewMode ? 'view_header' : 'edit_header')) }}</h2>
 
@@ -37,6 +37,11 @@
                                   :prop="col.name"
                                   :label="$i18n.t(col.i18n)">
                   </el-table-column>
+                  <el-table-column :label="$i18n.t('payment_gateway.merchant.edit_merchant.headerFloatAccount.last_update')">
+                    <template slot-scope="scope">
+                      {{ formatDate(scope.row.last_update) }}
+                    </template>
+                  </el-table-column>                  
                 </el-table>                  
               </PGAccordionTab>
             </collapse-item>
@@ -103,7 +108,7 @@
                  headerClasses="justify-content-center pg-merchant-modal-header" 
                  bodyClasses="pg-merchant-modal-body"
                  footerClasses="pg-merchant-modal-footer">
-            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_float_account') }}</h4>
+            <h4 slot="header" class="title">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_float_account') }}</h4>
 
             <div class="form-contents">
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.headerFloatAccount.name" :viewMode="false" required>
@@ -111,16 +116,10 @@
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.choose_currency" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Currency"
-                           v-model="newFloatAccountData.currency">
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newFloatAccountData.currency"
+                             placeholder="Currency"
+                             :options="currencies"/>
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.opening_balance" :viewMode="false">
@@ -140,7 +139,7 @@
             </div>                        
 
             <template slot="footer">
-              <p-button type="info" @click.native="modalAddFloatAccount = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click.native="modalAddFloatAccount = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>
   
@@ -149,51 +148,33 @@
                  headerClasses="justify-content-center pg-merchant-modal-header" 
                  bodyClasses="pg-merchant-modal-body"
                  footerClasses="pg-merchant-modal-footer">
-            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_processing_profile') }}</h4>
+            <h4 slot="header" class="title">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_processing_profile') }}</h4>
 
             <div class="form-contents">
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.float_account" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Float account"
-                           v-model="newProcessingProfileData.float_account">                           
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newProcessingProfileData.float_account"
+                             placeholder="Float account"
+                             :options="currencies"/>
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.processing_type" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Processing type"
-                           v-model="newProcessingProfileData.float_account">                           
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newProcessingProfileData.processing_type"
+                             placeholder="Processing type"
+                             :options="currencies"/>                
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.transaction_type" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Transaction type"
-                           v-model="newProcessingProfileData.float_account">                           
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newProcessingProfileData.transaction_type"
+                             placeholder="Transaction type"
+                             :options="currencies"/>                
               </PGRow>         
             </div>                        
 
             <template slot="footer">
-              <p-button type="info" @click.native="modalAddProcessingProfile = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click.native="modalAddProcessingProfile = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>
 
@@ -202,20 +183,14 @@
                  headerClasses="justify-content-center pg-merchant-modal-header" 
                  bodyClasses="pg-merchant-modal-body"
                  footerClasses="pg-merchant-modal-footer">
-            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_fee') }}</h4>
+            <h4 slot="header" class="title">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_fee') }}</h4>
 
             <div class="form-contents">
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.processing_profile" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Processing profile"
-                           v-model="newProcessingProfileFee.processing_profile">                           
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newProcessingProfileFee.processing_profile"
+                             placeholder="Processing profile"
+                             :options="currencies"/>                
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.apply_all" :viewMode="false">
@@ -223,16 +198,10 @@
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.fee_name" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Fee name"
-                           v-model="newProcessingProfileFee.fee_name">                           
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newProcessingProfileFee.fee_name"
+                             placeholder="Fee name"
+                             :options="currencies"/>                
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.fee" :viewMode="false" required>
@@ -248,7 +217,7 @@
             </div>                        
 
             <template slot="footer">
-              <p-button type="info" @click.native="modalAddProcessingProfileFee = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click.native="modalAddProcessingProfileFee = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>
 
@@ -258,7 +227,7 @@
                  bodyClasses="pg-merchant-modal-body"
                  footerClasses="pg-merchant-modal-footer">
 
-            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.fee_history') }}</h4>
+            <h4 slot="header" class="title">{{ $i18n.t('payment_gateway.merchant.edit_merchant.fee_history') }}</h4>
 
             <el-table stripe
                       :data="dataProcessingProfile"
@@ -271,7 +240,7 @@
             </el-table>                  
 
             <template slot="footer">
-              <p-button type="info" @click.native="modalProcessingProfileFeeHistory = false">{{ $i18n.t('payment_gateway.button_close') }}</p-button>
+              <p-button type="primary" @click.native="modalProcessingProfileFeeHistory = false">{{ $i18n.t('payment_gateway.button_close') }}</p-button>
             </template> 
           </modal>
 
@@ -280,7 +249,7 @@
                  headerClasses="justify-content-center pg-merchant-modal-header" 
                  bodyClasses="pg-merchant-modal-body"
                  footerClasses="pg-merchant-modal-footer">
-            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_reserve') }}</h4>
+            <h4 slot="header" class="title">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_reserve') }}</h4>
 
             <div class="form-contents">
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.headerReserve.percentage" :viewMode="false" required>
@@ -300,7 +269,7 @@
             </div>                        
 
             <template slot="footer">
-              <p-button type="info" @click.native="modalAddReserve = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click.native="modalAddReserve = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>          
 
@@ -309,33 +278,21 @@
                  headerClasses="justify-content-center pg-merchant-modal-header" 
                  bodyClasses="pg-merchant-modal-body"
                  footerClasses="pg-merchant-modal-footer">
-            <h4 slot="header" class="title title-up">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_settlement_profile') }}</h4>
+            <h4 slot="header" class="title">{{ $i18n.t('payment_gateway.merchant.edit_merchant.add_settlement_profile') }}</h4>
 
             <div class="form-contents">
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.choose_currency" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Currency"
-                           v-model="newSettlementProfile.currency">
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newSettlementProfile.currency"
+                             placeholder="Currency"
+                             :options="currencies"/>                
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.headerSettlementProfile.interval" :viewMode="false" required>
-                <el-select slot="edit" class="select-default"
-                           placeholder="Interval"
-                           v-model="newSettlementProfile.interval">
-                  <el-option v-for="option in currencies"
-                            class="select-default"
-                            :value="option.value"
-                            :label="option.label"
-                            :key="option.label">
-                  </el-option>
-                </el-select>
+                <CeevoSelect slot="edit" 
+                             v-model="newSettlementProfile.interval"
+                             placeholder="Interval"
+                             :options="currencies"/>                
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.fee" :viewMode="false" required>
@@ -351,7 +308,7 @@
             </div>                        
 
             <template slot="footer">
-              <p-button type="info" @click.native="modalAddSettlementProfile = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click.native="modalAddSettlementProfile = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>        
 
@@ -380,6 +337,8 @@ import RegularTable from '@/components/UIComponents/CeevoTables/RegularTable/Reg
 import PButton from "@/components/UIComponents/Button"
 import PGRow from '@/components/Dashboard/pages/PaymentGateway/PGRow'
 import PGAccordionTab from '@/components/Dashboard/pages/PaymentGateway/PGAccordionTab'
+import moment from 'moment'
+import CeevoSelect from "@/components/UIComponents/CeevoSelect"
 
 export default {
   name: 'EditMerchant',
@@ -392,7 +351,8 @@ export default {
     PButton,
     PGRow,
     PGAccordionTab,
-    RegularTable
+    RegularTable,
+    CeevoSelect
   },
   data () {
     return {
@@ -402,8 +362,7 @@ export default {
       // Float account
       headerFloatAccount: [
         { name: 'name', i18n: 'payment_gateway.merchant.edit_merchant.headerFloatAccount.name' },
-        { name: 'balance', i18n: 'payment_gateway.merchant.edit_merchant.headerFloatAccount.balance' },
-        { name: 'last_update', i18n: 'payment_gateway.merchant.edit_merchant.headerFloatAccount.last_update' }
+        { name: 'balance', i18n: 'payment_gateway.merchant.edit_merchant.headerFloatAccount.balance' }
       ],
       dataFloatAccount: [
         { name: 'masterpayment-EUR', balance: 'EUR 9998.92', last_update: '2019-03-01 12:14:06.0' },
@@ -470,6 +429,9 @@ export default {
     this.loading = false
   },
   methods: {
+    formatDate (date) {
+      return moment(date).format('YYYY-MM-DD hh:mm:ss')
+    },
     getData () {
       let pm = this.$store.state.paymentGateway.merchants.filter(value => value.merchant_id === this.$route.params.id)
 
@@ -520,5 +482,18 @@ export default {
 }
 .pg-merchant-collapse div.card-body {
   padding: 0 !important;
+}
+div.pg-edit-merchant th {
+  text-transform: capitalize;
+}
+div.pg-edit-merchant h4 {
+  text-transform: capitalize;
+}
+div.pg-edit-merchant .el-select,
+div.pg-edit-merchant .el-date-editor {
+  width: 100%;
+}
+div.pg-edit-merchant div#accordion div.card-header i.nc-icon {
+  color: #8d8d8d;
 }
 </style>

@@ -54,6 +54,7 @@ div.pg-row-control-col {
 }
 .pg-row-header-col label {
   margin-bottom: 0 !important;
+  text-transform: capitalize;
 }
 div.pg-row-control-col .form-check label.form-check-label {
   position: static !important;
