@@ -108,7 +108,7 @@
                   </el-select>
                 </template>
                 <template v-else-if="heading.name === 'view'">
-                  <button class="action-button" type="button">View</button>
+                  <button class="action-button" type="button" @click.stop.prevent="goToProductConfig(row)">View</button>
                 </template>
                 <template v-else-if="heading.name === 'action'">
                   <button class="action-button" type="button">Action</button>
@@ -470,6 +470,11 @@
             }
           }
         return valid;
+      },
+      goToProductConfig(row) {
+          if(row && row.appReferenceId && row.appReferenceId.value ) {
+              this.$router.push({ name: 'KYC Product Config', query: {appRef: row.appReferenceId.value }})
+          }
       }
     },
     updated() {
