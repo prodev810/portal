@@ -2,6 +2,12 @@
   <el-row :gutter="20" class="kyc__product__config">
     <el-col :md="24">
       <el-row>
+        <div class="d-flex justify-content-between">
+          <span class="kyc__product__title">Overview KYC Client</span>
+          <router-link to="/kyc/product-config/create-client">
+            <p-button class="text-capitalize" round>Create new client</p-button>
+          </router-link>
+        </div>
         <div class="card">
           <regular-table class="kyc__module__table"
                          striped responsive condensed
@@ -9,21 +15,30 @@
                          :value="tableProductConfigData">
             <template slot-scope="index">
               <td>
-                <p-button type="primary" outline class="kyc__product__btn">
+                <p-button type="primary"
+                          outline
+                          @click="handleViewInvoice(1)"
+                          class="kyc__product__btn">
                   <slot name="label">
                     <img class="img-responsive ic__icon"
                          src="../../../../../public/static/img/dashboard_icons/ic_view invoice.svg" alt="">
                   </slot>
                   <span class="kyc-button__title">View Invoice</span>
                 </p-button>
-                <p-button type="primary" outline class="kyc__product__btn">
+                <p-button type="primary"
+                          outline
+                          @click="handleEditClient(1)"
+                          class="kyc__product__btn">
                   <slot name="label">
                     <img class="img-responsive ic__icon"
                          src="../../../../../public/static/img/dashboard_icons/ic_edit.svg" alt="">
                   </slot>
                   <span class="kyc-button__title">Edit</span>
                 </p-button>
-                <p-button type="primary" outline class="kyc__product__btn">
+                <p-button type="primary"
+                          outline
+                          @click="handleViewClient(1)"
+                          class="kyc__product__btn">
                   <slot name="label">
                     <img class="img-responsive ic__icon"
                          src="../../../../../public/static/img/dashboard_icons/ic_view statement.svg" alt="">
@@ -66,7 +81,16 @@
           return value.toLowerCase()
         }
         return (value.toLowerCase() === 'yes') ? 'success' : 'danger'
-      }
+      },
+      handleViewClient(id) {
+        this.$router.push({path: `/kyc/product-config/view-client/${id}`});
+      },
+      handleEditClient(id) {
+        this.$router.push({path: `/kyc/product-config/edit-client/${id}`});
+      },
+      handleViewInvoice(id) {
+        this.$router.push({path: `/kyc/product-config/view-invoice/${id}`});
+      },
     },
     data() {
       return {
@@ -140,7 +164,14 @@
 
   .kyc__product__config {
 
-    .btn{
+    .kyc__product__title {
+      font-size: 28px;
+      font-weight: 900;
+      font-family: 'Poppins', sans-serif;
+      margin: auto 0;
+    }
+
+    .btn {
       padding-left: 30px;
       padding-right: 30px;
     }
@@ -180,7 +211,8 @@
     .kyc__module__table {
       /deep/ {
         .ceevo__table {
-          overflow: auto!important;
+          overflow: auto !important;
+
           .cell {
             text-align: center;
             min-width: unset;

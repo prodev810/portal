@@ -284,11 +284,47 @@ const kyc = {
     {
       path: '/kyc/product-config',
       name: 'KYC Product Config',
-      component: () => import('../components/Dashboard/pages/Kyc/ProductConfig'),
+      component: () => import('../components/Dashboard/pages/Kyc/KycProductConfig'),
       meta: {
         permission: permission.RESELLER_INVOICE_VIEW
       }
-    }
+    },
+    {
+      path:'/kyc/product-config/create-client',
+      name: 'KYC Product Config Create Client',
+      component: () => import('../components/Dashboard/pages/Kyc/KycClient'),
+      props:{mode: 'create'},
+      meta: {
+        permission: permission.RESELLER_INVOICE_VIEW
+      }
+    },
+    {
+      path: '/kyc/product-config/view-client/:id',
+      name: 'KYC Product Config View Client',
+      component: () => import('../components/Dashboard/pages/Kyc/KycClient'),
+      props:{mode: 'view'},
+      meta: {
+        permission: permission.RESELLER_INVOICE_VIEW
+      }
+    },
+    {
+      path: '/kyc/product-config/edit-client/:id',
+      name: 'KYC Product Config Edit Client',
+      component: () => import('../components/Dashboard/pages/Kyc/KycClient'),
+      props:{mode: 'edit'},
+      meta: {
+        permission: permission.RESELLER_INVOICE_VIEW
+      }
+    },
+    {
+      path: '/kyc/product-config/view-invoice/:id',
+      name: 'KYC Product Config View Invoice',
+      component: () => import('../components/Dashboard/pages/Kyc/KycViewInvoice'),
+      props:{mode: 'edit'},
+      meta: {
+        permission: permission.RESELLER_INVOICE_VIEW
+      }
+    },
   ]
 }
 let loginPage = {
