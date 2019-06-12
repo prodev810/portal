@@ -333,6 +333,24 @@ const kyc = {
         permission: permission.RESELLER_INVOICE_VIEW
       }
     },
+    {
+      path: '/kyc/poa-action',
+      name: 'KYC POA Action',
+      component: () => import('../components/Dashboard/pages/Kyc/KycPOAAction'),
+      props:{mode: 'action'},
+      meta: {
+        permission: permission.RESELLER_INVOICE_VIEW
+      }
+    },
+    {
+      path: '/kyc/poa-view',
+      name: 'KYC POA View',
+      component: () => import('../components/Dashboard/pages/Kyc/KycPOAAction'),
+      props:{mode: 'view'},
+      meta: {
+        permission: permission.RESELLER_INVOICE_VIEW
+      }
+    },
   ]
 }
 let loginPage = {
