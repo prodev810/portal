@@ -2,22 +2,30 @@
 <div>
 
     <div class="container-fluid mb-5">
-        <div class="kyc__section d-xl-flex align-items-center">
-            <h3 class="kyc__section__header mb-3 mb-xl-0">Product Config</h3>
-            <p-button class="ml-xl-5 btn btn--issue" type="success">Issuing</p-button>
-            <p-button round class="ml-5 btn btn--close" @click.stop.prevent="$router.push({ name: returnPageName })">Close and Return</p-button>
+        <div class="row">
+            <div class="col-xl-8">
+                <div class="kyc__section kyc__section__buttons d-flex justify-content-between align-items-center flex-wrap">
+                    <h3 class="kyc__section__header mb-0 mb-xl-0 mr-4">Product Config</h3>
+                    <!-- <p-button class="btn btn--issue mr-5" type="success">Issuing</p-button>
+                        <p-button round class="btn btn--close btn--shadow mr-4">Close and Return</p-button> -->
+                    <div class="my-3 d-flex justify-content-between kyc-top-buttons">
+                        <p-button class="btn btn--issue mr-5" type="success">Issuing</p-button>
+                        <p-button round class="btn btn--close btn--shadow mr-1">Close and Return</p-button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="container-fluid">
-        <div class="kyc-info-section">
-            <div class="kyc__section mb-4">
+        <div class="row">
+            <div class="col-xl-4 mb-5">
                 <h3 class="kyc__section__header">{{ $t('kyc.applicationInfo.title') }}</h3>
-                <div class="" v-for="(application, index) in applicationInfo" :key="index">
-                    <div class="d-flex justify-content-start">
-                        <p class="d-inline-block kyc-label">{{ application.label }}</p>
-                        <div class="kyc-value">
-                            <p class="d-inline">{{ application.value }}</p>
+                <div class="kyc-info-box">
+                    <div class="row" v-for="(application, index) in applicationInfo" :key="index">
+                        <div class="col-6"><p class="kyc-label">{{ application.label }}</p></div>
+                        <div class="col-6">
+                            <p class="kyc-value d-inline-block pr-2">{{ application.value }}</p>
                             <el-popover v-if="application.label === 'Status'" placement="bottom right" width="490" class="status-helper" trigger="hover">
                                 <h5 class="sub-title">Account Legend</h5>
                                 <table class="helper-table">
@@ -28,94 +36,88 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <img slot="reference" class="ml-2" :src="eyeIcon" />
+                                <img slot="reference" :src="eyeIcon" />
                             </el-popover>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="mt-xl-5 mb-4 mr-5" style="width: 442px;">
-                <div class="card p-0" >
-                    <regular-table striped responsive condensed :headings="ApplicationInfoTableHeadings" :value="ApplicationInfoTableValues" :productConfig="true" />
+            <div class="col-xl-4 mb-5">
+                <div class="car mt-xl-5 pt-xl-2" style="">
+                    <regular-table class="kyc-t-card" striped responsive condensed :headings="ApplicationInfoTableHeadings" :value="ApplicationInfoTableValues" :productConfig="true" />
                 </div>
             </div>
 
-            <div class="kyc__section mb-4">
+            <div class="col-xl-4 mb-5">
                 <h3 class="kyc__section__header">Program Info</h3>
-                <div class="" v-for="(item, k) in programInfo" :key="k">
-                    <div class="d-flex justify-content-start">
-                        <p class="d-inline-block kyc-label">{{ item.name }}</p>
-                        <p class="kyc-value">{{ item.value }}</p>
+                <div class="kyc-info-box">
+                    <div class="row" v-for="(item, k) in programInfo" :key="k">
+                        <div class="col-6"><p class="kyc-label">{{ item.name }}</p></div>
+                        <div class="col-6"><p class="kyc-value">{{ item.value }}</p></div>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>
 
     <div class="communication-wrapper mt-4">
-        <div class="container-fluid">
-            <div class="row mt-4 mb-5">
-                <div class="col-xl-7 mb-xl-0 mb-5">
+        <div class="container-fluid pt-3">
+            <div class="row">
+                <div class="col-xl-8 mb-5">
                     <div class="kyc__section">
-                        <h3 class="kyc__section__header">Communication Channel</h3>
-                        <div class="kyc__section__body">
-                            <div class="row py-2">
-                                <div class="col align-center">
-                                    <p class="d-inline-block kyc-label">E-mail</p>
-                                    <div class="ml-4">
-                                        <fg-input v-if="editEmail" v-model="communicationEmail" class="p-0 my-2"></fg-input>
-                                        <span v-else-if="getterClientInfo && getterClientInfo.contactInfo" class="color-primary" >{{ getterClientInfo.contactInfo.email }}</span>
-                                        <img v-if="!editEmail" :src="editIcon" width="20" class="ml-3" @click="editEmail = !editEmail" />
+                        <h3 class="kyc__section__header mb-2">Communication Channel</h3>
+                        <div class="kyc__section__body kyc-info-box--large">
+                            <div class="row mb-2 pt-3">
+                                <div class="col-6"><p class="kyc-label">E-mail</p></div>
+                                <div class="col-6">
+                                    <div class="">
+                                        <fg-input v-if="editEmail" v-model="communicationEmail" class="p-0 mr-2"></fg-input>
+                                        <span v-else-if="getterClientInfo && getterClientInfo.contactInfo" class="color-primary mr-2" >{{ getterClientInfo.contactInfo.email }}</span>
+                                        <img v-if="!editEmail" :src="editIcon" width="20" @click="editEmail = !editEmail" />
                                         <p-button v-if="editEmail" class="btn btn--view mb-4 mr-2" round @click.stop="goUpdateContact">Update Contact</p-button>
                                         <p-button v-if="editEmail" class="btn btn--view mb-4" round @click.stop="cancelEmail">Cancel</p-button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row pb-2">
-                                <div class="col align-center">
-                                    <p class="d-inline-block  mb-0 kyc-label">Mobile Phone Number</p>
-                                    <div class="ml-4">
-                                        <el-select size="small" :disabled="!editMobile" class="select-default mr-3" placeholder="Selected A Country Code" v-model="selectedPhoneCode">
-                                            <el-option v-for="(phoneCode, index) in phoneCodeList" class="select-success" :value="phoneCode.dial_code" :label="`${phoneCode.name}(${phoneCode.dial_code})`" :key="index" />
-                                        </el-select>
-                                        <fg-input v-if="editMobile" v-model="phoneNumber" class="p-0 my-2"></fg-input>
-                                        <span v-else-if="getterClientInfo && getterClientInfo.contactInfo">{{ getterClientInfo.contactInfo.mobile }}</span>
-                                        <img v-if="!editMobile" :src="editIcon" width="20" class="ml-3" @click="editMobile = !editMobile" />
-                                        <p-button v-if="editMobile" class="btn btn--view mb-4 mr-2" round @click.stop="goUpdateContact">Update Contact</p-button>
-                                        <p-button v-if="editMobile" class="btn btn--view mb-4" round @click.stop="cancelMobile">Cancel</p-button>
-                                    </div>
+                            <div class="row mb-2">
+                                <div class="col-6"><p class="kyc-label pt-2">Mobile Phone Number</p></div>
+                                <div class="col-6">
+                                    <el-select size="small" :disabled="!editMobile" class="mobile-phone-select mr-3 mb-3" placeholder="Selected A Country Code" v-model="selectedPhoneCode">
+                                        <el-option v-for="(phoneCode, index) in phoneCodeList" class="select-success" :value="phoneCode.dial_code" :label="`${phoneCode.name}(${phoneCode.dial_code})`" :key="index" />
+                                    </el-select>
+                                    <fg-input v-if="editMobile" v-model="phoneNumber" class="p-0 my-2"></fg-input>
+                                    <span v-else-if="getterClientInfo && getterClientInfo.contactInfo">{{ getterClientInfo.contactInfo.mobile }}</span>
+                                    <img v-if="!editMobile" :src="editIcon" width="20" class="ml-3" @click="editMobile = !editMobile" />
+                                    <p-button v-if="editMobile" class="btn btn--view mb-4 mr-2" round @click.stop="goUpdateContact">Update Contact</p-button>
+                                    <p-button v-if="editMobile" class="btn btn--view mb-4" round @click.stop="cancelMobile">Cancel</p-button>
                                 </div>
-                                
                             </div>
-                            <div class="row py-1">
-                                <div class="col-4 align-center">
-                                    <p class="d-inline-block mb-0 kyc-label">Resend Application SMS</p>
-                                    <div class="ml-4">
-                                        <p-button class="btn btn--view" round @click.stop="resendSms">send</p-button>
-                                    </div>
-                                </div>
-                                
+                            <div class="row mb-2">
+                                <div class="col-6"><p class="kyc-label pt-2">Resend Application SMS</p></div>
+                                <div class="col-6"><p-button class="btn btn--view btn--shadow m-0" round @click.stop="resendSms">send</p-button></div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-5 mb-xl-0 mb-5">
+
+                <div class="col-xl-4 mb-xl-0 mb-5">
                     <div class="kyc__section">
-                        <h3 class="kyc__section__header">Application Options</h3>
+                        <h3 class="kyc__section__header mb-2">Application Options</h3>
                         <div class="">
-                            <div class="row">
+                            <div class="row mb-2">
                                 <div class="col align-center">
-                                    <p-button round class="btn btn--close" @click.stop.prevent="$router.push({ name: returnPageName })">Close and Return</p-button>
+                                    <p-button round class="btn btn--close btn--shadow">Close and Return</p-button>
                                     <p class="mb-0 ml-4">Return to previous menu</p>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row mb-2">
                                 <div class="col align-center">
                                     <el-popover v-model="showTerminatePopover" placement="left" width="490" class="status-helper"  trigger="click">
                                         <div class="container-fluid">
                                             <div class="row">
-                                                <div class="col"><h5 class="sub-title text-center mt-4 mb-4">Account Closure Confirmation</h5></div>
+                                                <div class="col"><h5 class="sub-title text-center mt-4 mb-4">Terminate Application Confirmation</h5></div>
                                             </div>
                                             <div class="row">
                                                 <div class="col">
@@ -146,13 +148,13 @@
 
             <div class="row">
                 <div class="col pt-5">
-                    <h5 class="sub-title">Preliminary Client Information</h5>
+                    <h5 class="sub-title mb-3">Preliminary Client Information</h5>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col">
-                    <h5 class="sub-title mt-3 mb-2">ID Verification</h5>
+                    <h5 class="sub-title mb-2 pt-1">ID Verification</h5>
                 </div>
             </div>
 
@@ -165,7 +167,7 @@
                 </div>
             </div>
 
-            <div class="row mb-5">
+            <div class="row mb-3">
                 <div class="col-xl-4 mb-xl-0 mb-4">
                     <div class="client-info">
                         <p class=" kyc-label">Front</p>
@@ -201,7 +203,7 @@
                     <div class="client-info">
                         <div class="text-right">
                         </div>
-                        <p class="my-2 kyc-label">Selfie</p>
+                        <p class="kyc-label">Selfie</p>
                         <el-card class="client-info__card" :body-style="{ padding: '0px' }">
                             <el-popover v-if="gettersCheckDocs.SELFIE" placement="right" width="550" class="image-zoom" trigger="hover">
                                 <img class="w-100" :src="`data:${gettersCheckDocs.SELFIE.mimeType};base64, ${gettersCheckDocs.SELFIE.content}`">
@@ -233,73 +235,70 @@
                 </div>
             </div>
 
-            <div class="row mb-4">
-                <div class="col">
-                    <h5 class="sub-title mt-3 mb-1">POA Verification</h5>
-                </div>
-            </div>
-
-            <div class="row">
-
-                <div class="col-xl-4 mb-xl-0 mb-5">
-                    <div class="client-info">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <p class="kyc-label kyc-label--no-w mb-0">Status</p>
-                            <p-button class="btn btn--status m-0" :class="cardPoaCheckStatus" v-if="getterClientInfo && getterClientInfo.poaCheckInfo">{{ getterClientInfo.poaCheckInfo.checkStatusName }}</p-button>
-                        </div>
-                        <p class="mb-3 kyc-label kyc-label--no-w" v-if="getterPoaImg">{{ getterPoaImg.docType }}</p>
-                        <el-card class="client-info__card" :body-style="{ padding: '0px' }">
-                            <el-popover v-if="getterPoaImg" placement="right" width="550" class="image-zoom" trigger="hover">
-                                <img class="w-100" :src="`data:${getterPoaImg.mimeType};base64, ${getterPoaImg.content}`">
-                                <img class="client-info__card__img" slot="reference" v-if="getterPoaImg" :src="`data:${getterPoaImg.mimeType};base64, ${getterPoaImg.content}`">
-                            </el-popover>
-                            <div v-else class="client-info__card__info d-flex justify-content-center align-items-center">
-                                <p>No document received</p>
+            <div class="row mb-3 pt-3">
+                <div class="col-xl-8 mb-5">
+                    <h5 class="sub-title mb-3">POA Verification</h5>
+                    <div class="row">
+                        <div class="col-xl-6 mb-xl-0 mb-5">
+                            <div class="client-info">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <p class="kyc-label kyc-label--no-w mb-0">Status</p>
+                                    <p-button class="btn btn--status m-0" :class="cardPoaCheckStatus" v-if="getterClientInfo && getterClientInfo.poaCheckInfo">{{ getterClientInfo.poaCheckInfo.checkStatusName }}</p-button>
+                                </div>
+                                <p class="mb-3 kyc-label kyc-label--no-w" v-if="getterPoaImg">{{ getterPoaImg.docType }}</p>
+                                <el-card class="client-info__card" :body-style="{ padding: '0px' }">
+                                    <el-popover v-if="getterPoaImg" placement="right" width="550" class="image-zoom" trigger="hover">
+                                        <img class="w-100" :src="`data:${getterPoaImg.mimeType};base64, ${getterPoaImg.content}`">
+                                        <img class="client-info__card__img" slot="reference" v-if="getterPoaImg" :src="`data:${getterPoaImg.mimeType};base64, ${getterPoaImg.content}`">
+                                    </el-popover>
+                                    <div v-else class="client-info__card__info d-flex justify-content-center align-items-center">
+                                        <p>No document received</p>
+                                    </div>
+                                </el-card>
                             </div>
-                        </el-card>
+                        </div>
+
+                        <div class="col-xl-6 mb-xl-0 mb-5">
+                            <div class="kyc-info-box">
+                                <p class="mb-2 kyc-label">POA Match</p>
+                                <p class="mb-4 kyc-label">POA Supplied Details</p>
+                                <el-row class="">
+                                    <el-col :sm="10"><p class="kyc-label">Address Line 1</p></el-col>
+                                    <el-col :sm="14"><p class="kyc-value">{{ poaSuppliedDetails.address1 }}</p></el-col>
+                                </el-row>
+                                <el-row class="">
+                                    <el-col :sm="10"><p class="kyc-label">Address Line 2</p></el-col>
+                                    <el-col :sm="14"><p class="kyc-value">{{ poaSuppliedDetails.address2 }}</p></el-col>
+                                </el-row>
+                                <el-row class="">
+                                    <el-col :sm="10"><p class="kyc-label">Address Line 3</p></el-col>
+                                    <el-col :sm="14"><p class="kyc-value">{{ poaSuppliedDetails.address3 }}</p></el-col>
+                                </el-row>
+                                <el-row class="">
+                                    <el-col :sm="10"><p class="kyc-label">City / Town</p></el-col>
+                                    <el-col :sm="14"><p class="kyc-value">{{ poaSuppliedDetails.city }}</p></el-col>
+                                </el-row>
+                                <el-row class="">
+                                    <el-col :sm="10"><p class="kyc-label">Post Code</p></el-col>
+                                    <el-col :sm="14"><p class="kyc-value">{{ poaSuppliedDetails.postCode }}</p></el-col>
+                                </el-row>
+                                <el-row class="">
+                                    <el-col :sm="10"><p class="kyc-label">Region</p></el-col>
+                                    <el-col :sm="14"><p class="kyc-value">{{ poaSuppliedDetails.countyOrState }}</p></el-col>
+                                </el-row>
+                                <el-row class="">
+                                    <el-col :sm="10"><p class="kyc-label">Country</p></el-col>
+                                    <el-col :sm="14"><p class="kyc-value">{{ poaSuppliedDetails.countryCode }}</p></el-col>
+                                </el-row>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="col-xl-4 mb-xl-0 mb-5">
-                    <div class="">
-                        <p class="mb-4 font-weight-bold">POA Match</p>
-                        <p class="mb-4 font-weight-bold">POA Supplied Details</p>
-                        <el-row class="">
-                            <el-col :sm="10"><p class="kyc-label">Address Line 1</p></el-col>
-                            <el-col :sm="14">{{ poaSuppliedDetails.address1 }}</el-col>
-                        </el-row>
-                        <el-row class="">
-                            <el-col :sm="10"><p class="kyc-label">Address Line 2</p></el-col>
-                            <el-col :sm="14">{{ poaSuppliedDetails.address2 }}</el-col>
-                        </el-row>
-                        <el-row class="">
-                            <el-col :sm="10"><p class="kyc-label">Address Line 3</p></el-col>
-                            <el-col :sm="14">{{ poaSuppliedDetails.address3 }}</el-col>
-                        </el-row>
-                        <el-row class="">
-                            <el-col :sm="10"><p class="kyc-label">City / Town</p></el-col>
-                            <el-col :sm="14">{{ poaSuppliedDetails.city }}</el-col>
-                        </el-row>
-                        <el-row class="">
-                            <el-col :sm="10"><p class="kyc-label">Post Code</p></el-col>
-                            <el-col :sm="14">{{ poaSuppliedDetails.postCode }}</el-col>
-                        </el-row>
-                        <el-row class="">
-                            <el-col :sm="10"><p class="kyc-label">Region</p></el-col>
-                            <el-col :sm="14">{{ poaSuppliedDetails.countyOrState }}</el-col>
-                        </el-row>
-                        <el-row class="">
-                            <el-col :sm="10"><p class="kyc-label">Country</p></el-col>
-                            <el-col :sm="14">{{ poaSuppliedDetails.countryCode }}</el-col>
-                        </el-row>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 mb-xl-0 mb-5">
+                <div class="col-xl-4 mb-5">
                     <h5 class="sub-title mb-3">PEP / Sactions Check</h5>
                     <div class="w-100 d-flex justify-content-between align-items-center">
                         <p class="mb-0 kyc-label kyc-label--no-w">Status</p>
-                        <p-button class="btn btn--status btn--passed" v-if="getterClientInfo && getterClientInfo.sanctionCheckInfo">{{ getterClientInfo.sanctionCheckInfo.checkStatusName }}</p-button>
+                        <p-button class="btn btn--status btn--passed m-0" v-if="getterClientInfo && getterClientInfo.sanctionCheckInfo">{{ getterClientInfo.sanctionCheckInfo.checkStatusName }}</p-button>
                     </div>
                     <el-row>
                         <el-col :sm="24" class="kyc-action">
@@ -324,118 +323,133 @@
     </div>
 
     <div class="container-fluid">
-        <div class="kyc-info-section">
-            <div class="mb-4">
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Title</p>
-                    <p class="particular__value">Mr</p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">First Name</p>
-                    <p class="particular__value">Erik</p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Second Name</p>
-                    <p class="particular__value">Sven</p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Last Name</p>
-                    <p class="particular__value">Hakans</p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Maiden Name</p>
-                    <p class="particular__value"></p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Gender</p>
-                    <p class="particular__value">M</p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">YYYY-MM-DD</p>
-                    <p class="particular__value">1980-01-31</p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Email</p>
-                    <p class="particular__value"><span class="color-primary">abc@e-mail.com</span></p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Mobile</p>
-                    <p class="particular__value">+493242345</p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Home</p>
-                    <p class="particular__value"></p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Work</p>
-                    <p class="particular__value"></p>
-                </div>
-            </div>
-
-            <div class="mb-4">
-                <h5 class="sub-title mb-4">Address</h5>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Address Line 1</p>
-                    <p class="particular__value">Wilhelm-Epstein Strasse 14</p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Address Line 2</p>
-                    <p class="particular__value"></p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Address Line 3</p>
-                    <p class="particular__value"></p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">City / Town</p>
-                    <p class="particular__value">Frankfurt</p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Post Code</p>
-                    <p class="particular__value">60431</p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Region</p>
-                    <p class="particular__value">Frankfurt</p>
-                </div>
-                <div>
-                    <el-select size="small" class="select-default mr-3" placeholder="Selected A Country" v-model="countryAddr">
-                        <el-option v-for="(cntry, index) in countryList" class="select-success" :value="cntry.country_name" :label="`${cntry.country_name}`" :key="index" />
-                    </el-select>
+        <div class="row">
+            <div class="col-xl-4 mb-5">
+                <div class="kyc-info-box particulars">
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Title</p></div>
+                        <div class="col-6"><p class="kyc-value">Mr</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">First Name</p></div>
+                        <div class="col-6"><p class="kyc-value">Erik</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Second Name</p></div>
+                        <div class="col-6"><p class="kyc-value">Sven</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Last Name</p></div>
+                        <div class="col-6"><p class="kyc-value">Hakans</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Maiden Name</p></div>
+                        <div class="col-6"><p class="kyc-value"></p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Gender</p></div>
+                        <div class="col-6"><p class="kyc-value">M</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">YYYY-MM-DD</p></div>
+                        <div class="col-6"><p class="kyc-value">1980-01-31</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Email</p></div>
+                        <div class="col-6"><p class="kyc-value"><span class="color-primary">abc@e-mail.com</span></p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Mobile</p></div>
+                        <div class="col-6"><p class="kyc-value">+493242345</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Home</p></div>
+                        <div class="col-6"><p class="kyc-value"></p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Work</p></div>
+                        <div class="col-6"><p class="kyc-value"></p></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="mb-4">
-                <h5 class="sub-title mb-4">Override Address</h5>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Address Line 1</p>
-                    <p class="particular__value"></p>
+            <div class="col-xl-4 mb-5">
+                <div class="kyc-info-box particulars">
+                    <div class="row">
+                        <div class="col"><p class="kyc-label font-weight-bold mb-4">Address</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Address Line 1</p></div>
+                        <div class="col-6"><p class="kyc-value">Wilhelm-Epstein Strasse 14</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Address Line 2</p></div>
+                        <div class="col-6"><p class="kyc-value">Erik</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Address Line 3</p></div>
+                        <div class="col-6"><p class="kyc-value">Sven</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">City / Town</p></div>
+                        <div class="col-6"><p class="kyc-value">Frankfurt</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Post Code</p></div>
+                        <div class="col-6"><p class="kyc-value">60431</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Region</p></div>
+                        <div class="col-6"><p class="kyc-value">Frankfurt</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <el-select size="small" class=" mr-3 particulars-input" placeholder="Selected A Country" v-model="countryAddr">
+                                <el-option v-for="(cntry, index) in countryList" class="select-success" :value="cntry.country_name" :label="`${cntry.country_name}`" :key="index" />
+                            </el-select>
+                        </div>
+                    </div>
                 </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Address Line 2</p>
-                    <p class="particular__value"></p>
+            </div>
+
+            <div class="col-xl-4 mb-5">
+                <div class="kyc-info-box particulars">
+                    <div class="row">
+                        <div class="col"><p class="kyc-label font-weight-bold mb-4">Override Address</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Address Line 1</p></div>
+                        <div class="col-6"><p class="kyc-value"></p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Address Line 2</p></div>
+                        <div class="col-6"><p class="kyc-value"></p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Address Line 3</p></div>
+                        <div class="col-6"><p class="kyc-value"></p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">City / Town</p></div>
+                        <div class="col-6"><p class="kyc-value"></p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Post Code</p></div>
+                        <div class="col-6"><p class="kyc-value"></p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Region</p></div>
+                        <div class="col-6"><p class="kyc-value"></p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <el-select size="small" class=" mr-3 particulars-input" placeholder="Selected A Country" v-model="countryAddr">
+                                <el-option v-for="(cntry, index) in countryList" class="select-success" :value="cntry.country_name" :label="`${cntry.country_name}`" :key="index" />
+                            </el-select>
+                        </div>
+                    </div>
                 </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Address Line 3</p>
-                    <p class="particular__value"></p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">City / Town</p>
-                    <p class="particular__value"></p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Post Code</p>
-                    <p class="particular__value"></p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <p class="particular__label">Region</p>
-                    <p class="particular__value"></p>
-                </div>
-                <div>
-                    <el-select size="small" class="select-default mr-3" placeholder="Selected A Country" v-model="countryOverrideAddr">
-                        <el-option v-for="(cntry, index) in countryList" class="select-success" :value="cntry.country_name" :label="`${cntry.country_name}`" :key="index" />
-                    </el-select>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -452,15 +466,15 @@
 
         <el-row class="mt-3">
             <el-col :sm="4">
-                <p class="mb-2">Matrx PID</p>
+                <p class="mb-2 kyc-label">Matrx PID</p>
                 <span>001</span>
             </el-col>
             <el-col :sm="4">
-                <p class="mb-2">PID Description</p>
+                <p class="mb-2 kyc-label">PID Description</p>
                 <span>Royal Mail</span>
             </el-col>
             <el-col :sm="4">
-                <p class="mb-2">Fourth Line</p>
+                <p class="mb-2 kyc-label">Fourth Line</p>
                 <span>Bundesbank</span>
             </el-col>
         </el-row>
@@ -835,7 +849,10 @@ export default {
         const temp = value.eventInfos;
         this.applicationData = JSON.parse(JSON.stringify(temp));
 
-        this.applicationData.forEach(item => item.required = '');
+        this.applicationData.forEach(item => {
+            item.required = '';
+            if(item.eventDate) item.eventDate = formatDate(item.eventDate, true)
+        });
 
         this.pageCount = value.pageMeta.totalPages;
         this.perPage = value.pageMeta.perPage;
@@ -875,6 +892,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 .particular {
     &__label {
         min-width: 150px;
@@ -890,15 +908,17 @@ export default {
     }
 }
 .kyc-label {
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    min-width: 200px;
+    margin-bottom: 8px;
     &--no-w {
         min-width: 0;
     }
 }
 .kyc-value {
-    min-width: 200px;
-    font-weight: 200;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    margin-bottom: 8px;
 }
 .kyc-info-section {
     display: flex;
@@ -914,9 +934,18 @@ export default {
 }
 .btn {
     text-transform: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    &--shadow {
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    }
 
     &--view {
         min-width: 150px;
+        padding: 8px 22px;
+        font-size: 11px;
     }
 
     &--ac-close {
@@ -981,6 +1010,10 @@ export default {
             line-height: 38px;
             color: #292929;
         }
+        &__buttons {
+            width: 100%;
+            max-width: calc(50% + 387px);
+        }
     }
 }
 
@@ -1028,6 +1061,13 @@ table.helper-table {
     }
 }
 
+.kyc-top-buttons {
+    width: auto;
+    @media (max-width: 1760px) {
+        width: 100%;
+    }
+}
+
 .communication-wrapper {
     background-color: rgba(#2ED684, 0.04);
     margin: 30px -30px;
@@ -1041,10 +1081,17 @@ table.helper-table {
     line-height: 20px;
 }
 
+.kyc-info-box {
+    max-width: 500px;
+    &--large {
+        max-width: 766px;
+    }
+}
+
 p {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 20px;
     color: #292929;
 }
@@ -1053,9 +1100,7 @@ p {
     min-width: 200px;
 }
 
-.card {
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-}
+
 
 .color-primary {
     color: #2ED684;
@@ -1097,12 +1142,49 @@ p {
 </style>
 
 <style lang="scss">
+.particulars input, .mobile-phone-select input {
+    border-radius: 5px !important;
+}
+.kyc-t-card {
+    & th {
+        &:nth-child(2) {
+            width: 150px !important;
+        }
+    }
+    & .productConfig {
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+        max-width: 372px;
+        margin-bottom: 0 !important;
+    }
+    & .productConfigYes {
+    }
+    & .productConfigNo {
+    }
+    & .cell {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        text-align: left;
+        padding-left: 25px;
+    }
+    & .ceevo__heading-label {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        justify-content: flex-start;
+        padding-left: 25px;
+    }
+}
 // for styling account log table
 .collapsible-content .cell {
     text-align: left;
     padding: 3px 7px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
 }
 .collapsible-content .ceevo__heading-label {
     justify-content: start;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
 }
 </style>

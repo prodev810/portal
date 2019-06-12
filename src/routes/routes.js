@@ -282,6 +282,14 @@ const kyc = {
       }
     },
     {
+      path: '/kyc/kyc-mainpage',
+      name: 'KYC Main Page',
+      component: () => import('../components/Dashboard/pages/Kyc/ProductConfig'),
+      meta: {
+        permission: permission.RESELLER_INVOICE_VIEW
+      }
+    },
+    {
       path: '/kyc/product-config',
       name: 'KYC Product Config',
       component: () => import('../components/Dashboard/pages/Kyc/KycProductConfig'),

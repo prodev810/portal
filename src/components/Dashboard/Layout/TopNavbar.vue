@@ -105,9 +105,9 @@
           this.showLogoutBtn = false;
           return "Search";
 
-        } else if (this.$route.path.split('/').slice(-1)[0] == "product-config") {
+        } else if (this.$route.path.split('/').slice(-1)[0] == "kyc-mainpage") {
           this.showLogoutBtn = false;
-          return "Product Config";
+          return "KYC Main Page";
 
         } else {
           return this.$route.path.split('/')[2].replace(/-/g, ' ');

@@ -6,7 +6,7 @@
         'ceevo__table--responsive': responsive,
         'ceevo__table--condensed': true,
         'ceevo__table--striped': striped,
-        'ceevo__table-edit': editId ||editAll,
+        'ceevo__table-edit': editId || editAll,
         'productConfig': productConfig
       }"
       class="table__wrapper ceevo__table--auto-height"
@@ -40,10 +40,11 @@
           <slot name="balance"></slot>
           <!--  row is an object [{row ,row }]<- table data-->
           <tr v-for="(row,index) in allData" :key="row.id">
-
             <td scope="row" v-for="heading in renderHeadings"
                 :key="(row.id ||JSON.stringify(row))+heading.name"
                 :class="[
+                row && row.required && row.required.value === 'Yes' && productConfig ? 'productConfigYes' : '',
+                row && row.required && row.required.value === 'No' && productConfig ? 'productConfigNo' : '',
                 heading.info ? 'ceevo__table_info' : '',
                 heading.danger ? 'ceevo__table_danger': '',
                 heading.button ? 'ceevo__table_action':'',
@@ -473,7 +474,7 @@
       },
       goToProductConfig(row) {
           if(row && row.appReferenceId && row.appReferenceId.value ) {
-              this.$router.push({ name: 'KYC Product Config', query: {appRef: row.appReferenceId.value }})
+              this.$router.push({ name: 'KYC Main Page', query: {appRef: row.appReferenceId.value }})
           }
       }
     },
@@ -685,8 +686,10 @@
 
   .table__wrapper.ceevo__table--auto-height.ceevo__table--responsive.ceevo__table--condensed.ceevo__table--striped {
     padding: 0 0 20px 0;
-  .table__wrapper.productConfig {
+  }
+  .table__wrapper.ceevo__table--auto-height.ceevo__table--responsive.ceevo__table--condensed.ceevo__table--striped.productConfig {
     border-radius: 10px;
+    padding: 0 0 0 0;
   }
   table.productConfig {
     margin-bottom: 0;
@@ -709,5 +712,5 @@
       }
     }
   }
-}
+
 </style>
