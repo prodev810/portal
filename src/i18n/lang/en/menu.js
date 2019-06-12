@@ -21,5 +21,6 @@ export default {
     processor: 'Processor',
     transaction: 'Transaction'
   },
+  kyc_kyc_mainpage: `KYC Main Page`,
   kyc_product_config: `Product Config`
 }
