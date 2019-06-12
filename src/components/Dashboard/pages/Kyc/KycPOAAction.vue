@@ -46,7 +46,7 @@
       </el-col>
     </el-row>
 
-    <el-row class="mt-2">
+    <el-row class="mt-5">
       <el-col>
         <strong>POA Verification</strong>
       </el-col>
@@ -130,6 +130,22 @@
       </el-col>
     </el-row>
 
+    <el-row class="mt-5">
+      <el-col :md="24">
+       <el-card>
+         <regular-table striped
+                        :headings="tableHeadings"
+                        :value="applicationInfoData">
+           <template slot-scope="index">
+            <td>
+              <p-button type="primary" outline>Download</p-button>
+            </td>
+           </template>
+         </regular-table>
+       </el-card>
+      </el-col>
+    </el-row>
+
   </div>
 </template>
 
@@ -137,12 +153,16 @@
   import {Popover, Card} from 'element-ui'
   import eyeIcon from '../../../../../public/static/img/dashboard_icons/outline-visibility-24px-1.svg'
   import editIcon from '../../../../../public/static/img/dashboard_icons/ic_edit.svg'
+  import RegularTable from '@/components/UIComponents/CeevoTables/RegularTable/RegularTable'
+  import PButton from "@/components/UIComponents/Button"
 
   export default {
     name: "KycPOAAction",
     components: {
       [Popover.name]: Popover,
       [Card.name]: Card,
+      RegularTable,
+      PButton,
     },
     data() {
       return {
@@ -186,7 +206,41 @@
           'Full POA visible',
           'No obvious marks of manipulation',
           'Address match supplied address by client'
-        ]
+        ],
+        tableHeadings:[
+          {name: 'caseHistory', label: 'Case history'},
+          {name: 'name', label: 'Name'},
+          {name: 'date', label: 'Date'},
+          {name: 'status', label: 'Status'},
+          {name: 'reason', label: 'Reason'},
+          {name: 'operator', label: 'Operator'},
+        ],
+        applicationInfoData:[
+          {
+            caseHistory: 'Replaced Doc',
+            name: 'ID201332',
+            date: 'YYYY-MM-DD-HH-SS',
+            status: 'Rejected',
+            reason: 'Expired ID',
+            operator: 'J.LIM',
+          },
+          {
+            caseHistory: 'Replaced Doc',
+            name: 'ID201333',
+            date: 'YYYY-MM-DD-HH-SS',
+            status: 'Rejected',
+            reason: 'Expired ID',
+            operator: 'J.LIM',
+          },
+          {
+            caseHistory: 'Replaced Doc',
+            name: 'ID201334',
+            date: 'YYYY-MM-DD-HH-SS',
+            status: 'Rejected',
+            reason: 'Expired ID',
+            operator: 'J.LIM',
+          },
+        ],
       }
     },
     methods: {
@@ -199,6 +253,9 @@
 </script>
 
 <style scoped lang="scss">
+  $table-border-gray: #dee2e6;
+  $unverified-status-color: #FDD9DA;
+
   .kyc-poa {
     font-size: 16px;
 
@@ -215,7 +272,7 @@
       text-align: center;
       line-height: 40px;
       padding: auto;
-      background-color: #FDD9DA;
+      background-color: $unverified-status-color;
     }
 
     .btn {
@@ -237,11 +294,106 @@
     }
 
     .poa-btn-download{
+      margin-top: 25px;
       font-size: 11px;
       height: 27px;
       width: 125px;
       line-height: 27px;
-      padding: 0 auto;
+      padding-top: inherit;
+    }
+
+    .btn-outline-primary {
+      border-width: 1px !important;
+      border-radius: 0;
+
+      &:hover {
+        background-color: white !important;
+        color: #9E79E7 !important;
+      }
+
+      &:last-child {
+        border-right-width: 1px !important;
+      }
+    }
+
+    /deep/{
+      .el-card__body{
+        padding: 0;
+      }
+      .table__wrapper{
+        &.ceevo__table--auto-height{
+          &.ceevo__table--responsive{
+            &.ceevo__table--condensed{
+              &.ceevo__table--striped{
+                padding: 0;
+              }
+            }
+          }
+        }
+      }
+      .table{
+        margin-bottom: 0;
+      }
+      .ceevo__table {
+        overflow: auto!important;
+        .cell {
+          text-align: left;
+          min-width: unset;
+        }
+
+        &.table {
+          margin-bottom: 0;
+          width: 100%!important;
+
+          thead {
+            th {
+              overflow: auto !important;
+            }
+          }
+
+          tbody {
+            outline: none !important;
+
+            tr {
+              td {
+                border-left: 1px solid $table-border-gray !important;
+                min-width: unset;
+
+                &:first-child {
+                  border: none !important;
+                }
+                &:last-child{
+                  text-align: right;
+                }
+              }
+            }
+
+            td {
+              &:first-child {
+                .cell {
+                  border: none;
+                }
+              }
+
+              &:last-child {
+                border-left: none !important;
+              }
+            }
+
+            tr {
+              &:last-child {
+                .btn-outline-primary {
+                  border-bottom-width: 1px !important;
+                }
+              }
+            }
+          }
+        }
+
+        .ceevo__heading-label {
+          justify-content: start;
+        }
+      }
     }
 
     table.helper-table {
