@@ -151,7 +151,7 @@ export default [
       },
       {
         path: '/kyc/product-config',
-        name: 'Search',
+        name: 'Product Config',
         i18n: 'menu.kyc_product_config',
         permission: ''
       },
