@@ -131,12 +131,12 @@ export default [
         i18n: 'menu.kyc_dashboard',
         permission: permission.NAV_KYC_MODULE // !!! change permission
       },
-      {
-        path: '/kyc/register',
-        name: 'KYC Register',
-        i18n: 'menu.kyc_register',
-        permission: permission.NAV_KYC_MODULE // !!! change permission
-      },
+      // {
+      //   path: '/kyc/register',
+      //   name: 'KYC Register',
+      //   i18n: 'menu.kyc_register',
+      //   permission: permission.NAV_KYC_MODULE // !!! change permission
+      // },
       {
         path: '/kyc/workflow',
         name: 'Work Flow',
