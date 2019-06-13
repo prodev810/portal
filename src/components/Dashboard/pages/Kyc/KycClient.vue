@@ -175,7 +175,7 @@
             type="primary"
             class="search-button"
             @click="searchHandle"
-          >
+            :class="{'disabled':!validateClientForm}">
             {{ handlePageBtn }}
           </p-button>
           <div v-else>
@@ -412,6 +412,16 @@
           'Yearly',
         ],
         dateIntervalList: [],
+        validationList:[
+          'issuing',
+          'id',
+          'screening',
+          'rescreeningInterval',
+          'currency',
+          'kycReminder',
+          'autoClose',
+          'autoFollowupClose',
+        ],
       }
     },
     mounted() {
@@ -449,6 +459,17 @@
       },
       isViewMode() {
         return this.mode === 'view'
+      },
+      validateClientForm(){
+        let isValid = true
+         if(this.mode === 'create'){
+           this.validationList.forEach( item =>{
+             if(!this.client[`${item}`]){
+               isValid = false
+             }
+           })
+         }
+        return isValid
       }
     },
     methods: {
