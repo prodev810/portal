@@ -39,6 +39,10 @@ import {
   GETTER_POA_IMG,
   RESEND_SMS,
   KYC_UPDATE_CONTACT,
+  KYC_GET_CURRENCY_LIST,
+  KYC_GET_CLIENT_STATUSES,
+  MUTATE_CURRENCY_LIST,
+  MUTATE_CLIENT_STATUSES,
 } from '../types';
 
 const state = {
@@ -55,6 +59,8 @@ const state = {
   clientInfo: null,
   checkDocs: {},
   poaImg: null,
+  currencyList: [],
+  clientStatusesList: [],
 }
 
 const mutations = {
@@ -114,7 +120,13 @@ const mutations = {
     },
     [MUTATE_POA_IMG]: (state, {data}) => {
         state.poaImg = data;
-    }
+    },
+  [MUTATE_CLIENT_STATUSES]: (state, {data}) => {
+    state.clientStatusesList = data;
+  },
+  [MUTATE_CURRENCY_LIST]: (state, {data}) => {
+    state.currencyList = data;
+  },
 }
 
 const actions = {
@@ -180,6 +192,25 @@ const actions = {
       const {data} = await Vue.prototype.$http.get('v1/kyc/dashboard/summary-report', {duration: payload.duration})
       commit(MUTATE_SUMMARY_REPORT, {data: data.infos})
       console.log('summary report' ,data)
+    }catch(e){
+      console.log('error :', e);
+    }
+  },
+  [KYC_GET_CLIENT_STATUSES]: async ({commit})=> {
+    try{
+      const {data} = await Vue.prototype.$http.get('v1/kyc/client-statuses')
+      commit(MUTATE_CLIENT_STATUSES, {data})
+      console.log('statuses' ,{data})
+    }catch(e){
+      console.log('error :', e);
+    }
+  },
+
+  [KYC_GET_CURRENCY_LIST]: async ({commit})=> {
+    try{
+      const {data} = await Vue.prototype.$http.get('v1/kyc/currencies')
+      commit(MUTATE_CURRENCY_LIST, {data})
+      console.log('currency' ,{data})
     }catch(e){
       console.log('error :', e);
     }
