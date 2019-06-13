@@ -26,7 +26,7 @@
 
       <el-row class="kyc-client-row">
         <el-col :sm="10">
-          <p class="kyc-client-row__text kyc-client-row__title">Client Ref</p>
+          <p class="kyc-client-row__text kyc-client-row__title">Client App Ref</p>
         </el-col>
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name">{{userData.ref}}</p>
@@ -60,8 +60,8 @@
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
                      class="select-primary kyc__custom__primary__select"
-                     v-model="valueSelect">
-            <el-option v-for="item in dataForSelects"
+                     v-model="client.issuing">
+            <el-option v-for="item in selectYesNoValue"
                        :key="item.value"
                        :label="item.label"
                        :value="item.value"
@@ -79,8 +79,8 @@
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
                      class="select-primary kyc__custom__primary__select"
-                     v-model="valueSelect">
-            <el-option v-for="item in dataForSelects"
+                     v-model="client.id">
+            <el-option v-for="item in selectYesNoValue"
                        :key="item.value"
                        :label="item.label"
                        :value="item.value"
@@ -98,8 +98,8 @@
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
                      class="select-primary kyc__custom__primary__select"
-                     v-model="valueSelect">
-            <el-option v-for="item in dataForSelects"
+                     v-model="client.screening">
+            <el-option v-for="item in selectYesNoValue"
                        :key="item.value"
                        :label="item.label"
                        :value="item.value"
@@ -117,8 +117,8 @@
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
                      class="select-primary kyc__custom__primary__select"
-                     v-model="valueSelect">
-            <el-option v-for="item in dataForSelects"
+                     v-model="client.proofAddress">
+            <el-option v-for="item in selectYesNoValue"
                        :key="item.value"
                        :label="item.label"
                        :value="item.value"
@@ -136,11 +136,11 @@
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
                      class="select-primary kyc__custom__primary__select"
-                     v-model="valueSelect">
-            <el-option v-for="item in dataForSelects"
-                       :key="item.value"
-                       :label="item.label"
-                       :value="item.value"
+                     v-model="client.status">
+            <el-option v-for="item in clientStatuses"
+                       :key="item.name"
+                       :label="ucFirst(item.name)"
+                       :value="item.name"
             >
             </el-option>
           </el-select>
@@ -155,20 +155,19 @@
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
                      class="select-primary kyc__custom__primary__select"
-                     v-model="valueSelect">
-            <el-option v-for="item in dataForSelects"
-                       :key="item.value"
-                       :label="item.label"
-                       :value="item.value"
-            >
+                     v-model="client.rescreeningInterval">
+            <el-option v-for="item in rescreeningList"
+                       :key="item"
+                       :label="item"
+                       :value="item">
             </el-option>
           </el-select>
           <span v-else>Yearly</span>
         </el-col>
       </el-row>
 
-      <el-row class="kyc-client-row d-inline-flex justify-content-between w-100">
-        <div class="item btn-item">
+      <el-row class="kyc-client-row d-inline-flex justify-content-start w-100">
+        <div class="item btn-item mr-4">
           <p-button
             v-if="!isViewMode"
             round
@@ -199,7 +198,7 @@
         <modal :show.sync="modals.visible"
                footer-classes="justify-content-center"
                type="notice">
-          <h5 slot="header" class="modal-title">{{handleModalTitle}} KYC Client Confirmation</h5>
+          <h5 slot="header" class="modal-title">{{handleModalTitle}}</h5>
           <template>
             <p>{{handleModalText}}?</p>
           </template>
@@ -225,18 +224,17 @@
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
                      class="select-primary kyc__custom__primary__select"
-                     v-model="valueSelect">
-            <el-option v-for="item in dataForSelects"
-                       :key="item.value"
-                       :label="item.label"
-                       :value="item.value"
+                     v-model="client.currency">
+            <el-option v-for="item in currencyList"
+                       :key="item.currencyCode"
+                       :label="item.currencyCode"
+                       :value="item.currencyCode"
             >
             </el-option>
           </el-select>
           <span v-else>EUR</span>
         </el-col>
       </el-row>
-
 
       <el-row class="kyc-client-row">
         <el-col :sm="10">
@@ -290,12 +288,11 @@
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
                      class="select-primary kyc__custom__primary__select"
-                     v-model="valueSelect">
-            <el-option v-for="item in dataForSelects"
-                       :key="item.value"
-                       :label="item.label"
-                       :value="item.value"
-            >
+                     v-model="client.kycReminder">
+            <el-option v-for="item in dateIntervalList"
+                       :key="item"
+                       :label="addDateRangeLabel(item)"
+                       :value="item">
             </el-option>
           </el-select>
           <span v-else>7 days</span>
@@ -309,12 +306,11 @@
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
                      class="select-primary kyc__custom__primary__select"
-                     v-model="valueSelect">
-            <el-option v-for="item in dataForSelects"
-                       :key="item.value"
-                       :label="item.label"
-                       :value="item.value"
-            >
+                     v-model="client.autoClose">
+            <el-option v-for="item in dateIntervalList"
+                       :key="item"
+                       :label="addDateRangeLabel(item)"
+                       :value="item">
             </el-option>
           </el-select>
           <span v-else>30 days</span>
@@ -329,12 +325,11 @@
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
                      class="select-primary kyc__custom__primary__select"
-                     v-model="valueSelect">
-            <el-option v-for="item in dataForSelects"
-                       :key="item.value"
-                       :label="item.label"
-                       :value="item.value"
-            >
+                     v-model="client.autoFollowupClose">
+            <el-option v-for="item in dateIntervalList"
+                       :key="item"
+                       :label="addDateRangeLabel(item)"
+                       :value="item">
             </el-option>
           </el-select>
           <span v-else>30 days</span>
@@ -346,15 +341,23 @@
 </template>
 
 <script>
+  import {mapState, mapActions} from 'vuex'
   import {Modal} from 'src/components/UIComponents'
+  import {
+    KYC_GET_CLIENT_STATUSES,
+    KYC_GET_CURRENCY_LIST,
+  } from "../../../../store/types"
 
   const KYC_CLIENT_MODE = {
     create: {
-      modal: {title: 'Create', modalText: 'Are you sure you want to create the KYC client?'},
+      modal: {title: 'Create KYC Client Confirmation', modalText: 'Are you sure you want to create the KYC client?'},
       page: {title: 'Create', btnText: 'Create'},
     },
     edit: {
-      modal: {title: 'Edit', modalText: 'Are you sure you want to save your changes to the KYC client?'},
+      modal: {
+        title: 'Confirm save new KYC client',
+        modalText: 'Are you sure you want to save your changes to the KYC client?'
+      },
       page: {title: 'Edit', btnText: 'Save'},
     },
     view: {
@@ -373,6 +376,18 @@
         modals: {
           visible: false
         },
+        client: {
+          issuing: 'no',
+          id: 'no',
+          screening: 'yes',
+          proofAddress: 'yes',
+          status: '',
+          rescreeningInterval: '',
+          currency: 'EUR',
+          kycReminder: '',
+          autoClose: '',
+          autoFollowupClose: '',
+        },
         valueSelect: '',
         userData: {
           name: 'Acquiring',
@@ -384,10 +399,33 @@
           {value: true, label: 'yes'},
           {value: false, label: 'no'},
 
-        ]
+        ],
+        selectYesNoValue: [
+          {value: 'yes', name: 'Yes'},
+          {value: 'no', name: 'No'},
+        ],
+        rescreeningList: [
+          'Never',
+          'Monthly',
+          'Quarterly',
+          '6 Month',
+          'Yearly',
+        ],
+        dateIntervalList: [],
       }
     },
+    mounted() {
+      this.getClientStatuses()
+
+      this.getCurrencyList()
+
+      this.getDateRange(1, 30, this.dateIntervalList)
+    },
     computed: {
+      ...mapState({
+        clientStatuses: state => state.kyc.clientStatusesList,
+        currencyList: state => state.kyc.currencyList,
+      }),
       handleModalTitle() {
         return (KYC_CLIENT_MODE[this.mode].modal) ? KYC_CLIENT_MODE[this.mode].modal.title : ''
       },
@@ -414,9 +452,30 @@
       }
     },
     methods: {
-      searchHandle() {
+      ...mapActions({
+        getClientStatuses: KYC_GET_CLIENT_STATUSES,
+        getCurrencyList: KYC_GET_CURRENCY_LIST,
+      }),
+      ucFirst(string) {
+        string = string.toLowerCase()
+        console.log(string)
+        return string.charAt(0).toUpperCase() + string.slice(1)
+      },
+      getDateRange(start, end, dateArray) {
+        for (let i = start; i <= end; i++) {
+          dateArray.push(i)
+        }
+      },
+      addDateRangeLabel(value) {
+        let label = 'days'
+        if (value === 1) {
+          label = 'day'
+        }
+        return `${value} ${label}`
+      },
+      searchHandle(){
 
-      }
+      },
     }
   }
 </script>
@@ -521,6 +580,11 @@
 
       .modal-header {
         border-bottom-color: transparent !important;
+
+        .modal-title {
+          font-weight: 900;
+          font-family: 'Poppins', sans-serif;
+        }
       }
 
       .modal-footer {

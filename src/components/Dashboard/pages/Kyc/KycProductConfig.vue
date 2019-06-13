@@ -23,7 +23,7 @@
                     <img class="img-responsive ic__icon"
                          src="../../../../../public/static/img/dashboard_icons/ic_view invoice.svg" alt="">
                   </slot>
-                  <span class="kyc-button__title">View Invoice</span>
+                  <strong class="kyc-button__title">View Invoice</strong>
                 </p-button>
                 <p-button type="primary"
                           outline
@@ -33,7 +33,7 @@
                     <img class="img-responsive ic__icon"
                          src="../../../../../public/static/img/dashboard_icons/ic_edit.svg" alt="">
                   </slot>
-                  <span class="kyc-button__title">Edit</span>
+                  <strong class="kyc-button__title">Edit</strong>
                 </p-button>
                 <p-button type="primary"
                           outline
@@ -43,7 +43,7 @@
                     <img class="img-responsive ic__icon"
                          src="../../../../../public/static/img/dashboard_icons/ic_view statement.svg" alt="">
                   </slot>
-                  <span class="kyc-button__title">View Client</span>
+                  <strong class="kyc-button__title">View Client</strong>
                 </p-button>
               </td>
             </template>
@@ -174,6 +174,7 @@
     .btn {
       padding-left: 30px;
       padding-right: 30px;
+      font-weight: bold;
     }
 
     .kyc__product__btn {
@@ -218,6 +219,7 @@
             min-width: unset;
             padding-left: 0;
             padding-right: 0;
+            font-weight: bold;
           }
 
           &.table {
@@ -247,6 +249,8 @@
                 &:first-child {
                   .cell {
                     border: none;
+                    padding-left: 20px;
+                    text-align: left;
                   }
                 }
 
