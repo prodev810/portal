@@ -255,6 +255,18 @@
                                         <p>No document received</p>
                                     </div>
                                 </el-card>
+                                <div class="mt-4">
+                                    <p class="kyc-label d-inline">KYC URL: </p>
+                                    <span class="kyc-action__url"> www.URL.com</span>
+                                </div>
+                                <div class="mt-3">
+                                    <router-link to="/kyc/poa-view">
+                                        <p-button round type="primary" class="mr-2 btn btn--view">View</p-button>
+                                    </router-link>
+                                    <router-link to="/kyc/poa-action">
+                                        <p-button round class="btn btn--view">Action</p-button>
+                                    </router-link>
+                                </div>
                             </div>
                         </div>
 
@@ -295,7 +307,7 @@
                     </div>
                 </div>
                 <div class="col-xl-4 mb-5">
-                    <h5 class="sub-title mb-3">PEP / Sactions Check</h5>
+                    <h5 class="sub-title mb-3">PEP / Sanctions Check</h5>
                     <div class="w-100 d-flex justify-content-between align-items-center">
                         <p class="mb-0 kyc-label kyc-label--no-w">Status</p>
                         <p-button class="btn btn--status btn--passed m-0" v-if="getterClientInfo && getterClientInfo.sanctionCheckInfo">{{ getterClientInfo.sanctionCheckInfo.checkStatusName }}</p-button>
