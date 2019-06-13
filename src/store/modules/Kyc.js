@@ -43,6 +43,14 @@ import {
   KYC_GET_CLIENT_STATUSES,
   MUTATE_CURRENCY_LIST,
   MUTATE_CLIENT_STATUSES,
+  KYC_GET_POA_CHECK_ENQUIRY,
+  MUTATE_POA_CHECK_ENQUIRY,
+  KYC_GET_POA_CHECK_DOC,
+  MUTATE_POA_CHECK_DOC,
+  KYC_GET_POA_SUPPORT_DOC,
+  MUTATE_POA_SUPPORT_DOC,
+  KYC_GET_DOWNLOAD_SUPPORT_DOC,
+  MUTATE_POA_DOWNLOAD_SUPPORT_DOC,
 } from '../types';
 
 const state = {
@@ -53,7 +61,7 @@ const state = {
   outstandingApps: [],
   applicationStatuses: [],
   applications: [],
-  summaryReports:[],
+  summaryReports: [],
   statistics: [],
   accountLog: [],
   clientInfo: null,
@@ -61,6 +69,10 @@ const state = {
   poaImg: null,
   currencyList: [],
   clientStatusesList: [],
+  poaInfo: [],
+  poaCheckDoc: [],
+  poaSupportDoc:[],
+  poaDownloadSupportDoc: [],
 }
 
 const mutations = {
@@ -113,19 +125,31 @@ const mutations = {
     state.accountLog = data;
   },
   [MUTATE_CLIENT_INFO]: (state, {data}) => {
-      state.clientInfo = data;
+    state.clientInfo = data;
   },
   [MUTATE_CHECK_DOCS]: (state, {data}) => {
-        Vue.set(state.checkDocs, data.docType, data)
-    },
-    [MUTATE_POA_IMG]: (state, {data}) => {
-        state.poaImg = data;
-    },
+    Vue.set(state.checkDocs, data.docType, data)
+  },
+  [MUTATE_POA_IMG]: (state, {data}) => {
+    state.poaImg = data;
+  },
   [MUTATE_CLIENT_STATUSES]: (state, {data}) => {
     state.clientStatusesList = data;
   },
   [MUTATE_CURRENCY_LIST]: (state, {data}) => {
     state.currencyList = data;
+  },
+  [MUTATE_POA_CHECK_ENQUIRY]: (state, {data}) => {
+    state.poaInfo = data;
+  },
+  [MUTATE_POA_CHECK_DOC]: (state, {data}) => {
+    state.poaCheckDoc = data;
+  },
+  [MUTATE_POA_SUPPORT_DOC]: (state, {data}) => {
+    state.poaSupportDoc = data;
+  },
+  [MUTATE_POA_DOWNLOAD_SUPPORT_DOC]: (state, {data}) => {
+    state.poaDownloadSupportDoc = data;
   },
 }
 
@@ -140,7 +164,7 @@ const actions = {
     }
   },
   [KYC_GET_ALL_CLIENTS]: async (
-    {commit, dispatch}    
+    {commit, dispatch}
   ) => {
     try {
       // simplified version
@@ -177,42 +201,78 @@ const actions = {
     }
   },
 
-  [KYC_GET_STATISTICS]: async ({commit}, payload)=> {
-    try{
-      const {data} = await Vue.prototype.$http.get('v1/kyc/dashboard/statistics', {duration: payload.duration, clientReference: payload.clientReference || null})
+  [KYC_GET_STATISTICS]: async ({commit}, payload) => {
+    try {
+      const {data} = await Vue.prototype.$http.get('v1/kyc/dashboard/statistics', {
+        duration: payload.duration,
+        clientReference: payload.clientReference || null
+      })
       commit(MUTATE_STATISTICS, {data})
-      console.log('statistic' ,data)
-    }catch(e){
+      console.log('statistic', data)
+    } catch (e) {
       console.log('error :', e);
     }
   },
 
-  [KYC_GET_SUMMARY_REPORT]: async ({commit}, payload)=> {
-    try{
+  [KYC_GET_SUMMARY_REPORT]: async ({commit}, payload) => {
+    try {
       const {data} = await Vue.prototype.$http.get('v1/kyc/dashboard/summary-report', {duration: payload.duration})
       commit(MUTATE_SUMMARY_REPORT, {data: data.infos})
-      console.log('summary report' ,data)
-    }catch(e){
+      console.log('summary report', data)
+    } catch (e) {
       console.log('error :', e);
     }
   },
-  [KYC_GET_CLIENT_STATUSES]: async ({commit})=> {
-    try{
+  [KYC_GET_CLIENT_STATUSES]: async ({commit}) => {
+    try {
       const {data} = await Vue.prototype.$http.get('v1/kyc/client-statuses')
       commit(MUTATE_CLIENT_STATUSES, {data})
-      console.log('statuses' ,{data})
-    }catch(e){
+      console.log('statuses', {data})
+    } catch (e) {
       console.log('error :', e);
     }
   },
 
-  [KYC_GET_CURRENCY_LIST]: async ({commit})=> {
-    try{
+  [KYC_GET_CURRENCY_LIST]: async ({commit}) => {
+    try {
       const {data} = await Vue.prototype.$http.get('v1/kyc/currencies')
       commit(MUTATE_CURRENCY_LIST, {data})
-      console.log('currency' ,{data})
-    }catch(e){
+      console.log('currency', {data})
+    } catch (e) {
       console.log('error :', e);
+    }
+  },
+  [KYC_GET_POA_CHECK_ENQUIRY]: async ({commit}, payload) => {
+    try{
+      const {data} = await Vue.prototype.$http.get(`v1/kyc/applications/${payload}/poacheck-enquiry`)
+      commit(MUTATE_POA_CHECK_ENQUIRY, {data})
+    }catch (e) {
+      console.log('error :', e)
+    }
+  },
+  [KYC_GET_POA_CHECK_DOC]: async ({commit}, payload) => {
+    try{
+      const {data} = await Vue.prototype.$http.get(`v1/kyc/poacheck/${payload.checkId}/docs/${payload.id}`)
+      commit(MUTATE_POA_CHECK_DOC, {data})
+    }catch(e){
+      console.log('error :', e)
+    }
+  },
+  [KYC_GET_POA_SUPPORT_DOC]: async ({commit}, payload) => {
+    try{
+      const {data} = await Vue.prototype.$http.get(`v1/kyc/poacheck/${payload}/document-supports`)
+      commit(MUTATE_POA_SUPPORT_DOC, {data})
+    }catch (e) {
+      console.log('error :', e)
+    }
+  },
+  [KYC_GET_DOWNLOAD_SUPPORT_DOC]: async ({commit}, payload) => {
+    try {
+      // const {data} = await Vue.prototype.$http.get(``)
+      const {data} = await Vue.prototype.$http.get(`/v1/kyc/poacheck/${payload.checkId}/document-supports/${payload.id}`)
+      commit(MUTATE_POA_DOWNLOAD_SUPPORT_DOC, {data})
+    }catch (e) {
+      console.log('error :', e)
     }
   },
 
@@ -267,7 +327,7 @@ const actions = {
         requestStr += `&reseller_code=${resellerCode}`
       }
       requestStr.replace(/ /g, '')
-      
+
       let {data} = await Vue.prototype.$http.get(requestStr);
 
       data = {
@@ -455,8 +515,8 @@ const actions = {
   }) => {
     try {
       const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/applications/${appReferenceId}/update-status`, {
-          reason: reason,
-          status: status
+        reason: reason,
+        status: status
       });
       console.log('data from API', data)
     } catch (e) {
@@ -515,8 +575,8 @@ const actions = {
   }) => {
     try {
       const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/applications/${appReferenceId}/update-contact`, {
-          email: email,
-          mobile: mobile
+        email: email,
+        mobile: mobile
       });
       console.log('data from API POA', data)
     } catch (e) {

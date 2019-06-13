@@ -339,6 +339,13 @@
   import RegularTable from '@/components/UIComponents/CeevoTables/RegularTable/RegularTable'
   import PButton from "@/components/UIComponents/Button"
   import Modal from 'src/components/UIComponents/Modal'
+  import {mapState, mapActions} from 'vuex'
+  import {
+    KYC_GET_POA_CHECK_ENQUIRY,
+    KYC_GET_POA_CHECK_DOC,
+    KYC_GET_POA_SUPPORT_DOC,
+    KYC_GET_DOWNLOAD_SUPPORT_DOC,
+  } from "../../../../store/types"
 
   export default {
     name: "KycPOAAction",
@@ -472,14 +479,32 @@
 
         modalTextarea: '',
         modalActionPoa: [],
+        appReferenceId: 'test',
       }
     },
+    mounted(){
+      this.getPoaData('KYC190612-MOEO')
+      this.getPoaDocs({checkId: '00000', id: '12312'})
+      this.getPoaDownloadSupportDoc({checkId: '00000', id: '12312'})
+    },
     computed: {
+      ...mapState({
+        poaData : state => state.kyc.poaInfo,
+        poaCheckDoc: state => state.kyc.poaCheckDoc,
+        poaSupportDoc: state => state.kyc.poaSupportDoc,
+        poaDownloadSupportDoc: state => state.kyc.poaDownloadSupportDoc,
+      }),
       isActionMode() {
         return this.mode === 'action'
       },
     },
     methods: {
+      ...mapActions({
+        getPoaData: KYC_GET_POA_CHECK_ENQUIRY,
+        getPoaDocs: KYC_GET_POA_CHECK_DOC,
+        getPoaSupportDoc: KYC_GET_POA_SUPPORT_DOC,
+        getPoaDownloadSupportDoc: KYC_GET_DOWNLOAD_SUPPORT_DOC,
+      }),
       handleClose() {
         this.$router.push({name: 'KYC Main Page'})
       },
