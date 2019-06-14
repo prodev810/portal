@@ -68,7 +68,7 @@
             >
             </el-option>
           </el-select>
-          <span v-else>Yes</span>
+          <span v-else class="kyc-client-row__text">{{ client.issuing }}</span>
         </el-col>
       </el-row>
 
@@ -87,7 +87,7 @@
             >
             </el-option>
           </el-select>
-          <span v-else> {{ client.ident }}</span>
+          <span v-else class="kyc-client-row__text"> {{ client.ident }}</span>
         </el-col>
       </el-row>
 
@@ -106,7 +106,7 @@
             >
             </el-option>
           </el-select>
-          <span v-else>Yes</span>
+          <span v-else class="kyc-client-row__text">{{ client.screening }}</span>
         </el-col>
       </el-row>
 
@@ -125,7 +125,7 @@
             >
             </el-option>
           </el-select>
-          <span v-else>Yes</span>
+          <span v-else class="kyc-client-row__text">{{ client.proofofaddress }}</span>
         </el-col>
       </el-row>
 
@@ -144,7 +144,7 @@
             >
             </el-option>
           </el-select>
-          <span v-else>Active</span>
+          <span v-else class="kyc-client-row__text">{{ client.status }}</span>
         </el-col>
       </el-row>
 
@@ -162,7 +162,7 @@
                        :value="item">
             </el-option>
           </el-select>
-          <span v-else>Yearly</span>
+          <span v-else class="kyc-client-row__text">{{ client.rescreeningInterval }}</span>
         </el-col>
       </el-row>
 
@@ -332,7 +332,7 @@
                        :value="item">
             </el-option>
           </el-select>
-          <span v-else>{{ client.autoFollowupClose }}</span>
+          <span>{{ client.autoFollowupClose }}</span>
         </el-col>
       </el-row>
 
