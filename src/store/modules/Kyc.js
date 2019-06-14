@@ -39,10 +39,24 @@ import {
   GETTER_POA_IMG,
   RESEND_SMS,
   KYC_UPDATE_CONTACT,
+
   KYC_GET_CURRENCY_LIST,
   KYC_GET_CLIENT_STATUSES,
   MUTATE_CURRENCY_LIST,
   MUTATE_CLIENT_STATUSES,
+
+  KYC_GET_CHECK_ENQUIRY,
+  MUTATE_SANC_CHECK_ENQUIRY,
+  KYC_RESCREEN_ACTION,
+  MUTATE_SANCTION_CHECK_STATUSES,
+  KYC_GET_SANCTION_CHECK_STATUSES,
+  MUTATE_SANCTION_CHECK_ACTION_TYPES,
+  KYC_GET_SANCTION_CHECK_ACTION_TYPES,
+  KYC_MANUAL_UPDATE,
+  KYC_UPLOAD_SUPPORT_DOCUMENT,
+  KYC_GET_LIST_SUPPORT_DOCUMENTS,
+  MUTATE_LIST_SUPPORT_DOCUMENTS,
+
 } from '../types';
 
 const state = {
@@ -59,8 +73,15 @@ const state = {
   clientInfo: null,
   checkDocs: {},
   poaImg: null,
+
   currencyList: [],
   clientStatusesList: [],
+
+  sanCheckEnquiry: null,
+  sanctionCheckStatuses: null,
+  sanctionCheckActionTypes: null,
+  listSupportDocuments: {},
+
 }
 
 const mutations = {
@@ -113,20 +134,35 @@ const mutations = {
     state.accountLog = data;
   },
   [MUTATE_CLIENT_INFO]: (state, {data}) => {
-      state.clientInfo = data;
+    state.clientInfo = data;
   },
   [MUTATE_CHECK_DOCS]: (state, {data}) => {
-        Vue.set(state.checkDocs, data.docType, data)
-    },
-    [MUTATE_POA_IMG]: (state, {data}) => {
-        state.poaImg = data;
-    },
+    Vue.set(state.checkDocs, data.docType, data)
+  },
+  [MUTATE_POA_IMG]: (state, {data}) => {
+    state.poaImg = data;
+  },
+
   [MUTATE_CLIENT_STATUSES]: (state, {data}) => {
     state.clientStatusesList = data;
   },
   [MUTATE_CURRENCY_LIST]: (state, {data}) => {
     state.currencyList = data;
   },
+
+  [MUTATE_SANC_CHECK_ENQUIRY]: (state, {data}) => {
+      state.sanCheckEnquiry = data;
+  },
+  [MUTATE_SANCTION_CHECK_STATUSES]: (state, {data}) => {
+      state.sanctionCheckStatuses = data;
+  },
+  [MUTATE_SANCTION_CHECK_ACTION_TYPES]: (state, {data}) => {
+      state.sanctionCheckActionTypes = data;
+  },
+  [MUTATE_LIST_SUPPORT_DOCUMENTS]: (state, {data}) => {
+      state.listSupportDocuments = data;
+  }
+
 }
 
 const actions = {
@@ -358,7 +394,6 @@ const actions = {
       console.log('error :', e);
     }
   },
-
   [GETTER_All_CLIENTS_LIST]: async ({commit, dispatch}) => {
     try {
       const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/clients/all`);
@@ -519,6 +554,91 @@ const actions = {
           mobile: mobile
       });
       console.log('data from API POA', data)
+    } catch (e) {
+      console.log('error :', e);
+    }
+  },
+  [KYC_GET_CHECK_ENQUIRY]: async ({commit, dispatch}, {
+    appReferenceId,
+  }) => {
+    try {
+      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/applications/${appReferenceId}/sancheck-enquiry`);
+      console.log('KYC_GET_CHECK_ENQUIRY ', data)
+      commit(MUTATE_SANC_CHECK_ENQUIRY, {data});
+    } catch (e) {
+      console.log('error :', e);
+    }
+  },
+  [KYC_RESCREEN_ACTION]: async ({commit, dispatch}, {
+    appReferenceId,
+  }) => {
+    try {
+      const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/applications/${appReferenceId}/sanction-rescreen`);
+      console.log('KYC_RESCREEN_ACTION ', data)
+    } catch (e) {
+      console.log('error :', e);
+    }
+  },
+  [KYC_GET_SANCTION_CHECK_STATUSES]: async ({commit, dispatch}) => {
+    try {
+      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/sancheck-statuses`);
+      console.log('KYC_GET_SANCTION_CHECK_STATUSES ', data)
+      commit(MUTATE_SANCTION_CHECK_STATUSES, {data});
+    } catch (e) {
+      console.log('error :', e);
+    }
+  },
+  [KYC_GET_SANCTION_CHECK_ACTION_TYPES]: async ({commit, dispatch}) => {
+    try {
+      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/sancheck-action-types`);
+      console.log('KYC_GET_SANCTION_CHECK_ACTION_TYPES ', data)
+      commit(MUTATE_SANCTION_CHECK_ACTION_TYPES, {data});
+    } catch (e) {
+      console.log('error :', e);
+    }
+  },
+  [KYC_MANUAL_UPDATE]: async ({commit, dispatch}, {
+    actionTypeCode,
+    comment,
+    operatorName,
+    id,
+  }) => {
+    try {
+      const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/sancheck/${id}/action`, {
+        actionTypeCode,
+        comment,
+        operatorName,
+      });
+      console.log('KYC_MANUAL_UPDATE ', data)
+    } catch (e) {
+      console.log('error :', e);
+    }
+  },
+  [KYC_UPLOAD_SUPPORT_DOCUMENT]: async ({commit, dispatch}, {
+    content,
+    mimeType,
+    operatorName,
+    id,
+  }) => {
+    try {
+      const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/sancheck/${id}/document-supports`, {
+        content,
+        mimeType,
+        operatorName,
+      });
+      Promise.resolve()
+      console.log('KYC_UPLOAD_SUPPORT_DOCUMENT ', data)
+    } catch (e) {
+      console.log('error :', e);
+    }
+  },
+  [KYC_GET_LIST_SUPPORT_DOCUMENTS]: async ({commit, dispatch}, {
+      id
+  }) => {
+    try {
+      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/sancheck/${id}/document-supports`);
+      console.log('KYC_GET_LIST_SUPPORT_DOCUMENTS ', data)
+      commit(MUTATE_LIST_SUPPORT_DOCUMENTS, {data});
     } catch (e) {
       console.log('error :', e);
     }

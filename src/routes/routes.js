@@ -351,6 +351,22 @@ const kyc = {
         permission: permission.RESELLER_INVOICE_VIEW
       }
     },
+    {
+        path: '/kyc/sanction-action',
+        name: 'KYC Sanction Action',
+        component: () => import('../components/Dashboard/pages/Kyc/SanctionAction'),
+        meta: {
+          permission: permission.RESELLER_INVOICE_VIEW
+        }
+      },
+      {
+        path: '/kyc/sanction-view',
+        name: 'KYC Sanction View',
+        component: () => import('../components/Dashboard/pages/Kyc/SanctionAction'),
+        meta: {
+          permission: permission.RESELLER_INVOICE_VIEW
+        }
+      }
   ]
 }
 let loginPage = {

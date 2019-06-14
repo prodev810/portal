@@ -11,6 +11,8 @@ pipeline {
 
     options {
         timestamps()
+	disableConcurrentBuilds()
+        timeout(activity: true, time: 5)
     }
 
     stages {
