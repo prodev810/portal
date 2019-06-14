@@ -131,6 +131,7 @@ export const KYC_DOWNLOAD_POA_IMAGE = 'KYC_DOWNLOAD_POA_IMAGE'
 export const RESEND_SMS = 'RESEND_SMS'
 export const KYC_UPDATE_CONTACT = 'KYC_UPDATE_CONTACT'
 
+
 // -> getters
 export const GETTER_All_CLIENTS = 'GETTER_All_CLIENTS'
 export const GETTER_All_CLIENTS_LIST = 'GETTER_All_CLIENTS_LIST'

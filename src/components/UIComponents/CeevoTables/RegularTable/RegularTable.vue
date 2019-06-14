@@ -125,7 +125,7 @@
               </div>
             </td>
             <!--todo pass the id of the row-->
-            <slot :index="{index,id:row.id}"></slot>
+            <slot :index="{row: row, index: index}"></slot>
           </tr>
           <slot name="total"></slot>
         </tbody>

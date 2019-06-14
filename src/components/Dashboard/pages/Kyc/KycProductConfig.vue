@@ -17,7 +17,7 @@
               <td>
                 <p-button type="primary"
                           outline
-                          @click="handleViewInvoice(1)"
+                          @click="handleViewInvoice(index)"
                           class="kyc__product__btn">
                   <slot name="label">
                     <img class="img-responsive ic__icon"
@@ -27,7 +27,7 @@
                 </p-button>
                 <p-button type="primary"
                           outline
-                          @click="handleEditClient(1)"
+                          @click="handleEditClient(index.index.row)"
                           class="kyc__product__btn">
                   <slot name="label">
                     <img class="img-responsive ic__icon"
@@ -37,7 +37,7 @@
                 </p-button>
                 <p-button type="primary"
                           outline
-                          @click="handleViewClient(1)"
+                          @click="handleViewClient(index.index.row)"
                           class="kyc__product__btn">
                   <slot name="label">
                     <img class="img-responsive ic__icon"
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+  import {mapState, mapActions} from 'vuex'
   import RegularTable from "@/components/UIComponents/CeevoTables/RegularTable/RegularTable"
   import PButton from "@/components/UIComponents/Button"
 
@@ -82,11 +83,13 @@
         }
         return (value.toLowerCase() === 'yes') ? 'success' : 'danger'
       },
-      handleViewClient(id) {
-        this.$router.push({path: `/kyc/product-config/view-client/${id}`});
+      handleViewClient(tableClient) {
+        const client = this.productConfigData.find( d => d.id === tableClient.id);
+        this.$router.push({path: `/kyc/product-config/view-client/${client.id}`, query: {client}});
       },
-      handleEditClient(id) {
-        this.$router.push({path: `/kyc/product-config/edit-client/${id}`});
+      handleEditClient(tableClient) {
+        const client = this.productConfigData.find( d => d.id === tableClient.id);
+        this.$router.push({path: `/kyc/product-config/edit-client/${client.id}`, query: {client}});
       },
       handleViewInvoice(id) {
         this.$router.push({path: `/kyc/product-config/view-invoice/${id}`});
@@ -98,11 +101,11 @@
           {name: 'clientName', label: 'Client Name'},
           {name: 'clientRef', label: 'Client App'},
           {name: 'accountContact', label: 'Account Contact'},
-          {name: 'accountEmail', label: 'Account e-mail', email: true},
+          {name: 'accountEmail', label: 'Account E-mail', email: true},
           {name: 'issuing', label: 'Issuing', custom: true},
           {name: 'ident', label: 'ID', custom: true},
           {name: 'screening', label: 'Screening', custom: true},
-          {name: 'proofofaddress', label: 'Proof Of address'},
+          {name: 'proofofaddress', label: 'Proof Of Address'},
           {name: 'status', label: 'Status', status: true},
         ],
 
@@ -112,6 +115,7 @@
 
         productConfigData: [
           {
+            id: 1,
             clientName: 'Acwqee',
             clientRef: 'KYCACQ',
             accountContact: 'Peter Gibbons',
@@ -124,9 +128,21 @@
             classes: {
               status: 'active',
               issuing: 'success'
+            },
+            fees: {
+              currency: '',
+              fullApplication: '3.00',
+              idRescreen: '3.33',
+              poaRescreen: '2.40',
+              sanotionRescreen: '0.10',
+              smsFee : '0.10',
+              kycReminder : '',
+              autoClose: '',
+              followupClose: ''
             }
           },
           {
+            id: 2,
             clientName: 'Abc Name',
             clientRef: 'KYCACQ',
             accountContact: 'Peter Gibbons',
@@ -136,8 +152,20 @@
             screening: 'Yes',
             proofofaddress: 'No',
             status: 'Inactive',
+            fees: {
+              currency: '',
+              fullApplication: '4.0',
+              idRescreen: '33.23',
+              poaRescreen: '2.50',
+              sanotionRescreen: '0.11',
+              smsFee : '0.12',
+              kycReminder : '',
+              autoClose: '',
+              followupClose: ''
+            }
           },
           {
+            id: 3,
             clientName: 'Chn Name',
             clientRef: 'KYCACQ',
             accountContact: 'Peter Gibbons',
@@ -147,6 +175,17 @@
             screening: 'Yes',
             proofofaddress: 'No',
             status: 'Closed',
+            fees: {
+              currency: '',
+              fullApplication: '5.0',
+              idRescreen: '23.27',
+              poaRescreen: '2.70',
+              sanotionRescreen: '0.18',
+              smsFee : '0.15',
+              kycReminder : '',
+              autoClose: '',
+              followupClose: ''
+            }
           },
         ],
       }
@@ -163,6 +202,11 @@
   $table-column-closed: #292929;
 
   .kyc__product__config {
+    /deep/ {
+      .table__wrapper.ceevo__table--auto-height.ceevo__table--responsive.ceevo__table--condensed.ceevo__table--striped {
+        padding: 0 !important;
+      }
+    }
 
     .kyc__product__title {
       font-size: 28px;
@@ -208,7 +252,6 @@
       top: 50%;
       transform: translateY(-50%);
     }
-
     .kyc__module__table {
       /deep/ {
         .ceevo__table {
