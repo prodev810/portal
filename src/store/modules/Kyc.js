@@ -51,6 +51,8 @@ import {
   MUTATE_POA_SUPPORT_DOC,
   KYC_GET_DOWNLOAD_SUPPORT_DOC,
   MUTATE_POA_DOWNLOAD_SUPPORT_DOC,
+  KYC_GET_POA_CHECK_STATUSES,
+  MUTATE_POA_CHECK_STATUSES
 } from '../types';
 
 const state = {
@@ -73,6 +75,7 @@ const state = {
   poaCheckDoc: [],
   poaSupportDoc:[],
   poaDownloadSupportDoc: [],
+  poaStatuses: [],
 }
 
 const mutations = {
@@ -150,6 +153,9 @@ const mutations = {
   },
   [MUTATE_POA_DOWNLOAD_SUPPORT_DOC]: (state, {data}) => {
     state.poaDownloadSupportDoc = data;
+  },
+  [MUTATE_POA_CHECK_STATUSES]: (state, {data}) => {
+    state.poaStatuses = data;
   },
 }
 
@@ -244,10 +250,55 @@ const actions = {
   },
   [KYC_GET_POA_CHECK_ENQUIRY]: async ({commit}, payload) => {
     try{
-      const {data} = await Vue.prototype.$http.get(`v1/kyc/applications/${payload}/poacheck-enquiry`)
+      // const {data} = await Vue.prototype.$http.get(`v1/kyc/applications/${payload}/poacheck-enquiry`);
+      //this query return error - {"errorCode":500,"message":"Please contact your administrator","detail":null,"errors":null}
+
+      const data = {
+        "appReceivedDate": "2018-12-25T12:35:50Z",
+        "appReferenceId": "KYC190417-ABCD",
+        "applicationStatus": "New Application",
+        "checkHistories": [
+          {
+            "checkActionComment": "Reviewed and approved by management",
+            "checkActionCreatedDate": "2018-12-25T12:35:50Z",
+            "checkActionId": "00000000-0000-0000-0000-000000000000",
+            "checkActionName": "Approve",
+            "checkActionReason": "N/A",
+            "checkId": "00000000-0000-0000-0000-000000000000",
+            "checkReferenceId": "CHK-12345",
+            "checkStatusDesc": "Manually reviewed and approved",
+            "checkStatusName": "Manual Approval",
+            "operatorName": "david.chan"
+          }
+        ],
+        "checkId": "00000000-0000-0000-0000-000000000000",
+        "checkReferenceId": "CHK-12345",
+        "checkStatusDesc": "Manually reviewed and approved",
+        "checkStatusName": "Manual Approval",
+        "clientReference": "KYCACQ",
+        "lastSmsSentDate": "2018-12-25T12:35:50Z",
+        "poaCheckDoc": {
+          "docType": "BILL",
+          "fileName": "IMAGE-1234.jpeg",
+          "id": "00000000-0000-0000-0000-000000000000",
+          "mimeType": "image/jpeg",
+          "uploadId": "FL20181225-000001-ABCD"
+        },
+        "submittedAddress": {
+          "address1": "2863 Kerry Way",
+          "address2": "Long Beach",
+          "address3": "CA 90802",
+          "city": "Bensalem",
+          "countryCode": "US",
+          "countyOrState": "Capricorn",
+          "postCode": 802
+        },
+        "verifyAttempts": 1
+      };
+
       commit(MUTATE_POA_CHECK_ENQUIRY, {data})
     }catch (e) {
-      console.log('error :', e)
+      console.log('error -------', e)
     }
   },
   [KYC_GET_POA_CHECK_DOC]: async ({commit}, payload) => {
@@ -275,7 +326,14 @@ const actions = {
       console.log('error :', e)
     }
   },
-
+  [KYC_GET_POA_CHECK_STATUSES]: async ({commit}, payload) => {
+    try {
+      const {data} = await Vue.prototype.$http.get(`/v1/kyc/poacheck-statuses/`);
+      commit(MUTATE_POA_CHECK_STATUSES, {data})
+    }catch (e) {
+      console.log('error :', e)
+    }
+  },
   /*
   [ADD_RESELLER_SUBSCRIPTION]: async ({commit, dispatch}, {body}) => {
     try {
