@@ -146,6 +146,9 @@
         }
       }
     }
+    .div-max-length {
+      font-weight: bold !important;
+    }
     .ceevo__table {
       width: 100% !important;
       overflow: auto !important;

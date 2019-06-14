@@ -44,7 +44,7 @@
 
       <el-row class="kyc-client-row">
         <el-col :sm="10">
-          <p class="kyc-client-row__text kyc-client-row__title">Account e-mail</p>
+          <p class="kyc-client-row__text kyc-client-row__title">Account E-mail</p>
         </el-col>
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"><a :href="'mailto:' + userData.email"
@@ -68,7 +68,7 @@
             >
             </el-option>
           </el-select>
-          <span v-else>Yes</span>
+          <span v-else class="kyc-client-row__text">{{ client.issuing }}</span>
         </el-col>
       </el-row>
 
@@ -79,7 +79,7 @@
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
                      class="select-primary kyc__custom__primary__select"
-                     v-model="client.id">
+                     v-model="client.ident">
             <el-option v-for="item in selectYesNoValue"
                        :key="item.value"
                        :label="item.label"
@@ -87,7 +87,7 @@
             >
             </el-option>
           </el-select>
-          <span v-else>Yes</span>
+          <span v-else class="kyc-client-row__text"> {{ client.ident }}</span>
         </el-col>
       </el-row>
 
@@ -106,18 +106,18 @@
             >
             </el-option>
           </el-select>
-          <span v-else>Yes</span>
+          <span v-else class="kyc-client-row__text">{{ client.screening }}</span>
         </el-col>
       </el-row>
 
       <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
-          <p class="kyc-client-row__text kyc-client-row__title">Proof of address</p>
+          <p class="kyc-client-row__text kyc-client-row__title">Proof Of Address</p>
         </el-col>
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
                      class="select-primary kyc__custom__primary__select"
-                     v-model="client.proofAddress">
+                     v-model="client.proofofaddress">
             <el-option v-for="item in selectYesNoValue"
                        :key="item.value"
                        :label="item.label"
@@ -125,7 +125,7 @@
             >
             </el-option>
           </el-select>
-          <span v-else>Yes</span>
+          <span v-else class="kyc-client-row__text">{{ client.proofofaddress }}</span>
         </el-col>
       </el-row>
 
@@ -144,13 +144,13 @@
             >
             </el-option>
           </el-select>
-          <span v-else>Active</span>
+          <span v-else class="kyc-client-row__text">{{ client.status }}</span>
         </el-col>
       </el-row>
 
       <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
-          <p class="kyc-client-row__text kyc-client-row__title">Resereening interval</p>
+          <p class="kyc-client-row__text kyc-client-row__title">Resereening Interval</p>
         </el-col>
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
@@ -162,7 +162,7 @@
                        :value="item">
             </el-option>
           </el-select>
-          <span v-else>Yearly</span>
+          <span v-else class="kyc-client-row__text">{{ client.rescreeningInterval }}</span>
         </el-col>
       </el-row>
 
@@ -232,7 +232,7 @@
             >
             </el-option>
           </el-select>
-          <span v-else>EUR</span>
+          <span v-else>{{ client.currency }}</span>
         </el-col>
       </el-row>
 
@@ -241,7 +241,7 @@
           <p class="kyc-client-row__text kyc-client-row__title">Full Application</p>
         </el-col>
         <el-col :sm="14">
-          <p class="kyc-client-row__text kyc-client-row__name">3.00</p>
+          <p class="kyc-client-row__text kyc-client-row__name" v-if="client && client.fees && client.fees.fullApplication">{{ client.fees.fullApplication }}</p>
         </el-col>
       </el-row>
 
@@ -250,7 +250,7 @@
           <p class="kyc-client-row__text kyc-client-row__title">ID Rescreen</p>
         </el-col>
         <el-col :sm="14">
-          <p class="kyc-client-row__text kyc-client-row__name">3.33</p>
+          <p class="kyc-client-row__text kyc-client-row__name" v-if="client && client.fees && client.fees.idRescreen">{{ client.fees.idRescreen }}</p>
         </el-col>
       </el-row>
 
@@ -259,7 +259,7 @@
           <p class="kyc-client-row__text kyc-client-row__title">POA Rescreen</p>
         </el-col>
         <el-col :sm="14">
-          <p class="kyc-client-row__text kyc-client-row__name">2.40</p>
+          <p class="kyc-client-row__text kyc-client-row__name" v-if="client && client.fees && client.fees.poaRescreen">{{ client.fees.poaRescreen }}</p>
         </el-col>
       </el-row>
 
@@ -268,7 +268,7 @@
           <p class="kyc-client-row__text kyc-client-row__title">Sanotion Rescreen</p>
         </el-col>
         <el-col :sm="14">
-          <p class="kyc-client-row__text kyc-client-row__name">0.10</p>
+          <p class="kyc-client-row__text kyc-client-row__name" v-if="client && client.fees && client.fees.sanotionRescreen">{{ client.fees.sanotionRescreen }}</p>
         </el-col>
       </el-row>
 
@@ -277,7 +277,7 @@
           <p class="kyc-client-row__text kyc-client-row__title">SMS Fee</p>
         </el-col>
         <el-col :sm="14">
-          <p class="kyc-client-row__text kyc-client-row__name">0.10</p>
+          <p class="kyc-client-row__text kyc-client-row__name" v-if="client && client.fees && client.fees.smsFee">{{ client.fees.smsFee }}</p>
         </el-col>
       </el-row>
 
@@ -295,7 +295,7 @@
                        :value="item">
             </el-option>
           </el-select>
-          <span v-else>7 days</span>
+          <span v-else>{{ client.kycReminder }}</span>
         </el-col>
       </el-row>
 
@@ -313,7 +313,7 @@
                        :value="item">
             </el-option>
           </el-select>
-          <span v-else>30 days</span>
+          <span v-else>{{ client.autoClose }}</span>
         </el-col>
       </el-row>
 
@@ -332,7 +332,7 @@
                        :value="item">
             </el-option>
           </el-select>
-          <span v-else>30 days</span>
+          <span>{{ client.autoFollowupClose }}</span>
         </el-col>
       </el-row>
 
@@ -376,18 +376,7 @@
         modals: {
           visible: false
         },
-        client: {
-          issuing: 'no',
-          id: 'no',
-          screening: 'yes',
-          proofAddress: 'yes',
-          status: '',
-          rescreeningInterval: '',
-          currency: 'EUR',
-          kycReminder: '',
-          autoClose: '',
-          autoFollowupClose: '',
-        },
+        client: {},
         valueSelect: '',
         userData: {
           name: 'Acquiring',
@@ -425,6 +414,7 @@
       }
     },
     mounted() {
+      this.client = this.$route.query.client
       this.getClientStatuses()
 
       this.getCurrencyList()
@@ -548,6 +538,7 @@
   .kyc-client-row__text {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
+    font-weight: bold;
     display: flex;
     align-items: center;
     margin-bottom: 0;
@@ -555,10 +546,6 @@
 
   .kyc-client-row__title {
     font-weight: 600;
-  }
-
-  .kyc-client-row__name {
-    font-weight: 100;
   }
 
   .kyc-client-row__link {
