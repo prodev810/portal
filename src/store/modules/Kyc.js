@@ -52,7 +52,13 @@ import {
   KYC_GET_DOWNLOAD_SUPPORT_DOC,
   MUTATE_POA_DOWNLOAD_SUPPORT_DOC,
   KYC_GET_POA_CHECK_STATUSES,
-  MUTATE_POA_CHECK_STATUSES
+  MUTATE_POA_CHECK_STATUSES,
+  KYC_POST_POA_CHECK_ADDRESS,
+  MUTATE_POA_CHECK_ADDRESS,
+  KYC_GET_POA_ACTION_TYPES,
+  MUTATE_POA_ACTION_TYPES,
+  KYC_POST_UPLOAD_DOCUMENT_SUPPORTS,
+  KYC_POST_ACTION_FROM_MODAL
 } from '../types';
 
 const state = {
@@ -74,8 +80,9 @@ const state = {
   poaInfo: [],
   poaCheckDoc: [],
   poaSupportDoc:[],
-  poaDownloadSupportDoc: [],
   poaStatuses: [],
+  poaAddress: [],
+  poaActionTypes: []
 }
 
 const mutations = {
@@ -157,6 +164,15 @@ const mutations = {
   [MUTATE_POA_CHECK_STATUSES]: (state, {data}) => {
     state.poaStatuses = data;
   },
+  [MUTATE_POA_CHECK_ADDRESS]: (state, {data}) => {
+    state.poaAddress = data;
+  },
+  [MUTATE_POA_CHECK_ADDRESS]: (state, {data}) => {
+    state.poaAddress = data;
+  },
+  [MUTATE_POA_ACTION_TYPES]: (state, {data}) => {
+    state.poaActionTypes = data;
+  },
 }
 
 const actions = {
@@ -233,7 +249,6 @@ const actions = {
     try {
       const {data} = await Vue.prototype.$http.get('v1/kyc/client-statuses')
       commit(MUTATE_CLIENT_STATUSES, {data})
-      console.log('statuses', {data})
     } catch (e) {
       console.log('error :', e);
     }
@@ -243,62 +258,17 @@ const actions = {
     try {
       const {data} = await Vue.prototype.$http.get('v1/kyc/currencies')
       commit(MUTATE_CURRENCY_LIST, {data})
-      console.log('currency', {data})
     } catch (e) {
       console.log('error :', e);
     }
   },
   [KYC_GET_POA_CHECK_ENQUIRY]: async ({commit}, payload) => {
     try{
-      // const {data} = await Vue.prototype.$http.get(`v1/kyc/applications/${payload}/poacheck-enquiry`);
-      //this query return error - {"errorCode":500,"message":"Please contact your administrator","detail":null,"errors":null}
-
-      const data = {
-        "appReceivedDate": "2018-12-25T12:35:50Z",
-        "appReferenceId": "KYC190417-ABCD",
-        "applicationStatus": "New Application",
-        "checkHistories": [
-          {
-            "checkActionComment": "Reviewed and approved by management",
-            "checkActionCreatedDate": "2018-12-25T12:35:50Z",
-            "checkActionId": "00000000-0000-0000-0000-000000000000",
-            "checkActionName": "Approve",
-            "checkActionReason": "N/A",
-            "checkId": "00000000-0000-0000-0000-000000000000",
-            "checkReferenceId": "CHK-12345",
-            "checkStatusDesc": "Manually reviewed and approved",
-            "checkStatusName": "Manual Approval",
-            "operatorName": "david.chan"
-          }
-        ],
-        "checkId": "00000000-0000-0000-0000-000000000000",
-        "checkReferenceId": "CHK-12345",
-        "checkStatusDesc": "Manually reviewed and approved",
-        "checkStatusName": "Manual Approval",
-        "clientReference": "KYCACQ",
-        "lastSmsSentDate": "2018-12-25T12:35:50Z",
-        "poaCheckDoc": {
-          "docType": "BILL",
-          "fileName": "IMAGE-1234.jpeg",
-          "id": "00000000-0000-0000-0000-000000000000",
-          "mimeType": "image/jpeg",
-          "uploadId": "FL20181225-000001-ABCD"
-        },
-        "submittedAddress": {
-          "address1": "2863 Kerry Way",
-          "address2": "Long Beach",
-          "address3": "CA 90802",
-          "city": "Bensalem",
-          "countryCode": "US",
-          "countyOrState": "Capricorn",
-          "postCode": 802
-        },
-        "verifyAttempts": 1
-      };
-
+      // I get some App Ref from search module, but how i can get current app ref I dont know
+      const {data} = await Vue.prototype.$http.get(`v1/kyc/applications/${payload}/poacheck-enquiry`);
       commit(MUTATE_POA_CHECK_ENQUIRY, {data})
     }catch (e) {
-      console.log('error -------', e)
+      console.log('error', e)
     }
   },
   [KYC_GET_POA_CHECK_DOC]: async ({commit}, payload) => {
@@ -319,17 +289,56 @@ const actions = {
   },
   [KYC_GET_DOWNLOAD_SUPPORT_DOC]: async ({commit}, payload) => {
     try {
-      // const {data} = await Vue.prototype.$http.get(``)
       const {data} = await Vue.prototype.$http.get(`/v1/kyc/poacheck/${payload.checkId}/document-supports/${payload.id}`)
       commit(MUTATE_POA_DOWNLOAD_SUPPORT_DOC, {data})
     }catch (e) {
       console.log('error :', e)
     }
   },
+  [KYC_POST_UPLOAD_DOCUMENT_SUPPORTS]: async ({commit}, payload) => {
+    try {
+      const {data} = await Vue.prototype.$http.post(`/v1/kyc/poacheck/${payload}/document-supports`)
+    }catch (e) {
+      console.log('error :', e)
+    }
+  },
+  // [KYC_GET_POA_UPOADED_DOCUMENT]: async ({commit}, payload) => {
+  //   try {
+  //     // console.log('payload', payload)
+  //     const {data} = await Vue.prototype.$http.get(`/v1/kyc/poacheck/{payload}/document-supports`);
+  //     commit(MUTATE_POA_UPLOADED_DOCUMENT, {data})
+  //   }catch (e) {
+  //     console.log('error :', e)
+  //   }
+  // },
+
   [KYC_GET_POA_CHECK_STATUSES]: async ({commit}, payload) => {
     try {
       const {data} = await Vue.prototype.$http.get(`/v1/kyc/poacheck-statuses/`);
       commit(MUTATE_POA_CHECK_STATUSES, {data})
+    }catch (e) {
+      console.log('error :', e)
+    }
+  },
+  [KYC_POST_POA_CHECK_ADDRESS]: async ({commit}, payload) => {
+    try {
+      const {data} = await Vue.prototype.$http.post(`/v1/kyc/poacheck/{payload}/address`);
+      commit(MUTATE_POA_CHECK_ADDRESS, {data})
+    }catch (e) {
+      console.log('error :', e)
+    }
+  },
+  [KYC_GET_POA_ACTION_TYPES]: async ({commit}, payload) => {
+    try {
+      const {data} = await Vue.prototype.$http.get(`/v1/kyc/poacheck-action-types`);
+      commit(MUTATE_POA_ACTION_TYPES, {data})
+    }catch (e) {
+      console.log('error :', e)
+    }
+  },
+  [KYC_POST_ACTION_FROM_MODAL]: async ({commit}, payload) => {
+    try {
+      const {data} = await Vue.prototype.$http.post(`/v1/kyc/poacheck{payload}/action`);
     }catch (e) {
       console.log('error :', e)
     }
@@ -470,7 +479,6 @@ const actions = {
   [GETTER_APPLICATION_STATUS_LIST]: async ({commit, dispatch}) => {
     try {
       const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/kyc-application-statuses`);
-      console.log('application status data', data);
       commit(MUTATE_APPLICATION_STATUS, {data});
     } catch (e) {
       console.log('error :', e);
@@ -598,7 +606,6 @@ const actions = {
   }) => {
     try {
       const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/idcheck/${checkId}/docs/${id}`);
-      console.log('data from API', data)
       commit(MUTATE_CHECK_DOCS, {data});
     } catch (e) {
       console.log('error :', e);
@@ -610,7 +617,6 @@ const actions = {
   }) => {
     try {
       const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/poacheck/${checkId}/docs/${id}`);
-      console.log('data from API POA', data)
       commit(MUTATE_POA_IMG, {data});
     } catch (e) {
       console.log('error :', e);

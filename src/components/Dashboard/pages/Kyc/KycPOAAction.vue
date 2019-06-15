@@ -1,6 +1,5 @@
 <template>
   <div class="kyc-poa">
-    <pre>{{ poaData }}</pre>
     <el-row class="kyc-poa-row w-100 d-flex align-items-center mb-4">
       <el-col :sm="12">
         <h2 class="col-12 kyc-poa__sub-head m-0">Application Info</h2>
@@ -151,8 +150,8 @@
                           <h5 class="sub-title">Status</h5>
                           <table class="helper-table">
                             <tbody>
-                            <tr v-for="(actionName, index) in actionPOAList" :key="index">
-                              <td>{{ actionName }}</td>
+                            <tr v-for="(item, index) in poaActionTypes" :key="index">
+                              <td>{{ item.description }}</td>
                             </tr>
                             </tbody>
                           </table>
@@ -231,7 +230,7 @@
                       <p-button
                         type="success"
                         class="kyc-poa-action-btn mr-2"
-                        @click="toggleModalVisible"
+                        @click="toggleModalVisible(); sendDataFromModal()"
                         round>
                         Save</p-button>
                       <p-button
@@ -368,7 +367,7 @@
                          :value="applicationInfoData">
             <template slot-scope="index">
               <td>
-                <p-button type="primary" outline>Download</p-button>
+                <p-button type="primary" outline @click="onClickTableBtn(index)">Download</p-button>
               </td>
             </template>
           </regular-table>
@@ -392,7 +391,11 @@
     KYC_GET_POA_CHECK_DOC,
     KYC_GET_POA_SUPPORT_DOC,
     KYC_GET_DOWNLOAD_SUPPORT_DOC,
-    KYC_GET_POA_CHECK_STATUSES
+    KYC_GET_POA_CHECK_STATUSES,
+    KYC_POST_POA_CHECK_ADDRESS,
+    KYC_GET_POA_ACTION_TYPES,
+    KYC_POST_UPLOAD_DOCUMENT_SUPPORTS,
+    KYC_POST_ACTION_FROM_MODAL
   } from "../../../../store/types"
 
   export default {
@@ -451,15 +454,6 @@
         //   region: 'Frankfurt',
         //   country: 'Germany',
         // },
-        actionPOAList: [
-          'Approve POA',
-          'Decline POA - Close Application',
-          'Decline POA - Fraud and Close',
-          'Request new POA - Not supported',
-          'Request new POA - Expired ID',
-          'Request new POA - Not Legible',
-          'Request new POA - Address Update',
-        ],
         verificationList: [
           'POA is an approved bill type',
           'POA is an approved bill type',
@@ -531,10 +525,14 @@
       }
     },
     mounted(){
-      this.getPoaData('KYC190417-ABCD')
+      this.getPoaData('KYC190612-NIAI')
       this.getPoaCheckStatuses()
-      this.getPoaDocs({checkId: '00000', id: '12312'})
-      this.getPoaDownloadSupportDoc({checkId: '00000', id: '12312'})
+      this.getPoaDocs({checkId: 'a1dac324-da9e-4c5a-b7fd-6764438bb933', id: '51b84935-400d-4f2c-b06c-aa4f6c123cb4'})
+      this.getPoaDownloadSupportDoc({checkId: 'a1dac324-da9e-4c5a-b7fd-6764438bb933', id: '51b84935-400d-4f2c-b06c-aa4f6c123cb4'})
+      this.getPoaActionTypes()
+      // this.sendPoaCheckAddress()
+      //this.sendDocumentSuppports()
+
     },
     computed: {
       ...mapState({
@@ -542,7 +540,9 @@
         poaCheckDoc: state => state.kyc.poaCheckDoc,
         poaSupportDoc: state => state.kyc.poaSupportDoc,
         poaDownloadSupportDoc: state => state.kyc.poaDownloadSupportDoc,
-        poaStatuses: state => state.kyc.poaStatuses
+        poaStatuses: state => state.kyc.poaStatuses,
+        poaActionTypes: state => state.kyc.poaActionTypes,
+
       }),
       isActionMode() {
         return this.mode === 'action'
@@ -552,9 +552,13 @@
       ...mapActions({
         getPoaData: KYC_GET_POA_CHECK_ENQUIRY,
         getPoaDocs: KYC_GET_POA_CHECK_DOC,
-        getPoaSupportDoc: KYC_GET_POA_SUPPORT_DOC,
+        getListUploadedDocument: KYC_GET_POA_SUPPORT_DOC,
         getPoaDownloadSupportDoc: KYC_GET_DOWNLOAD_SUPPORT_DOC,
-        getPoaCheckStatuses: KYC_GET_POA_CHECK_STATUSES
+        getPoaCheckStatuses: KYC_GET_POA_CHECK_STATUSES,
+        sendPoaCheckAddress: KYC_POST_POA_CHECK_ADDRESS,
+        getPoaActionTypes: KYC_GET_POA_ACTION_TYPES,
+        sendDocumentSuppports: KYC_POST_UPLOAD_DOCUMENT_SUPPORTS,
+        saveDataFromModal: KYC_POST_ACTION_FROM_MODAL
       }),
       handleClose() {
         this.$router.push({name: 'KYC Main Page'})
@@ -565,6 +569,13 @@
       toggleModalVisible() {
         this.modals.visible = !this.modals.visible
       },
+      onClickTableBtn(idx) {
+        let index = idx.index.index
+        this.getListUploadedDocument(this.applicationInfoData[index].name)
+      },
+      sendDataFromModal() {
+        this.saveDataFromModal()
+      }
     }
   }
 </script>
