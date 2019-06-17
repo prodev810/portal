@@ -187,7 +187,8 @@
             round
             @click.native="modals.visible = true"
             type="primary"
-            class="search-button">
+            class="search-button"
+            :class="{'disabled':!validateClientForm}">
             {{ handlePageBtn }}
           </p-button>
           <div v-else>
@@ -452,6 +453,16 @@
           'Yearly',
         ],
         dateIntervalList: [],
+        validationList:[
+          'issuing',
+          'id',
+          'screening',
+          'rescreeningInterval',
+          'currency',
+          'kycReminder',
+          'autoClose',
+          'autoFollowupClose',
+        ],
       }
     },
     async created() {
@@ -507,6 +518,17 @@
           return `/kyc/product-config/view-client/${this.clientId}`
         }
         return `/kyc/product-config/edit-client/${this.clientId}`
+      },
+      validateClientForm(){
+        let isValid = true
+         if(this.mode === 'create'){
+           this.validationList.forEach( item =>{
+             if(!this.client[`${item}`]){
+               isValid = false
+             }
+           })
+         }
+        return isValid
       }
     },
     methods: {

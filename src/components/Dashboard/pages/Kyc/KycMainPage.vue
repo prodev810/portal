@@ -159,10 +159,10 @@
             </div>
 
             <div class="row">
-                <div class="col-4 mb-3">
+                <div class="col-xl-4 mb-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <p class="kyc-label mb-0">Status</p>
-                        <p-button class="btn btn--status" :class="cardBtnFrontStatus" v-if="getterClientInfo && getterClientInfo.idCheckInfo">{{ getterClientInfo.idCheckInfo.checkStatusName }}</p-button>
+                        <p-button class="btn" :class="cardBtnFrontStatus" v-if="getterClientInfo && getterClientInfo.idCheckInfo">{{ getterClientInfo.idCheckInfo.checkStatusName }}</p-button>
                     </div>
                 </div>
             </div>
@@ -310,7 +310,7 @@
                     <h5 class="sub-title mb-3">PEP / Sanctions Check</h5>
                     <div class="w-100 d-flex justify-content-between align-items-center">
                         <p class="mb-0 kyc-label kyc-label--no-w">Status</p>
-                        <p-button class="btn btn--status btn--passed m-0" v-if="getterClientInfo && getterClientInfo.sanctionCheckInfo">{{ getterClientInfo.sanctionCheckInfo.checkStatusName }}</p-button>
+                        <p-button class="btn btn--passed m-0" :class="cardBtnSancStatus" v-if="getterClientInfo && getterClientInfo.sanctionCheckInfo">{{ getterClientInfo.sanctionCheckInfo.checkStatusName }}</p-button>
                     </div>
                     <el-row>
                         <el-col :sm="24" class="kyc-action">
@@ -318,8 +318,8 @@
                                 <span class="" v-if="getterClientInfo && getterClientInfo.sanctionCheckInfo">{{ getterClientInfo.sanctionCheckInfo.latestResubmittedDate }}</span>
                             </p>
                             <div class="kyc_url_action">
-                                <p-button round type="primary" class="btn btn--view mr-2">View</p-button>
-                                <p-button round class="btn btn--view">Action</p-button>
+                                <p-button round type="primary" class="btn btn--view mr-2" @click.stop.prevent="goSanctionView">View</p-button>
+                                <p-button round class="btn btn--view" @click.stop.prevent="goSanctionAction">Action</p-button>
                             </div>
                         </el-col>
                     </el-row>
@@ -779,16 +779,24 @@ export default {
             if(!this.getterClientInfo || !this.getterClientInfo.idCheckInfo) return {}
             return {
                 'btn--passed': this.getterClientInfo.idCheckInfo.checkStatusName === 'Passed',
-                'btn--not-recieved': this.getterClientInfo.idCheckInfo.checkStatusName === 'Not Received',
-                'btn--failed': this.getterClientInfo.idCheckInfo.checkStatusName === 'Failed',
+                // 'btn--not-recieved': this.getterClientInfo.idCheckInfo.checkStatusName === 'Not Received',
+                'btn--failed': this.getterClientInfo.idCheckInfo.checkStatusName !== 'Passed',
             }
         },
         cardPoaCheckStatus() {
             if(!this.getterClientInfo || !this.getterClientInfo.poaCheckInfo) return {}
             return {
                 'btn--passed': this.getterClientInfo.poaCheckInfo.checkStatusName === 'Approved',
-                'btn--not-recieved': this.getterClientInfo.poaCheckInfo.checkStatusName === 'Not Received',
-                'btn--failed': this.getterClientInfo.poaCheckInfo.checkStatusName === 'Failed',
+                // 'btn--not-recieved': this.getterClientInfo.poaCheckInfo.checkStatusName === 'Not Received',
+                'btn--failed': this.getterClientInfo.poaCheckInfo.checkStatusName !== 'Approved',
+            }
+        },
+        cardBtnSancStatus() {
+            if(!this.getterClientInfo || !this.getterClientInfo.idCheckInfo) return {}
+            return {
+                'btn--passed': this.getterClientInfo.idCheckInfo.checkStatusName === 'No Match',
+                // 'btn--not-recieved': this.getterClientInfo.idCheckInfo.checkStatusName === 'Not Received',
+                'btn--failed': this.getterClientInfo.idCheckInfo.checkStatusName !== 'No Match',
             }
         },
     },
@@ -809,6 +817,13 @@ export default {
             kycResendSms: RESEND_SMS,
             updateContact: KYC_UPDATE_CONTACT,
         }),
+        goSanctionAction() {
+            let id = this.getterClientInfo && this.getterClientInfo.sanctionCheckInfo ? this.getterClientInfo.sanctionCheckInfo.checkId : '';
+            if(this.appReferenceId) this.$router.push({ name: 'KYC Sanction Action', query: {appRef: this.appReferenceId, id: id }});
+        },
+        goSanctionView() {
+            if(this.appReferenceId) this.$router.push({ name: 'KYC Sanction View', query: {appRef: this.appReferenceId }})
+        },
         cancelEmail() {
             this.editEmail = false;
             this.communicationEmail = this.getterClientInfo && this.getterClientInfo.contactInfo ? this.getterClientInfo.contactInfo.email : '';
