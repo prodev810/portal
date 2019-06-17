@@ -16,11 +16,11 @@
           </div>
           <regular-table striped
                          :headings="tableHeadings"
-                         :value="viewInvoiceData">
+                         :value="productConfigViewInvoiceItem">
           </regular-table>
           <el-row class="d-flex justify-content-end">
             <span class="kyc__invoice__total">
-              <b class="text-uppercase">Sum</b> {{invoiceTotal | moneyFormat}}
+              <b class="text-uppercase">Sum</b> {{productConfigViewInvoiceTotal | moneyFormat}}
             </span>
           </el-row>
         </div>
@@ -32,21 +32,28 @@
 
 <script>
   import RegularTable from "@/components/UIComponents/CeevoTables/RegularTable/RegularTable"
+  import {mapState, mapActions} from 'vuex'
+  import {
+    KYC_GET_PRODUCT_CONFIG_VIEW_INVOICE,
+  } from "../../../../store/types"
 
   export default {
     name: "KycViewInvoice",
     components: {
       RegularTable,
     },
+    created(){
+      this.getProductConfigInvoices()
+    },
     data() {
       return {
         tableHeadings: [
           {name: 'clientName', label: 'KYC Client Code'},
-          {name: 'clientRef', label: 'App Requested'},
+          {name: 'clientReference', label: 'App Requested'},
           {name: 'timestamp', label: 'Time Stamp'},
           {name: 'chargeType', label: 'Charge Type'},
-          {name: 'description', label: 'Description'},
-          {name: 'amount', label: 'Amount', custom: true},
+          {name: 'itemDesc', label: 'Description'},
+          {name: 'itemAmount', label: 'Amount', custom: true},
         ],
 
         viewInvoiceData: [
@@ -86,6 +93,20 @@
 
         invoiceTotal: 7,
       }
+    },
+    computed:{
+      ...mapState({
+        productConfigViewInvoiceItem: state => state.kyc.productConfigViewInvoice.invoiceItems,
+        productConfigViewInvoiceTotal: state => state.kyc.productConfigViewInvoice.sum
+      }),
+      getInvoiceCurrence(){
+        return this.productConfigViewInvoiceItem[0].itemCurrency
+      }
+    },
+    methods:{
+      ...mapActions({
+        getProductConfigInvoices: KYC_GET_PRODUCT_CONFIG_VIEW_INVOICE
+      }),
     },
     filters: {
       moneyFormat(value) {

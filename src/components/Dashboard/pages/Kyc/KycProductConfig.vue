@@ -27,7 +27,7 @@
                 </p-button>
                 <p-button type="primary"
                           outline
-                          @click="handleEditClient(index.index.row)"
+                          @click="handleEditClient(index.index.row.id)"
                           class="kyc__product__btn">
                   <slot name="label">
                     <img class="img-responsive ic__icon"
@@ -37,7 +37,7 @@
                 </p-button>
                 <p-button type="primary"
                           outline
-                          @click="handleViewClient(index.index.row)"
+                          @click="handleViewClient(index.index.row.id)"
                           class="kyc__product__btn">
                   <slot name="label">
                     <img class="img-responsive ic__icon"
@@ -58,38 +58,60 @@
   import {mapState, mapActions} from 'vuex'
   import RegularTable from "@/components/UIComponents/CeevoTables/RegularTable/RegularTable"
   import PButton from "@/components/UIComponents/Button"
+  import {KYC_GET_PRODUCT_CONFIG_ALL_CLIENTS} from "../../../../store/types"
 
   export default {
     name: "KycProductConfig",
     components: {
       RegularTable, PButton,
     },
+    created() {
+      this.getProductConfigClient()
+
+    },
     computed: {
+      ...mapState({
+        productConfigClients: state => state.kyc.productConfigClients
+      }),
       tableProductConfigData() {
-        return this.productConfigData.map(data => {
-          const classes = {};
-          this.tableCustomColumns.forEach(column => {
-            classes[column] = this.getCustomClassName(data[column], column)
-          });
-          data.classes = classes;
-          return data
-        })
+        if (this.productConfigClients && this.productConfigClients.clientInfos) {
+          return this.productConfigClients.clientInfos.map(data => {
+
+            const classes = {};
+            data.issuing = data.clientType === 'ISSUING'
+            this.tableCustomColumns.forEach(column => {
+              classes[column] = this.getCustomClassName(data[column], column)
+            });
+
+            data.clientStatus = data.clientStatus.toLowerCase()
+            data.issuing = this.getYesNoFromBoolean(data.issuing)
+            data.idCheckRequired = this.getYesNoFromBoolean(data.idCheckRequired)
+            data.sanctionCheckRequired = this.getYesNoFromBoolean(data.sanctionCheckRequired)
+            data.poaCheckRequired = this.getYesNoFromBoolean(data.poaCheckRequired)
+            data.classes = classes;
+            return data
+          })
+        }
       }
     },
     methods: {
+      ...mapActions({
+        getProductConfigClient: KYC_GET_PRODUCT_CONFIG_ALL_CLIENTS,
+      }),
+      getYesNoFromBoolean(value){
+        return value ? 'Yes': 'No'
+      },
       getCustomClassName(value, name) {
-        if (name === 'status') {
+        if (name === 'clientStatus') {
           return value.toLowerCase()
         }
-        return (value.toLowerCase() === 'yes') ? 'success' : 'danger'
+        return (value) ? 'success' : 'danger'
       },
-      handleViewClient(tableClient) {
-        const client = this.productConfigData.find( d => d.id === tableClient.id);
-        this.$router.push({path: `/kyc/product-config/view-client/${client.id}`, query: {client}});
+      handleViewClient(clientId) {
+        this.$router.push({path: `/kyc/product-config/view-client/${clientId}`});
       },
-      handleEditClient(tableClient) {
-        const client = this.productConfigData.find( d => d.id === tableClient.id);
-        this.$router.push({path: `/kyc/product-config/edit-client/${client.id}`, query: {client}});
+      handleEditClient(clientId) {
+        this.$router.push({path: `/kyc/product-config/edit-client/${clientId}`});
       },
       handleViewInvoice(id) {
         this.$router.push({path: `/kyc/product-config/view-invoice/${id}`});
@@ -99,18 +121,18 @@
       return {
         tableHeadings: [
           {name: 'clientName', label: 'Client Name'},
-          {name: 'clientRef', label: 'Client App'},
-          {name: 'accountContact', label: 'Account Contact'},
-          {name: 'accountEmail', label: 'Account E-mail', email: true},
+          {name: 'clientReference', label: 'Client App'},
+          {name: 'contactName', label: 'Account Contact'},
+          {name: 'contactEmail', label: 'Account E-mail', email: true},
           {name: 'issuing', label: 'Issuing', custom: true},
-          {name: 'ident', label: 'ID', custom: true},
-          {name: 'screening', label: 'Screening', custom: true},
-          {name: 'proofofaddress', label: 'Proof Of Address'},
-          {name: 'status', label: 'Status', status: true},
+          {name: 'idCheckRequired', label: 'ID', custom: true},
+          {name: 'sanctionCheckRequired', label: 'Screening', custom: true},
+          {name: 'poaCheckRequired', label: 'Proof Of Address'},
+          {name: 'clientStatus', label: 'Status', status: true},
         ],
 
         tableCustomColumns: [
-          'issuing', 'ident', 'screening', 'proofofaddress', 'status'
+          'issuing', 'idCheckRequired', 'sanctionCheckRequired', 'poaCheckRequired', 'clientStatus'
         ],
 
         productConfigData: [
@@ -135,8 +157,8 @@
               idRescreen: '3.33',
               poaRescreen: '2.40',
               sanotionRescreen: '0.10',
-              smsFee : '0.10',
-              kycReminder : '',
+              smsFee: '0.10',
+              kycReminder: '',
               autoClose: '',
               followupClose: ''
             }
@@ -158,8 +180,8 @@
               idRescreen: '33.23',
               poaRescreen: '2.50',
               sanotionRescreen: '0.11',
-              smsFee : '0.12',
-              kycReminder : '',
+              smsFee: '0.12',
+              kycReminder: '',
               autoClose: '',
               followupClose: ''
             }
@@ -181,8 +203,8 @@
               idRescreen: '23.27',
               poaRescreen: '2.70',
               sanotionRescreen: '0.18',
-              smsFee : '0.15',
-              kycReminder : '',
+              smsFee: '0.15',
+              kycReminder: '',
               autoClose: '',
               followupClose: ''
             }
@@ -252,10 +274,15 @@
       top: 50%;
       transform: translateY(-50%);
     }
+
     .kyc__module__table {
       /deep/ {
         .ceevo__table {
           overflow: auto !important;
+
+          .ceevo__table_status{
+            text-transform: capitalize;
+          }
 
           .cell {
             text-align: center;
