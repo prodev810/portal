@@ -56,7 +56,6 @@ import {
   KYC_UPLOAD_SUPPORT_DOCUMENT,
   KYC_GET_LIST_SUPPORT_DOCUMENTS,
   MUTATE_LIST_SUPPORT_DOCUMENTS,
-
 } from '../types';
 
 const state = {
@@ -81,7 +80,6 @@ const state = {
   sanctionCheckStatuses: null,
   sanctionCheckActionTypes: null,
   listSupportDocuments: {},
-
 }
 
 const mutations = {
@@ -575,6 +573,7 @@ const actions = {
     try {
       const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/applications/${appReferenceId}/sanction-rescreen`);
       console.log('KYC_RESCREEN_ACTION ', data)
+      Promise.resolve()
     } catch (e) {
       console.log('error :', e);
     }

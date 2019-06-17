@@ -162,7 +162,7 @@
                 <div class="col-xl-4 mb-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <p class="kyc-label mb-0">Status</p>
-                        <p-button class="btn btn--status" :class="cardBtnFrontStatus" v-if="getterClientInfo && getterClientInfo.idCheckInfo">{{ getterClientInfo.idCheckInfo.checkStatusName }}</p-button>
+                        <p-button class="btn" :class="cardBtnFrontStatus" v-if="getterClientInfo && getterClientInfo.idCheckInfo">{{ getterClientInfo.idCheckInfo.checkStatusName }}</p-button>
                     </div>
                 </div>
             </div>

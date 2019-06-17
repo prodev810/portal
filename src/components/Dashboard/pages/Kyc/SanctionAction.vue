@@ -81,7 +81,7 @@
                         <div class="col-6">
                             <div v-if="sancheck.latestResubmittedDate" class="d-flex w-mn">
                                 <p class="kyc-value w-mn">{{ sancheck.latestResubmittedDate | dateFormat }}</p>
-                                <p-button round class="btn btn--browse m-0" @click.stop.prevent="rescreenNow({ appReferenceId })">Rescreen Now</p-button>
+                                <p-button round class="btn btn--browse m-0" @click.stop.prevent="doRescreenNow()">Rescreen Now</p-button>
                             </div>
                         </div>
                             
@@ -391,10 +391,7 @@ export default {
         }
     },
     mounted() {
-        this.getCheckEnquiry({ appReferenceId: this.appReferenceId })
-        this.getSanctionCheckStatuses()
-        this.getSancActionTypes()
-        if(this.$route.query && this.$route.query.id) this.getListSupportDocs({ id: this.$route.query.id})
+        this.start();
     },
     methods: {
         ...mapActions({
@@ -406,6 +403,16 @@ export default {
             uploadSupportDocument: KYC_UPLOAD_SUPPORT_DOCUMENT,
             getListSupportDocs: KYC_GET_LIST_SUPPORT_DOCUMENTS,
         }),
+        start() {
+            this.getCheckEnquiry({ appReferenceId: this.appReferenceId })
+            this.getSanctionCheckStatuses()
+            this.getSancActionTypes()
+            if(this.$route.query && this.$route.query.id) this.getListSupportDocs({ id: this.$route.query.id})
+        },
+        async doRescreenNow() {
+            await this.rescreenNow({appReferenceId: this.appReferenceId})
+            this.start();
+        },
         async doUploadSupportDocument() {
             const id = this.$route.query.id;
             if(!this.file || !id) return;
@@ -416,6 +423,7 @@ export default {
                 this.sending = true;
                 const content = await toBase64(this.file);
                 await this.uploadSupportDocument({ content, mimeType, operatorName, id })
+                await this.getListSupportDocs({ id: this.$route.query.id});
                 this.file = null;
                 this.sending = false;
             } catch(e) {
