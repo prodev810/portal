@@ -43,6 +43,14 @@ import {
   KYC_GET_CLIENT_STATUSES,
   MUTATE_CURRENCY_LIST,
   MUTATE_CLIENT_STATUSES,
+  KYC_GET_PRODUCT_CONFIG_CLIENT,
+  MUTATE_PRODUCT_CONFIG_CLIENT,
+  KYC_GET_PRODUCT_CONFIG_ALL_CLIENTS,
+  MUTATE_PRODUCT_CONFIG_ALL_CLIENTS,
+  KYC_PUT_PRODUCT_CONFIG_CLIENT,
+  KYC_CREATE_PRODUCT_CONFIG_CLIENT,
+  KYC_GET_PRODUCT_CONFIG_VIEW_INVOICE,
+  MUTATE_PRODUCT_CONFIG_VIEW_INVOICE,
 } from '../types';
 
 const state = {
@@ -61,6 +69,8 @@ const state = {
   poaImg: null,
   currencyList: [],
   clientStatusesList: [],
+  productConfigClients: [],
+  productConfigViewInvoice: [],
 }
 
 const mutations = {
@@ -126,6 +136,13 @@ const mutations = {
   },
   [MUTATE_CURRENCY_LIST]: (state, {data}) => {
     state.currencyList = data;
+  },
+  [MUTATE_PRODUCT_CONFIG_ALL_CLIENTS]: (state, {data} ) => {
+    state.productConfigClients = data;
+  },
+  [MUTATE_PRODUCT_CONFIG_VIEW_INVOICE]: (state, {data} ) => {
+    console.log('invoice mut', data)
+    state.productConfigViewInvoice = data;
   },
 }
 
@@ -212,6 +229,96 @@ const actions = {
       commit(MUTATE_CURRENCY_LIST, {data})
       console.log('currency' ,{data})
     }catch(e){
+      console.log('error :', e);
+    }
+  },
+  [KYC_GET_PRODUCT_CONFIG_ALL_CLIENTS]: async ({commit}) => {
+    const pageNum = 0
+    const pageSize = 20
+    // todo: there is no pagination in design !!!
+    try{
+      const {data} = await Vue.prototype.$http.get('v1/kyc/clients', {pageNum, pageSize})
+      commit(MUTATE_PRODUCT_CONFIG_ALL_CLIENTS, {data})
+    }catch(e){
+      console.log('error :', e);
+    }
+  },
+  [KYC_GET_PRODUCT_CONFIG_CLIENT]: async ({},payload) => {
+    // console.log('product config', payload);
+    const id = payload.id
+    return new Promise ( (resolve, reject) => {
+      Vue.prototype.$http.get(`v1/kyc/clients/${id}`).then( data => {
+        resolve(data.data);
+      }).catch( error => reject(error));
+    })
+  },
+  [KYC_PUT_PRODUCT_CONFIG_CLIENT]: async ({}, payload) => {
+    const id = payload.id
+    const body = payload.body
+    console.log('id', id)
+    console.log('update', body)
+    return new Promise((resolve, reject) => {
+      Vue.prototype.$http.put(`v1/kyc/clients/${id}`, body)
+        .then(data => {
+          resolve(data.data)
+        })
+        .catch( error => reject(error))
+    })
+  },
+  [KYC_CREATE_PRODUCT_CONFIG_CLIENT]: async ({}, payload) => {
+    const body = payload.body
+    /*const body = {
+      applicationFee: 1,
+      autoCloseSchedule: {
+        clientScheduleIntervalType: "DAY",
+        intervalVal: 1
+      },
+      clientName: "ABC Name",
+      clientReference: "LYCACH",
+      clientStatus: "ACTIVE",
+      clientType: "STANDARD",
+      contactEmail: "gibbons@email.com",
+      contactName: "Peter Gibbons",
+      feeCurrency: "EUR",
+      frmRequired: true,
+      idCheckFee: 1,
+      idCheckRequired: true,
+      kycAutoFollowupCloseSchedule: {
+        clientScheduleIntervalType: "DAY",
+        intervalVal: 1
+      },
+      kycReminderSchedule: {
+        clientScheduleIntervalType: "DAY",
+        intervalVal: 1
+      },
+      poaCheckFee: 1,
+      poaCheckRequired: true,
+      rescreenIntervalSchedule: {
+        clientScheduleIntervalType: "DAY",
+        intervalVal: 1
+      },
+      sanctionCheckFee: 1,
+      sanctionCheckRequired: true,
+      smsFee: 1
+    }*/
+    console.log('create', body)
+    return new Promise((resolve, reject) => {
+      Vue.prototype.$http.post(`v1/kyc/clients`, body)
+        .then(data => {
+          resolve(data.data)
+        })
+        .catch( error => reject(error))
+    })
+  },
+  [KYC_GET_PRODUCT_CONFIG_VIEW_INVOICE]: async ({commit}) => {
+    const pageNum = 0
+    const pageSize = 5
+    // todo: there is no pagination in design !!!
+    try {
+      const {data} = await Vue.prototype.$http.get('v1/kyc/invoices', {pageNum, pageSize})
+      console.log('invoices', data)
+      commit(MUTATE_PRODUCT_CONFIG_VIEW_INVOICE, {data})
+    } catch (e) {
       console.log('error :', e);
     }
   },
