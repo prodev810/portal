@@ -340,12 +340,14 @@ const actions = {
         .catch( error => reject(error))
     })
   },
-  [KYC_GET_PRODUCT_CONFIG_VIEW_INVOICE]: async ({commit}) => {
+  [KYC_GET_PRODUCT_CONFIG_VIEW_INVOICE]: async ({commit}, payload) => {
     const pageNum = 0
     const pageSize = 5
     // todo: there is no pagination in design !!!
+    const params = {pageNum, pageSize, ...payload}
+    console.log('invoice payload ', params)
     try {
-      const {data} = await Vue.prototype.$http.get('v1/kyc/invoices', {pageNum, pageSize})
+      const {data} = await Vue.prototype.$http.get('v1/kyc/invoices', params)
       console.log('invoices', data)
       commit(MUTATE_PRODUCT_CONFIG_VIEW_INVOICE, {data})
     } catch (e) {

@@ -4,14 +4,10 @@
       <el-row class="w-100 mb-4 kyc__client__head">
         <div class="d-flex justify-content-between">
           <span class="h2 kyc-client__sub-head">{{ handlePageTitle }} KYC Client</span>
-          <p-button
-            v-if="isCreateMode"
-            round
-            type="default"
-            @click="searchHandle"
-          >
-            View Client
-          </p-button>
+          <router-link to="/kyc/view-client"></router-link>
+          <p-button v-if="isCreateMode"
+                    round
+                    type="default">View Client</p-button>
         </div>
       </el-row>
 
@@ -64,7 +60,7 @@
              v-if="mode!=='create' && mode!=='edit'">
             <a :href="'mailto:' + client.contactEmail" class="kyc-client-row__link">{{client.contactEmail}}</a>
           </p>
-          <el-input v-model="client.contactEmail" v-else-if="client"></el-input>
+          <el-input v-model="client.contactEmail" type="email" v-else-if="client"></el-input>
         </el-col>
       </el-row>
 
@@ -100,7 +96,7 @@
                        :value="item.value">{{item.name}}
             </el-option>
           </el-select>
-          <span v-else class="kyc-client-row__text"> {{ client.idCheckRequired }}</span>
+          <span v-else class="kyc-client-row__text"> {{ client.idCheckRequired | booleanToYesNoFormat}}</span>
         </el-col>
       </el-row>
 
@@ -118,7 +114,7 @@
                        :value="item.value">{{item.name}}
             </el-option>
           </el-select>
-          <span v-else class="kyc-client-row__text">{{ client.sanctionCheckRequired }}</span>
+          <span v-else class="kyc-client-row__text">{{ client.sanctionCheckRequired | booleanToYesNoFormat}}</span>
         </el-col>
       </el-row>
 
@@ -136,7 +132,7 @@
                        :value="item.value">{{item.name}}
             </el-option>
           </el-select>
-          <span v-else class="kyc-client-row__text">{{ client.poaCheckRequired }}</span>
+          <span v-else class="kyc-client-row__text">{{ client.poaCheckRequired | booleanToYesNoFormat}}</span>
         </el-col>
       </el-row>
 
@@ -155,28 +151,29 @@
             >
             </el-option>
           </el-select>
-          <span v-else class="kyc-client-row__text">{{ client.clientStatus }}</span>
+          <span v-else class="kyc-client-row__text">{{ ucFirst(client.clientStatus) }}</span>
         </el-col>
       </el-row>
 
       <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
-          <p class="kyc-client-row__text kyc-client-row__title">Resereening Interval</p>
+          <p class="kyc-client-row__text kyc-client-row__title">Rescreening Interval</p>
         </el-col>
         <el-col :sm="14">
           <template v-if="!isViewMode">
             <el-select v-if="client && client.rescreenIntervalSchedule"
                        class="select-primary kyc__custom__primary__select"
-                       v-model="client.rescreenIntervalSchedule.clientScheduleIntervalType">
+                       v-model="rescreenIntervalScheduleSelectValue"
+                       @change="handleRescreeningInterval">
               <el-option v-for="item in rescreeningList"
-                         :key="item"
-                         :label="item"
-                         :value="item">
+                         :key="item.label"
+                         :label="item.label"
+                         :value="item.label">{{item.label}}
               </el-option>
             </el-select>
           </template>
           <span v-else
-                class="kyc-client-row__text">{{ client.rescreenIntervalSchedule.clientScheduleIntervalType }}</span>
+                class="kyc-client-row__text">{{ rescreenIntervalScheduleSelectValue }}</span>
         </el-col>
       </el-row>
 
@@ -200,26 +197,26 @@
           </div>
         </div>
         <div class="item btn-item">
-          <p-button
-            round
-            type="default"
-            @click="searchHandle"
-          >
-            {{handlePageCancelBtn}}
-          </p-button>
+          <router-link to="/kyc/product-config">
+            <p-button round type="default">{{handlePageCancelBtn}}</p-button>
+          </router-link>
         </div>
         <modal :show.sync="modals.visible"
                footer-classes="justify-content-center"
                type="notice">
           <h5 slot="header" class="modal-title">{{handleModalTitle}}</h5>
           <template>
-            <p>{{handleModalText}}?</p>
+            <strong>{{handleModalText}}?</strong>
           </template>
           <div slot="footer" class="w-50 d-flex justify-content-between">
-            <router-link :to="productConfigClientRoute">
+            <!--<router-link :to="productConfigClientRoute">
               <p-button round type="success" round
-                        @click.native="searchHandle">Yes</p-button>
-            </router-link>
+                        @click.native="handleClientAction">Yes
+              </p-button>
+            </router-link>-->
+            <p-button round type="success" round
+                      @click.native="handleClientAction">Yes
+            </p-button>
             <p-button round type="default" round @click.native="modals.visible = false">Cancel</p-button>
           </div>
         </modal>
@@ -245,7 +242,7 @@
                        :value="item.currencyCode">
             </el-option>
           </el-select>
-          <strong v-else>{{ client.feeCurrency }}</strong>
+          <strong class="kyc-client-row__text" v-else>{{ client.feeCurrency }}</strong>
         </el-col>
       </el-row>
 
@@ -255,7 +252,8 @@
         </el-col>
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
-             v-if="client && client.applicationFee && mode!='create' && mode!='edit'">{{ client.applicationFee }}</p>
+             v-if="client && client.applicationFee && isViewMode">{{ client.applicationFee |
+            numberMoneyFormat }}</p>
           <el-input v-model="client.applicationFee"
                     v-else></el-input>
         </el-col>
@@ -267,7 +265,7 @@
         </el-col>
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
-             v-if="client && client.idCheckFee && mode!='create' && mode!='edit'">{{ client.idCheckFee }}</p>
+             v-if="client && client.idCheckFee && isViewMode">{{ client.idCheckFee | numberMoneyFormat }}</p>
           <el-input v-model="client.idCheckFee"
                     v-else></el-input>
         </el-col>
@@ -279,7 +277,7 @@
         </el-col>
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
-             v-if="client && client.poaCheckFee  && mode!='create' && mode!='edit'">{{ client.poaCheckFee }}</p>
+             v-if="client && client.poaCheckFee  && isViewMode">{{ client.poaCheckFee | numberMoneyFormat }}</p>
           <el-input v-model="client.poaCheckFee"
                     v-else></el-input>
         </el-col>
@@ -291,8 +289,8 @@
         </el-col>
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
-             v-if="client && client.sanctionCheckFee && mode!='create' && mode!='edit'">
-            {{ client.sanctionCheckFee}}</p>
+             v-if="client && client.sanctionCheckFee && isViewMode">
+            {{ client.sanctionCheckFee | numberMoneyFormat}}</p>
           <el-input v-model="client.sanctionCheckFee"
                     v-else></el-input>
         </el-col>
@@ -304,7 +302,7 @@
         </el-col>
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
-             v-if="client && client.smsFee && mode!='create' && mode!='edit'">{{ client.smsFee }}</p>
+             v-if="client && client.smsFee && isViewMode">{{ client.smsFee | numberMoneyFormat}}</p>
           <el-input v-model="client.smsFee"
                     v-else></el-input>
         </el-col>
@@ -326,7 +324,8 @@
               </el-option>
             </el-select>
           </template>
-          <strong  v-else>{{ client.kycReminderSchedule.intervalVal }} days</strong>
+          <strong class="kyc-client-row__text" v-else>{{ addDateRangeLabel(client.kycReminderSchedule.intervalVal)
+            }}</strong>
         </el-col>
       </el-row>
 
@@ -346,7 +345,8 @@
               </el-option>
             </el-select>
           </template>
-          <strong v-else>{{ client.autoCloseSchedule.intervalVal }} days</strong>
+          <strong class="kyc-client-row__text" v-else>{{ addDateRangeLabel(client.autoCloseSchedule.intervalVal)
+            }}</strong>
         </el-col>
       </el-row>
 
@@ -367,7 +367,8 @@
               </el-option>
             </el-select>
           </template>
-          <strong v-else>{{ client.kycAutoFollowupCloseSchedule.intervalVal }} days</strong>
+          <strong class="kyc-client-row__text"
+                  v-else>{{ addDateRangeLabel(client.kycAutoFollowupCloseSchedule.intervalVal) }}</strong>
         </el-col>
       </el-row>
 
@@ -385,6 +386,9 @@
     KYC_PUT_PRODUCT_CONFIG_CLIENT,
     KYC_CREATE_PRODUCT_CONFIG_CLIENT,
   } from "../../../../store/types"
+  import clientTypes from '../../../../utils/clientTypes'
+  import rescreeningIntervals from '../../../../utils/rescreeningIntervals'
+  import {moneyFormat} from '../../../../utils/moneyFormat'
 
   const KYC_CLIENT_MODE = {
     create: {
@@ -411,59 +415,60 @@
     props: ['mode'],
     data() {
       return {
+        rescreenIntervalScheduleSelectValue: null,
         modals: {
           visible: false
         },
         clientId: null,
         client: {
-          kycReminderSchedule:{
+          kycReminderSchedule: {
             clientScheduleIntervalType: "DAY",
           },
-          autoCloseSchedule:{
+          autoCloseSchedule: {
             clientScheduleIntervalType: "DAY",
           },
-          rescreenIntervalSchedule:{
-            intervalVal: 1
-          },
-          kycAutoFollowupCloseSchedule:{
+          rescreenIntervalSchedule: {},
+          kycAutoFollowupCloseSchedule: {
             clientScheduleIntervalType: "DAY",
           },
         },
-        valueSelect: '',
-        userData: {
-          name: 'Acquiring',
-          ref: 'KYCACQ',
-          contact: 'Peter Gibbons',
-          email: 'gibbons@email.com'
-        },
-        dataForSelects: [
-          {value: true, label: 'yes'},
-          {value: false, label: 'no'},
-
-        ],
         selectYesNoValue: [
           {value: true, name: 'Yes'},
           {value: false, name: 'No'},
         ],
         rescreeningList: [
-          'Never',
-          'Monthly',
-          'QUARTER',
-          '6 Month',
-          'Yearly',
+          {label: 'Never', value: 0, type: rescreeningIntervals.DAY},
+          {label: 'Monthly', value: 1, type: rescreeningIntervals.MONTH},
+          {label: 'Quarter', value: 1, type: rescreeningIntervals.QUARTER},
+          {label: '6 Month', value: 6, type: rescreeningIntervals.MONTH},
+          {label: 'Yearly', value: 1, type: rescreeningIntervals.YEAR},
         ],
         dateIntervalList: [],
-        validationList:[
+        validationList: [
           'issuing',
-          'id',
-          'screening',
-          'rescreeningInterval',
-          'currency',
-          'kycReminder',
-          'autoClose',
-          'autoFollowupClose',
+          'idCheckRequired',
+          'sanctionCheckRequired',
+          'feeCurrency',
+          'clientStatus',
+          'poaCheckRequired'
+        ],
+        validationObjectList:[
+          'rescreenIntervalSchedule',
+          'kycReminderSchedule',
+          'autoCloseSchedule',
+          'kycAutoFollowupCloseSchedule',
         ],
       }
+    },
+    filters: {
+      booleanToYesNoFormat: (value) => {
+        return value ? 'Yes' : 'No'
+      },
+      numberMoneyFormat: (d) => {
+        if (!d) return ''
+        if (d < 1) return Number(d).toFixed(2)
+        return moneyFormat(d)
+      },
     },
     async created() {
 
@@ -473,7 +478,7 @@
 
       this.getCurrencyList()
 
-      if(this.clientId){
+      if (this.clientId) {
         const responseClient = await this.getProductConfigClientById({id: this.clientId})
           .catch(err => console.log('error get client by id', err))
         if (responseClient) {
@@ -481,14 +486,32 @@
           this.client = responseClient
         }
       }
+      if(this.mode !== 'create') {
+        this.rescreenIntervalScheduleSelectValue = this.handleRescreenIntervalItemLabel()
+      }
 
       this.getDateRange(1, 30, this.dateIntervalList)
+    },
+    watch: {
+      mode() {
+        this.client.issuing = this.getYesNoFromBoolean(this.isClientIssuing)
+
+        if(this.mode !== 'create'){
+          this.rescreenIntervalScheduleSelectValue = this.handleRescreenIntervalItemLabel()
+        }
+      },
     },
     computed: {
       ...mapState({
         clientStatuses: state => state.kyc.clientStatusesList,
         currencyList: state => state.kyc.currencyList,
       }),
+      isViewMode() {
+        return this.mode === 'view'
+      },
+      isClientIssuing() {
+        return this.client.clientType === clientTypes.ISSUING
+      },
       handleModalTitle() {
         return (KYC_CLIENT_MODE[this.mode].modal) ? KYC_CLIENT_MODE[this.mode].modal.title : ''
       },
@@ -513,21 +536,26 @@
       isViewMode() {
         return this.mode === 'view'
       },
-      productConfigClientRoute(){
-        if(this.mode === 'create'){
+      productConfigClientRoute() {
+        if (this.mode === 'create') {
           return `/kyc/product-config/view-client/${this.clientId}`
         }
         return `/kyc/product-config/edit-client/${this.clientId}`
       },
-      validateClientForm(){
+      validateClientForm() {
         let isValid = true
-         if(this.mode === 'create'){
-           this.validationList.forEach( item =>{
-             if(!this.client[`${item}`]){
-               isValid = false
-             }
-           })
-         }
+        if (this.mode === 'create') {
+          this.validationList.forEach(item => {
+            if (typeof (this.client[`${item}`]) === 'undefined') {
+              isValid = false
+            }
+          })
+          this.validationObjectList.forEach(item => {
+            if(!this.client[`${item}`].hasOwnProperty('intervalVal')){
+              isValid = false
+            }
+          })
+        }
         return isValid
       }
     },
@@ -540,8 +568,8 @@
         createProductConfigClient: KYC_CREATE_PRODUCT_CONFIG_CLIENT,
       }),
       ucFirst(string) {
+        if (!string) return ''
         string = string.toLowerCase()
-        console.log(string)
         return string.charAt(0).toUpperCase() + string.slice(1)
       },
       getDateRange(start, end, dateArray) {
@@ -556,18 +584,19 @@
         }
         return `${value} ${label}`
       },
-      async searchHandle() {
+      async handleClientAction() {
         this.modals.visible = false
-        if(this.mode === 'edit'){
+        if (this.mode === 'edit') {
+          this.client.clientType = this.getClientType(this.client.issuing)
           delete this.client.issuing
           delete this.client.id
           const response = await this.updateProductConfigClient({id: this.clientId, body: this.client})
             .catch(err => console.log('error put client by id', err));
           this.$router.push({path: `/kyc/product-config/view-client/${this.clientId}`});
         }
-        if(this.mode === 'create'){
-          delete this.client.issuing
-          this.client.clientType = 'STANDARD'
+        if (this.mode === 'create') {
+          this.client.clientType = this.getClientType(this.client.issuing)
+          this.client.clientReference = (this.client.clientReference)? this.client.clientReference.toUpperCase() : ''
           this.client.frmRequired = true
           this.client.applicationFee = Number(this.client.applicationFee)
           this.client.idCheckFee = Number(this.client.idCheckFee)
@@ -575,14 +604,38 @@
           this.client.sanctionCheckFee = Number(this.client.sanctionCheckFee)
           this.client.sanctionCheckFee = Number(this.client.sanctionCheckFee)
           this.client.smsFee = Number(this.client.smsFee)
-          const response = await this.createProductConfigClient({body: this.client})
+          delete this.client.issuing
+          const copyClient = Object.assign({}, this.client)
+          delete copyClient.issuing
+          const response = await this.createProductConfigClient({body: copyClient})
             .catch(err => console.log('error create client by id', err));
-          console.log('res', response)
+          this.clientId = response.id
+          this.$router.push({path: `/kyc/product-config/view-client/${this.clientId}`})
         }
 
       },
       getYesNoFromBoolean(value) {
         return value ? 'Yes' : 'No'
+      },
+      getClientType(value) {
+        if (!value) return clientTypes.STANDARD
+        return clientTypes.ISSUING
+      },
+      handleRescreeningInterval(event) {
+        const rescreenIntervalItem = this.rescreeningList.filter(item => item.label === event)[0]
+        this.client.rescreenIntervalSchedule = {
+          clientScheduleIntervalType: rescreenIntervalItem.type,
+          intervalVal: rescreenIntervalItem.value,
+        }
+      },
+      handleRescreenIntervalItemLabel() {
+        const result = this.rescreeningList.filter(item => {
+          if (item.value === this.client.rescreenIntervalSchedule.intervalVal
+            && item.type === this.client.rescreenIntervalSchedule.clientScheduleIntervalType) {
+            return item
+          }
+        })
+        if(result.length) return result[0].label
       },
     }
   }
