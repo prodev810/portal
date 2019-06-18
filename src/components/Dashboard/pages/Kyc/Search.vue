@@ -321,7 +321,7 @@
         this.getApplicationAction(payload);
         if (!this.isPagination) this.currentPage = 1;
       },
-      handleClientAction () {
+      searchHandle () {
         this.isPagination=false;
         this.search();
         this.currentPage = 1;

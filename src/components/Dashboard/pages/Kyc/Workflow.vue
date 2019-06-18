@@ -267,7 +267,7 @@
         if (!this.isPagination) this.currentPage = 1;
       },
 
-      handleClientAction() {
+      searchHandle() {
         this.isPagination = false;
         this.goForOutstandingApps('page');
       },
