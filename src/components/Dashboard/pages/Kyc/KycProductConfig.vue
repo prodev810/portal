@@ -3,7 +3,7 @@
     <el-col :md="24">
       <el-row>
         <div class="d-flex justify-content-between">
-          <span class="kyc__product__title">Overview KYC Client</span>
+          <span class="kyc__product__title">Overview KYC Clients</span>
           <router-link to="/kyc/product-config/create-client">
             <p-button class="text-capitalize" round>Create new client</p-button>
           </router-link>
@@ -282,12 +282,13 @@
 
           .ceevo__table_status{
             text-transform: capitalize;
+            color: white;
           }
 
           .cell {
             text-align: center;
             min-width: unset;
-            padding-left: 0;
+            padding-left: 6px!important;
             padding-right: 0;
             font-weight: bold;
           }
@@ -319,7 +320,7 @@
                 &:first-child {
                   .cell {
                     border: none;
-                    padding-left: 20px;
+                    padding-left: 6px;
                     text-align: left;
                   }
                 }
@@ -340,8 +341,7 @@
           }
 
           .ceevo__heading-label {
-            justify-content: center;
-            padding-left: 0;
+            padding-left: 6px;
             padding-right: 0;
           }
 
