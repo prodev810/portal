@@ -262,10 +262,9 @@ const actions = {
       console.log('error :', e);
     }
   },
-  [KYC_GET_PRODUCT_CONFIG_ALL_CLIENTS]: async ({commit}) => {
-    const pageNum = 0
-    const pageSize = 20
-    // todo: there is no pagination in design !!!
+  [KYC_GET_PRODUCT_CONFIG_ALL_CLIENTS]: async ({commit}, payload) => {
+    const pageNum = (payload && payload.pageNum) ? payload.pageNum : 0
+    const pageSize = (payload && payload.pageSize) ? payload.pageSize : 3
     try{
       const {data} = await Vue.prototype.$http.get('v1/kyc/clients', {pageNum, pageSize})
       commit(MUTATE_PRODUCT_CONFIG_ALL_CLIENTS, {data})
@@ -285,8 +284,6 @@ const actions = {
   [KYC_PUT_PRODUCT_CONFIG_CLIENT]: async ({}, payload) => {
     const id = payload.id
     const body = payload.body
-    console.log('id', id)
-    console.log('update', body)
     return new Promise((resolve, reject) => {
       Vue.prototype.$http.put(`v1/kyc/clients/${id}`, body)
         .then(data => {

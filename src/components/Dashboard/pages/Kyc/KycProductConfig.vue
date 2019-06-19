@@ -48,6 +48,13 @@
               </td>
             </template>
           </regular-table>
+          <div class="table-pagination">
+            <p-pagination
+              :page-count="pageCount"
+              v-model="currentPage"
+              @input="handleInput"
+              :perPage="perPage"></p-pagination>
+          </div>
         </div>
       </el-row>
     </el-col>
@@ -59,15 +66,23 @@
   import RegularTable from "@/components/UIComponents/CeevoTables/RegularTable/RegularTable"
   import PButton from "@/components/UIComponents/Button"
   import {KYC_GET_PRODUCT_CONFIG_ALL_CLIENTS} from "../../../../store/types"
+  import PPagination from "../../../UIComponents/Pagination.vue"
+  import clientTypes from '../../../../utils/clientTypes'
 
   export default {
     name: "KycProductConfig",
     components: {
-      RegularTable, PButton,
+      RegularTable, PButton, PPagination,
     },
     created() {
-      this.getProductConfigClient()
-
+      const pageNum = this.isPagination ? this.currentPage - 1 : 0
+      this.getProductConfigClient({pageNum})
+      console.log('created')
+      if (this.productConfigClients && this.productConfigClients.pageMeta){
+        this.pageCount = this.productConfigClients.pageMeta.totalPages;
+        this.perPage = this.productConfigClients.pageMeta.perPage;
+        console.log('page Meta')
+      }
     },
     computed: {
       ...mapState({
@@ -78,7 +93,7 @@
           return this.productConfigClients.clientInfos.map(data => {
 
             const classes = {};
-            data.issuing = data.clientType === 'ISSUING'
+            data.issuing = data.clientType === clientTypes.ISSUING
             this.tableCustomColumns.forEach(column => {
               classes[column] = this.getCustomClassName(data[column], column)
             });
@@ -92,14 +107,24 @@
             return data
           })
         }
-      }
+      },
+      pageCount(){
+        if (this.productConfigClients && this.productConfigClients.pageMeta) {
+          return this.productConfigClients.pageMeta.totalPages
+        }
+      },
+      perPage(){
+        if (this.productConfigClients && this.productConfigClients.pageMeta) {
+          return this.productConfigClients.pageMeta.perPage
+        }
+      },
     },
     methods: {
       ...mapActions({
         getProductConfigClient: KYC_GET_PRODUCT_CONFIG_ALL_CLIENTS,
       }),
-      getYesNoFromBoolean(value){
-        return value ? 'Yes': 'No'
+      getYesNoFromBoolean(value) {
+        return value ? 'Yes' : 'No'
       },
       getCustomClassName(value, name) {
         if (name === 'clientStatus') {
@@ -116,9 +141,17 @@
       handleViewInvoice(id) {
         this.$router.push({path: `/kyc/product-config/view-invoice/${id}`});
       },
+      handleInput(ev) {
+        const pageNum = ev - 1;
+        this.getProductConfigClient({pageNum})
+        console.log('pagination ', ev)
+      },
     },
     data() {
       return {
+        totalPages: 0,
+        currentPage: 1,
+        isPagination: false,
         tableHeadings: [
           {name: 'clientName', label: 'Client Name'},
           {name: 'clientReference', label: 'Client App'},
@@ -135,81 +168,6 @@
           'issuing', 'idCheckRequired', 'sanctionCheckRequired', 'poaCheckRequired', 'clientStatus'
         ],
 
-        productConfigData: [
-          {
-            id: 1,
-            clientName: 'Acwqee',
-            clientRef: 'KYCACQ',
-            accountContact: 'Peter Gibbons',
-            accountEmail: 'gibbons@email.com',
-            issuing: 'Yes',
-            ident: 'Yes',
-            screening: 'Yes',
-            proofofaddress: 'Yes',
-            status: 'Active',
-            classes: {
-              status: 'active',
-              issuing: 'success'
-            },
-            fees: {
-              currency: '',
-              fullApplication: '3.00',
-              idRescreen: '3.33',
-              poaRescreen: '2.40',
-              sanotionRescreen: '0.10',
-              smsFee: '0.10',
-              kycReminder: '',
-              autoClose: '',
-              followupClose: ''
-            }
-          },
-          {
-            id: 2,
-            clientName: 'Abc Name',
-            clientRef: 'KYCACQ',
-            accountContact: 'Peter Gibbons',
-            accountEmail: 'gibbons@email.com',
-            issuing: 'No',
-            ident: 'Yes',
-            screening: 'Yes',
-            proofofaddress: 'No',
-            status: 'Inactive',
-            fees: {
-              currency: '',
-              fullApplication: '4.0',
-              idRescreen: '33.23',
-              poaRescreen: '2.50',
-              sanotionRescreen: '0.11',
-              smsFee: '0.12',
-              kycReminder: '',
-              autoClose: '',
-              followupClose: ''
-            }
-          },
-          {
-            id: 3,
-            clientName: 'Chn Name',
-            clientRef: 'KYCACQ',
-            accountContact: 'Peter Gibbons',
-            accountEmail: 'gibbons@email.com',
-            issuing: 'No',
-            ident: 'Yes',
-            screening: 'Yes',
-            proofofaddress: 'No',
-            status: 'Closed',
-            fees: {
-              currency: '',
-              fullApplication: '5.0',
-              idRescreen: '23.27',
-              poaRescreen: '2.70',
-              sanotionRescreen: '0.18',
-              smsFee: '0.15',
-              kycReminder: '',
-              autoClose: '',
-              followupClose: ''
-            }
-          },
-        ],
       }
     }
   }
@@ -280,7 +238,7 @@
         .ceevo__table {
           overflow: auto !important;
 
-          .ceevo__table_status{
+          .ceevo__table_status {
             text-transform: capitalize;
             color: white;
           }
@@ -288,7 +246,7 @@
           .cell {
             text-align: center;
             min-width: unset;
-            padding-left: 6px!important;
+            padding-left: 6px !important;
             padding-right: 0;
             font-weight: bold;
           }
@@ -299,6 +257,12 @@
             thead {
               th {
                 overflow: auto !important;
+
+                &:first-child {
+                  .ceevo__heading-label {
+                    justify-content: start;
+                  }
+                }
               }
             }
 
@@ -306,9 +270,11 @@
               outline: none !important;
 
               tr {
+                position: static;
                 td {
                   border-left: 1px solid $table-border-gray !important;
                   min-width: unset;
+                  position: static;
 
                   &:first-child {
                     border: none !important;
@@ -338,9 +304,13 @@
                 }
               }
             }
+            td {
+              background-clip: padding-box;
+            }
           }
 
           .ceevo__heading-label {
+            justify-content: center;
             padding-left: 6px;
             padding-right: 0;
           }
@@ -367,6 +337,12 @@
           }
         }
       }
+    }
+
+    .table-pagination {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
     }
 
   }
