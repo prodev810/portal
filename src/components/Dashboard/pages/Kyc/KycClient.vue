@@ -4,63 +4,65 @@
       <el-row class="w-100 mb-4 kyc__client__head">
         <div class="d-flex justify-content-between">
           <span class="h2 kyc-client__sub-head">{{ handlePageTitle }} KYC Client</span>
-          <router-link to="/kyc/view-client"></router-link>
-          <p-button v-if="isCreateMode"
-                    round
-                    type="default">View Client</p-button>
+          <router-link to="/kyc/product-config">
+            <p-button v-if="isCreateMode"
+                      round type="default">View Clients
+            </p-button>
+          </router-link>
         </div>
       </el-row>
 
-      <el-row class="kyc-client-row">
+      <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
           <p class="kyc-client-row__text kyc-client-row__title">Client Name</p>
         </el-col>
         <el-col :sm="14">
-          <!--<p class="kyc-client-row__text kyc-client-row__name">{{client.clientName}}</p>-->
           <p class="kyc-client-row__text kyc-client-row__name"
-             v-if="mode!='create' && mode!='edit'">{{client.clientName}}</p>
-          <el-input
-            v-model="client.clientName"
-            v-else-if="client"></el-input>
+             v-if="isViewMode">{{client.clientName}}</p>
+          <el-input class="input-outline"
+                    v-model="client.clientName"
+                    v-else-if="client"></el-input>
         </el-col>
       </el-row>
 
-      <el-row class="kyc-client-row">
+      <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
-          <p class="kyc-client-row__text kyc-client-row__title">Client App Ref</p>
+          <p class="kyc-client-row__text kyc-client-row__title">Client Reference</p>
         </el-col>
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
-             v-if="mode!=='create' && mode!=='edit'">{{client.clientReference}}</p>
-          <el-input
-            v-model="client.clientReference"
-            v-else-if="client"></el-input>
+             v-if="isViewMode">{{client.clientReference}}</p>
+          <el-input class="input-outline"
+                    v-model="client.clientReference"
+                    v-else-if="client"></el-input>
         </el-col>
       </el-row>
 
-      <el-row class="kyc-client-row">
+      <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
           <p class="kyc-client-row__text kyc-client-row__title">Account Contact</p>
         </el-col>
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
-             v-if="mode!=='create' && mode!=='edit'">{{client.contactName}}</p>
-          <el-input
-            v-model="client.contactName"
-            v-else-if="client"></el-input>
+             v-if="isViewMode">{{client.contactName}}</p>
+          <el-input class="input-outline"
+                    v-model="client.contactName"
+                    v-else-if="client"></el-input>
         </el-col>
       </el-row>
 
-      <el-row class="kyc-client-row">
+      <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
-          <p class="kyc-client-row__text kyc-client-row__title">Account E-mail</p>
+          <p class="kyc-client-row__text kyc-client-row__title">Account e-mail</p>
         </el-col>
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
-             v-if="mode!=='create' && mode!=='edit'">
+             v-if="isViewMode">
             <a :href="'mailto:' + client.contactEmail" class="kyc-client-row__link">{{client.contactEmail}}</a>
           </p>
-          <el-input v-model="client.contactEmail" type="email" v-else-if="client"></el-input>
+          <el-input class="input-outline"
+                    v-model="client.contactEmail"
+                    type="email" v-else-if="client"></el-input>
         </el-col>
       </el-row>
 
@@ -70,7 +72,7 @@
         </el-col>
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
-                     class="select-primary kyc__custom__primary__select"
+                     class="select-primary kyc__custom__primary__select w-100"
                      v-model="client.issuing">
             <el-option v-for="item in selectYesNoValue"
                        :key="item.value"
@@ -88,7 +90,7 @@
         </el-col>
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
-                     class="select-primary kyc__custom__primary__select"
+                     class="select-primary kyc__custom__primary__select w-100"
                      v-model="client.idCheckRequired">
             <el-option v-for="item in selectYesNoValue"
                        :key="item.value"
@@ -106,7 +108,7 @@
         </el-col>
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
-                     class="select-primary kyc__custom__primary__select"
+                     class="select-primary kyc__custom__primary__select w-100"
                      v-model="client.sanctionCheckRequired">
             <el-option v-for="item in selectYesNoValue"
                        :key="item.value"
@@ -124,7 +126,7 @@
         </el-col>
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
-                     class="select-primary kyc__custom__primary__select"
+                     class="select-primary kyc__custom__primary__select w-100"
                      v-model="client.poaCheckRequired">
             <el-option v-for="item in selectYesNoValue"
                        :key="item.value"
@@ -142,7 +144,7 @@
         </el-col>
         <el-col :sm="14">
           <el-select v-if="!isViewMode"
-                     class="select-primary kyc__custom__primary__select"
+                     class="select-primary kyc__custom__primary__select w-100"
                      v-model="client.clientStatus">
             <el-option v-for="item in clientStatuses"
                        :key="item.name"
@@ -162,7 +164,7 @@
         <el-col :sm="14">
           <template v-if="!isViewMode">
             <el-select v-if="client && client.rescreenIntervalSchedule"
-                       class="select-primary kyc__custom__primary__select"
+                       class="select-primary kyc__custom__primary__select w-100"
                        v-model="rescreenIntervalScheduleSelectValue"
                        @change="handleRescreeningInterval">
               <el-option v-for="item in rescreeningList"
@@ -209,21 +211,18 @@
             <strong>{{handleModalText}}?</strong>
           </template>
           <div slot="footer" class="w-50 d-flex justify-content-between">
-            <!--<router-link :to="productConfigClientRoute">
-              <p-button round type="success" round
-                        @click.native="handleClientAction">Yes
-              </p-button>
-            </router-link>-->
-            <p-button round type="success" round
+            <p-button round type="success"
                       @click.native="handleClientAction">Yes
             </p-button>
-            <p-button round type="default" round @click.native="modals.visible = false">Cancel</p-button>
+            <p-button round type="default"
+                      @click.native="modals.visible = false">Cancel
+            </p-button>
           </div>
         </modal>
       </el-row>
 
     </div>
-    <div class="kyc-client col-md-6">
+    <div class="kyc-client col-md-7">
       <el-row class="mb-4">
         <span class="h2 kyc-client__sub-head">Fees</span>
       </el-row>
@@ -232,9 +231,9 @@
         <el-col :sm="10">
           <p class="kyc-client-row__text kyc-client-row__title">Currency</p>
         </el-col>
-        <el-col :sm="14">
+        <el-col :sm="11">
           <el-select v-if="!isViewMode"
-                     class="select-primary kyc__custom__primary__select"
+                     class="select-primary kyc__custom__primary__select w-100"
                      v-model="client.feeCurrency">
             <el-option v-for="item in currencyList"
                        :key="item.currencyCode"
@@ -246,64 +245,69 @@
         </el-col>
       </el-row>
 
-      <el-row class="kyc-client-row">
+      <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
           <p class="kyc-client-row__text kyc-client-row__title">Full Application</p>
         </el-col>
-        <el-col :sm="14">
+        <el-col :sm="11">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="client && client.applicationFee && isViewMode">{{ client.applicationFee |
             numberMoneyFormat }}</p>
           <el-input v-model="client.applicationFee"
+                    class="input-outline"
                     v-else></el-input>
         </el-col>
       </el-row>
 
-      <el-row class="kyc-client-row">
+      <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
           <p class="kyc-client-row__text kyc-client-row__title">ID Rescreen</p>
         </el-col>
-        <el-col :sm="14">
+        <el-col :sm="11">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="client && client.idCheckFee && isViewMode">{{ client.idCheckFee | numberMoneyFormat }}</p>
           <el-input v-model="client.idCheckFee"
+                    class="input-outline"
                     v-else></el-input>
         </el-col>
       </el-row>
 
-      <el-row class="kyc-client-row">
+      <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
           <p class="kyc-client-row__text kyc-client-row__title">POA Rescreen</p>
         </el-col>
-        <el-col :sm="14">
+        <el-col :sm="11">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="client && client.poaCheckFee  && isViewMode">{{ client.poaCheckFee | numberMoneyFormat }}</p>
           <el-input v-model="client.poaCheckFee"
+                    class="input-outline"
                     v-else></el-input>
         </el-col>
       </el-row>
 
-      <el-row class="kyc-client-row">
+      <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
           <p class="kyc-client-row__text kyc-client-row__title">Sanotion Rescreen</p>
         </el-col>
-        <el-col :sm="14">
+        <el-col :sm="11">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="client && client.sanctionCheckFee && isViewMode">
             {{ client.sanctionCheckFee | numberMoneyFormat}}</p>
           <el-input v-model="client.sanctionCheckFee"
+                    class="input-outline"
                     v-else></el-input>
         </el-col>
       </el-row>
 
-      <el-row class="kyc-client-row">
+      <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
           <p class="kyc-client-row__text kyc-client-row__title">SMS Fee</p>
         </el-col>
-        <el-col :sm="14">
+        <el-col :sm="11">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="client && client.smsFee && isViewMode">{{ client.smsFee | numberMoneyFormat}}</p>
           <el-input v-model="client.smsFee"
+                    class="input-outline"
                     v-else></el-input>
         </el-col>
       </el-row>
@@ -312,10 +316,10 @@
         <el-col :sm="10">
           <p class="kyc-client-row__text kyc-client-row__title">KYC Reminder</p>
         </el-col>
-        <el-col :sm="14">
+        <el-col :sm="11">
           <template v-if="!isViewMode">
             <el-select v-if="client && client.kycReminderSchedule"
-                       class="select-primary kyc__custom__primary__select"
+                       class="select-primary kyc__custom__primary__select w-100"
                        v-model="client.kycReminderSchedule.intervalVal">
               <el-option v-for="item in dateIntervalList"
                          :key="item"
@@ -333,10 +337,10 @@
         <el-col :sm="10">
           <p class="kyc-client-row__text kyc-client-row__title">Auto Close</p>
         </el-col>
-        <el-col :sm="14">
+        <el-col :sm="11">
           <template v-if="!isViewMode">
             <el-select v-if="client && client.autoCloseSchedule"
-                       class="select-primary kyc__custom__primary__select"
+                       class="select-primary kyc__custom__primary__select w-100"
                        v-model="client.autoCloseSchedule.intervalVal">
               <el-option v-for="item in dateIntervalList"
                          :key="item"
@@ -355,10 +359,10 @@
         <el-col :sm="10">
           <p class="kyc-client-row__text kyc-client-row__title">KYC Auto Followup Close</p>
         </el-col>
-        <el-col :sm="14">
+        <el-col :sm="11">
           <template v-if="!isViewMode">
             <el-select v-if="client && client.kycAutoFollowupCloseSchedule"
-                       class="select-primary kyc__custom__primary__select"
+                       class="select-primary kyc__custom__primary__select w-100"
                        v-model="client.kycAutoFollowupCloseSchedule.intervalVal">
               <el-option v-for="item in dateIntervalList"
                          :key="item"
@@ -452,7 +456,7 @@
           'clientStatus',
           'poaCheckRequired'
         ],
-        validationObjectList:[
+        validationObjectList: [
           'rescreenIntervalSchedule',
           'kycReminderSchedule',
           'autoCloseSchedule',
@@ -486,7 +490,7 @@
           this.client = responseClient
         }
       }
-      if(this.mode !== 'create') {
+      if (this.mode !== 'create') {
         this.rescreenIntervalScheduleSelectValue = this.handleRescreenIntervalItemLabel()
       }
 
@@ -496,7 +500,7 @@
       mode() {
         this.client.issuing = this.getYesNoFromBoolean(this.isClientIssuing)
 
-        if(this.mode !== 'create'){
+        if (this.mode !== 'create') {
           this.rescreenIntervalScheduleSelectValue = this.handleRescreenIntervalItemLabel()
         }
       },
@@ -508,6 +512,12 @@
       }),
       isViewMode() {
         return this.mode === 'view'
+      },
+      isCreateMode() {
+        return this.mode === 'create'
+      },
+      isEditMode() {
+        return this.mode === 'edit'
       },
       isClientIssuing() {
         return this.client.clientType === clientTypes.ISSUING
@@ -530,12 +540,6 @@
         }
         return 'Cancel'
       },
-      isCreateMode() {
-        return this.mode === 'create'
-      },
-      isViewMode() {
-        return this.mode === 'view'
-      },
       productConfigClientRoute() {
         if (this.mode === 'create') {
           return `/kyc/product-config/view-client/${this.clientId}`
@@ -551,7 +555,7 @@
             }
           })
           this.validationObjectList.forEach(item => {
-            if(!this.client[`${item}`].hasOwnProperty('intervalVal')){
+            if (!this.client[`${item}`].hasOwnProperty('intervalVal')) {
               isValid = false
             }
           })
@@ -596,7 +600,7 @@
         }
         if (this.mode === 'create') {
           this.client.clientType = this.getClientType(this.client.issuing)
-          this.client.clientReference = (this.client.clientReference)? this.client.clientReference.toUpperCase() : ''
+          this.client.clientReference = (this.client.clientReference) ? this.client.clientReference.toUpperCase() : ''
           this.client.frmRequired = true
           this.client.applicationFee = Number(this.client.applicationFee)
           this.client.idCheckFee = Number(this.client.idCheckFee)
@@ -635,7 +639,7 @@
             return item
           }
         })
-        if(result.length) return result[0].label
+        if (result.length) return result[0].label
       },
     }
   }
@@ -731,6 +735,15 @@
     }
   }
 
+  .input-outline {
+    /deep/ {
+      .el-input__inner {
+        border-color: transparent !important;
+        padding-left: 0;
+      }
+    }
+  }
+
   /deep/ {
     .modal-dialog {
       min-width: 760px;
@@ -755,6 +768,12 @@
       }
     }
 
+    .el-input__inner {
+      border-radius: 10px !important;
+      color: black;
+      font-weight: 600;
+    }
+
     .select-primary.el-select .el-input input,
     .select-primary.el-select .el-input:hover input,
     .select-primary.el-select .el-input:hover .el-input__icon {
@@ -767,11 +786,17 @@
       }
     }
 
+    .select-primary.el-select .el-input input,
+    .select-primary.el-select .el-input .el-input__icon {
+      color: black !important;
+    }
+
     .select-primary.el-select {
       .el-input {
         input {
           border-width: 1px;
-          border-radius: 5px;
+          border-radius: 10px;
+          border-color: #dcdfe6 !important;
           color: $grey-color;
 
           &:hover {
