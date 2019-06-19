@@ -17,7 +17,7 @@
               <td>
                 <p-button type="primary"
                           outline
-                          @click="handleViewInvoice(index)"
+                          @click="handleViewInvoice(index.index.row.id)"
                           class="kyc__product__btn">
                   <slot name="label">
                     <img class="img-responsive ic__icon"
@@ -52,7 +52,7 @@
             <p-pagination
               :page-count="pageCount"
               v-model="currentPage"
-              @input="handleInput"
+              @input="handleChangePage"
               :perPage="perPage"></p-pagination>
           </div>
         </div>
@@ -77,11 +77,9 @@
     created() {
       const pageNum = this.isPagination ? this.currentPage - 1 : 0
       this.getProductConfigClient({pageNum})
-      console.log('created')
       if (this.productConfigClients && this.productConfigClients.pageMeta){
         this.pageCount = this.productConfigClients.pageMeta.totalPages;
         this.perPage = this.productConfigClients.pageMeta.perPage;
-        console.log('page Meta')
       }
     },
     computed: {
@@ -141,10 +139,9 @@
       handleViewInvoice(id) {
         this.$router.push({path: `/kyc/product-config/view-invoice/${id}`});
       },
-      handleInput(ev) {
-        const pageNum = ev - 1;
+      handleChangePage(event) {
+        const pageNum = event - 1;
         this.getProductConfigClient({pageNum})
-        console.log('pagination ', ev)
       },
     },
     data() {

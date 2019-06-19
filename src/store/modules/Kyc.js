@@ -238,7 +238,6 @@ const actions = {
     try{
       const {data} = await Vue.prototype.$http.get('v1/kyc/dashboard/summary-report', {duration: payload.duration})
       commit(MUTATE_SUMMARY_REPORT, {data: data.infos})
-      console.log('summary report' ,data)
     }catch(e){
       console.log('error :', e);
     }
@@ -247,7 +246,6 @@ const actions = {
     try{
       const {data} = await Vue.prototype.$http.get('v1/kyc/client-statuses')
       commit(MUTATE_CLIENT_STATUSES, {data})
-      console.log('statuses' ,{data})
     }catch(e){
       console.log('error :', e);
     }
@@ -257,7 +255,6 @@ const actions = {
     try{
       const {data} = await Vue.prototype.$http.get('v1/kyc/currencies')
       commit(MUTATE_CURRENCY_LIST, {data})
-      console.log('currency' ,{data})
     }catch(e){
       console.log('error :', e);
     }
@@ -273,7 +270,6 @@ const actions = {
     }
   },
   [KYC_GET_PRODUCT_CONFIG_CLIENT]: async ({},payload) => {
-    // console.log('product config', payload);
     const id = payload.id
     return new Promise ( (resolve, reject) => {
       Vue.prototype.$http.get(`v1/kyc/clients/${id}`).then( data => {
@@ -294,41 +290,6 @@ const actions = {
   },
   [KYC_CREATE_PRODUCT_CONFIG_CLIENT]: async ({}, payload) => {
     const body = payload.body
-    /*const body = {
-      applicationFee: 1,
-      autoCloseSchedule: {
-        clientScheduleIntervalType: "DAY",
-        intervalVal: 1
-      },
-      clientName: "ABC Name",
-      clientReference: "LYCACH",
-      clientStatus: "ACTIVE",
-      clientType: "STANDARD",
-      contactEmail: "gibbons@email.com",
-      contactName: "Peter Gibbons",
-      feeCurrency: "EUR",
-      frmRequired: true,
-      idCheckFee: 1,
-      idCheckRequired: true,
-      kycAutoFollowupCloseSchedule: {
-        clientScheduleIntervalType: "DAY",
-        intervalVal: 1
-      },
-      kycReminderSchedule: {
-        clientScheduleIntervalType: "DAY",
-        intervalVal: 1
-      },
-      poaCheckFee: 1,
-      poaCheckRequired: true,
-      rescreenIntervalSchedule: {
-        clientScheduleIntervalType: "DAY",
-        intervalVal: 1
-      },
-      sanctionCheckFee: 1,
-      sanctionCheckRequired: true,
-      smsFee: 1
-    }*/
-    console.log('create', body)
     return new Promise((resolve, reject) => {
       Vue.prototype.$http.post(`v1/kyc/clients`, body)
         .then(data => {
@@ -338,14 +299,8 @@ const actions = {
     })
   },
   [KYC_GET_PRODUCT_CONFIG_VIEW_INVOICE]: async ({commit}, payload) => {
-    const pageNum = 0
-    const pageSize = 5
-    // todo: there is no pagination in design !!!
-    const params = {pageNum, pageSize, ...payload}
-    console.log('invoice payload ', params)
     try {
-      const {data} = await Vue.prototype.$http.get('v1/kyc/invoices', params)
-      console.log('invoices', data)
+      const {data} = await Vue.prototype.$http.get('v1/kyc/invoices', {...payload})
       commit(MUTATE_PRODUCT_CONFIG_VIEW_INVOICE, {data})
     } catch (e) {
       console.log('error :', e);
