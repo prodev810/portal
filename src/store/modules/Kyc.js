@@ -356,13 +356,16 @@ const actions = {
     }
   },
   [KYC_GET_POA_CHECK_ENQUIRY]: async ({commit}, payload) => {
-    try{
-      // I get some App Ref from search module, but how i can get current app ref I dont know
-      const {data} = await Vue.prototype.$http.get(`v1/kyc/applications/${payload}/poacheck-enquiry`);
-      commit(MUTATE_POA_CHECK_ENQUIRY, {data})
-    }catch (e) {
-      console.log('error', e)
-    }
+    return new Promise ( async (resolve, reject) => {
+      try{
+        // I get some App Ref from search module, but how i can get current app ref I dont know
+        const {data} = await Vue.prototype.$http.get(`v1/kyc/applications/${payload}/poacheck-enquiry`).catch( err => reject(err));
+        commit(MUTATE_POA_CHECK_ENQUIRY, {data});
+        resolve(data);
+      }catch (e) {
+        console.log('error', e)
+      }
+    });
   },
   [KYC_GET_POA_CHECK_DOC]: async ({commit}, payload) => {
     try{
@@ -374,7 +377,7 @@ const actions = {
   },
   [KYC_GET_POA_SUPPORT_DOC]: async ({commit}, payload) => {
     try{
-      const {data} = await Vue.prototype.$http.get(`v1/kyc/poacheck/${payload}/document-supports`)
+      const {data} = await Vue.prototype.$http.get(`v1/kyc/poacheck/${payload.id}/document-supports`)
       commit(MUTATE_POA_SUPPORT_DOC, {data})
     }catch (e) {
       console.log('error :', e)
@@ -415,7 +418,9 @@ const actions = {
   },
   [KYC_POST_POA_CHECK_ADDRESS]: async ({commit}, payload) => {
     try {
-      const {data} = await Vue.prototype.$http.post(`/v1/kyc/poacheck/{payload}/address`);
+      const body = payload.body
+      console.log('update address', payload)
+      const {data} = await Vue.prototype.$http.post(`/v1/kyc/poacheck/${payload.id}/address`, body);
       commit(MUTATE_POA_CHECK_ADDRESS, {data})
     }catch (e) {
       console.log('error :', e)
@@ -431,7 +436,10 @@ const actions = {
   },
   [KYC_POST_ACTION_FROM_MODAL]: async ({commit}, payload) => {
     try {
-      const {data} = await Vue.prototype.$http.post(`/v1/kyc/poacheck{payload}/action`);
+      const id = payload.id
+      const body = payload.body
+      console.log({id,body})
+      const {data} = await Vue.prototype.$http.post(`/v1/kyc/poacheck/${id}/action`,body);
     }catch (e) {
       console.log('error :', e)
     }

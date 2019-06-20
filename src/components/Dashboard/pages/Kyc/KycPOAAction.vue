@@ -110,11 +110,10 @@
         </el-row>
         <el-row>
           <el-card class="client-info__card" :body-style="{ padding: '0px' }">
-            <el-popover v-if="img" placement="right" width="550" class="image-zoom" trigger="hover">
-              <!-- todo: add img src-->
-              <!-- <img class="w-100" :src="">-->
-              <!--<img class="client-info__card__img" slot="reference" v-if="img"
-                   :src="">-->
+            <el-popover v-if="poaCheckDoc" placement="right" width="550" class="image-zoom" trigger="hover">
+              <img class="w-100" :src="`data:${poaCheckDoc.mimeType};base64, ${poaCheckDoc.content}`">
+              <img class="client-info__card__img" slot="reference" v-if="poaCheckDoc"
+                   :src="`data:${poaCheckDoc.mimeType};base64, ${poaCheckDoc.content}`">
             </el-popover>
             <div v-else class="client-info__card__info d-flex justify-content-center align-items-center">
               <p>No document received</p>
@@ -125,7 +124,7 @@
 
       <el-col :md="16">
         <el-row class="mb-5 pl-5 d-flex align-items-center w-100">
-          <el-col :md="6">
+          <el-col :md="7">
             <strong>Client Submitted information</strong>
           </el-col>
           <el-col :md="18" class="pl-2">
@@ -165,13 +164,11 @@
                   <el-row class="kyc-poa-modal-wrap-select">
                     <el-col>
                       <el-select class="kyc-poa-modal__select" v-model="modalActionPoa">
-                        <el-option v-for="item in actionsPoa"
+                        <el-option v-for="item in poaActionTypes"
                                    placeholder="Action"
-                                   :key="item.value"
-                                   :label="item.label"
-                                   :value="item.value"
-                        >
-                        </el-option>
+                                   :key="item.code"
+                                   :label="item.description"
+                                   :value="item.code">{{item.description}}</el-option>
                       </el-select>
                     </el-col>
                   </el-row>
@@ -198,7 +195,7 @@
                   </el-row>
                   <el-row class="kyc-poa-modal-wrap-subtitle d-flex mb-4">
                     <el-col class="d-flex align-items-center">
-                      <p class="kyc-poa-modal-sub-title mb-0">Supporting document(Optional)
+                      <p class="kyc-poa-modal-sub-title mb-0">Supporting document (Optional)
                       </p>
                     </el-col>
                     <el-col class="d-flex justify-content-end">
@@ -218,7 +215,7 @@
                         <div class="card">
                           <regular-table
                             :headings="modalTableHeadings"
-                            :value="modalTableValues"
+                            :value="modalTableData"
                           >
                           </regular-table>
                         </div>
@@ -228,9 +225,10 @@
                   <el-row class="d-flex mb-4">
                     <el-col class="text-center">
                       <p-button
+                        :disabled="!isValidModal"
                         type="success"
                         class="kyc-poa-action-btn mr-2"
-                        @click="toggleModalVisible(); sendDataFromModal()"
+                        @click="sendDataFromModal()"
                         round>
                         Save</p-button>
                       <p-button
@@ -256,89 +254,96 @@
               <tr>
                 <td><strong>Address Line 1</strong></td>
                 <td>
-                  <fg-input v-if="editAddress1" v-model="clientInformation.address1" class="p-0 mr-2"></fg-input>
+                  <fg-input v-if="editAddress1" v-model="poaData.submittedAddress.address1" class="p-0 mr-2"></fg-input>
                   <span
                     v-else-if="poaData && poaData.submittedAddress && poaData.submittedAddress.address1">{{poaData.submittedAddress.address1}}</span>
                 </td>
                 <td>
                   <img v-if="!editAddress1 && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
                        @click="editAddress1 = !editAddress1"/>
-                  <p-button v-if="editAddress1" round @click="editAddress1 = !editAddress1">Save</p-button>
+                  <p-button v-if="editAddress1" round
+                            @click="handleUpdatePoaCheckAddress('editAddress1')">Save</p-button>
                 </td>
               </tr>
               <tr>
                 <td><strong>Address Line 2</strong></td>
                 <td>
-                  <fg-input v-if="editAddress2" v-model="clientInformation.address2" class="p-0 mr-2"></fg-input>
+                  <fg-input v-if="editAddress2" v-model="poaData.submittedAddress.address2" class="p-0 mr-2"></fg-input>
                   <span
                     v-else-if="poaData && poaData.submittedAddress && poaData.submittedAddress.address2">{{poaData.submittedAddress.address2}}</span>
                 </td>
                 <td>
                   <img v-if="!editAddress2 && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
                        @click="editAddress2 = !editAddress2"/>
-                  <p-button v-if="editAddress2" round @click="editAddress2 = !editAddress2">Save</p-button>
+                  <p-button v-if="editAddress2" round
+                            @click="handleUpdatePoaCheckAddress('editAddress2')">Save</p-button>
                 </td>
               </tr>
               <tr>
                 <td><strong>Address Line 3</strong></td>
                 <td>
-                  <fg-input v-if="editAddress3" v-model="clientInformation.address3" class="p-0 mr-2"></fg-input>
+                  <fg-input v-if="editAddress3" v-model="poaData.submittedAddress.address3" class="p-0 mr-2"></fg-input>
                   <span
                     v-else-if="poaData && poaData.submittedAddress && poaData.submittedAddress.address3">{{poaData.submittedAddress.address3}}</span>
                 </td>
                 <td>
                   <img v-if="!editAddress3 && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
                        @click="editAddress3 = !editAddress3"/>
-                  <p-button v-if="editAddress3" round @click="editAddress3 = !editAddress3">Save</p-button>
+                  <p-button v-if="editAddress3" round
+                            @click="handleUpdatePoaCheckAddress('editAddress3')">Save</p-button>
                 </td>
               </tr>
               <tr>
                 <td><strong>City / Town</strong></td>
                 <td>
-                  <fg-input v-if="editCity" v-model="clientInformation.city" class="p-0 mr-2"></fg-input>
+                  <fg-input v-if="editCity" v-model="poaData.submittedAddress.city" class="p-0 mr-2"></fg-input>
                   <span v-else-if="poaData && poaData.submittedAddress && poaData.submittedAddress.city">{{poaData.submittedAddress.city}}</span>
                 </td>
                 <td>
                   <img v-if="!editCity && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
                        @click="editCity = !editCity"/>
-                  <p-button v-if="editCity" round @click="editCity = !editCity">Save</p-button>
+                  <p-button v-if="editCity" round
+                            @click="handleUpdatePoaCheckAddress('editCity')">Save</p-button>
                 </td>
               </tr>
               <tr>
                 <td><strong>Post Code</strong></td>
                 <td>
-                  <fg-input v-if="editPostCode" v-model="clientInformation.postCode" class="p-0 mr-2"></fg-input>
+                  <fg-input v-if="editPostCode" v-model="poaData.submittedAddress.postCode" class="p-0 mr-2"></fg-input>
                   <span
                     v-else-if="poaData && poaData.submittedAddress && poaData.submittedAddress.postCode">{{poaData.submittedAddress.postCode}}</span>
                 </td>
                 <td>
                   <img v-if="!editPostCode && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
                        @click="editPostCode = !editPostCode"/>
-                  <p-button v-if="editPostCode" round @click="editPostCode = !editPostCode">Save</p-button>
+                  <p-button v-if="editPostCode" round
+                            @click="handleUpdatePoaCheckAddress('editPostCode')">Save</p-button>
                 </td>
               </tr>
               <tr>
                 <td><strong>Region</strong></td>
                 <td>
-                  <fg-input v-if="editRegion" v-model="clientInformation.region" class="p-0 mr-2"></fg-input>
+                  <fg-input v-if="editRegion" v-model="poaData.submittedAddress.region" class="p-0 mr-2"></fg-input>
                   <span v-else-if="poaData && poaData.submittedAddress && poaData.submittedAddress.region">{{poaData.submittedAddress.region}}</span>
                 </td>
                 <td>
                   <img v-if="!editRegion && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
                        @click="editRegion = !editRegion"/>
-                  <p-button v-if="editRegion" round @click="editRegion = !editRegion">Save</p-button>
+                  <p-button v-if="editRegion" round
+                            @click="handleUpdatePoaCheckAddress('editRegion')">Save</p-button>
                 </td>
               </tr>
               <tr>
                 <td><strong>Country</strong></td>
                 <td>
-                  <fg-input v-if="editCountry" v-model="clientInformation.country" class="p-0 mr-2"></fg-input>
+                  <fg-input v-if="editCountry" v-model="poaData.submittedAddress.country" class="p-0 mr-2"></fg-input>
                   <span v-else-if="poaData && poaData.submittedAddress && poaData.submittedAddress.countryCode">{{poaData.submittedAddress.countryCode}}</span>
                 </td>
                 <td>
                   <img v-if="!editCountry && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
                        @click="editCountry = !editCountry"/>
-                  <p-button v-if="editCountry" round @click="editCountry = !editCountry">Save</p-button>
+                  <p-button v-if="editCountry" round
+                            @click="handleUpdatePoaCheckAddress('editCountry')">Save</p-button>
                 </td>
               </tr>
               </tbody>
@@ -364,7 +369,7 @@
         <el-card>
           <regular-table striped
                          :headings="tableHeadings"
-                         :value="applicationInfoData">
+                         :value="customCheckHistory">
             <template slot-scope="index">
               <td>
                 <p-button type="primary" outline @click="onClickTableBtn(index)">Download</p-button>
@@ -425,35 +430,6 @@
         visible: false,
         img: false,
         poaStatus: 'Unverified',
-        // applicationInfo: [
-        //   {name: 'Application Ref', value: 'ABCDEFG'},
-        //   {name: 'Client App Ref', value: 'BCDEFGH'},
-        //   {name: 'Status', value: 'KYC Validation'},
-        //   {name: 'ID Documentation', value: 'Drivers License'},
-        //   {name: 'Status', value: 'Unverified', className: 'icon'},
-        // ],
-        // applicationInfoII: [
-        //   {name: 'Verification attempts', value: '1'},
-        //   {name: 'Date Received', value: 'YYYY-MM-DD-HH-MM'},
-        //   {name: 'App SMS Sent', value: 'YYYY-MM-DD-HH-MM'},
-        // ],
-        // statusList: [
-        //   'Unverified',
-        //   'Approved',
-        //   'Declined',
-        //   'Declined - fraud',
-        //   'New POA requested',
-        //   'Address update - New POA requested'
-        // ],
-        // clientInformation: {
-        //   address1: 'Wilhelm-Epstein Strasse 14',
-        //   address2: '',
-        //   address3: '',
-        //   city: 'Frankfurt',
-        //   postCode: '60431',
-        //   region: 'Frankfurt',
-        //   country: 'Germany',
-        // },
         verificationList: [
           'POA is an approved bill type',
           'POA is an approved bill type',
@@ -462,12 +438,12 @@
           'Address match supplied address by client'
         ],
         tableHeadings: [
-          {name: 'caseHistory', label: 'Case history'},
-          {name: 'name', label: 'Name'},
-          {name: 'date', label: 'Date'},
-          {name: 'status', label: 'Status'},
-          {name: 'reason', label: 'Reason'},
-          {name: 'operator', label: 'Operator'},
+          {name: 'checkActionComment', label: 'Case history'},
+          {name: 'checkActionName', label: 'Name'},
+          {name: 'checkActionCreatedDate', label: 'Date'},
+          {name: 'checkStatusName', label: 'Status'},
+          {name: 'checkActionReason', label: 'Reason'},
+          {name: 'operatorName', label: 'Operator'},
         ],
         applicationInfoData: [
           {
@@ -501,12 +477,9 @@
           {value: 90, label: '90 Days'}
         ],
         modalTableHeadings: [
-          {name: 'documentLog', label: 'Document Log'},
-          {name: 'documentName', label: 'Document Name'},
-          {name: 'date', label: 'Date'},
-          {name: 'status', label: 'Status'},
-          {name: 'reason', label: 'Reason'},
-          {name: 'operator', label: 'Operator'}
+          {name: 'fileName', label: 'Document Name'},
+          {name: 'uploadDate', label: 'Date'},
+          {name: 'operatorName', label: 'Operator'}
         ],
         modalTableValues: [
           {
@@ -520,19 +493,37 @@
         ],
 
         modalTextarea: '',
-        modalActionPoa: [],
-        appReferenceId: 'test',
+        modalActionPoa: '',
+        appReferenceId: 'KYC190612-FIAQ',
+        operatorName: 'Mock Operator'
       }
     },
-    mounted(){
-      this.getPoaData('KYC190612-NIAI')
-      this.getPoaCheckStatuses()
-      this.getPoaDocs({checkId: 'a1dac324-da9e-4c5a-b7fd-6764438bb933', id: '51b84935-400d-4f2c-b06c-aa4f6c123cb4'})
-      this.getPoaDownloadSupportDoc({checkId: 'a1dac324-da9e-4c5a-b7fd-6764438bb933', id: '51b84935-400d-4f2c-b06c-aa4f6c123cb4'})
+    async created(){
+      const data = await this.getPoaData(this.appReferenceId).catch( err => console.log(err));
+      if(data) {
+        console.log('created poa data', {data})
+        const checkId = data.checkId
+        const id = data.poaCheckDoc.id
+        const body = {checkId, id}
+        this.getPoaDocs(body)
+        this.getPoaDownloadSupportDoc(body)
+        this.getListUploadedDocument({id:checkId})
+      }
+      // if(this.poaData.length){
+      //   const checkId = this.poaData.checkId
+      //   console.log('mounted poa data', this.poaData)
+      // }
       this.getPoaActionTypes()
+      this.getPoaCheckStatuses()
+
       // this.sendPoaCheckAddress()
       //this.sendDocumentSuppports()
 
+    },
+    watch:{
+      poaData(value){
+        console.log('wactch',{value})
+      },
     },
     computed: {
       ...mapState({
@@ -546,6 +537,39 @@
       }),
       isActionMode() {
         return this.mode === 'action'
+      },
+      customCheckHistory(){
+       if(this.poaData.checkHistories){
+        return this.poaData.checkHistories.map(item => {
+          console.log({item})
+          return {
+            id: item.checkActionId,
+            checkActionComment: item.checkActionComment,
+            checkActionName: item.checkActionName,
+            checkActionCreatedDate: this.handleDateFormat(item.checkActionCreatedDate),
+            // checkActionCreatedDate: item.checkActionCreatedDate.replace('Z', '').replace('T', '-').replace(/:/g, '-'),
+            checkStatusName: item.checkStatusName,
+            checkActionReason: item.checkActionReason,
+            operatorName: item.operatorName
+          }
+        })
+       }
+      },
+      modalTableData(){
+        if(this.poaSupportDoc && this.poaSupportDoc.supportDocs){
+          return this.poaSupportDoc.supportDocs.map(doc => {
+            return {
+              fileName: doc.fileName,
+              uploadDate: this.handleDateFormat(doc.uploadDate),
+              operatorName: doc.operatorName,
+            }
+          })
+        }
+
+        return []
+      },
+      isValidModal(){
+        return this.modalTextarea !== ''
       },
     },
     methods: {
@@ -570,12 +594,29 @@
         this.modals.visible = !this.modals.visible
       },
       onClickTableBtn(idx) {
-        let index = idx.index.index
-        this.getListUploadedDocument(this.applicationInfoData[index].name)
+        /*let index = idx.index.index
+        this.getListUploadedDocument(this.applicationInfoData[index].name)*/
       },
       sendDataFromModal() {
-        this.saveDataFromModal()
-      }
+        const id = this.poaData.checkId
+        const body = {
+          actionTypeCode: this.modalActionPoa,
+          comment: this.modalTextarea,
+          operatorName: this.operatorName
+        }
+
+        this.saveDataFromModal({id, body})
+        this.toggleModalVisible()
+      },
+      handleUpdatePoaCheckAddress(name){
+        this[name] = !this[name]
+        const body = this.poaData.submittedAddress
+        const id = this.poaData.checkId
+        this.sendPoaCheckAddress({id,body})
+      },
+      handleDateFormat(date){
+        return date.replace('Z', '').replace('T', '-').replace(/:/g, '-')
+      },
     }
   }
 </script>
@@ -609,12 +650,15 @@
     }
 
     .btn-poa-action {
-      width: 190px;
+      width: 145px;
     }
 
     .table-client-info {
       td {
         padding-top: 5px;
+        &:last-child{
+          text-align: right;
+        }
       }
 
       .btn {
@@ -622,6 +666,11 @@
         line-height: 25px;
         padding-top: initial;
         width: 75px;
+      }
+      /deep/{
+        .form-control{
+          max-width: 190px;
+        }
       }
     }
 
