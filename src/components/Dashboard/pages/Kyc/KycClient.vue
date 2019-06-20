@@ -19,8 +19,8 @@
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="isViewMode">{{client.clientName}}</p>
-          <el-input class="input-outline"
-                    v-model="client.clientName"
+          <el-input v-model="client.clientName"
+                    :class="{'input-outline':isEditMode}"
                     v-else-if="client"></el-input>
         </el-col>
       </el-row>
@@ -32,8 +32,8 @@
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="isViewMode">{{client.clientReference}}</p>
-          <el-input class="input-outline"
-                    v-model="client.clientReference"
+          <el-input v-model="client.clientReference"
+                    :class="{'input-outline':isEditMode}"
                     v-else-if="client"></el-input>
         </el-col>
       </el-row>
@@ -45,8 +45,7 @@
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="isViewMode">{{client.contactName}}</p>
-          <el-input class="input-outline"
-                    v-model="client.contactName"
+          <el-input v-model="client.contactName"
                     v-else-if="client"></el-input>
         </el-col>
       </el-row>
@@ -60,8 +59,7 @@
              v-if="isViewMode">
             <a :href="'mailto:' + client.contactEmail" class="kyc-client-row__link">{{client.contactEmail}}</a>
           </p>
-          <el-input class="input-outline"
-                    v-model="client.contactEmail"
+          <el-input v-model="client.contactEmail"
                     type="email" v-else-if="client"></el-input>
         </el-col>
       </el-row>
@@ -254,7 +252,6 @@
              v-if="client && client.applicationFee && isViewMode">{{ client.applicationFee |
             numberMoneyFormat }}</p>
           <el-input v-model="client.applicationFee"
-                    class="input-outline"
                     v-else></el-input>
         </el-col>
       </el-row>
@@ -267,7 +264,6 @@
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="client && client.idCheckFee && isViewMode">{{ client.idCheckFee | numberMoneyFormat }}</p>
           <el-input v-model="client.idCheckFee"
-                    class="input-outline"
                     v-else></el-input>
         </el-col>
       </el-row>
@@ -280,7 +276,6 @@
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="client && client.poaCheckFee  && isViewMode">{{ client.poaCheckFee | numberMoneyFormat }}</p>
           <el-input v-model="client.poaCheckFee"
-                    class="input-outline"
                     v-else></el-input>
         </el-col>
       </el-row>
@@ -294,7 +289,6 @@
              v-if="client && client.sanctionCheckFee && isViewMode">
             {{ client.sanctionCheckFee | numberMoneyFormat}}</p>
           <el-input v-model="client.sanctionCheckFee"
-                    class="input-outline"
                     v-else></el-input>
         </el-col>
       </el-row>
@@ -307,7 +301,6 @@
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="client && client.smsFee && isViewMode">{{ client.smsFee | numberMoneyFormat}}</p>
           <el-input v-model="client.smsFee"
-                    class="input-outline"
                     v-else></el-input>
         </el-col>
       </el-row>
@@ -328,8 +321,8 @@
               </el-option>
             </el-select>
           </template>
-          <strong class="kyc-client-row__text" v-else>{{ addDateRangeLabel(client.kycReminderSchedule.intervalVal)
-            }}</strong>
+          <strong class="kyc-client-row__text" v-else>
+            {{addDateRangeLabel(client.kycReminderSchedule.intervalVal)}}</strong>
         </el-col>
       </el-row>
 
