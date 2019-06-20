@@ -355,7 +355,7 @@
         this.allData = souceOfTruth.map((i, index) => {
           let newDataLabel = {};
           for (const key in i) {
-            if (key === 'id' || key === 'edit') {
+            if (key === 'id' || key === 'edit' || key === 'classes') {
               newDataLabel[key] = data[index][key]
             } else if (typeof i[key] !== "object") {
               //mask code  @commit e1955e739285782b054048b66a664ef605c50446

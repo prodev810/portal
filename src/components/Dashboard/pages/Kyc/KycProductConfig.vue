@@ -87,7 +87,9 @@
         productConfigClients: state => state.kyc.productConfigClients
       }),
       tableProductConfigData() {
+        console.log('computed')
         if (this.productConfigClients && this.productConfigClients.clientInfos) {
+          /*return this.handleProductConfigApiData()*/
           return this.productConfigClients.clientInfos.map(data => {
 
             const classes = {};
@@ -117,6 +119,11 @@
         }
       },
     },
+    watch:{
+      productConfigClients(value){
+        // this.tableProductConfigData()
+      },
+    },
     methods: {
       ...mapActions({
         getProductConfigClient: KYC_GET_PRODUCT_CONFIG_ALL_CLIENTS,
@@ -142,6 +149,24 @@
       handleChangePage(event) {
         const pageNum = event - 1;
         this.getProductConfigClient({pageNum})
+      },
+      handleProductConfigApiData(){
+        return this.productConfigClients.clientInfos.map(data => {
+
+          const classes = {};
+          data.issuing = data.clientType === clientTypes.ISSUING
+          this.tableCustomColumns.forEach(column => {
+            classes[column] = this.getCustomClassName(data[column], column)
+          });
+
+          data.clientStatus = data.clientStatus.toLowerCase()
+          data.issuing = this.getYesNoFromBoolean(data.issuing)
+          data.idCheckRequired = this.getYesNoFromBoolean(data.idCheckRequired)
+          data.sanctionCheckRequired = this.getYesNoFromBoolean(data.sanctionCheckRequired)
+          data.poaCheckRequired = this.getYesNoFromBoolean(data.poaCheckRequired)
+          data.classes = classes;
+          return data
+        })
       },
     },
     data() {

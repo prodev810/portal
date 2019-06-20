@@ -111,6 +111,7 @@
 
         } else if (this.$route.path.split('/').slice(-1)[0] === 'product-config'){
           this.showLogoutBtn = false;
+          return "Product Config";
         } else {
           return this.$route.path.split('/')[2].replace(/-/g, ' ');
         }
