@@ -59,7 +59,7 @@ import {
   KYC_GET_POA_ACTION_TYPES,
   MUTATE_POA_ACTION_TYPES,
   KYC_POST_UPLOAD_DOCUMENT_SUPPORTS,
-  KYC_POST_ACTION_FROM_MODAL
+  KYC_POST_ACTION_FROM_MODAL,
   KYC_GET_PRODUCT_CONFIG_CLIENT,
   MUTATE_PRODUCT_CONFIG_CLIENT,
   KYC_GET_PRODUCT_CONFIG_ALL_CLIENTS,
@@ -195,7 +195,7 @@ const mutations = {
   },
   [MUTATE_LIST_SUPPORT_DOCUMENTS]: (state, {data}) => {
       state.listSupportDocuments = data;
-  }
+  },
   [MUTATE_POA_CHECK_ENQUIRY]: (state, {data}) => {
     state.poaInfo = data;
   },
