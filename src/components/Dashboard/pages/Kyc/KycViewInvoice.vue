@@ -49,6 +49,12 @@
               <b class="text-uppercase">Sum</b> {{productConfigViewInvoiceTotal | numberToMoneyFormat}}
             </strong>
           </el-row>
+          <div class="table-pagination">
+            <p-pagination :page-count="pageCount"
+                          v-model="currentPage"
+                          @input="handleChangePage"
+                          :perPage="perPage"></p-pagination>
+          </div>
         </div>
       </div>
     </el-col>
@@ -63,18 +69,24 @@
     KYC_GET_PRODUCT_CONFIG_VIEW_INVOICE,
   } from "../../../../store/types"
   import {moneyFormat} from '../../../../utils/moneyFormat'
-  import {formatDate} from "../../../../utils/Date";
+  import {formatDate} from "../../../../utils/Date"
+  import PPagination from "../../../UIComponents/Pagination"
 
   export default {
     name: "KycViewInvoice",
     components: {
-      RegularTable,
+      RegularTable, PPagination,
     },
     created() {
-      this.getProductConfigInvoices()
+      // this.getProductConfigInvoices()
+      this.handleFilterInvoice()
     },
     data() {
       return {
+        totalPages: 0,
+        perPage: 10,
+        currentPage: 1,
+        pageCount: 0,
         tableHeadings: [
           {name: 'clientReference', label: 'App Requested'},
           {name: 'clientName', label: 'KYC Client Code'},
@@ -92,20 +104,27 @@
     },
     computed: {
       ...mapState({
+        productConfigViewInvoicePageMeta: state => state.kyc.productConfigViewInvoice.pageMeta,
         productConfigViewInvoiceItem: state => state.kyc.productConfigViewInvoice.invoiceItems,
         productConfigViewInvoiceTotal: state => state.kyc.productConfigViewInvoice.sum
       }),
-      getInvoiceCurrence() {
+      getInvoiceCurrency() {
         return this.productConfigViewInvoiceItem[0].itemCurrency
       },
       productConfigViewInvoiceList() {
         if (this.productConfigViewInvoiceItem) {
           return this.productConfigViewInvoiceItem.map(invoice => {
-            invoice.timestamp = invoice.timestamp.replace('Z', '').replace('T', '-').replace(/:/g,'-')
-            invoice.itemAmount = `${this.getInvoiceCurrence} ${this.getMoneyFormat(invoice.itemAmount)}`
+            invoice.timestamp = invoice.timestamp.replace('Z', '').replace('T', '-').replace(/:/g, '-')
+            invoice.itemAmount = `${this.getInvoiceCurrency} ${this.getMoneyFormat(invoice.itemAmount)}`
             return invoice
           })
         }
+      },
+    },
+    watch: {
+      productConfigViewInvoicePageMeta(value) {
+        this.pageCount = value.totalPages;
+        this.perPage = value.perPage;
       },
     },
     methods: {
@@ -122,12 +141,21 @@
           fromDate: this.getDateFormat(this.fromDate),
           clientName: this.clientName,
           clientReference: this.clientReference.toUpperCase(),
+          pageNum: this.isPagination ? this.currentPage - 1 : 0,
+          pageSize: this.perPage
         }
-        Object.keys(payload).forEach((key) => (payload[key] == null || !payload[key]) && delete payload[key])
+        Object.keys(payload).forEach((key) => (payload[key] == null || payload[key] === '') && delete payload[key])
         this.getProductConfigInvoices(payload)
+        if (!this.isPagination) this.currentPage = 1;
       },
-      getDateFormat(date){
+      getDateFormat(date) {
         return (date) ? formatDate(date) : ''
+      },
+      handleChangePage(event) {
+        this.currentPage = event;
+        this.isPagination = true;
+        //this.getProductConfigInvoices({pageNum})
+        this.handleFilterInvoice()
       },
     },
     filters: {
@@ -170,6 +198,23 @@
       display: flex;
       justify-content: space-between;
       margin-right: 17px;
+    }
+  }
+
+  .table-pagination {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+
+
+  tbody {
+    tr {
+      position: static;
+
+      td {
+        position: static;
+      }
     }
   }
 
@@ -222,9 +267,12 @@
           outline: none !important;
 
           tr {
+            position: static;
+
             td {
               border-left: 1px solid $table-border-gray !important;
               min-width: unset;
+              position: static;
 
               &:first-child {
                 border: none !important;
