@@ -84,7 +84,7 @@
     data() {
       return {
         totalPages: 0,
-        perPage: 10,
+        perPage: 20,
         currentPage: 1,
         pageCount: 0,
         tableHeadings: [

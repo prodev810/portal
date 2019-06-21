@@ -310,7 +310,7 @@ const actions = {
   },
   [KYC_GET_PRODUCT_CONFIG_ALL_CLIENTS]: async ({commit}, payload) => {
     const pageNum = (payload && payload.pageNum) ? payload.pageNum : 0
-    const pageSize = (payload && payload.pageSize) ? payload.pageSize : 3
+    const pageSize = (payload && payload.pageSize) ? payload.pageSize : 20
     try{
       const {data} = await Vue.prototype.$http.get('v1/kyc/clients', {pageNum, pageSize})
       commit(MUTATE_PRODUCT_CONFIG_ALL_CLIENTS, {data})
