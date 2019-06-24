@@ -366,6 +366,22 @@ const kyc = {
         meta: {
           permission: permission.RESELLER_INVOICE_VIEW
         }
+      },
+      {
+        path: '/kyc/ID-view',
+        name: 'KYC Id View',
+        component: () => import('../components/Dashboard/pages/Kyc/KycId.vue'),
+        meta: {
+          permission: permission.RESELLER_INVOICE_VIEW
+        }
+      },
+      {
+        path: '/kyc/ID-action',
+        name: 'KYC Id Action',
+        component: () => import('../components/Dashboard/pages/Kyc/KycId.vue'),
+        meta: {
+          permission: permission.RESELLER_INVOICE_VIEW
+        }
       }
   ]
 }

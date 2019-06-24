@@ -223,8 +223,8 @@
                     
                     <span class="kyc-action__url">www.URL.com</span>
                     <div class="kyc_url_action">
-                        <p-button round type="primary" class="mr-2 btn btn--view">View</p-button>
-                        <p-button round class="btn btn--view">Action</p-button>
+                        <p-button round type="primary" class="mr-2 btn btn--view" @click.stop.prevent="goViewId">View</p-button>
+                        <p-button round class="btn btn--view" @click.stop.prevent="goActionId">Action</p-button>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -315,7 +315,7 @@
                     <el-row>
                         <el-col :sm="24" class="kyc-action">
                             <p class="mb-3 mt-2 kyc-label kyc-label--no-w">Rescreen date &nbsp;&nbsp;&nbsp;
-                                <span class="" v-if="getterClientInfo && getterClientInfo.sanctionCheckInfo">{{ getterClientInfo.sanctionCheckInfo.latestResubmittedDate }}</span>
+                                <span class="" v-if="getterClientInfo && getterClientInfo.sanctionCheckInfo">{{ getterClientInfo.sanctionCheckInfo.latestResubmittedDate | dateFormat }}</span>
                             </p>
                             <div class="kyc_url_action">
                                 <p-button round type="primary" class="btn btn--view mr-2" @click.stop.prevent="goSanctionView">View</p-button>
@@ -681,7 +681,8 @@ export default {
             getterPoaImg: GETTER_POA_IMG,
         }),
         appReferenceId() {
-            if(this.$route.query) return this.$route.query.appRef; 
+            // if(this.$route.query) return this.$route.query.appRef
+            return 'KYC190612-NIAI'
         },
         applicationInfo() {
             var obj = [{
@@ -817,6 +818,12 @@ export default {
             kycResendSms: RESEND_SMS,
             updateContact: KYC_UPDATE_CONTACT,
         }),
+        goViewId() {
+            if(this.appReferenceId) this.$router.push({ name: 'KYC Id View', query: {appRef: this.appReferenceId }})
+        },
+        goActionId() {
+            if(this.appReferenceId) this.$router.push({ name: 'KYC Id Action', query: {appRef: this.appReferenceId, action: true }})
+        },
         goSanctionAction() {
             let id = this.getterClientInfo && this.getterClientInfo.sanctionCheckInfo ? this.getterClientInfo.sanctionCheckInfo.checkId : '';
             if(this.appReferenceId) this.$router.push({ name: 'KYC Sanction Action', query: {appRef: this.appReferenceId, id: id }});
@@ -915,6 +922,12 @@ export default {
 
       },
     },
+    filters: {
+        dateFormat(d) {
+            if(!d) return '';
+            return formatDate(d, true)
+        }
+    }
 };
 </script>
 

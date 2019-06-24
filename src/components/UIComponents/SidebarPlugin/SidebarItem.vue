@@ -1,5 +1,6 @@
 <template>
-  <component :is="baseComponent"
+  <component v-if="!link.hidden" 
+             :is="baseComponent"
              :to="link.path ? link.path : '/'"
              :class="{active: isActive}"
              tag="li">

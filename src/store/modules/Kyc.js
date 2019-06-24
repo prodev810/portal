@@ -79,6 +79,22 @@ import {
   KYC_UPLOAD_SUPPORT_DOCUMENT,
   KYC_GET_LIST_SUPPORT_DOCUMENTS,
   MUTATE_LIST_SUPPORT_DOCUMENTS,
+  MUTATE_ID_CHECK_ENQUIRY,
+  KYC_GET_ID_CHECK_ENQUIRY,
+  MUTATE_ID_CHECK_STATUSES,
+  KYC_GET_ID_CHECK_STATUSES,
+  MUTATE_ID_VALIDATION_DATAS,
+  KYC_GET_ID_VALIDATION_DATAS,
+  GETTER_VALIDATION_DATAS,
+  MUTATE_ID_CHECK_ACTION_TYPES,
+  KYC_GET_ID_CHECK_ACTION_TYPES,
+  KYC_ID_MANUAL_UPDATE,
+  CLEAR_CHECK_DOCS,
+  KYC_UPLOAD_ID_SUPPORT_DOCUMENT,
+  MUTATE_LIST_SUPPORT_DOCUMENTS_ID,
+  MUTATE_LIST_SUPPORT_DOCUMENTS_HISTORY,
+  KYC_GET_LIST_SUPPORT_DOCUMENTS_ID,
+  KYC_DOWNLOAD_SUPPORT_DOC,
 } from '../types';
 
 const state = {
@@ -104,12 +120,20 @@ const state = {
   sanctionCheckStatuses: null,
   sanctionCheckActionTypes: null,
   listSupportDocuments: {},
+
   poaInfo: [],
   poaCheckDoc: [],
   poaSupportDoc:[],
   poaStatuses: [],
   poaAddress: [],
-  poaActionTypes: []
+  poaActionTypes: [],
+
+  idCheckEnquiry: {},
+  idCheckStatuses: [],
+  idValidationDatas: [],
+  idCheckActionTypes: [],
+  listSupportDocumentsId: {},
+  listSupportDocumentsHis: {}
 }
 
 const mutations = {
@@ -167,6 +191,9 @@ const mutations = {
   [MUTATE_CHECK_DOCS]: (state, {data}) => {
     Vue.set(state.checkDocs, data.docType, data)
   },
+  [CLEAR_CHECK_DOCS]: (state) => {
+    state.checkDocs = {}
+  },
   [MUTATE_POA_IMG]: (state, {data}) => {
     state.poaImg = data;
   },
@@ -196,6 +223,7 @@ const mutations = {
   [MUTATE_LIST_SUPPORT_DOCUMENTS]: (state, {data}) => {
       state.listSupportDocuments = data;
   },
+
   [MUTATE_POA_CHECK_ENQUIRY]: (state, {data}) => {
     state.poaInfo = data;
   },
@@ -219,6 +247,25 @@ const mutations = {
   },
   [MUTATE_POA_ACTION_TYPES]: (state, {data}) => {
     state.poaActionTypes = data;
+  },
+
+  [MUTATE_ID_CHECK_ENQUIRY]: (state, {data}) => {
+    state.idCheckEnquiry = data;
+  },
+  [MUTATE_ID_CHECK_STATUSES]: (state, {data}) => {
+    state.idCheckStatuses = data;
+  },
+  [MUTATE_ID_VALIDATION_DATAS]: (state, {data}) => {
+    state.idValidationDatas = data;
+  },
+  [MUTATE_ID_CHECK_ACTION_TYPES]: (state, {data}) => {
+    state.idCheckActionTypes = data;
+  },
+  [MUTATE_LIST_SUPPORT_DOCUMENTS_ID]: (state, {data}) => {
+    state.listSupportDocumentsId = data;
+  },
+  [MUTATE_LIST_SUPPORT_DOCUMENTS_HISTORY]: (state, {data}) => {
+    state.listSupportDocumentsHis = data;
   },
 }
 
@@ -833,6 +880,114 @@ const actions = {
       console.log('error :', e);
     }
   },
+  [KYC_GET_ID_CHECK_ENQUIRY]: async ({commit, dispatch}, {
+    appReferenceId
+    }) => {
+    try {
+        const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/applications/${appReferenceId}/idcheck-enquiry`);
+        console.log('KYC_GET_ID_CHECK_ENQUIRY ', data)
+        commit(MUTATE_ID_CHECK_ENQUIRY, {data});
+    } catch (e) {
+        console.log('error :', e);
+    }
+  },
+  [KYC_GET_ID_CHECK_STATUSES]: async ({commit, dispatch}) => {
+    try {
+        const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/idcheck-statuses`);
+        console.log('KYC_GET_ID_CHECK_STATUSES ', data)
+        commit(MUTATE_ID_CHECK_STATUSES, {data});
+    } catch (e) {
+        console.log('error :', e);
+    }
+  },
+  [KYC_GET_ID_VALIDATION_DATAS]: async ({commit, dispatch}) => {
+    try {
+        const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/id-validations-fields`);
+        console.log('KYC_GET_ID_VALIDATION_DATAS ', data)
+        commit(MUTATE_ID_VALIDATION_DATAS, {data});
+    } catch (e) {
+        console.log('error :', e);
+    }
+  },
+  [KYC_GET_ID_CHECK_ACTION_TYPES]: async ({commit, dispatch}) => {
+    try {
+        const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/idcheck-action-types`);
+        console.log('KYC_GET_ID_CHECK_ACTION_TYPES ', data)
+        commit(MUTATE_ID_CHECK_ACTION_TYPES, {data});
+    } catch (e) {
+        console.log('error :', e);
+    }
+  },
+  [KYC_ID_MANUAL_UPDATE]: async ({commit, dispatch}, {
+    actionTypeCode,
+    comment,
+    operatorName,
+    id,
+  }) => {
+    try {
+      const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/idcheck/${id}/action`, {
+        actionTypeCode,
+        comment,
+        operatorName,
+      });
+      console.log('KYC_ID_MANUAL_UPDATE ', data)
+    } catch (e) {
+      console.log('error :', e);
+    }
+  },
+  [KYC_UPLOAD_ID_SUPPORT_DOCUMENT]: async ({commit, dispatch}, {
+    content,
+    mimeType,
+    operatorName,
+    id,
+  }) => {
+    try {
+      const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/idcheck/${id}/document-supports`, {
+        content,
+        mimeType,
+        operatorName,
+      });
+      Promise.resolve()
+      console.log('KYC_UPLOAD_ID_SUPPORT_DOCUMENT ', data)
+    } catch (e) {
+      console.log('error :', e);
+    }
+  },
+  [KYC_GET_LIST_SUPPORT_DOCUMENTS_ID]: async ({commit, dispatch}, {
+        id,
+        fromHistoryTable
+    }) => {
+    try {
+        console.log(id, fromHistoryTable);
+        const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/idcheck/${id}/document-supports`);
+        console.log('KYC_GET_LIST_SUPPORT_DOCUMENTS_ID ', data)
+        if(!fromHistoryTable) commit(MUTATE_LIST_SUPPORT_DOCUMENTS_ID, {data});
+        else commit(MUTATE_LIST_SUPPORT_DOCUMENTS_HISTORY, {data});
+        Promise.resolve()
+    } catch (e) {
+        console.log('error :', e);
+    }
+  },
+  [KYC_DOWNLOAD_SUPPORT_DOC]: async ({commit, dispatch}, {
+        checkId,
+        id,
+        fileName
+    }) => {
+    try {
+        const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/idcheck/${checkId}/document-supports/${id}`);
+        console.log('KYC_DOWNLOAD_SUPPORT_DOC ', data)
+        const linkSource = `data:${data.mimeType};base64,${data.content}`;
+        const downloadLink = document.createElement("a");
+
+        downloadLink.href = linkSource;
+        downloadLink.download = fileName;
+        downloadLink.click();
+        Promise.resolve()
+
+    } catch (e) {
+        console.log('error :', e);
+    }
+  },
 }
 
 const getters = {
@@ -846,6 +1001,17 @@ const getters = {
   [GETTER_CLIENT_INFO]: state => state.clientInfo,
   [GETTER_CHECK_DOCS]: state => state.checkDocs,
   [GETTER_POA_IMG]: state => state.poaImg,
+  [GETTER_VALIDATION_DATAS]: state => {
+    if(!state.idValidationDatas || !state.idValidationDatas.length) return null;
+    var d = state.idValidationDatas;
+    const len = d.length;
+    const halfLength = Math.ceil(len/2);
+
+    var leftSide = d.filter((item, i)=> i <= halfLength);
+    var rightSide = d.filter((item, i)=> i > halfLength);
+
+    return { leftSide, rightSide, halfLength };
+  }
 }
 
 const kyc = {

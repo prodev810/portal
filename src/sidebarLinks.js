@@ -155,6 +155,24 @@ export default [
         i18n: 'menu.kyc_product_config',
         permission: ''
       },
+      {
+        path: '/kyc/kyc-mainpage',
+        name: 'KYC Main Page',
+        permission: '',
+        hidden: true,
+      },
+      {
+        path: '/kyc/ID-view',
+        name: 'KYC Id View',
+        permission: '',
+        hidden: true,
+      },
+      {
+        path: '/kyc/ID-action',
+        name: 'KYC Id Action',
+        permission: '',
+        hidden: true,
+      },
     ]
   },
 ];

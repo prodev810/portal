@@ -114,6 +114,9 @@
                 <template v-else-if="heading.name === 'action'">
                   <button class="action-button" type="button">Action</button>
                 </template>
+                <template v-else-if="heading.name === 'download'">
+                  <button class="action-button" type="button" @click.stop.prevent="getSupportList(row)" :disabled="sendingGetDocListReq">Download</button>
+                </template>
                 <template v-else>
                   <template v-if="heading.mapViewData">
                     <span>  {{row[heading.mapViewData]? row[heading.mapViewData].value : '---' }}</span>
@@ -141,6 +144,13 @@
   </div>
 </template>
 <script>
+import {
+    mapActions,
+} from 'vuex';
+import {
+    KYC_GET_LIST_SUPPORT_DOCUMENTS_ID,
+} from "@/store/types";
+
   import {Input, Option, Select} from 'element-ui'
   import FadeTransition from "vue2-transitions/src/Fade/FadeTransition";
   import {breakInput, defBreakInput, requiredField} from "../../../../utils/formValidations";
@@ -161,7 +171,8 @@
       return {
         allData: [],
         maskedInput: {},
-        sort_dir: 'ascend'
+        sort_dir: 'ascend',
+        sendingGetDocListReq: false,
       }
     },
 
@@ -279,6 +290,9 @@
       }
     },
     methods: {
+        ...mapActions({
+            getListSupportDocs: KYC_GET_LIST_SUPPORT_DOCUMENTS_ID,
+        }),
       handleViewDisplayData (row, heading) {
         // return row[heading.name] ? heading.mask ?
         //             heading.mask(row[heading.name].value)
@@ -475,6 +489,16 @@
       goToProductConfig(row) {
           if(row && row.appReferenceId && row.appReferenceId.value ) {
               this.$router.push({ name: 'KYC Main Page', query: {appRef: row.appReferenceId.value }})
+          }
+      },
+      async getSupportList(row) {
+          
+          try {
+            this.sendingGetDocListReq = true;
+            await this.getListSupportDocs({ id: row.checkId.value, fromHistoryTable: true})
+            this.sendingGetDocListReq = false;
+          } catch(e) {
+              this.sendingGetDocListReq = false;
           }
       }
     },
