@@ -109,9 +109,15 @@
           this.showLogoutBtn = false;
           return "KYC Main Page";
 
-        } else if (this.$route.path.split('/').slice(-1)[0] === 'product-config'){
+        } else if (this.$route.path.split('/').slice(-1)[0] === 'product-config') {
           this.showLogoutBtn = false;
           return "Product Config";
+        } else if (this.$route.path.split('/').slice(-1)[0] === 'poa-action') {
+          this.showLogoutBtn = false;
+          return "POA Action";
+        } else if (this.$route.path.split('/').slice(-1)[0] === 'poa-view') {
+          this.showLogoutBtn = false;
+          return "POA View";
         } else {
           return this.$route.path.split('/')[2].replace(/-/g, ' ');
         }

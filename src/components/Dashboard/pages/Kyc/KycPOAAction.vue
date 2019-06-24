@@ -1,3 +1,5 @@
+
+
 <template>
   <div class="kyc-poa">
     <el-row class="kyc-poa-row w-100 d-flex align-items-center mb-4">
@@ -78,7 +80,7 @@
             <strong>Date Received</strong>
           </el-col>
           <el-col :md="14">
-            <p>{{ poaData.appReceivedDate }}</p>
+            <p>{{ poaData.appReceivedDate | kycDateFormat }}</p>
           </el-col>
         </el-row>
         <el-row class="mb-1">
@@ -86,7 +88,7 @@
             <strong>App SMS Sent</strong>
           </el-col>
           <el-col :md="14">
-            <p>{{ poaData.lastSmsSentDate }}</p>
+            <p>{{ poaData.lastSmsSentDate | kycDateFormat }}</p>
           </el-col>
         </el-row>
       </el-col>
@@ -141,104 +143,104 @@
                    type="notice">
               <template>
 
-                  <el-row class="kyc-poa-modal-wrap-title">
-                    <el-col>
-                      <p class="kyc-poa-modal-title">Action POA
-                        <el-popover placement="bottom right" width="490" class="status-helper"
-                                    trigger="hover">
-                          <h5 class="sub-title">Status</h5>
-                          <table class="helper-table">
-                            <tbody>
-                            <tr v-for="(item, index) in poaActionTypes" :key="index">
-                              <td>{{ item.description }}</td>
-                            </tr>
-                            </tbody>
-                          </table>
-                          <img slot="reference" class="kyc-poa-modal__eye" :src="eyeIcon"/>
-                        </el-popover>
+                <el-row class="kyc-poa-modal-wrap-title">
+                  <el-col>
+                    <p class="kyc-poa-modal-title">Action POA
+                      <el-popover placement="bottom right" width="490" class="status-helper"
+                                  trigger="hover">
+                        <h5 class="sub-title">Action POA Overview</h5>
+                        <table class="helper-table">
+                          <tbody>
+                          <tr v-for="(item, index) in poaActionTypes" :key="index">
+                            <td>{{ item.description }}</td>
+                          </tr>
+                          </tbody>
+                        </table>
+                        <img slot="reference" class="kyc-poa-modal__eye" :src="eyeIcon"/>
+                      </el-popover>
 
-                        <span class="kyc-poa-modal__title-required">*</span>
-                      </p>
-                    </el-col>
-                  </el-row>
-                  <el-row class="kyc-poa-modal-wrap-select">
-                    <el-col>
-                      <el-select class="kyc-poa-modal__select" v-model="modalActionPoa">
-                        <el-option v-for="item in poaActionTypes"
-                                   placeholder="Action"
-                                   :key="item.code"
-                                   :label="item.description"
-                                   :value="item.code">{{item.description}}</el-option>
-                      </el-select>
-                    </el-col>
-                  </el-row>
-                  <el-row class="kyc-poa-modal-wrap-subtitle d-flex">
-                    <el-col>
-                      <p class="kyc-poa-modal-sub-title mb-0">Action Comment
-                        <span class="kyc-poa-modal__title-required">*</span>
-                      </p>
-                    </el-col>
-                    <el-col class="d-flex justify-content-end">
-                      <p class="kyc-poa-modal-subtitle-required mb-0"><span
-                        class="kyc-poa-modal-small__required">*</span>
-                        required
-                      </p>
-                    </el-col>
-                  </el-row>
-                  <el-row class="mb-4">
-                    <el-input
-                      type="textarea"
-                      :rows="6"
-                      placeholder="Please input"
-                      v-model="modalTextarea">
-                    </el-input>
-                  </el-row>
-                  <el-row class="kyc-poa-modal-wrap-subtitle d-flex mb-4">
-                    <el-col class="d-flex align-items-center">
-                      <p class="kyc-poa-modal-sub-title mb-0">Supporting document (Optional)
-                      </p>
-                    </el-col>
-                    <el-col class="d-flex justify-content-end">
-                      <p-button
-                        type="default"
-                        class="kyc-poa-modal-browse-btn"
-                        round
-                        @click="clickOnBrowseBtn"
-                      >
-                        Browse
-                      </p-button>
-                    </el-col>
-                  </el-row>
-                  <el-row class="mb-4">
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="card">
-                          <regular-table
-                            :headings="modalTableHeadings"
-                            :value="modalTableData"
-                          >
-                          </regular-table>
-                        </div>
+                      <span class="kyc-poa-modal__title-required">*</span>
+                    </p>
+                  </el-col>
+                </el-row>
+                <el-row class="kyc-poa-modal-wrap-select">
+                  <el-col>
+                    <el-select class="kyc-poa-modal__select" v-model="modalActionPoa">
+                      <el-option v-for="item in poaActionTypes"
+                                 placeholder="Action"
+                                 :key="item.code"
+                                 :label="item.description"
+                                 :value="item.code">{{item.description}}</el-option>
+                    </el-select>
+                  </el-col>
+                </el-row>
+                <el-row class="kyc-poa-modal-wrap-subtitle d-flex">
+                  <el-col>
+                    <p class="kyc-poa-modal-sub-title mb-0">Action Comment
+                      <span class="kyc-poa-modal__title-required">*</span>
+                    </p>
+                  </el-col>
+                  <el-col class="d-flex justify-content-end">
+                    <p class="kyc-poa-modal-subtitle-required mb-0"><span
+                      class="kyc-poa-modal-small__required">*</span>
+                      required
+                    </p>
+                  </el-col>
+                </el-row>
+                <el-row class="mb-4">
+                  <el-input
+                    type="textarea"
+                    :rows="6"
+                    placeholder="Please input"
+                    v-model="modalTextarea">
+                  </el-input>
+                </el-row>
+                <el-row class="kyc-poa-modal-wrap-subtitle d-flex mb-4">
+                  <el-col class="d-flex align-items-center">
+                    <p class="kyc-poa-modal-sub-title mb-0">Supporting document (Optional)
+                    </p>
+                  </el-col>
+                  <el-col class="d-flex justify-content-end">
+                    <p-button
+                      type="default"
+                      class="kyc-poa-modal-browse-btn"
+                      round
+                      @click="clickOnBrowseBtn"
+                    >
+                      Browse
+                    </p-button>
+                  </el-col>
+                </el-row>
+                <el-row class="mb-4">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="card">
+                        <regular-table
+                          :headings="modalTableHeadings"
+                          :value="modalTableData"
+                        >
+                        </regular-table>
                       </div>
                     </div>
-                  </el-row>
-                  <el-row class="d-flex mb-4">
-                    <el-col class="text-center">
-                      <p-button
-                        :disabled="!isValidModal"
-                        type="success"
-                        class="kyc-poa-action-btn mr-2"
-                        @click="sendDataFromModal()"
-                        round>
-                        Save</p-button>
-                      <p-button
-                        type="default"
-                        class="kyc-poa-action-btn ml-2"
-                        @click="toggleModalVisible"
-                        round>
-                        Cancel</p-button>
-                    </el-col>
-                  </el-row>
+                  </div>
+                </el-row>
+                <el-row class="d-flex mb-4">
+                  <el-col class="text-center">
+                    <p-button
+                      :disabled="!isValidModal"
+                      type="success"
+                      class="kyc-poa-action-btn mr-2"
+                      @click="sendDataFromModal()"
+                      round>
+                      Save</p-button>
+                    <p-button
+                      type="default"
+                      class="kyc-poa-action-btn ml-2"
+                      @click="toggleModalVisible"
+                      round>
+                      Cancel</p-button>
+                  </el-col>
+                </el-row>
 
               </template>
 
@@ -354,7 +356,7 @@
           </el-row>
         </el-col>
         <el-col :md="12" class="poa-verification-column">
-          <el-row>
+          <el-row v-if="isActionMode">
             <strong>Verification Checklist</strong>
             <ul class="w-100 list-unstyled mt-2">
               <li v-for="(item, index ) in verificationList" :key="index">- {{item}}</li>
@@ -402,6 +404,7 @@
     KYC_POST_UPLOAD_DOCUMENT_SUPPORTS,
     KYC_POST_ACTION_FROM_MODAL
   } from "../../../../store/types"
+  import {kycModuleDateFormat} from '../../../../utils/kycModuleDateFormat'
 
   export default {
     name: "KycPOAAction",
@@ -445,32 +448,6 @@
           {name: 'checkActionReason', label: 'Reason'},
           {name: 'operatorName', label: 'Operator'},
         ],
-        applicationInfoData: [
-          {
-            caseHistory: 'Replaced Doc',
-            name: 'ID201332',
-            date: 'YYYY-MM-DD-HH-SS',
-            status: 'Rejected',
-            reason: 'Expired ID',
-            operator: 'J.LIM',
-          },
-          {
-            caseHistory: 'Replaced Doc',
-            name: 'ID201333',
-            date: 'YYYY-MM-DD-HH-SS',
-            status: 'Rejected',
-            reason: 'Expired ID',
-            operator: 'J.LIM',
-          },
-          {
-            caseHistory: 'Replaced Doc',
-            name: 'ID201334',
-            date: 'YYYY-MM-DD-HH-SS',
-            status: 'Rejected',
-            reason: 'Expired ID',
-            operator: 'J.LIM',
-          },
-        ],
         actionsPoa: [
           {value: 30, label: '30 Days'},
           {value: 60, label: '60 Days'},
@@ -480,16 +457,6 @@
           {name: 'fileName', label: 'Document Name'},
           {name: 'uploadDate', label: 'Date'},
           {name: 'operatorName', label: 'Operator'}
-        ],
-        modalTableValues: [
-          {
-            documentLog: 'Supporting Log',
-            documentName: 'ID201332',
-            date: 'YYYY-MM-DD-HH-MM',
-            status: 'Rejected',
-            reason: 'Expired Id',
-            operator: 'J.Lim'
-          }
         ],
 
         modalTextarea: '',
@@ -509,15 +476,8 @@
         this.getPoaDownloadSupportDoc(body)
         this.getListUploadedDocument({id:checkId})
       }
-      // if(this.poaData.length){
-      //   const checkId = this.poaData.checkId
-      //   console.log('mounted poa data', this.poaData)
-      // }
       this.getPoaActionTypes()
       this.getPoaCheckStatuses()
-
-      // this.sendPoaCheckAddress()
-      //this.sendDocumentSuppports()
 
     },
     watch:{
@@ -539,21 +499,19 @@
         return this.mode === 'action'
       },
       customCheckHistory(){
-       if(this.poaData.checkHistories){
-        return this.poaData.checkHistories.map(item => {
-          console.log({item})
-          return {
-            id: item.checkActionId,
-            checkActionComment: item.checkActionComment,
-            checkActionName: item.checkActionName,
-            checkActionCreatedDate: this.handleDateFormat(item.checkActionCreatedDate),
-            // checkActionCreatedDate: item.checkActionCreatedDate.replace('Z', '').replace('T', '-').replace(/:/g, '-'),
-            checkStatusName: item.checkStatusName,
-            checkActionReason: item.checkActionReason,
-            operatorName: item.operatorName
-          }
-        })
-       }
+        if(this.poaData.checkHistories){
+          return this.poaData.checkHistories.map(item => {
+            return {
+              id: item.checkActionId,
+              checkActionComment: item.checkActionComment,
+              checkActionName: item.checkActionName,
+              checkActionCreatedDate: this.handleDateFormat(item.checkActionCreatedDate),
+              checkStatusName: item.checkStatusName,
+              checkActionReason: item.checkActionReason,
+              operatorName: item.operatorName
+            }
+          })
+        }
       },
       modalTableData(){
         if(this.poaSupportDoc && this.poaSupportDoc.supportDocs){
@@ -594,8 +552,6 @@
         this.modals.visible = !this.modals.visible
       },
       onClickTableBtn(idx) {
-        /*let index = idx.index.index
-        this.getListUploadedDocument(this.applicationInfoData[index].name)*/
       },
       sendDataFromModal() {
         const id = this.poaData.checkId
@@ -614,10 +570,17 @@
         const id = this.poaData.checkId
         this.sendPoaCheckAddress({id,body})
       },
-      handleDateFormat(date){
-        return date.replace('Z', '').replace('T', '-').replace(/:/g, '-')
+      handleDateFormat(value){
+        if(!value) return ''
+        return kycModuleDateFormat(value).substring(0,16)
       },
-    }
+    },
+    filters:{
+      kycDateFormat(value){
+        if(!value) return ''
+        return kycModuleDateFormat(value).substring(0,16)
+      },
+    },
   }
 </script>
 
@@ -704,6 +667,10 @@
     /deep/ {
       .el-card__body {
         padding: 0;
+      }
+
+      .el-popover{
+        padding: 20px 0 40px;
       }
 
       .table__wrapper {
@@ -826,7 +793,7 @@
         }
 
         td {
-          padding: 15px 15px 15px 5px;
+          padding: 15px 15px 15px 15px;
           text-align: left;
 
           &:first-child {
@@ -995,6 +962,15 @@
   .kyc-poa-action-btn {
     width: 198px;
     text-transform: none;
+  }
+
+  .status-helper{
+    .sub-title{
+      font-size: 16px;
+      font-weight: bold;
+      margin-left: 15px;
+      margin-bottom: 0;
+    }
   }
 
   .kyc-modal-wrap-table {
