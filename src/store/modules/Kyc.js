@@ -405,6 +405,7 @@ const actions = {
   [KYC_GET_POA_CHECK_ENQUIRY]: async ({commit}, payload) => {
     return new Promise ( async (resolve, reject) => {
       try{
+        console.log({payload})
         // I get some App Ref from search module, but how i can get current app ref I dont know
         const {data} = await Vue.prototype.$http.get(`v1/kyc/applications/${payload}/poacheck-enquiry`).catch( err => reject(err));
         commit(MUTATE_POA_CHECK_ENQUIRY, {data});
@@ -440,7 +441,7 @@ const actions = {
   },
   [KYC_POST_UPLOAD_DOCUMENT_SUPPORTS]: async ({commit}, payload) => {
     try {
-      const {data} = await Vue.prototype.$http.post(`/v1/kyc/poacheck/${payload}/document-supports`)
+      const {data} = await Vue.prototype.$http.post(`v1/kyc/poacheck/${payload}/document-supports`)
     }catch (e) {
       console.log('error :', e)
     }
@@ -457,7 +458,7 @@ const actions = {
 
   [KYC_GET_POA_CHECK_STATUSES]: async ({commit}, payload) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`/v1/kyc/poacheck-statuses/`);
+      const {data} = await Vue.prototype.$http.get(`v1/kyc/poacheck-statuses/`);
       commit(MUTATE_POA_CHECK_STATUSES, {data})
     }catch (e) {
       console.log('error :', e)
@@ -467,7 +468,7 @@ const actions = {
     try {
       const body = payload.body
       console.log('update address', payload)
-      const {data} = await Vue.prototype.$http.post(`/v1/kyc/poacheck/${payload.id}/address`, body);
+      const {data} = await Vue.prototype.$http.post(`v1/kyc/poacheck/${payload.id}/address`, body);
       commit(MUTATE_POA_CHECK_ADDRESS, {data})
     }catch (e) {
       console.log('error :', e)
@@ -475,7 +476,7 @@ const actions = {
   },
   [KYC_GET_POA_ACTION_TYPES]: async ({commit}, payload) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`/v1/kyc/poacheck-action-types`);
+      const {data} = await Vue.prototype.$http.get(`v1/kyc/poacheck-action-types`);
       commit(MUTATE_POA_ACTION_TYPES, {data})
     }catch (e) {
       console.log('error :', e)
@@ -486,7 +487,7 @@ const actions = {
       const id = payload.id
       const body = payload.body
       console.log({id,body})
-      const {data} = await Vue.prototype.$http.post(`/v1/kyc/poacheck/${id}/action`,body);
+      const {data} = await Vue.prototype.$http.post(`v1/kyc/poacheck/${id}/action`,body);
     }catch (e) {
       console.log('error :', e)
     }

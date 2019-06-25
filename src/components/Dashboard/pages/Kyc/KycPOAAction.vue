@@ -461,14 +461,16 @@
 
         modalTextarea: '',
         modalActionPoa: '',
-        appReferenceId: 'KYC190612-FIAQ',
+        appReferenceId: '',
         operatorName: 'Mock Operator'
       }
     },
     async created(){
+      if(this.$route.params && this.$route.params.appReferenceId){
+        this.appReferenceId = this.$route.params.appReferenceId
+      }
       const data = await this.getPoaData(this.appReferenceId).catch( err => console.log(err));
       if(data) {
-        console.log('created poa data', {data})
         const checkId = data.checkId
         const id = data.poaCheckDoc.id
         const body = {checkId, id}
@@ -479,11 +481,6 @@
       this.getPoaActionTypes()
       this.getPoaCheckStatuses()
 
-    },
-    watch:{
-      poaData(value){
-        console.log('wactch',{value})
-      },
     },
     computed: {
       ...mapState({
@@ -539,7 +536,7 @@
         getPoaCheckStatuses: KYC_GET_POA_CHECK_STATUSES,
         sendPoaCheckAddress: KYC_POST_POA_CHECK_ADDRESS,
         getPoaActionTypes: KYC_GET_POA_ACTION_TYPES,
-        sendDocumentSuppports: KYC_POST_UPLOAD_DOCUMENT_SUPPORTS,
+        sendDocumentSupports: KYC_POST_UPLOAD_DOCUMENT_SUPPORTS,
         saveDataFromModal: KYC_POST_ACTION_FROM_MODAL
       }),
       handleClose() {
