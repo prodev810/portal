@@ -49,6 +49,7 @@ const create = {
     cancel: 'Cancel'
   },
   table_header: {
+    corporate_program:'Corporate Program',
     card_program_id: 'CPC',
     reseller_code: 'RC',
     reseller_name: 'Reseller Name',

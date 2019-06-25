@@ -16,6 +16,7 @@ import UnallocatedFloat from '../components/Dashboard/pages/FloatBalance/Unalloc
 import ViewFloatAccount from '../components/Dashboard/pages/FloatBalance/ViewFloatAccount';
 import ViewStatement from '../components/Dashboard/pages/FloatBalance/ViewStatement';
 import ResellerCreate from '../components/Dashboard/pages/Resller/Create';
+import ResellerCreateCorporateModule from '../components/Dashboard/pages/Resller/CreateCorporateModule';
 import ResellerInvoice from '../components/Dashboard/pages/Resller/Invoice';
 import Invoicesdetails from "../components/Dashboard/pages/Resller/Invoicesdetails";
 import SearchInvoices from "../components/Dashboard/pages/Resller/SearchInvoices";
@@ -193,9 +194,11 @@ let reseller = {
   },
   children: [
     {
-      path: '/reseller/view',
+      path: '/reseller/view/:id',
       name: 'Resellers View',
-      component: ResellerView,
+      //component: ResellerView,
+      component: ResellerCreateCorporateModule,
+      props:{context: 'view'},
       meta: {
         permission: permission.RESELLER_SUBSCRIPTION_VIEW
       }
@@ -203,7 +206,18 @@ let reseller = {
     {
       path: '/reseller/create',
       name: 'Resellers Create',
-      component: ResellerCreate,
+      component: ResellerCreateCorporateModule,
+      // component: ResellerCreate,
+      props:{context: 'create'},
+      meta: {
+        permission: permission.RESELLER_SUBSCRIPTION_EDIT
+      }
+    },
+    {
+      path: '/reseller/edit/:id',
+      name: 'Resellers Edit',
+      component: ResellerCreateCorporateModule,
+      props:{context: 'edit'},
       meta: {
         permission: permission.RESELLER_SUBSCRIPTION_EDIT
       }

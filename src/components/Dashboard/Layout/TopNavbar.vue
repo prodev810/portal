@@ -118,6 +118,14 @@
         } else if (this.$route.path.split('/').slice(-1)[0] === 'poa-view') {
           this.showLogoutBtn = false;
           return "POA View";
+        } else if (this.$route.path.split('/')[1] === 'reseller') {
+          console.log('navbar', this.$route.path.split('/')[2])
+          if(this.$route.path.split('/')[2] === 'create'){
+            return "Create Reseller Corporate";
+          }else if(this.$route.path.split('/')[2] === 'view'){
+            return "View Reseller Corporate";
+          }
+          return "Edit Reseller Corporate";
         } else {
           return this.$route.path.split('/')[2].replace(/-/g, ' ');
         }
