@@ -260,10 +260,10 @@
                                     <span class="kyc-action__url"> www.URL.com</span>
                                 </div>
                                 <div class="mt-3">
-                                    <router-link to="/kyc/poa-view">
+                                    <router-link :to="`/kyc/poa-view/${appReferenceId}`">
                                         <p-button round type="primary" class="mr-2 btn btn--view">View</p-button>
                                     </router-link>
-                                    <router-link to="/kyc/poa-action">
+                                    <router-link :to="`/kyc/poa-action/${appReferenceId}`">
                                         <p-button round class="btn btn--view">Action</p-button>
                                     </router-link>
                                 </div>

@@ -348,7 +348,7 @@ const kyc = {
       }
     },
     {
-      path: '/kyc/poa-action',
+      path: '/kyc/poa-action/:appReferenceId',
       name: 'KYC POA Action',
       component: () => import('../components/Dashboard/pages/Kyc/KycPOAAction'),
       props:{mode: 'action'},
@@ -357,7 +357,7 @@ const kyc = {
       }
     },
     {
-      path: '/kyc/poa-view',
+      path: '/kyc/poa-view/:appReferenceId',
       name: 'KYC POA View',
       component: () => import('../components/Dashboard/pages/Kyc/KycPOAAction'),
       props:{mode: 'view'},
