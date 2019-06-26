@@ -526,7 +526,8 @@
 <script>
 import {
     mapActions,
-    mapGetters
+    mapGetters,
+    mapMutations,
 } from 'vuex';
 import {
     //   DatePicker,
@@ -567,6 +568,7 @@ import {
     GETTER_POA_IMG,
     RESEND_SMS,
     KYC_UPDATE_CONTACT,
+    CLEAR_CHECK_DOCS,
 } from "@/store/types";
 import eyeIcon from '../../../../../public/static/img/dashboard_icons/outline-visibility-24px-1.svg';
 import editIcon from '../../../../../public/static/img/dashboard_icons/ic_edit.svg';
@@ -681,8 +683,7 @@ export default {
             getterPoaImg: GETTER_POA_IMG,
         }),
         appReferenceId() {
-            // if(this.$route.query) return this.$route.query.appRef
-            return 'KYC190612-NIAI'
+            if(this.$route.query) return this.$route.query.appRef
         },
         applicationInfo() {
             var obj = [{
@@ -802,6 +803,7 @@ export default {
         },
     },
     mounted() {
+        this.clearCheckDocs()
         this.getApplicationStatus();
         this.getAccountLog({ appReferenceId: this.appReferenceId, pageNum: this.isPagination ? this.currentPage - 1 : 0, pageSize: this.perPage})
         this.getClient({ appReferenceId: this.appReferenceId })
@@ -817,6 +819,9 @@ export default {
             downloadPoaImage: KYC_DOWNLOAD_POA_IMAGE,
             kycResendSms: RESEND_SMS,
             updateContact: KYC_UPDATE_CONTACT,
+        }),
+        ...mapMutations({
+            clearCheckDocs: CLEAR_CHECK_DOCS
         }),
         goViewId() {
             if(this.appReferenceId) this.$router.push({ name: 'KYC Id View', query: {appRef: this.appReferenceId }})
