@@ -141,17 +141,27 @@
             <td class="pl-0 pr-0">
               <p-button outline type="primary"
                         @click="handleReviewAccount(tableItem.accountReference)"
-                        class="w-100">Review
+                        class="w-100">
+                <img class="glass-icon" :src="GlassPurpleIcon" alt="glassIcon">
+                Review
               </p-button>
             </td>
             <td class="text-center text" :class="[tableItem.ac_created ? 'submitted': 'failed']">
-              <i class="fa" :class="[tableItem.ac_created ? 'fa-check': 'fa-times']" aria-hidden="true"></i>
+              <img v-if="tableItem.ac_created"  :src="TickIcon" alt="tickIcon">
+              <img v-else :src="CrossIcon" alt="crossIcon">
             </td>
             <td class="pl-0 pr-0">
               <p-button outline :type="tableItem.ac_created ? 'success' : 'danger'"
                         @click="handleCardCreated()"
                         class="w-100">
-                <i class="fa" :class="[tableItem.ac_created ? 'fa-check': 'fa-times']" aria-hidden="true"></i>
+                <template v-if="tableItem.ac_created ">
+                  <img class="glass-icon" :src="GlassGreenIcon" alt="glassIcon">
+                  <img :src="TickIcon" alt="tickIcon">
+                </template>
+                <template v-else>
+                  <img class="glass-icon" :src="GlassRedIcon" alt="glassIcon">
+                  <img :src="CrossIcon" alt="crossIcon">
+                </template>
               </p-button>
             </td>
             <td class="pl-0 pr-0">
@@ -175,6 +185,11 @@
   import PCheckbox from '../../../../components/UIComponents/Inputs/Checkbox'
   import PButton from "../../../UIComponents/Button";
   import {DatePicker} from 'element-ui'
+  import GlassPurpleIcon from '../../../../../public/static/img/dashboard_icons/icon_glass_purple.svg'
+  import GlassGreenIcon from '../../../../../public/static/img/dashboard_icons/icon_glass_green.svg'
+  import GlassRedIcon from '../../../../../public/static/img/dashboard_icons/icon_glass_red.svg'
+  import CrossIcon from '../../../../../public/static/img/dashboard_icons/icon_cross_red.svg'
+  import TickIcon from '../../../../../public/static/img/dashboard_icons/icon_tick_green.svg'
 
   export default {
     name: "KycApprovedEmoneyAccount",
@@ -186,6 +201,11 @@
     },
     data() {
       return {
+        GlassPurpleIcon,
+        GlassGreenIcon,
+        GlassRedIcon,
+        CrossIcon,
+        TickIcon,
         filterModel: {
           reseller: '',
           status: '',
@@ -288,6 +308,8 @@
   $success-color: rgba(46, 214, 132, 0.25);
   $danger-color: rgba(255, 106, 106, 0.25);
   $table-border-color: #dee2e6;
+  $btn-danger-border: #F70003;
+  $btn-success-border: #3ED683;
 
   .approve-emoney-account {
     font-family: 'Poppins', sans-serif;
@@ -399,9 +421,18 @@
 
           .btn {
             height: 40px;
+            padding: unset;
+            position: relative;
           }
         }
       }
+    }
+
+    .glass-icon {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 15px;
     }
 
     .table-striped tbody tr {
@@ -455,14 +486,12 @@
 
     .btn-outline-danger {
       background: $danger-color;
-      border: 1px solid red !important;
-      color: red;
+      border: 1px solid $btn-danger-border !important;
     }
 
     .btn-outline-success {
       background: $success-color;
-      border: 1px solid green !important;
-      color: green;
+      border: 1px solid $btn-success-border !important;
     }
 
     .btn-outline-success, .btn-outline-danger{
