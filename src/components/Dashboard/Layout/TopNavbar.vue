@@ -178,14 +178,13 @@
 </script>
 <style>
   .navbar .navbar-brand {
-    text-transform: unset!important;
+    text-transform: capitalize!important;
   }
 
   .navbar-brand {
     color: #2ed684;
     font-family: 'Poppins', sans-serif;
     font-weight: bold;
-    text-transform: unset;
     font-size: 40px!important;
     margin: 0;
     margin-right: 57px;
