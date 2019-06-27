@@ -95,6 +95,8 @@ import {
   MUTATE_LIST_SUPPORT_DOCUMENTS_HISTORY,
   KYC_GET_LIST_SUPPORT_DOCUMENTS_ID,
   KYC_DOWNLOAD_SUPPORT_DOC,
+
+  CLEAR_POA_IMG,
 } from '../types';
 
 const state = {
@@ -197,7 +199,9 @@ const mutations = {
   [MUTATE_POA_IMG]: (state, {data}) => {
     state.poaImg = data;
   },
-
+  [CLEAR_POA_IMG]: (state) => {
+    state.poaImg = null;
+  },
   [MUTATE_CLIENT_STATUSES]: (state, {data}) => {
     state.clientStatusesList = data;
   },
@@ -764,6 +768,7 @@ const actions = {
     id,
   }) => {
     try {
+        commit(CLEAR_POA_IMG);
       const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/poacheck/${checkId}/docs/${id}`);
       commit(MUTATE_POA_IMG, {data});
     } catch (e) {
