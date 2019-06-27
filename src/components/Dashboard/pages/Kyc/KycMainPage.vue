@@ -739,7 +739,7 @@ export default {
                     required: ''
                 },
                 {
-                    productMatrix: 'Sactions/PEP',
+                    productMatrix: 'Sanctions/PEP',
                     required: ''
                 }
             ]
