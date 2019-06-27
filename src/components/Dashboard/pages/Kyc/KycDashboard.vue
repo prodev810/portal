@@ -3,16 +3,16 @@
     <el-col :sm="24" :md="11">
       <el-row class="kyc__duration">
         <b>Duration</b>
-          <el-select class="ml-2 select-default kyc__top__bottom__arrows"
-                     v-model="leftPanelDuration"
-                     @change="handleDurationSummaryReport">
-            <el-option class="select-default"
-                       v-for="item in durationValues"
-                       :key="item.value"
-                       :label="item.label"
-                       :value="item.value">
-            </el-option>
-          </el-select>
+        <el-select class="ml-2 select-default kyc__top__bottom__arrows"
+                   v-model="leftPanelDuration"
+                   @change="handleDurationSummaryReport">
+          <el-option class="select-default"
+                     v-for="item in durationValues"
+                     :key="item.value"
+                     :label="item.label"
+                     :value="item.value">
+          </el-option>
+        </el-select>
       </el-row>
 
       <el-row>
@@ -58,12 +58,14 @@
 
           <div class="kyc__issuing">
             <span>ISSUING ONLY</span><br/>
-            <p-button round class="kyc-button--mobile">
-              <div class="kyc-button__title">
-                <kyc-button-icons name="svg-mobile"/>
-                E-money Accounts
-              </div>
-            </p-button>
+            <router-link to="/kyc/approved-emoney-account">
+              <p-button round class="kyc-button--mobile">
+                <div class="kyc-button__title">
+                  <kyc-button-icons name="svg-mobile"/>
+                  E-money Accounts
+                </div>
+              </p-button>
+            </router-link>
           </div>
         </div>
       </el-row>
@@ -72,26 +74,28 @@
     <el-col :sm="24" :md="13">
       <el-row class="kyc__name__duration">
         <div class="kyc__duration"><b>Client</b>
-            <el-select class="ml-2 select-default kyc__top__bottom__arrows" v-model="rightPanelClient" @change="handleDurationStatistics">
-              <el-option class="select-default"
-                         :label="rightPanelClientDefault.label"
-                         :value="rightPanelClientDefault.value"></el-option>
-              <el-option v-for="item in allClients"
-                         :key="item.name"
-                         :label="item.name"
-                         :value="item.name"></el-option>
-            </el-select>
+          <el-select class="ml-2 select-default kyc__top__bottom__arrows" v-model="rightPanelClient"
+                     @change="handleDurationStatistics">
+            <el-option class="select-default"
+                       :label="rightPanelClientDefault.label"
+                       :value="rightPanelClientDefault.value"></el-option>
+            <el-option v-for="item in allClients"
+                       :key="item.name"
+                       :label="item.name"
+                       :value="item.name"></el-option>
+          </el-select>
         </div>
 
         <div class="kyc__duration ml-4"><b>Duration</b>
-            <el-select class="ml-2 select-default kyc__top__bottom__arrows" v-model="rightPanelDuration" @change="handleDurationStatistics">
-              <el-option class="select-default"
-                         v-for="item in durationValues"
-                         :key="item.value"
-                         :label="item.label"
-                         :value="item.value">
-              </el-option>
-            </el-select>
+          <el-select class="ml-2 select-default kyc__top__bottom__arrows" v-model="rightPanelDuration"
+                     @change="handleDurationStatistics">
+            <el-option class="select-default"
+                       v-for="item in durationValues"
+                       :key="item.value"
+                       :label="item.label"
+                       :value="item.value">
+            </el-option>
+          </el-select>
         </div>
       </el-row>
       <el-row :gutter="10">
@@ -208,11 +212,11 @@
           return reportItem;
         })
       },
-      lineChartsOptions (){
+      lineChartsOptions() {
         return {
           spanGaps: false,
           scales: {
-            yAxes:[{
+            yAxes: [{
               gridLines: {
                 display: false,
                 drawBorder: false,
@@ -224,7 +228,7 @@
                 display: false,
                 drawBorder: false,
               },
-              time:{
+              time: {
                 unit: 'day',
                 unitStepSize: this.rightPanelDuration,
                 displayFormats: {
@@ -263,7 +267,7 @@
         const series = [];
 
         Object.entries(values).forEach(item => {
-          series.push({ x: item[0], y: item[1]})
+          series.push({x: item[0], y: item[1]})
         });
         return {
           labels: [],
@@ -275,13 +279,13 @@
           }]
         }
       },
-      handleStartCharts(duration){
+      handleStartCharts(duration) {
         const dateNow = new Date()
-        return  new Date(new Date().setDate(dateNow.getDate() - duration)).toISOString().split('T')[0]
+        return new Date(new Date().setDate(dateNow.getDate() - duration)).toISOString().split('T')[0]
       },
-      handleEndCharts(){
+      handleEndCharts() {
         const dateNow = new Date()
-        return  dateNow.toISOString().split('T')[0]
+        return dateNow.toISOString().split('T')[0]
       },
       handleDataPieCharts(values) {
         const approvePercent = 100 - Number(values);
@@ -360,11 +364,11 @@
   }
 
   .el-select.select-default {
-    &.kyc__top__bottom__arrows{
-      /deep/{
+    &.kyc__top__bottom__arrows {
+      /deep/ {
         .el-input {
-          .el-icon-arrow-up{
-            &:before{
+          .el-icon-arrow-up {
+            &:before {
               font-family: FontAwesome;
               content: "\f0dc" !important;
               transform: translateY(-50%);
@@ -376,8 +380,9 @@
               top: 50%;
             }
           }
-          .el-select__caret{
-            &.is-reverse{
+
+          .el-select__caret {
+            &.is-reverse {
               transform: rotateZ(180deg);
             }
           }
@@ -393,7 +398,7 @@
       font-weight: 900;
     }
 
-    .card-footer{
+    .card-footer {
       display: none;
     }
 
@@ -443,7 +448,8 @@
 
       tbody {
         outline: none !important;
-        .cell{
+
+        .cell {
           border-left: 1px solid $table-border-gray;
         }
 

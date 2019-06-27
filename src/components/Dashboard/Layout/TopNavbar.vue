@@ -119,13 +119,22 @@
           this.showLogoutBtn = false;
           return "POA View";
         } else if (this.$route.path.split('/')[1] === 'reseller') {
-          console.log('navbar', this.$route.path.split('/')[2])
+
           if(this.$route.path.split('/')[2] === 'create'){
             return "Create Reseller Corporate";
           }else if(this.$route.path.split('/')[2] === 'view'){
             return "View Reseller Corporate";
           }
           return "Edit Reseller Corporate";
+        }else if(this.$route.path.split('/')[2] === 'approved-emoney-account'){
+          this.showLogoutBtn = false;
+          return "Approved for E-money account";
+        }else if(this.$route.path.split('/')[2] === 'review-edit-account'){
+          this.showLogoutBtn = false;
+          return "Review and Edit Account Creation";
+        }else if(this.$route.path.split('/')[2] === 'review-edit-card'){
+          this.showLogoutBtn = false;
+          return "Review and Edit Card Creation";
         } else {
           return this.$route.path.split('/')[2].replace(/-/g, ' ');
         }
@@ -168,11 +177,15 @@
   };
 </script>
 <style>
+  .navbar .navbar-brand {
+    text-transform: unset!important;
+  }
+
   .navbar-brand {
     color: #2ed684;
     font-family: 'Poppins', sans-serif;
     font-weight: bold;
-    text-transform: capitalize;
+    text-transform: unset;
     font-size: 40px!important;
     margin: 0;
     margin-right: 57px;
