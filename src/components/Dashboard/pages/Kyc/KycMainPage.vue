@@ -162,7 +162,7 @@
                 <div class="col-xl-4 mb-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <p class="kyc-label mb-0">Status</p>
-                        <p-button class="btn" :class="cardBtnFrontStatus" v-if="getterClientInfo && getterClientInfo.idCheckInfo">{{ getterClientInfo.idCheckInfo.checkStatusName }}</p-button>
+                        <p class="status-label" :class="idCheckStatusClass" v-if="getterClientInfo && getterClientInfo.idCheckInfo && getterClientInfo.idCheckInfo.checkStatusName">{{ getterClientInfo.idCheckInfo.checkStatusName }}</p>
                     </div>
                 </div>
             </div>
@@ -243,7 +243,7 @@
                             <div class="client-info">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <p class="kyc-label kyc-label--no-w mb-0">Status</p>
-                                    <p-button class="btn btn--status m-0" :class="cardPoaCheckStatus" v-if="getterClientInfo && getterClientInfo.poaCheckInfo && getterClientInfo.poaCheckInfo.checkStatusName">{{ getterClientInfo.poaCheckInfo.checkStatusName }}</p-button>
+                                    <p class="status-label" :class="cardPoaCheckStatus" v-if="getterClientInfo && getterClientInfo.poaCheckInfo && getterClientInfo.poaCheckInfo.checkStatusName">{{ getterClientInfo.poaCheckInfo.checkStatusName }}</p>
                                 </div>
                                 <p class="mb-3 kyc-label kyc-label--no-w" v-if="getterPoaImg">{{ getterPoaImg.docType }}</p>
                                 <el-card class="client-info__card" :body-style="{ padding: '0px' }">
@@ -310,7 +310,7 @@
                     <h5 class="sub-title mb-3">PEP / Sanctions Check</h5>
                     <div class="w-100 d-flex justify-content-between align-items-center">
                         <p class="mb-0 kyc-label kyc-label--no-w">Status</p>
-                        <p-button class="btn btn--passed m-0" :class="cardBtnSancStatus" v-if="getterClientInfo && getterClientInfo.sanctionCheckInfo">{{ getterClientInfo.sanctionCheckInfo.checkStatusName }}</p-button>
+                        <p class="status-label" :class="cardBtnSancStatus" v-if="getterClientInfo && getterClientInfo.sanctionCheckInfo && getterClientInfo.sanctionCheckInfo.checkStatusName">{{ getterClientInfo.sanctionCheckInfo.checkStatusName }}</p>
                     </div>
                     <el-row>
                         <el-col :sm="24" class="kyc-action">
@@ -778,28 +778,33 @@ export default {
                 backgroundImage: 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmuKUR9ghX6ofMzZLbJkE3qEjzw2gcCzaJqM_3tkX3x7gVHvQG)'
             };
         },
-        cardBtnFrontStatus() {
+        idCheckStatusClass() {
             if(!this.getterClientInfo || !this.getterClientInfo.idCheckInfo) return {}
+            const status = this.getterClientInfo.idCheckInfo.checkStatusName
             return {
-                'btn--passed': this.getterClientInfo.idCheckInfo.checkStatusName === 'Passed',
-                // 'btn--not-recieved': this.getterClientInfo.idCheckInfo.checkStatusName === 'Not Received',
-                'btn--failed': this.getterClientInfo.idCheckInfo.checkStatusName !== 'Passed',
+                'bg-bright-red': status == 'Failed' || status == 'Manually Declined',
+                'bg-light-red': status == 'Unknown' || status == 'Skipped' || status == 'Caution' || status == 'Attention',
+                'bg-green': status == 'Passed' || status == 'Manual Approval',
+                'bg-orange': status == 'New ID Requested' || status == 'Update ID Request',
             }
         },
         cardPoaCheckStatus() {
             if(!this.getterClientInfo || !this.getterClientInfo.poaCheckInfo) return {}
+            const status = this.getterClientInfo.poaCheckInfo.checkStatusName
             return {
-                'btn--passed': this.getterClientInfo.poaCheckInfo.checkStatusName === 'Approved',
-                // 'btn--not-recieved': this.getterClientInfo.poaCheckInfo.checkStatusName === 'Not Received',
-                'btn--failed': this.getterClientInfo.poaCheckInfo.checkStatusName !== 'Approved',
+                'bg-bright-red': status == 'Declined' || status == 'Fraud',
+                'bg-light-red': status == 'Unverified',
+                'bg-green': status == 'Approved',
+                'bg-orange': status == 'New POA requested' || status == 'Address update',
             }
         },
         cardBtnSancStatus() {
-            if(!this.getterClientInfo || !this.getterClientInfo.idCheckInfo) return {}
+            if(!this.getterClientInfo || !this.getterClientInfo.sanctionCheckInfo) return {}
+            const status = this.getterClientInfo.sanctionCheckInfo.checkStatusName
             return {
-                'btn--passed': this.getterClientInfo.idCheckInfo.checkStatusName === 'No Match',
-                // 'btn--not-recieved': this.getterClientInfo.idCheckInfo.checkStatusName === 'Not Received',
-                'btn--failed': this.getterClientInfo.idCheckInfo.checkStatusName !== 'No Match',
+                'bg-bright-red': status == 'Manual Decline',
+                'bg-light-red': status == 'HIT',
+                'bg-green': status == 'No Match' || status == 'Manual Approval',
             }
         },
     },
@@ -979,6 +984,14 @@ export default {
 }
 .image-zoom {
     padding: 0;
+}
+
+.status-label {
+    line-height: 40px;
+    text-align: center;
+    padding: 0 20px;
+    min-width: 200px;
+    margin: 0;
 }
 .btn {
     text-transform: none;
@@ -1187,6 +1200,18 @@ p {
     transition: max-height 0.4s ease-out;
     margin-top: 22px;
 }
+.bg-bright-red {
+      background-color: #FFD0D0 !important;
+  }
+  .bg-light-red {
+      background-color: #ff4d57 !important;
+  }
+  .bg-green {
+      background-color: #c9f4df !important;
+  }
+  .bg-orange {
+      background-color: #FF6A6A !important;
+  }
 </style>
 
 <style lang="scss">
