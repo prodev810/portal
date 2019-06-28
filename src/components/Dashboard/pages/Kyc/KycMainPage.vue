@@ -683,8 +683,6 @@ export default {
             getterPoaImg: GETTER_POA_IMG,
         }),
         appReferenceId() {
-          //return 'KYC190612-NIAI';
-          console.log('route', this.$route)
             if(this.$route.query) return this.$route.query.appRef
         },
         applicationInfo() {
