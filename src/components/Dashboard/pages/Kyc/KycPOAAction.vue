@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="kyc-poa">
     <el-row class="kyc-poa-row w-100 d-flex align-items-center mb-4">
@@ -17,7 +15,7 @@
             <strong>Application Ref</strong>
           </el-col>
           <el-col :md="14">
-            <p>{{ poaData.checkReferenceId }}</p>
+            <p>{{ poaData.appReferenceId }}</p>
           </el-col>
         </el-row>
         <el-row class="mb-1">

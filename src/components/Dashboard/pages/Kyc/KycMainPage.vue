@@ -1,6 +1,5 @@
 <template>
 <div>
-
     <div class="container-fluid mb-5">
         <div class="row">
             <div class="col-xl-8">
@@ -684,6 +683,8 @@ export default {
             getterPoaImg: GETTER_POA_IMG,
         }),
         appReferenceId() {
+          //return 'KYC190612-NIAI';
+          console.log('route', this.$route)
             if(this.$route.query) return this.$route.query.appRef
         },
         applicationInfo() {
