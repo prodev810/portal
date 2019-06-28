@@ -243,7 +243,7 @@
                             <div class="client-info">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <p class="kyc-label kyc-label--no-w mb-0">Status</p>
-                                    <p-button class="btn btn--status m-0" :class="cardPoaCheckStatus" v-if="getterClientInfo && getterClientInfo.poaCheckInfo">{{ getterClientInfo.poaCheckInfo.checkStatusName }}</p-button>
+                                    <p-button class="btn btn--status m-0" :class="cardPoaCheckStatus" v-if="getterClientInfo && getterClientInfo.poaCheckInfo && getterClientInfo.poaCheckInfo.checkStatusName">{{ getterClientInfo.poaCheckInfo.checkStatusName }}</p-button>
                                 </div>
                                 <p class="mb-3 kyc-label kyc-label--no-w" v-if="getterPoaImg">{{ getterPoaImg.docType }}</p>
                                 <el-card class="client-info__card" :body-style="{ padding: '0px' }">
@@ -569,6 +569,7 @@ import {
     RESEND_SMS,
     KYC_UPDATE_CONTACT,
     CLEAR_CHECK_DOCS,
+    CLEAR_POA_IMG,
 } from "@/store/types";
 import eyeIcon from '../../../../../public/static/img/dashboard_icons/outline-visibility-24px-1.svg';
 import editIcon from '../../../../../public/static/img/dashboard_icons/ic_edit.svg';
@@ -803,6 +804,7 @@ export default {
         },
     },
     mounted() {
+        this.clearPoaImg();
         this.clearCheckDocs()
         this.getApplicationStatus();
         this.getAccountLog({ appReferenceId: this.appReferenceId, pageNum: this.isPagination ? this.currentPage - 1 : 0, pageSize: this.perPage})
@@ -821,7 +823,8 @@ export default {
             updateContact: KYC_UPDATE_CONTACT,
         }),
         ...mapMutations({
-            clearCheckDocs: CLEAR_CHECK_DOCS
+            clearCheckDocs: CLEAR_CHECK_DOCS,
+            clearPoaImg: CLEAR_POA_IMG,
         }),
         goViewId() {
             if(this.appReferenceId) this.$router.push({ name: 'KYC Id View', query: {appRef: this.appReferenceId }})

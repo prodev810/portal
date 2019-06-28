@@ -46,6 +46,9 @@
                 row && row.required && row.required.value === 'Yes' && productConfig ? 'productConfigYes' : '',
                 row && row.required && row.required.value === 'No' && productConfig ? 'productConfigNo' : '',
                 heading.info ? 'ceevo__table_info' : '',
+                heading.name === 'idCheckStatus' ? idCheckStatusClass(row) : '',
+                heading.name === 'poaCheckStatus' ? poaCheckStatusClass(row) : '',
+                heading.name === 'sanctionCheckStatus' ? sanctionCheckStatusClass(row) : '',
                 heading.danger ? 'ceevo__table_danger': '',
                 heading.button ? 'ceevo__table_action':'',
                 heading.email ? 'text-primary':'',
@@ -109,10 +112,14 @@
                   </el-select>
                 </template>
                 <template v-else-if="heading.name === 'view'">
-                  <button class="action-button" type="button" @click.stop.prevent="goToProductConfig(row)">View</button>
+                  <router-link class="action-button" v-if="row.appReferenceId" :to="{ name: 'KYC Main Page', query: {appRef: row.appReferenceId.value }}">
+                        View
+                  </router-link>
                 </template>
-                <template v-else-if="heading.name === 'action'">
-                  <button class="action-button" type="button">Action</button>
+                <template v-else-if="heading.name === 'action'" >
+                    <router-link  class="action-button" v-if="row.appReferenceId" :to="{ name: 'KYC Main Page', query: {appRef: row.appReferenceId.value }}">
+                        Action
+                    </router-link>
                 </template>
                 <template v-else-if="heading.name === 'download'">
                   <button class="action-button" type="button" @click.stop.prevent="getSupportList(row)" :disabled="sendingGetDocListReq">Download</button>
@@ -320,6 +327,29 @@ import {
           return '---'
         }
       },
+      idCheckStatusClass(row) {
+          if(!row || !row.idCheckStatus || !row.idCheckStatus.value) return 'bg-white';
+          else if(row.idCheckStatus.value == 'Failed' || row.idCheckStatus.value == 'Manually Declined') return 'bg-bright-red';
+          else if(row.idCheckStatus.value == 'Unknown' || row.idCheckStatus.value == 'Skipped' || row.idCheckStatus.value == 'Caution' || row.idCheckStatus.value == 'Attention') return 'bg-light-red';
+          else if(row.idCheckStatus.value == 'Passed' || row.idCheckStatus.value == 'Manual Approval') return 'bg-green';
+          else if(row.idCheckStatus.value == 'New ID Requested' || row.idCheckStatus.value == 'Update ID Request') return 'bg-orange';
+          else return 'bg-white'
+      },
+      poaCheckStatusClass(row) {
+          if(!row || !row.poaCheckStatus || !row.poaCheckStatus.value) return 'bg-white';
+          else if(row.poaCheckStatus.value == 'Declined' || row.poaCheckStatus.value == 'Fraud') return 'bg-bright-red';
+          else if(row.poaCheckStatus.value == 'Unverified') return 'bg-light-red';
+          else if(row.poaCheckStatus.value == 'Approved') return 'bg-green';
+          else if(row.poaCheckStatus.value == 'New POA requested' || row.poaCheckStatus.value == 'Address update') return 'bg-orange';
+          else return 'bg-white'
+      },
+      sanctionCheckStatusClass(row) {
+          if(!row || !row.sanctionCheckStatus || !row.sanctionCheckStatus.value) return 'bg-white';
+          else if(row.sanctionCheckStatus.value == 'Manual Decline') return 'bg-bright-red';
+          else if(row.sanctionCheckStatus.value == 'HIT') return 'bg-light-red';
+          else if(row.sanctionCheckStatus.value == 'No Match' || row.sanctionCheckStatus.value == 'Manual Approval') return 'bg-green';
+          else return 'bg-white'
+      },
       // Sort Table Function
       sortTable(tableName) {
         const sortable = this.headings.find(head => head.name === tableName).sortable;
@@ -486,11 +516,6 @@ import {
           }
         return valid;
       },
-      goToProductConfig(row) {
-          if(row && row.appReferenceId && row.appReferenceId.value ) {
-              this.$router.push({ name: 'KYC Main Page', query: {appRef: row.appReferenceId.value }})
-          }
-      },
       async getSupportList(row) {
           
           try {
@@ -609,6 +634,9 @@ import {
             color: #7039DA;
             font-weight: bold;
             cursor: pointer;
+            line-height: 40px;
+            text-align: center;
+            text-decoration: none;
           }
           .el-select {
             input {
@@ -736,5 +764,16 @@ import {
       }
     }
   }
-
+  .bg-bright-red {
+      background-color: #FFD0D0 !important;
+  }
+  .bg-light-red {
+      background-color: #ff4d57 !important;
+  }
+  .bg-green {
+      background-color: #c9f4df !important;
+  }
+  .bg-orange {
+      background-color: #FF6A6A !important;
+  }
 </style>
