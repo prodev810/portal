@@ -15,7 +15,7 @@
             <strong>Application Ref</strong>
           </el-col>
           <el-col :md="14">
-            <p>{{ poaData.checkReferenceId }}</p>
+            <p>{{ poaData.appReferenceId }}</p>
           </el-col>
         </el-row>
         <el-row class="mb-1">

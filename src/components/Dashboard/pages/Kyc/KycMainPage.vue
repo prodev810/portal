@@ -1,6 +1,5 @@
 <template>
 <div>
-
     <div class="container-fluid mb-5">
         <div class="row">
             <div class="col-xl-8">
