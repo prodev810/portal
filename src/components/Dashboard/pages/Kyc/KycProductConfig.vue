@@ -77,7 +77,7 @@
     created() {
       const pageNum = this.isPagination ? this.currentPage - 1 : 0
       this.getProductConfigClient({pageNum})
-      if (this.productConfigClients && this.productConfigClients.pageMeta){
+      if (this.productConfigClients && this.productConfigClients.pageMeta) {
         this.pageCount = this.productConfigClients.pageMeta.totalPages;
         this.perPage = this.productConfigClients.pageMeta.perPage;
       }
@@ -108,19 +108,29 @@
           })
         }
       },
-      pageCount(){
-        if (this.productConfigClients && this.productConfigClients.pageMeta) {
-          return this.productConfigClients.pageMeta.totalPages
-        }
+      pageCount: {
+        get: function () {
+          if (this.productConfigClients && this.productConfigClients.pageMeta) {
+            return this.productConfigClients.pageMeta.totalPages
+          }
+        },
+        set: function(value){
+          return value
+        },
       },
-      perPage(){
-        if (this.productConfigClients && this.productConfigClients.pageMeta) {
-          return this.productConfigClients.pageMeta.perPage
+      perPage:{
+        get: function(){
+          if (this.productConfigClients && this.productConfigClients.pageMeta) {
+            return this.productConfigClients.pageMeta.perPage
+          }
+        },
+        set: function(value){
+          return value
         }
       },
     },
-    watch:{
-      productConfigClients(value){
+    watch: {
+      productConfigClients(value) {
         // this.tableProductConfigData()
       },
     },
@@ -293,6 +303,7 @@
 
               tr {
                 position: static;
+
                 td {
                   border-left: 1px solid $table-border-gray !important;
                   min-width: unset;
@@ -326,6 +337,7 @@
                 }
               }
             }
+
             td {
               background-clip: padding-box;
             }
