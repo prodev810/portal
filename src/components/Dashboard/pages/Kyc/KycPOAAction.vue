@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="kyc-poa">
     <el-row class="kyc-poa-row w-100 d-flex align-items-center mb-4">
@@ -170,7 +168,8 @@
                                  placeholder="Action"
                                  :key="item.code"
                                  :label="item.description"
-                                 :value="item.code">{{item.description}}</el-option>
+                                 :value="item.code">{{item.description}}
+                      </el-option>
                     </el-select>
                   </el-col>
                 </el-row>
@@ -232,13 +231,15 @@
                       class="kyc-poa-action-btn mr-2"
                       @click="sendDataFromModal()"
                       round>
-                      Save</p-button>
+                      Save
+                    </p-button>
                     <p-button
                       type="default"
                       class="kyc-poa-action-btn ml-2"
                       @click="toggleModalVisible"
                       round>
-                      Cancel</p-button>
+                      Cancel
+                    </p-button>
                   </el-col>
                 </el-row>
 
@@ -264,7 +265,8 @@
                   <img v-if="!editAddress1 && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
                        @click="editAddress1 = !editAddress1"/>
                   <p-button v-if="editAddress1" round
-                            @click="handleUpdatePoaCheckAddress('editAddress1')">Save</p-button>
+                            @click="handleUpdatePoaCheckAddress('editAddress1')">Save
+                  </p-button>
                 </td>
               </tr>
               <tr>
@@ -278,7 +280,8 @@
                   <img v-if="!editAddress2 && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
                        @click="editAddress2 = !editAddress2"/>
                   <p-button v-if="editAddress2" round
-                            @click="handleUpdatePoaCheckAddress('editAddress2')">Save</p-button>
+                            @click="handleUpdatePoaCheckAddress('editAddress2')">Save
+                  </p-button>
                 </td>
               </tr>
               <tr>
@@ -292,7 +295,8 @@
                   <img v-if="!editAddress3 && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
                        @click="editAddress3 = !editAddress3"/>
                   <p-button v-if="editAddress3" round
-                            @click="handleUpdatePoaCheckAddress('editAddress3')">Save</p-button>
+                            @click="handleUpdatePoaCheckAddress('editAddress3')">Save
+                  </p-button>
                 </td>
               </tr>
               <tr>
@@ -305,7 +309,8 @@
                   <img v-if="!editCity && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
                        @click="editCity = !editCity"/>
                   <p-button v-if="editCity" round
-                            @click="handleUpdatePoaCheckAddress('editCity')">Save</p-button>
+                            @click="handleUpdatePoaCheckAddress('editCity')">Save
+                  </p-button>
                 </td>
               </tr>
               <tr>
@@ -319,7 +324,8 @@
                   <img v-if="!editPostCode && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
                        @click="editPostCode = !editPostCode"/>
                   <p-button v-if="editPostCode" round
-                            @click="handleUpdatePoaCheckAddress('editPostCode')">Save</p-button>
+                            @click="handleUpdatePoaCheckAddress('editPostCode')">Save
+                  </p-button>
                 </td>
               </tr>
               <tr>
@@ -332,7 +338,8 @@
                   <img v-if="!editRegion && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
                        @click="editRegion = !editRegion"/>
                   <p-button v-if="editRegion" round
-                            @click="handleUpdatePoaCheckAddress('editRegion')">Save</p-button>
+                            @click="handleUpdatePoaCheckAddress('editRegion')">Save
+                  </p-button>
                 </td>
               </tr>
               <tr>
@@ -345,7 +352,8 @@
                   <img v-if="!editCountry && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
                        @click="editCountry = !editCountry"/>
                   <p-button v-if="editCountry" round
-                            @click="handleUpdatePoaCheckAddress('editCountry')">Save</p-button>
+                            @click="handleUpdatePoaCheckAddress('editCountry')">Save
+                  </p-button>
                 </td>
               </tr>
               </tbody>
@@ -465,18 +473,18 @@
         operatorName: 'Mock Operator'
       }
     },
-    async created(){
-      if(this.$route.params && this.$route.params.appReferenceId){
+    async created() {
+      if (this.$route.params && this.$route.params.appReferenceId) {
         this.appReferenceId = this.$route.params.appReferenceId
       }
-      const data = await this.getPoaData(this.appReferenceId).catch( err => console.log(err));
-      if(data) {
+      const data = await this.getPoaData(this.appReferenceId).catch(err => console.log(err));
+      if (data) {
         const checkId = data.checkId
         const id = data.poaCheckDoc.id
         const body = {checkId, id}
         this.getPoaDocs(body)
         this.getPoaDownloadSupportDoc(body)
-        this.getListUploadedDocument({id:checkId})
+        this.getListUploadedDocument({id: checkId})
       }
       this.getPoaActionTypes()
       this.getPoaCheckStatuses()
@@ -484,7 +492,7 @@
     },
     computed: {
       ...mapState({
-        poaData : state => state.kyc.poaInfo,
+        poaData: state => state.kyc.poaInfo,
         poaCheckDoc: state => state.kyc.poaCheckDoc,
         poaSupportDoc: state => state.kyc.poaSupportDoc,
         poaDownloadSupportDoc: state => state.kyc.poaDownloadSupportDoc,
@@ -495,8 +503,8 @@
       isActionMode() {
         return this.mode === 'action'
       },
-      customCheckHistory(){
-        if(this.poaData.checkHistories){
+      customCheckHistory() {
+        if (this.poaData.checkHistories) {
           return this.poaData.checkHistories.map(item => {
             return {
               id: item.checkActionId,
@@ -510,8 +518,8 @@
           })
         }
       },
-      modalTableData(){
-        if(this.poaSupportDoc && this.poaSupportDoc.supportDocs){
+      modalTableData() {
+        if (this.poaSupportDoc && this.poaSupportDoc.supportDocs) {
           return this.poaSupportDoc.supportDocs.map(doc => {
             return {
               fileName: doc.fileName,
@@ -523,7 +531,7 @@
 
         return []
       },
-      isValidModal(){
+      isValidModal() {
         return this.modalTextarea !== ''
       },
     },
@@ -540,7 +548,7 @@
         saveDataFromModal: KYC_POST_ACTION_FROM_MODAL
       }),
       handleClose() {
-        this.$router.push({name: 'KYC Main Page'})
+        this.$router.push({name: 'KYC Main Page', query: {appRef: this.appReferenceId}})
       },
       clickOnBrowseBtn() {
 
@@ -561,21 +569,21 @@
         this.saveDataFromModal({id, body})
         this.toggleModalVisible()
       },
-      handleUpdatePoaCheckAddress(name){
+      handleUpdatePoaCheckAddress(name) {
         this[name] = !this[name]
         const body = this.poaData.submittedAddress
         const id = this.poaData.checkId
-        this.sendPoaCheckAddress({id,body})
+        this.sendPoaCheckAddress({id, body})
       },
-      handleDateFormat(value){
-        if(!value) return ''
-        return kycModuleDateFormat(value).substring(0,16)
+      handleDateFormat(value) {
+        if (!value) return ''
+        return kycModuleDateFormat(value).substring(0, 16)
       },
     },
-    filters:{
-      kycDateFormat(value){
-        if(!value) return ''
-        return kycModuleDateFormat(value).substring(0,16)
+    filters: {
+      kycDateFormat(value) {
+        if (!value) return ''
+        return kycModuleDateFormat(value).substring(0, 16)
       },
     },
   }
@@ -616,7 +624,8 @@
     .table-client-info {
       td {
         padding-top: 5px;
-        &:last-child{
+
+        &:last-child {
           text-align: right;
         }
       }
@@ -627,8 +636,9 @@
         padding-top: initial;
         width: 75px;
       }
-      /deep/{
-        .form-control{
+
+      /deep/ {
+        .form-control {
           max-width: 190px;
         }
       }
@@ -666,7 +676,7 @@
         padding: 0;
       }
 
-      .el-popover{
+      .el-popover {
         padding: 20px 0 40px;
       }
 
@@ -768,10 +778,11 @@
         .btn {
           width: 178px;
         }
-        .ceevo__table.table{
-          tbody{
-            td{
-              &:last-child{
+
+        .ceevo__table.table {
+          tbody {
+            td {
+              &:last-child {
                 border-left: 1px solid #dee2e6 !important;
               }
             }
@@ -961,8 +972,8 @@
     text-transform: none;
   }
 
-  .status-helper{
-    .sub-title{
+  .status-helper {
+    .sub-title {
       font-size: 16px;
       font-weight: bold;
       margin-left: 15px;
@@ -975,21 +986,27 @@
       .ceevo__table--striped .ceevo__table tbody > tr:nth-of-type(2n+1) {
         background-color: transparent !important;
       }
+
       .table__wrapper.ceevo__table--striped {
         padding: 0 !important;
       }
+
       .cell {
         border: 1px solid #ededed;
       }
+
       .card {
         box-shadow: 0 10px 40px rgba(41, 41, 41, 0.3);
       }
+
       table.ceevo__table.table {
         margin-bottom: 0 !important;
+
         tbody tr:last-child {
           td:last-child {
             border-bottom-right-radius: 30px !important;
           }
+
           td:first-child {
             border-bottom-left-radius: 30px !important;
           }
