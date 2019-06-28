@@ -653,11 +653,11 @@
     data() {
       return {
         addIcon,
-        editRoute: '',
+        editRoute: '/reseller/edit',
         corporativeProgram: 0,
         reseller: {
           cpc: null,
-          status: null,
+          status: 'Active',
           reseller_code: null,
           reseller_name: null,
           unique_float: null,
@@ -665,13 +665,13 @@
           load_fee: null,
           load_fee_pct: null,
           load_fee_cap: null,
-          load_fee_bill_method: null,
+          load_fee_bill_method: 'ACCOUNT',
           app_fee: null,
-          app_fee_bill_method: null,
+          app_fee_bill_method: 'FLOAT',
           monthly_fee: null,
-          monthly_fee_bill_method: null,
+          monthly_fee_bill_method: 'INVOICE',
           api_fee: null,
-          api_fee_bill_method: null
+          api_fee_bill_method: 'ACCOUNT',
         },
         resellerCorporate: {
           dynamicReferences: {
@@ -687,7 +687,7 @@
           break_value: '',
           two_step_validation: 0,
           dynamic_pdf: [
-            {name: 'test 1', preset: ' name 1'},
+            {name: '', preset: ''},
             {name: '', preset: ''},
           ],
         },
@@ -1166,6 +1166,7 @@
 
   .card {
     font-size: 16px;
+    font-weight: bold;
 
     &.disabled {
       opacity: .6;
@@ -1286,10 +1287,12 @@
 
     .el-input__inner, .el-textarea__inner {
       border-radius: 10px !important;
+      font-weight: bold;
     }
 
     .form-control {
       border-radius: 10px !important;
+      font-weight: bold;
     }
   }
 
@@ -1355,53 +1358,60 @@
         color: $label-color;
       }
     }
-
-    /deep/ {
-      .el-textarea__inner {
-        padding: 5px 10px !important;
-        resize: none;
-
-        &::placeholder {
-          color: $placeholder-color;
-        }
-
-        &:-ms-input-placeholder {
-          color: $placeholder-color;
-        }
-
-        &::-ms-input-placeholder {
-          color: $placeholder-color;
-        }
-      }
-
-      .el-textarea__inner:focus {
-        outline: none;
-        border-color: #9A9A9A;
-      }
-
-      .form-control {
-        &::placeholder {
-          color: $placeholder-color;
-        }
-
-        &:-ms-input-placeholder {
-          color: $placeholder-color;
-        }
-
-        &::-ms-input-placeholder {
-          color: $placeholder-color;
-        }
-      }
-
-      .el-textarea.is-disabled .el-textarea__inner{
-        background-color: transparent!important;
-        color: $label-color;
-      }
-
+    .btn{
+      height: 42px;
     }
   }
 
-  /deep/{
+  /deep/ {
+    .el-textarea__inner {
+      padding: 5px 10px !important;
+      resize: none;
+
+      &::placeholder {
+        color: $placeholder-color;
+        font-weight: bold;
+      }
+
+      &:-ms-input-placeholder {
+        color: $placeholder-color;
+        font-weight: bold;
+      }
+
+      &::-ms-input-placeholder {
+        color: $placeholder-color;
+        font-weight: bold;
+      }
+    }
+
+    .el-textarea__inner:focus {
+      outline: none;
+      border-color: #9A9A9A;
+    }
+
+    .form-control {
+      &::placeholder {
+        color: $placeholder-color;
+        font-weight: bold;
+      }
+
+      &:-ms-input-placeholder {
+        color: $placeholder-color;
+        font-weight: bold;
+      }
+
+      &::-ms-input-placeholder {
+        color: $placeholder-color;
+        font-weight: bold;
+      }
+    }
+
+    .el-textarea.is-disabled .el-textarea__inner{
+      background-color: transparent!important;
+      color: $label-color;
+      font-weight: bold;
+    }
+
     .modal-dialog {
       min-width: 760px;
       text-align: center;
@@ -1427,5 +1437,11 @@
         }
       }
     }
+
+  }
+
+
+  .btn{
+    text-transform: unset;
   }
 </style>

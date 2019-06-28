@@ -44,8 +44,8 @@ const create = {
     required_fields: `Required fields`
   },
   button: {
-    edit: 'EDIT',
-    save: 'SAVE',
+    edit: 'Edit',
+    save: 'Save',
     cancel: 'Cancel'
   },
   table_header: {
