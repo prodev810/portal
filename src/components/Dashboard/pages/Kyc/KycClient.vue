@@ -704,10 +704,9 @@
           this.client.clientType = this.getClientType(this.client.issuing)
           delete this.client.issuing
           delete this.client.id
-          console.log('client', this.client)
           const response = await this.updateProductConfigClient({id: this.clientId, body: this.client})
             .catch(err => console.log('error put client by id', err));
-          //this.$router.push({path: `/kyc/product-config/view-client/${this.clientId}`});
+          this.$router.push({path: `/kyc/product-config/view-client/${this.clientId}`});
         }
         if (this.mode === 'create') {
           this.client.clientType = this.getClientType(this.client.issuing)
@@ -722,11 +721,10 @@
           delete this.client.issuing
           const copyClient = Object.assign({}, this.client)
           delete copyClient.issuing
-          console.log('client', copyClient)
           const response = await this.createProductConfigClient({body: copyClient})
             .catch(err => console.log('error create client by id', err));
           this.clientId = response.id
-          //this.$router.push({path: `/kyc/product-config/view-client/${this.clientId}`})
+          this.$router.push({path: `/kyc/product-config/view-client/${this.clientId}`})
         }
 
       },
