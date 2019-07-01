@@ -42,7 +42,7 @@
                   <el-select v-model="reseller.cpc">
                     <el-option v-for="item in cpcValues"
                                :key="item.value"
-                               :label="item.value"
+                               :label="item.name"
                                :value="item.value">{{item.name}}
                     </el-option>
                   </el-select>
@@ -104,7 +104,7 @@
                   <el-select v-model="reseller.unique_float">
                     <el-option v-for="item in uniqueFloatValues"
                                :key="item.value"
-                               :label="item.value"
+                               :label="item.name"
                                :value="item.value">{{item.name}}
                     </el-option>
                   </el-select>
@@ -660,7 +660,7 @@
           status: 'Active',
           reseller_code: null,
           reseller_name: null,
-          unique_float: null,
+          unique_float: 1,
           alert_contact: null,
           load_fee: null,
           load_fee_pct: null,
@@ -902,7 +902,8 @@
           {name: 'INVOICE', value: 'INVOICE'}
         ],
         uniqueFloatValues: [
-          {name: 'yes', value: 1},
+          {name: 'Yes', value: 1},
+          {name: 'No', value: 0},
         ],
         dynamicRef1: [
           {name: 'Ref 1', model: 'ref1'},
@@ -1438,8 +1439,12 @@
       }
     }
 
-  }
+    .el-select .el-input:hover .el-input__icon,
+    .el-select .el-input:hover input {
+      color: $placeholder-color;
+    }
 
+  }
 
   .btn{
     text-transform: unset;
