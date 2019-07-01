@@ -334,7 +334,7 @@
 
           <el-row>
             <label class="row-label">
-              <strong>Country Code</strong>
+              <strong>CountryCode</strong>
             </label>
             <div class="d-inline-flex form-input-block">
               <fg-input v-model="account.primaryAddress.countryCode"
@@ -413,7 +413,7 @@
 
           <el-row>
             <label class="row-label">
-              <strong>Country Code</strong>
+              <strong>CountryCode</strong>
             </label>
             <div class="d-inline-flex form-input-block">
               <fg-input v-model="account.overrideAddress.countryCode"
@@ -612,6 +612,7 @@
 
     .sub-title{
       font-size: 18px;
+      font-weight: 900;
     }
 
     .btn{
