@@ -194,7 +194,7 @@ let reseller = {
   },
   children: [
     {
-      path: '/reseller/view/:id',
+      path: '/reseller/view',
       name: 'Resellers View',
       //component: ResellerView,
       component: ResellerCreateCorporateModule,
@@ -214,7 +214,7 @@ let reseller = {
       }
     },
     {
-      path: '/reseller/edit/:id',
+      path: '/reseller/edit',
       name: 'Resellers Edit',
       component: ResellerCreateCorporateModule,
       props:{context: 'edit'},
