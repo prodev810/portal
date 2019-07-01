@@ -191,10 +191,7 @@
                 this.docActionTableValue = value;
             },
             doManualUpdate() {
-                if (!this.manualUpdate.actionTypeCode || !this.manualUpdate.comment || !this.$route.query || !this
-                        .$route
-                        .query
-                        .id) {
+                if (typeof(this.manualUpdate.actionTypeCode) !== 'number' || !this.manualUpdate.comment || !this.id) {
                     return;
                 }
                 this.manualUpdateAction({

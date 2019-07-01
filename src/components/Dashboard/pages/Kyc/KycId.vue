@@ -84,7 +84,7 @@
                         <div class="col-xl-6 mb-3">
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="kyc-label mb-0 mr-5">Status</p>
-                                <p class="m-0 mr-4" :class="cardBtnFrontStatus" v-if="idCheck && idCheck.checkStatusName">{{ idCheck.checkStatusName }}</p>
+                                <p class="m-0 mr-4 status-label" :class="idCheckStatusClass" v-if="idCheck && idCheck.checkStatusName">{{ idCheck.checkStatusName }}</p>
                                 
                             </div>
                         </div>
@@ -566,11 +566,14 @@ export default {
         idCheck() {
             return this.$store.state.kyc.idCheckEnquiry;
         },
-        cardBtnFrontStatus() {
+        idCheckStatusClass() {
             if(!this.idCheck || !this.idCheck.checkStatusName) return {}
+            const status = this.idCheck.checkStatusName
             return {
-                'status status--passed': this.idCheck.checkStatusName === 'Passed',
-                'status status--failed': this.idCheck.checkStatusName !== 'Passed',
+                'bg-bright-red': status == 'Failed' || status == 'Manually Declined',
+                'bg-light-red': status == 'Unknown' || status == 'Skipped' || status == 'Caution' || status == 'Attention',
+                'bg-green': status == 'Passed' || status == 'Manual Approval',
+                'bg-orange': status == 'New ID Requested' || status == 'Update ID Request',
             }
         },
         listSupportDocuments() {
@@ -973,5 +976,23 @@ p {
         padding-left: 25px;
     }
 }
-
+.status-label {
+    line-height: 40px !important;
+    text-align: center;
+    padding: 0 20px;
+    min-width: 200px;
+    margin: 0;
+}
+.bg-bright-red {
+      background-color: #FFD0D0 !important;
+  }
+  .bg-light-red {
+      background-color: #ff4d57 !important;
+  }
+  .bg-green {
+      background-color: #c9f4df !important;
+  }
+  .bg-orange {
+      background-color: #FF6A6A !important;
+  }
 </style>

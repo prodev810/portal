@@ -96,9 +96,9 @@
                     <div class="row">
                         <div class="col-xl-4"><p class="kyc-label pt-3">Status</p></div>
                         <div class="col-6">
-                            <div class="d-flex">
-                                <p-button class="btn btn--status mr-4" :class="cardBtnSancStatus" v-if="sancheck && sancheck.checkStatusName">{{ sancheck.checkStatusName }}</p-button>
-                                
+                            <div class="d-flex align-items-center">
+                                <p class="mr-4 status-label" :class="cardBtnSancStatus" v-if="sancheck && sancheck.checkStatusName">{{ sancheck.checkStatusName }}</p>
+
                                 <el-popover v-model="actionPopup"  placement="left-end" popper-class="actionPopover" :offset="500" :visible-arrow="false" width="700" class="status-helper" trigger="click">
                                     <div class="container-fluid">
                                         <div class="row mt-3 mb-2">
@@ -369,9 +369,11 @@ export default {
         },
         cardBtnSancStatus() {
             if(!this.sancheck || !this.sancheck.checkStatusName) return {}
+            const status = this.sancheck.checkStatusName;
             return {
-                'btn--passed': this.sancheck.checkStatusName === 'No Match',
-                'btn--failed': this.sancheck.checkStatusName !== 'No Match',
+                'bg-bright-red': status == 'Manual Decline',
+                'bg-light-red': status == 'HIT',
+                'bg-green': status == 'No Match' || status == 'Manual Approval',
             }
         },
         actionLegend() {
@@ -800,8 +802,26 @@ p {
 .bg-sanction {
     background-color: #7039DA;
 }
-
-
+.status-label {
+    line-height: 40px !important;
+    height: 40px !important;
+    text-align: center;
+    padding: 0 20px;
+    min-width: 200px;
+    margin: 0;
+}
+.bg-bright-red {
+      background-color: #FFD0D0 !important;
+  }
+  .bg-light-red {
+      background-color: #ff4d57 !important;
+  }
+  .bg-green {
+      background-color: #c9f4df !important;
+  }
+  .bg-orange {
+      background-color: #FF6A6A !important;
+  }
 
 </style>
 
