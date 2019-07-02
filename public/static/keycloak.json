@@ -1,0 +1,9 @@
+{
+    "realm": "ceevo-realm",
+    "auth-server-url": "https://auth.dev.transact24.com/auth",
+    "ssl-required": "external",
+    "resource": "kyc-svc",
+    "public-client": true,
+    "use-resource-role-mappings": true,
+    "confidential-port": 0
+}

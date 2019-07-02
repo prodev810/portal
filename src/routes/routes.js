@@ -271,30 +271,6 @@ const kyc = {
       }
     },
     {
-      path: '/kyc/approved-emoney-account',
-      name: 'KYC Approved Emoney Account',
-      component: () => import('../components/Dashboard/pages/Kyc/KycApprovedEmoneyAccount'),
-      meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
-      }
-    },
-    {
-      path: '/kyc/review-edit-account/:accountReferenceId',
-      name: 'KYC Review Edit Account Creation',
-      component: () => import('../components/Dashboard/pages/Kyc/KycReviewEditAccountCreation'),
-      meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
-      }
-    },
-    {
-      path: '/kyc/review-edit-card',
-      name: 'KYC Review Edit Card Creation',
-      component: () => import('../components/Dashboard/pages/Kyc/KycReviewEditCardCreation'),
-      meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
-      }
-    },
-    {
       path: '/kyc/register',
       name: 'KYC Register',
       component:Kyc,
@@ -315,9 +291,10 @@ const kyc = {
       path: '/kyc/search',
       name: 'KYC Search',
       component: () => import('../components/Dashboard/pages/Kyc/Search'),
-      meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
-      }
+    //   meta: {
+    //     permission: permission.RESELLER_INVOICE_VIEW
+    //   }
+        meta: { requiresAuth: true, roles: ['user'] },
     },
     {
       path: '/kyc/kyc-mainpage',
@@ -451,7 +428,7 @@ let system = {
       component: NoPermission
     }
   ]
-
+    
 }
 
 const routes = [

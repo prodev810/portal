@@ -8,6 +8,10 @@ import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
 import App from './App.vue'
 
+import keycloakStore from 'plugin-vuejs-keycloak'
+import security from 'plugin-vuejs-keycloak/security'
+
+
 // Plugins
 // Element-UI
 import { Select, Option, Row, Col, Input, Tooltip, Table, TableColumn, DatePicker } from 'element-ui'
@@ -83,54 +87,79 @@ locale.use(lang)
 
 // configure router
 export const router = new VueRouter({
-  routes, // short for routes: routes
+  routes,
   mode: 'history',
   linkActiveClass: 'active'
 })
 
-router.beforeEach(async (to, from, next) => {
-  const isAuth = await Vue.prototype.$oAuth.isAuthenticated()
-  const nextToByRole = () => {
-    if (Vue.prototype.$oAuth.isNoPermissionForAll()) {
-      return '/system'
-    } else if (Vue.prototype.$oAuth.isReseller()) {
-      return '/reseller'
-    } else {
-      return '/card-program'
-    }
-  }
+// router.beforeEach(async (to, from, next) => {
+//   const isAuth = await Vue.prototype.$oAuth.isAuthenticated()
+//   const nextToByRole = () => {
+//     if (Vue.prototype.$oAuth.isNoPermissionForAll()) {
+//       return '/system'
+//     } else if (Vue.prototype.$oAuth.isReseller()) {
+//       return '/reseller'
+//     } else {
+//       return '/card-program'
+//     }
+//   }
 
-  const isAbleAccess = (object) => {
-    let has = Vue.prototype.$oAuth.hasPermission(to.meta.permission)
-    if (!has && (object.name === 'Resellers Editor' || object.name === 'Edit card program')) {
-      if (!object.query.edit && Vue.prototype.$oAuth.hasPermission(permission.RESELLER_SUBSCRIPTION_VIEW)) {
-        has = true
+//   const isAbleAccess = (object) => {
+//     let has = Vue.prototype.$oAuth.hasPermission(to.meta.permission)
+//     if (!has && (object.name === 'Resellers Editor' || object.name === 'Edit card program')) {
+//       if (!object.query.edit && Vue.prototype.$oAuth.hasPermission(permission.RESELLER_SUBSCRIPTION_VIEW)) {
+//         has = true
+//       }
+//     }
+//     return has
+//   }
+
+//   const defaultTo = nextToByRole()
+//   if (!isAuth) {
+//     if (to.path !== '/login' && to.path !== '/lock') {
+//       next('/login')
+//     } else {
+//       next()
+//     }
+//   } else {
+//     if (to.path === '/login' || to.path === '/lock') {
+//       next(defaultTo)
+//     } else {
+//       if (to.meta.permission && !isAbleAccess(to)) {
+//         next(defaultTo)
+//       } else {
+//         next()
+//       }
+//     }
+//   }
+// })
+
+// initProgress(router);
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresAuth) {
+      const auth = keycloakStore.state.security.auth
+      if (!auth.authenticated) {
+        security.init(next, to.meta.roles)
+      }
+      else {
+        if (to.meta.roles) {
+          if (security.roles(to.meta.roles[0])) {
+            next()
+          }
+          else {
+            next({ name: 'unauthorized' })
+          }
+        }
+        else {
+          next()
+        }
       }
     }
-    return has
-  }
-
-  const defaultTo = nextToByRole()
-  if (!isAuth) {
-    if (to.path !== '/login' && to.path !== '/lock') {
-      next('/login')
-    } else {
+    else {
       next()
     }
-  } else {
-    if (to.path === '/login' || to.path === '/lock') {
-      next(defaultTo)
-    } else {
-      if (to.meta.permission && !isAbleAccess(to)) {
-        next(defaultTo)
-      } else {
-        next()
-      }
-    }
-  }
 })
-
-initProgress(router);
 
 /* eslint-disable no-new */
 export const AbaModalEvents = new Vue()
@@ -138,6 +167,7 @@ export const AbaModalEvents = new Vue()
 new Vue({
   el: '#app',
   store,
+  keycloakStore,
   render: h => h(App),
   router,
   i18n
