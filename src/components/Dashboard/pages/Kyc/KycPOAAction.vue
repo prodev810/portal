@@ -105,7 +105,7 @@
             <strong>Status</strong>
           </el-col>
           <el-col :md="12">
-            <p class="kyc-poa-status">{{poaStatus}}</p>
+            <p class="kyc-poa-status" :class="[isUnverifiedStatus ?'bg-unverified': 'bg-verified']">{{poaData.checkStatusName}}</p>
           </el-col>
         </el-row>
         <el-row>
@@ -331,8 +331,8 @@
               <tr>
                 <td><strong>Region</strong></td>
                 <td>
-                  <fg-input v-if="editRegion" v-model="poaData.submittedAddress.region" class="p-0 mr-2"></fg-input>
-                  <span v-else-if="poaData && poaData.submittedAddress && poaData.submittedAddress.region">{{poaData.submittedAddress.region}}</span>
+                  <fg-input v-if="editRegion" v-model="poaData.submittedAddress.countyOrState" class="p-0 mr-2"></fg-input>
+                  <span v-else-if="poaData && poaData.submittedAddress && poaData.submittedAddress.countyOrState">{{poaData.submittedAddress.countyOrState}}</span>
                 </td>
                 <td>
                   <img v-if="!editRegion && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
@@ -500,6 +500,9 @@
         poaActionTypes: state => state.kyc.poaActionTypes,
 
       }),
+      isUnverifiedStatus(){
+        return this.poaData.checkStatusName === 'Unverified'
+      },
       isActionMode() {
         return this.mode === 'action'
       },
@@ -590,6 +593,8 @@
 </script>
 
 <style scoped lang="scss">
+  @import "../../../../assets/sass/paper/variables";
+
   $table-border-gray: #dee2e6;
   $unverified-status-color: #FDD9DA;
 
@@ -604,12 +609,19 @@
       cursor: pointer;
     }
 
+    .bg-unverified {
+      background-color: $unverified-status-color;
+    }
+
+    .bg-verified {
+      background-color: $success-input-bg;
+    }
+
     &-status {
       height: 40px;
       text-align: center;
       line-height: 40px;
       padding: auto;
-      background-color: $unverified-status-color;
     }
 
     .btn {
