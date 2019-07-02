@@ -395,7 +395,10 @@ const actions = {
         .then(data => {
           resolve(data.data)
         })
-        .catch( error => reject(error))
+        .catch( error => {
+          const errObj = JSON.stringify(error)
+          reject(JSON.parse(errObj).response.data)
+        })
     })
   },
   [KYC_GET_PRODUCT_CONFIG_VIEW_INVOICE]: async ({commit}, payload) => {

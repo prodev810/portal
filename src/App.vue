@@ -22,4 +22,9 @@
   }
 </script>
 <style lang="scss">
+  /deep/{
+    .vue-notifyjs .alert[data-notify="container"] {
+      padding: 20px 0!important;
+    }
+  }
 </style>

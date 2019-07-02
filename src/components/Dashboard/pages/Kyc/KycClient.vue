@@ -26,23 +26,30 @@
                     :validate-event="true"
                     :class="{'input-outline':isEditMode, 'is-invalid': !isValidClientName}"
                     v-else-if="client"></el-input>
-          <p v-if="!isValidClientName" class="invalid-feedback">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</p>
+          <p v-if="!isValidClientName" class="invalid-feedback">
+            <span v-if="!client.clientName">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
+            {{KYC_CLIENT_VALIDATION_MESSAGES.letters}}
+          </p>
         </el-col>
       </el-row>
 
       <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
-          <p class="kyc-client-row__text kyc-client-row__title">Client Reference <span v-if="!isViewMode"
-                                                                                       class="required-input">*</span>
+          <p class="kyc-client-row__text kyc-client-row__title">Client Reference
+            <span v-if="!isViewMode" class="required-input">*</span>
           </p>
         </el-col>
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="isViewMode">{{client.clientReference}}</p>
-          <el-input v-model="client.clientReference"
+          <el-input v-model.trim="client.clientReference"
                     :class="{'input-outline':isEditMode, 'is-invalid': !isValidClientReference}"
                     v-else-if="client"></el-input>
-          <p v-if="!isValidClientReference" class="invalid-feedback">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</p>
+          <p v-if="!isValidClientReference" class="invalid-feedback">
+            <span v-if="!client.clientReference">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
+            <span v-if="client.clientReference.length > 6">{{KYC_CLIENT_VALIDATION_MESSAGES.max6}}</span>
+            <span v-if="!verifySpace(client.clientReference)">{{KYC_CLIENT_VALIDATION_MESSAGES.noSpace}}</span>
+          </p>
         </el-col>
       </el-row>
 
@@ -58,7 +65,10 @@
           <el-input v-model="client.contactName"
                     :class="{'is-invalid': !isValidContactName}"
                     v-else-if="client"></el-input>
-          <p v-if="!isValidContactName" class="invalid-feedback">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</p>
+          <p v-if="!isValidContactName" class="invalid-feedback">
+            <span v-if="!client.contactName">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
+            {{KYC_CLIENT_VALIDATION_MESSAGES.letters}}
+          </p>
         </el-col>
       </el-row>
 
@@ -75,7 +85,10 @@
           <el-input v-model="client.contactEmail"
                     :class="{'is-invalid': !isValidContactEmail}"
                     type="email" v-else-if="client"></el-input>
-          <p v-if="!isValidContactEmail" class="invalid-feedback">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</p>
+          <p v-if="!isValidContactEmail" class="invalid-feedback">
+            <span v-if="!client.contactEmail">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
+            {{KYC_CLIENT_VALIDATION_MESSAGES.email}}
+          </p>
         </el-col>
       </el-row>
 
@@ -448,6 +461,8 @@
 
     </div>
 
+    <Spinner v-if="isLoad"></Spinner>
+
   </div>
 </template>
 
@@ -464,6 +479,7 @@
   import clientTypes from '../../../../utils/clientTypes'
   import rescreeningIntervals from '../../../../utils/rescreeningIntervals'
   import {moneyFormat} from '../../../../utils/moneyFormat'
+  import Spinner from '../../../../components/UIComponents/Spinner'
 
   const KYC_CLIENT_MODE = {
     create: {
@@ -486,6 +502,7 @@
   export default {
     components: {
       Modal,
+      Spinner,
     },
     props: ['mode'],
     data() {
@@ -493,6 +510,10 @@
         KYC_CLIENT_VALIDATION_MESSAGES: {
           required: 'This field is required.',
           number: 'This field must be greater that 0.',
+          email: 'This field must be valid email address.',
+          max6: 'This field must be no more than 6 characters.',
+          letters: 'This field must not have numbers.',
+          noSpace: 'There should be no spaces.',
         },
         rescreenIntervalScheduleSelectValue: null,
         modals: {
@@ -545,6 +566,13 @@
           'autoCloseSchedule',
           'kycAutoFollowupCloseSchedule',
         ],
+        validateArray: {
+          clientName: true,
+          contactName: true,
+          clientReference: true,
+          contactEmail: true,
+        },
+        isLoad: false,
       }
     },
     filters: {
@@ -633,8 +661,22 @@
         let isValid = true
         if (!this.isViewMode) {
           this.validationList.forEach(item => {
-            if (typeof (this.client[`${item}`]) === 'undefined' || this.client[`${item}`] === '') {
+            if (typeof (this.client[`${item}`]) === 'undefined' || this.client[`${item}`] === '' || this.client[`${item}`] === 0) {
               isValid = false
+            }
+            switch (item) {
+              case'contactEmail':
+                this.validateArray.contactEmail = this.isValidContactEmail
+                break
+              case'clientName':
+                this.validateArray.clientName = this.isValidClientName
+                break
+              case'contactName':
+                this.validateArray.contactName = this.isValidContactName
+                break
+              case'clientReference':
+                this.validateArray.clientReference = this.isValidClientReference
+                break
             }
           })
           this.validationObjectList.forEach(item => {
@@ -642,26 +684,35 @@
               isValid = false
             }
           })
+
+          if(typeof this.validateArray !== 'undefined'){
+            Object.keys(this.validateArray).forEach(item => {
+              if(!this.validateArray[item]){
+                return isValid = false
+              }
+            })
+          }
         }
+
         return isValid
       },
       isValidClientName() {
-        return this.client.clientName !== ''
+        return this.client.clientName !== '' && this.verifyName(this.client.clientName)
       },
       isValidClientReference() {
-        return this.client.clientReference !== ''
+        return (typeof (this.client.clientReference) === 'undefined' || this.verifyContactRef(this.client.clientReference))
       },
       isValidSanctionCheckFee() {
-        return (typeof (this.client.sanctionCheckFee) === 'undefined'|| this.client.sanctionCheckFee !== '' && this.client.sanctionCheckFee > 0)
+        return (typeof (this.client.sanctionCheckFee) === 'undefined' || this.client.sanctionCheckFee !== '' && this.client.sanctionCheckFee > 0)
       },
       isValidApplicationFee() {
         return (typeof (this.client.applicationFee) === 'undefined' || this.client.applicationFee !== '' && this.client.applicationFee > 0)
       },
       isValidContactEmail() {
-        return this.client.contactEmail !== ''
+        return (typeof (this.client.contactEmail) === 'undefined' || this.client.contactEmail !== '' && this.verifyEmail(this.client.contactEmail))
       },
       isValidContactName() {
-        return this.client.contactName !== ''
+        return this.client.contactName !== '' && this.verifyName(this.client.contactName)
       },
       isValidPoaCheckFee() {
         return (typeof (this.client.poaCheckFee) === 'undefined' || this.client.poaCheckFee !== '' && this.client.poaCheckFee > 0)
@@ -718,13 +769,22 @@
           this.client.sanctionCheckFee = Number(this.client.sanctionCheckFee)
           this.client.sanctionCheckFee = Number(this.client.sanctionCheckFee)
           this.client.smsFee = Number(this.client.smsFee)
+          const cloneClient = Object.assign({}, this.client)
           delete this.client.issuing
           const copyClient = Object.assign({}, this.client)
           delete copyClient.issuing
+          this.isLoad = true
           const response = await this.createProductConfigClient({body: copyClient})
-            .catch(err => console.log('error create client by id', err));
-          this.clientId = response.id
-          this.$router.push({path: `/kyc/product-config/view-client/${this.clientId}`})
+            .catch(err => {
+              this.notifyVue('bottom', 'center', err.detail)
+              this.client = cloneClient
+              this.isLoad = false
+            });
+          if (response && response.id) {
+            this.isLoad = false
+            this.clientId = response.id
+            this.$router.push({path: `/kyc/product-config/view-client/${this.clientId}`})
+          }
         }
 
       },
@@ -756,9 +816,38 @@
       },
       handleNumberInput(name) {
         const value = event.target.value
-        if (value) {
-          this.client[`${name}`] = Math.abs(value)
+        if (value && value.toString().indexOf('e') == -1) {
+          this.client[`${name}`] = Math.abs(Number(value))
+        } else {
+          this.client[`${name}`] = 0
         }
+      },
+      notifyVue(verticalAlign, horizontalAlign, msg, type = 'danger') {
+        this.$notify(
+          {
+            message: msg,
+            icon: 'fa fa-exclamation-triangle',
+            horizontalAlign: horizontalAlign,
+            verticalAlign: verticalAlign,
+            type: type,
+            timeout: 10000,
+            closeOnClick: true,
+          })
+      },
+      verifyEmail(email) {
+        const emailCheck = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i;
+        return emailCheck.test(email);
+      },
+      verifyName(name) {
+        const nameCheck = /^[a-zA-Z ]{1,30}$/
+        return nameCheck.test(name)
+      },
+      verifyContactRef(ref){
+        return ref !== '' && ref.length <= 6 && this.verifySpace(ref)
+      },
+      verifySpace(string){
+        const refCheck = /\s/
+        return !refCheck.test(string)
       },
     }
   }
