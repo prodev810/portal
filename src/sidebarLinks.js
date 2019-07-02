@@ -131,6 +131,27 @@ export default [
         i18n: 'menu.kyc_dashboard',
         permission: permission.NAV_KYC_MODULE // !!! change permission
       },
+      {
+        path: '/kyc/approved-emoney-account',
+        name: 'KYC Approved Emoney Account',
+        hidden: true,
+        i18n: '',
+        permission: permission.NAV_KYC_MODULE // !!! change permission
+      },
+      {
+        path: '/kyc/review-edit-account/',
+        name: 'KYC Review Edit Account Creation',
+        hidden: true,
+        i18n: '',
+        permission: permission.NAV_KYC_MODULE // !!! change permission
+      },
+      {
+        path: '/kyc/review-edit-card',
+        name: 'KYC Review Edit Card Creation',
+        hidden: true,
+        i18n: '',
+        permission: permission.NAV_KYC_MODULE // !!! change permission
+      },
       // {
       //   path: '/kyc/register',
       //   name: 'KYC Register',

@@ -207,8 +207,8 @@
         CrossIcon,
         TickIcon,
         filterModel: {
-          reseller: '',
-          status: '',
+          reseller: 'all',
+          status: 'submitted',
           dateFrom: '',
           dateTo: '',
           oldestFirst: 0,
@@ -310,10 +310,12 @@
   $table-border-color: #dee2e6;
   $btn-danger-border: #F70003;
   $btn-success-border: #3ED683;
+  $placeholder-color: #9A9A9A;
 
   .approve-emoney-account {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
+    font-weight: bold;
     color: $text-color;
 
     .btn-block {
@@ -362,6 +364,16 @@
         border-color: $input-border;
         color: $text-color;
         border-radius: 7px;
+        font-weight: bold;
+      }
+
+      .form-control {
+        border-radius: 10px !important;
+      }
+
+      .el-select .el-input:hover .el-input__icon,
+      .el-select .el-input:hover input {
+        color: $placeholder-color;
       }
 
       .btn-outline-primary, .btn-outline-success, .btn-outline-danger {
