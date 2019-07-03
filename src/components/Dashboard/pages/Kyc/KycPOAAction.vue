@@ -346,7 +346,7 @@
                 <td><strong>Country</strong></td>
                 <td>
                   <fg-input v-if="editCountry" v-model="poaData.submittedAddress.country" class="p-0 mr-2"></fg-input>
-                  <span v-else-if="poaData && poaData.submittedAddress && poaData.submittedAddress.countryCode">{{poaData.submittedAddress.countryCode}}</span>
+                  <span v-else-if="poaData && poaData.submittedAddress && poaData.submittedAddress.countryName">{{poaData.submittedAddress.countryName}}</span>
                 </td>
                 <td>
                   <img v-if="!editCountry && isActionMode" :src="editIcon" width="20" class="ml-3 img-icon"
