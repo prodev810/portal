@@ -18,7 +18,7 @@
               <strong>Merchant USN</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.accountInformation.merchantUsn"
+              <fg-input v-model="accountInfo.merchantUSN"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -28,7 +28,7 @@
               <strong>IssuerInst Code</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.accountInformation.issuerInstCode"
+              <fg-input v-model="accountInfo.issuerInstCode"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -38,7 +38,7 @@
               <strong>Program Manager Code</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.accountInformation.programManagerCode"
+              <fg-input v-model="accountInfo.programManagerCode"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -48,7 +48,7 @@
               <strong>Program Owner Code</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.accountInformation.programOwnerCode"
+              <fg-input v-model="accountInfo.programOwnerCode"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -58,7 +58,7 @@
               <strong>Card Program Code</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.accountInformation.cardProgramCode"
+              <fg-input v-model="accountInfo.cardProgramCode"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -68,7 +68,7 @@
               <strong>Currency Code</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.accountInformation.currencyCode"
+              <fg-input v-model="accountInfo.currencyCode"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -78,7 +78,7 @@
               <strong>Card Program ID</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.accountInformation.cardProgramID"
+              <fg-input v-model="accountInfo.cardProgramId"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -88,7 +88,7 @@
               <strong>Reseller Code</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.accountInformation.resellerCode"
+              <fg-input v-model="accountInfo.resellerCode"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -98,7 +98,7 @@
               <strong>KYC Level</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.accountInformation.KYCLevel"
+              <fg-input v-model="accountInfo.kycLevel"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -108,7 +108,7 @@
               <strong>Fee Profile ID</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.accountInformation.feeProfileID"
+              <fg-input v-model="accountInfo.feeProfileId"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -118,7 +118,7 @@
               <strong>Customer ID Type</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.accountInformation.customerIDType"
+              <fg-input v-model="accountInfo.customerIdType"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -128,7 +128,7 @@
               <strong>Customer ID</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.accountInformation.customerID"
+              <fg-input v-model="accountInfo.customerId"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -138,7 +138,7 @@
               <strong>Account Reference</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.accountInformation.accountReference"
+              <fg-input v-model="accountInfo.accountReference"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -156,7 +156,7 @@
               <strong>Title</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.particulars.title"
+              <fg-input v-model="accountInfo.title"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -166,7 +166,7 @@
               <strong>First Name</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.particulars.firstName"
+              <fg-input v-model="accountInfo.firstName"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -176,7 +176,7 @@
               <strong>Second Name</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.particulars.secondName"
+              <fg-input v-model="accountInfo.secondName"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -186,7 +186,7 @@
               <strong>Last Name</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.particulars.lastName"
+              <fg-input v-model="accountInfo.lastName"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -196,7 +196,7 @@
               <strong>Maiden Name</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.particulars.maidenName"
+              <fg-input v-model="accountInfo.maidenName"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -206,7 +206,7 @@
               <strong>Gender</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.particulars.gender"
+              <fg-input v-model="accountInfo.gender"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -216,7 +216,7 @@
               <strong>Birth Date</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.particulars.birthDate"
+              <fg-input v-model="accountInfo.birthDate"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -226,7 +226,7 @@
               <strong>Email</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.particulars.email"
+              <fg-input v-model="accountInfo.email"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -236,7 +236,7 @@
               <strong>Home Phone</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.particulars.homePhone"
+              <fg-input v-model="accountInfo.homePhone"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -246,7 +246,7 @@
               <strong>Work Phone</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.particulars.workPhone"
+              <fg-input v-model="accountInfo.workPhone"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -256,7 +256,7 @@
               <strong>Mobile Phone</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.particulars.mobilePhone"
+              <fg-input v-model="accountInfo.mobilePhone"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -277,7 +277,7 @@
               <strong>Address line 1</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.primaryAddress.addressline1"
+              <fg-input v-model="accountInfo.primaryAddress.address1"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -287,7 +287,7 @@
               <strong>Address line 2</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.primaryAddress.addressline2"
+              <fg-input v-model="accountInfo.primaryAddress.address2"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -297,7 +297,7 @@
               <strong>Address line 3</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.primaryAddress.addressline3"
+              <fg-input v-model="accountInfo.primaryAddress.address3"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -307,7 +307,7 @@
               <strong>City / Town</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.primaryAddress.city"
+              <fg-input v-model="accountInfo.primaryAddress.city"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -317,7 +317,7 @@
               <strong>Region</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.primaryAddress.region"
+              <fg-input v-model="accountInfo.primaryAddress.region"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -327,7 +327,7 @@
               <strong>Post Code</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.primaryAddress.postCode"
+              <fg-input v-model="accountInfo.primaryAddress.postCode"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -337,7 +337,7 @@
               <strong>CountryCode</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.primaryAddress.countryCode"
+              <fg-input v-model="accountInfo.primaryAddress.countryCode"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -356,7 +356,7 @@
               <strong>Address line 1</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.overrideAddress.addressline1"
+              <fg-input v-model="accountInfo.overrideAddress.address1"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -366,7 +366,7 @@
               <strong>Address line 2</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.overrideAddress.addressline2"
+              <fg-input v-model="accountInfo.overrideAddress.address2"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -376,7 +376,7 @@
               <strong>Address line 3</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.overrideAddress.addressline3"
+              <fg-input v-model="accountInfo.overrideAddress.address3"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -386,7 +386,7 @@
               <strong>City / Town</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.overrideAddress.city"
+              <fg-input v-model="accountInfo.overrideAddress.city"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -396,7 +396,7 @@
               <strong>Region</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.overrideAddress.region"
+              <fg-input v-model="accountInfo.overrideAddress.region"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -406,7 +406,7 @@
               <strong>Post Code</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.overrideAddress.postCode"
+              <fg-input v-model="accountInfo.overrideAddress.postCode"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -416,7 +416,7 @@
               <strong>CountryCode</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.overrideAddress.countryCode"
+              <fg-input v-model="accountInfo.overrideAddress.countryCode"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -438,7 +438,7 @@
               <strong>Card Holder Name</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.miscellaneous.cardHolderName"
+              <fg-input v-model="accountInfo.cardHolderName"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -448,7 +448,7 @@
               <strong>Fourth Line</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.miscellaneous.fourthLine"
+              <fg-input v-model="accountInfo.fourthLine"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -458,7 +458,7 @@
               <strong>KYC Appr Ref Number</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.miscellaneous.KYCApprRefNumber"
+              <fg-input v-model="accountInfo.kycAppRefNumber"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -468,7 +468,7 @@
               <strong>Proof Of Passport URL</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.miscellaneous.proofOfPassportURL"
+              <fg-input v-model="accountInfo.proofOfPassportUrl"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -478,7 +478,7 @@
               <strong>Proof Of Address URL</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.miscellaneous.proofOfAddressURL"
+              <fg-input v-model="accountInfo.proofOfAddressUrl"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -488,7 +488,7 @@
               <strong>Memorable Word</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.miscellaneous.memorableWord"
+              <fg-input v-model="accountInfo.memorableWord"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -498,7 +498,7 @@
               <strong>Access Code</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="account.miscellaneous.accessCode"
+              <fg-input v-model="accountInfo.accessCode"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -509,9 +509,11 @@
       <el-row>
         <el-col :md="24" class="text-center">
           <p-button round type="primary" class="mr-3"
-                    @click="handleSaveAccount()">Save</p-button>
+                    @click="handleSaveAccount()">Save
+          </p-button>
           <p-button round
-                    @click="handleClose()">Close and Return</p-button>
+                    @click="handleClose()">Close and Return
+          </p-button>
         </el-col>
       </el-row>
 
@@ -520,12 +522,20 @@
 </template>
 
 <script>
+  import {
+    ISSUING_GET_ACCOUNT_REQUEST,
+    ISSUING_PUT_ACCOUNT_REQUEST,
+    GETTER_ISSUING_LOADINGSTATE,
+    GETTER_ISSUING_ACCOUNT_INFO,
+  } from '@/store/types'
+  import {mapActions, mapGetters} from 'vuex'
+
   export default {
     name: "KycReviewEditAccountCreation",
     data() {
       return {
-        account:{
-          accountInformation:{
+        account: {
+          accountInformation: {
             merchantUsn: '2136855643',
             issuerInstCode: 'HGDSBV',
             programManagerCode: 'T24PM',
@@ -540,7 +550,7 @@
             customerID: 'DEBUG-TGF-1222-3231',
             accountReference: '',
           },
-          particulars:{
+          particulars: {
             title: '1',
             firstName: 'John',
             secondName: 'Doe',
@@ -553,7 +563,7 @@
             workPhone: '+2399440345',
             mobilePhone: '+2399690395',
           },
-          primaryAddress:{
+          primaryAddress: {
             addressline1: 'Street 11',
             addressline2: '',
             addressline3: '',
@@ -562,7 +572,7 @@
             postCode: '11111',
             countryCode: '344',
           },
-          overrideAddress:{
+          overrideAddress: {
             addressline1: '',
             addressline2: '',
             addressline3: '',
@@ -571,7 +581,7 @@
             postCode: '',
             countryCode: '',
           },
-          miscellaneous:{
+          miscellaneous: {
             cardHolderName: 'John Smith',
             fourthLine: 'FDD TESET',
             KYCApprRefNumber: 'KYC-1234',
@@ -581,20 +591,33 @@
             accessCode: '123456',
           },
         },
-
+        id: null,
       }
     },
-    created(){
-      console.log('r params',this.$route.params)
-      if(this.$route.params && this.$route.params.accountReferenceId){
-        this.account.accountInformation.accountReference = this.$route.params.accountReferenceId
+    created() {
+      console.log('r params', this.$route.params)
+      if (this.$route.params && this.$route.params.id) {
+        //this.accountInfo.accountReference = this.$route.params.id
+        this.id = this.$route.params.id
+        this.getIssuingAccount(this.id)
       }
     },
-    methods:{
-      handleSaveAccount(){
-        console.log('save acc')
+    computed: {
+      ...mapGetters({
+        accountInfo: GETTER_ISSUING_ACCOUNT_INFO,
+      }),
+    },
+    methods: {
+      ...mapActions({
+        getIssuingAccount: ISSUING_GET_ACCOUNT_REQUEST,
+        putIssuingAccount: ISSUING_PUT_ACCOUNT_REQUEST,
+      }),
+      handleSaveAccount() {
+        // console.log('save acc')
+        if (!this.id) return
+        this.putIssuingAccount({id: this.id, body: this.accountInfo})
       },
-      handleClose(){
+      handleClose() {
         this.$router.push('/kyc/approved-emoney-account')
       },
     },
@@ -610,12 +633,12 @@
     font-size: 16px;
     color: $text-color;
 
-    .sub-title{
+    .sub-title {
       font-size: 18px;
       font-weight: 900;
     }
 
-    .btn{
+    .btn {
       height: 42px;
       width: 200px;
       text-transform: unset;
@@ -637,14 +660,15 @@
       margin-bottom: 0;
     }
 
-    .second-row{
+    .second-row {
       margin-bottom: 90px;
     }
 
     /deep/ {
-      input{
+      input {
         font-family: 'Poppins', sans-serif;
       }
+
       .btn {
         text-transform: unset;
       }

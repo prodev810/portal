@@ -41,6 +41,7 @@ import axiosWrapper from './plugins/axios'
 import oAuthWrapper from './plugins/oAuth'
 import oAuthKycWrapper from './plugins/oAuthKyc'
 import sidebarLinks from './sidebarLinks'
+import axiosAbaWrapper from './plugins/axiosAba'
 
 // configs
 import axiosConfig from './config/axios.config'
@@ -80,6 +81,17 @@ Vue.use(axiosWrapper, [
     SHORTCUT: '$acchttp',
     OAUTH: '$oAuth' // same oAuth as main
   } 
+])
+
+Vue.use(axiosAbaWrapper, [
+  {
+    BASE_URL: 'https://api.dev.ceevo.com/aba-api',
+    VERSION: '',
+    TYPE: '',
+    TIMEOUT: 35000,
+    SHORTCUT: '$abahttp',
+    OAUTH: '$oAuth' // same oAuth as main
+  }
 ])
 
 // config lang

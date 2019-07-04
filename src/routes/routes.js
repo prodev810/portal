@@ -279,7 +279,7 @@ const kyc = {
       }
     },
     {
-      path: '/kyc/review-edit-account/:accountReferenceId',
+      path: '/kyc/review-edit-account/:id',
       name: 'KYC Review Edit Account Creation',
       component: () => import('../components/Dashboard/pages/Kyc/KycReviewEditAccountCreation'),
       meta: {
@@ -287,7 +287,7 @@ const kyc = {
       }
     },
     {
-      path: '/kyc/review-edit-card',
+      path: '/kyc/review-edit-card/:id',
       name: 'KYC Review Edit Card Creation',
       component: () => import('../components/Dashboard/pages/Kyc/KycReviewEditCardCreation'),
       meta: {
