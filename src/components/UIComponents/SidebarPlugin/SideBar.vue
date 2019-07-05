@@ -20,12 +20,12 @@
       <ul class="nav">
         <slot name="links">
           <template v-for="(link, index) in sidebarLinks">
-            <sidebar-item v-show="hasPermission(link.permission)" :key="link.name + index" :link="link" >
+            <sidebar-item v-show="hasPermission(link.permission) || isAllowResellerToView(link.isAllowResellerToView)" :key="link.name + index" :link="link" >
               <sidebar-item
                 v-for="(subLink, index) in link.children"
                 :key="subLink.name + index"
                 :link="subLink"
-                v-show="hasPermission(subLink.permission)">
+                v-show="hasPermission(subLink.permission) || isAllowResellerToView(subLink.isAllowResellerToView)">
               </sidebar-item>
             </sidebar-item>
           </template>

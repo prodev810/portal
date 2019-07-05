@@ -63,7 +63,7 @@
                             :disabled="heading.read"
                             @input.native.prevent="handleInputChange(row.id, $event.target.value, heading.name,null,$event.target)"
                             :value="row[heading.name] ? row[heading.name].value: ''"
-                            :placeholder="heading.i18n ? $t(heading.i18n) : heading.label"
+                            :placeholder="hanldePlaceholder(heading)"
                             v-bind="(heading.$domAttri ||{})"
                             :addonRightIcon="heading.addonRightIcon"
                             :error="row[heading.name]? (row[heading.name].dirty ? row[heading.name].errors[0] :'') : '' "
@@ -73,7 +73,7 @@
                     v-if="!heading.input && (heading.$domAttri ||{}).type === 'number'"
                     :value="row[heading.name] ? row[heading.name].value: ''"
                     @input="handleInputChange(row.id, $event, heading.name,null)"
-                    :placeholder="heading.i18n ? $t(heading.i18n) : heading.label"
+                    :placeholder="hanldePlaceholder(heading)"
                     :addonRightIcon="heading.addonRightIcon"
                     :error="row[heading.name]? (row[heading.name].dirty ? row[heading.name].errors[0] :'') : '' "
                     @focus="dirtifyInput(row.id,heading.name,$event.target.value)"
@@ -82,7 +82,7 @@
                   <template v-if="heading.input === 'select'">
                     <el-select class="select-default"
                               size="small"
-                              :placeholder="heading.i18n ? $t(heading.i18n) : heading.label"
+                              :placeholder="hanldePlaceholder(heading)"
                               @input="handleInputChange(row.id, $event, heading.name,true)"
                               :value="row[heading.name] !== void 0 ? row[heading.name].value: '' "
                               @blur="dirtifyInput(row.id,heading.name,$event.target.value)"
@@ -97,7 +97,7 @@
                   </template>
                   <el-select v-if="heading.input === 'multiple'" class="select-default"
                             size="small"
-                            :placeholder="heading.i18n ? $t(heading.i18n) : heading.label"
+                            :placeholder="hanldePlaceholder(heading)"
                             multiple
                             @input="handleInputChange(row.id, $event, heading.name,true)"
                             :value="row[heading.name] ? row[heading.name].value: '' "
@@ -297,9 +297,18 @@ import {
       }
     },
     methods: {
-        ...mapActions({
-            getListSupportDocs: KYC_GET_LIST_SUPPORT_DOCUMENTS_ID,
-        }),
+      ...mapActions({
+          getListSupportDocs: KYC_GET_LIST_SUPPORT_DOCUMENTS_ID,
+      }),
+      hanldePlaceholder (heading) {
+        if (heading.i18n_placeholder) {
+          return this.$t(heading.i18n_placeholder)
+        } else if (heading.i18n) {
+          return this.$t(heading.i18n)
+        } else {
+          return heading.label
+        }
+      },
       handleViewDisplayData (row, heading) {
         // return row[heading.name] ? heading.mask ?
         //             heading.mask(row[heading.name].value)

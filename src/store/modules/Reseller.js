@@ -80,7 +80,7 @@ const actions = {
   [ADD_RESELLER_SUBSCRIPTION]: async ({commit, dispatch}, {body}) => {
     try {
       commit(MUTATE_LOADINGSTATE_RESELLER, 'sending')
-      const response = await Vue.prototype.$http.post(
+      const response = await Vue.prototype.$http.aba1.post(
         '/reseller-subscriptions',
         {
           ...handleEmptyValues({...body})
@@ -102,7 +102,7 @@ const actions = {
     try {
       commit(MUTATE_LOADINGSTATE_RESELLER, 'getting')
 
-      const {data} = await Vue.prototype.$http.get(
+      const {data} = await Vue.prototype.$http.aba1.get(
         `/reseller-subscriptions/all`
       );
 
@@ -128,7 +128,7 @@ const actions = {
       }
       requestStr.replace(/ /g, '')
       
-      let {data} = await Vue.prototype.$http.get(requestStr);
+      let {data} = await Vue.prototype.$http.aba1.get(requestStr);
 
       data = {
         ...data,
@@ -156,7 +156,7 @@ const actions = {
     try {
       commit(MUTATE_LOADINGSTATE_RESELLER, 'getting')
 
-      const {data} = await Vue.prototype.$http.get(
+      const {data} = await Vue.prototype.$http.aba1.get(
         `/reseller-subscriptions/${resellerSubscriptionId}`
       );
       commit(MUTATE_GET_RESELLER_SUBSCRTION_BY_ID, {data});
@@ -175,7 +175,7 @@ const actions = {
     try {
       console.log(body, resellerSubscriptionId);
       commit(MUTATE_LOADINGSTATE_RESELLER, 'sending')
-      const {data} = await Vue.prototype.$http.put(`/reseller-subscriptions/${resellerSubscriptionId}`, {
+      const {data} = await Vue.prototype.$http.aba1.put(`/reseller-subscriptions/${resellerSubscriptionId}`, {
         ...handleEmptyValues(body)
       });
 /*
@@ -197,7 +197,7 @@ const actions = {
   [GET_INVOICES_BY_SELLERID]: async ({commit, dispatch}, {cardProgramCode,page,perPage,currencyCode, resellerCode, fromDate, toDate}) => {
     try {
       commit(MUTATE_LOADINGSTATE_RESELLER, 'getting_invoices')
-      const {data} = await Vue.prototype.$http.get(`/invoices?
+      const {data} = await Vue.prototype.$http.aba1.get(`/invoices?
       card_program_code=${cardProgramCode}
       &currency_code=${currencyCode}
       &from_date=${fromDate}

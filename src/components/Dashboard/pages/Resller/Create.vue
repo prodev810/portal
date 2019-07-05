@@ -329,12 +329,16 @@
         loadingState: GETTER_LOADINGSTATE_RESELLER,
       }),
       resellerData() {
-        const resellerSub = this.$store.state.reseller.resellerSubscription;
+        let resellerSub = null
+        if (this.context !== 'create') {
+          resellerSub = this.$store.state.reseller.resellerSubscription;
+        }
         if (!resellerSub) return void 0;
+        const currencyCardProgram =  (this.$store.state.cardProgram.allCardPrograms.find(cardProgram => cardProgram.id === resellerSub.cardProgramID) ||
+            {cardProgCode: null})
         return !this.$route.params.id ? resellerSub : {
           ...resellerSub,
-          ['cardProgCode']: (this.$store.state.cardProgram.allCardPrograms.find(cardProgram => cardProgram.id === resellerSub.cardProgramID) ||
-            {cardProgCode: null}).cardProgCode
+          ['cardProgCode']: `${currencyCardProgram.cardProgCode} (${currencyCardProgram.defCurrency})`
         }
       },
       creationResponseState() { return this.$store.state.UiModule.responseState[ADD_RESELLER_SUBSCRIPTION]},
@@ -388,7 +392,7 @@
           if (i.name === 'cardProgramID') {
             return {
               ...i,
-              selectKeys: cardPrograms.map(cardProgram => ({name: cardProgram.cardProgCode, value: cardProgram.id}))
+              selectKeys: cardPrograms.map(cardProgram => ({name: `${cardProgram.cardProgCode} (${cardProgram.defCurrency})`, value: cardProgram.id}))
             }
           } else {
             return i;
@@ -494,7 +498,8 @@
 
         })
       }
-    }, mounted() {
+    }, 
+    mounted() {
       this.getAllCardPrograms();
       const {id,} = this.$route.params;
       const {edit} = this.$route.query;
@@ -512,10 +517,7 @@
           this.getResellerSubscripiton(id)
 
         }
-      }
-      if (this.context === 'create') {
-
-
+      } else if (this.context === 'create') {
         this.cardReseller = [createNewRowFromHeadings([...this.tableHeadingsPack.main,
           ...this.tableHeadingsPack.secondary, ...this.tableHeadingsPack.third], 'Reseller_new_row')];
         this.editId = 'Reseller_new_row';

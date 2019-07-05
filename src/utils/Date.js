@@ -14,3 +14,7 @@ export const formatDate = (date, withTime = false,preventOldDate=false) => {
 
   return withTime ? `${[year, month, day].join('-')}  ${[hour, minute].join(':')}` : [year, month, day].join('-');
 }
+
+export const simpleFormatAPIDate = (date) => {
+  return date.replace('T', ' ').replace('Z', ' GMT')
+}

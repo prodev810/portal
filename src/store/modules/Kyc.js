@@ -276,7 +276,7 @@ const mutations = {
 const actions = {
   [GETTER_APPLICATION_STATUS_LIST]: async ({commit, dispatch}) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/kyc-application-statuses`);
+      const {data} = await Vue.prototype.$http.kyc.get(`/kyc-application-statuses`);
       console.log('application status data', data);
       commit(MUTATE_APPLICATION_STATUS, {data});
     } catch (e) {
@@ -306,7 +306,7 @@ const actions = {
 
       //commit(MUTATE_LOADINGSTATE_RESELLER, 'getting')
 
-      const {data} = await Vue.prototype.$http.get('v1/kyc/clients/all');
+      const {data} = await Vue.prototype.$http.kyc.get('/clients/all');
 
       commit(MUTATE_All_CLIENTS, {data})
 
@@ -323,7 +323,7 @@ const actions = {
 
   [KYC_GET_STATISTICS]: async ({commit}, payload) => {
     try {
-      const {data} = await Vue.prototype.$http.get('v1/kyc/dashboard/statistics', {
+      const {data} = await Vue.prototype.$http.kyc.get('/dashboard/statistics', {
         duration: payload.duration,
         clientReference: payload.clientReference || null
       })
@@ -333,10 +333,9 @@ const actions = {
       console.log('error :', e);
     }
   },
-
   [KYC_GET_SUMMARY_REPORT]: async ({commit}, payload) => {
     try {
-      const {data} = await Vue.prototype.$http.get('v1/kyc/dashboard/summary-report', {duration: payload.duration})
+      const {data} = await Vue.prototype.$http.kyc.get('/dashboard/summary-report', {duration: payload.duration})
       commit(MUTATE_SUMMARY_REPORT, {data: data.infos})
     }catch(e){
       console.log('error :', e);
@@ -344,16 +343,15 @@ const actions = {
   },
   [KYC_GET_CLIENT_STATUSES]: async ({commit}) => {
     try {
-      const {data} = await Vue.prototype.$http.get('v1/kyc/client-statuses')
+      const {data} = await Vue.prototype.$http.kyc.get('/client-statuses')
       commit(MUTATE_CLIENT_STATUSES, {data})
     }catch(e){
       console.log('error :', e);
     }
   },
-
   [KYC_GET_CURRENCY_LIST]: async ({commit}) => {
     try {
-      const {data} = await Vue.prototype.$http.get('v1/kyc/currencies')
+      const {data} = await Vue.prototype.$http.kyc.get('/currencies')
       commit(MUTATE_CURRENCY_LIST, {data})
     }catch(e){
       console.log('error :', e);
@@ -363,7 +361,7 @@ const actions = {
     const pageNum = (payload && payload.pageNum) ? payload.pageNum : 0
     const pageSize = (payload && payload.pageSize) ? payload.pageSize : 20
     try{
-      const {data} = await Vue.prototype.$http.get('v1/kyc/clients', {pageNum, pageSize})
+      const {data} = await Vue.prototype.$http.kyc.get('/clients', {pageNum, pageSize})
       commit(MUTATE_PRODUCT_CONFIG_ALL_CLIENTS, {data})
     }catch(e){
       console.log('error :', e);
@@ -372,7 +370,7 @@ const actions = {
   [KYC_GET_PRODUCT_CONFIG_CLIENT]: async ({},payload) => {
     const id = payload.id
     return new Promise ( (resolve, reject) => {
-      Vue.prototype.$http.get(`v1/kyc/clients/${id}`).then( data => {
+      Vue.prototype.$http.kyc.get(`/clients/${id}`).then( data => {
         resolve(data.data);
       }).catch( error => reject(error));
     })
@@ -381,7 +379,7 @@ const actions = {
     const id = payload.id
     const body = payload.body
     return new Promise((resolve, reject) => {
-      Vue.prototype.$http.put(`v1/kyc/clients/${id}`, body)
+      Vue.prototype.$http.kyc.put(`/clients/${id}`, body)
         .then(data => {
           resolve(data.data)
         })
@@ -391,7 +389,7 @@ const actions = {
   [KYC_CREATE_PRODUCT_CONFIG_CLIENT]: async ({}, payload) => {
     const body = payload.body
     return new Promise((resolve, reject) => {
-      Vue.prototype.$http.post(`v1/kyc/clients`, body)
+      Vue.prototype.$http.kyc.post(`/clients`, body)
         .then(data => {
           resolve(data.data)
         })
@@ -403,7 +401,7 @@ const actions = {
   },
   [KYC_GET_PRODUCT_CONFIG_VIEW_INVOICE]: async ({commit}, payload) => {
     try {
-      const {data} = await Vue.prototype.$http.get('v1/kyc/invoices', {...payload})
+      const {data} = await Vue.prototype.$http.kyc.get('/invoices', {...payload})
       commit(MUTATE_PRODUCT_CONFIG_VIEW_INVOICE, {data})
     } catch (e) {
       console.log('error :', e);
@@ -414,7 +412,7 @@ const actions = {
       try{
         console.log({payload})
         // I get some App Ref from search module, but how i can get current app ref I dont know
-        const {data} = await Vue.prototype.$http.get(`v1/kyc/applications/${payload}/poacheck-enquiry`).catch( err => reject(err));
+        const {data} = await Vue.prototype.$http.kyc.get(`/applications/${payload}/poacheck-enquiry`).catch( err => reject(err));
         commit(MUTATE_POA_CHECK_ENQUIRY, {data});
         resolve(data);
       }catch (e) {
@@ -424,7 +422,7 @@ const actions = {
   },
   [KYC_GET_POA_CHECK_DOC]: async ({commit}, payload) => {
     try{
-      const {data} = await Vue.prototype.$http.get(`v1/kyc/poacheck/${payload.checkId}/docs/${payload.id}`)
+      const {data} = await Vue.prototype.$http.kyc.get(`/poacheck/${payload.checkId}/docs/${payload.id}`)
       commit(MUTATE_POA_CHECK_DOC, {data})
     }catch(e){
       console.log('error :', e)
@@ -432,7 +430,7 @@ const actions = {
   },
   [KYC_GET_POA_SUPPORT_DOC]: async ({commit}, payload) => {
     try{
-      const {data} = await Vue.prototype.$http.get(`v1/kyc/poacheck/${payload.id}/document-supports`)
+      const {data} = await Vue.prototype.$http.kyc.get(`/poacheck/${payload.id}/document-supports`)
       commit(MUTATE_POA_SUPPORT_DOC, {data})
     }catch (e) {
       console.log('error :', e)
@@ -440,7 +438,7 @@ const actions = {
   },
   [KYC_GET_DOWNLOAD_SUPPORT_DOC]: async ({commit}, payload) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`/v1/kyc/poacheck/${payload.checkId}/document-supports/${payload.id}`)
+      const {data} = await Vue.prototype.$http.kyc.get(`/poacheck/${payload.checkId}/document-supports/${payload.id}`)
       commit(MUTATE_POA_DOWNLOAD_SUPPORT_DOC, {data})
     }catch (e) {
       console.log('error :', e)
@@ -448,7 +446,7 @@ const actions = {
   },
   [KYC_POST_UPLOAD_DOCUMENT_SUPPORTS]: async ({commit}, payload) => {
     try {
-      const {data} = await Vue.prototype.$http.post(`v1/kyc/poacheck/${payload}/document-supports`)
+      const {data} = await Vue.prototype.$http.kyc.post(`/poacheck/${payload}/document-supports`)
     }catch (e) {
       console.log('error :', e)
     }
@@ -456,7 +454,7 @@ const actions = {
   // [KYC_GET_POA_UPOADED_DOCUMENT]: async ({commit}, payload) => {
   //   try {
   //     // console.log('payload', payload)
-  //     const {data} = await Vue.prototype.$http.get(`/v1/kyc/poacheck/{payload}/document-supports`);
+  //     const {data} = await Vue.prototype.$http.kyc.get(`/poacheck/{payload}/document-supports`);
   //     commit(MUTATE_POA_UPLOADED_DOCUMENT, {data})
   //   }catch (e) {
   //     console.log('error :', e)
@@ -465,7 +463,7 @@ const actions = {
 
   [KYC_GET_POA_CHECK_STATUSES]: async ({commit}, payload) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`v1/kyc/poacheck-statuses/`);
+      const {data} = await Vue.prototype.$http.kyc.get(`/poacheck-statuses/`);
       commit(MUTATE_POA_CHECK_STATUSES, {data})
     }catch (e) {
       console.log('error :', e)
@@ -475,7 +473,7 @@ const actions = {
     try {
       const body = payload.body
       console.log('update address', payload)
-      const {data} = await Vue.prototype.$http.post(`v1/kyc/poacheck/${payload.id}/address`, body);
+      const {data} = await Vue.prototype.$http.kyc.post(`/poacheck/${payload.id}/address`, body);
       commit(MUTATE_POA_CHECK_ADDRESS, {data})
     }catch (e) {
       console.log('error :', e)
@@ -483,7 +481,7 @@ const actions = {
   },
   [KYC_GET_POA_ACTION_TYPES]: async ({commit}, payload) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`v1/kyc/poacheck-action-types`);
+      const {data} = await Vue.prototype.$http.kyc.get(`/poacheck-action-types`);
       commit(MUTATE_POA_ACTION_TYPES, {data})
     }catch (e) {
       console.log('error :', e)
@@ -494,7 +492,7 @@ const actions = {
       const id = payload.id
       const body = payload.body
       console.log({id,body})
-      const {data} = await Vue.prototype.$http.post(`v1/kyc/poacheck/${id}/action`,body);
+      const {data} = await Vue.prototype.$http.kyc.post(`/poacheck/${id}/action`,body);
     }catch (e) {
       console.log('error :', e)
     }
@@ -634,7 +632,7 @@ const actions = {
   */
   [GETTER_APPLICATION_STATUS_LIST]: async ({commit, dispatch}) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/kyc-application-statuses`);
+      const {data} = await Vue.prototype.$http.kyc.get(`/kyc-application-statuses`);
       commit(MUTATE_APPLICATION_STATUS, {data});
     } catch (e) {
       console.log('error :', e);
@@ -642,7 +640,7 @@ const actions = {
   },
   [GETTER_All_CLIENTS_LIST]: async ({commit, dispatch}) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/clients/all`);
+      const {data} = await Vue.prototype.$http.kyc.get(`/clients/all`);
       commit(MUTATE_All_CLIENTS, {data});
     } catch (e) {
       console.log('error :', e);
@@ -650,7 +648,7 @@ const actions = {
   },
   [GETTER_CLIENT_TYPES_LIST]: async ({commit, dispatch}) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/client-types`);
+      const {data} = await Vue.prototype.$http.kyc.get(`/client-types`);
       commit(MUTATE_CLIENT_TYPES, {data});
     } catch (e) {
       console.log('error :', e);
@@ -666,7 +664,7 @@ const actions = {
     pageSize
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/outstanding-apps`, {
+      const {data} = await Vue.prototype.$http.kyc.get(`/outstanding-apps`, {
         clientReference: clientReference,
         clientType: clientType,
         dateFrom: dateFrom,
@@ -694,7 +692,7 @@ const actions = {
     pageSize
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/applications`, {
+      const {data} = await Vue.prototype.$http.kyc.get(`/applications`, {
         appReferenceId: appReferenceId,
         applicationStatus: applicationStatus,
         clientAppRef: clientAppRef,
@@ -719,7 +717,7 @@ const actions = {
     pageSize
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/applications/${appReferenceId}/events`, {
+      const {data} = await Vue.prototype.$http.kyc.get(`/applications/${appReferenceId}/events`, {
         pageNum: pageNum,
         pageSize: pageSize
       });
@@ -735,7 +733,7 @@ const actions = {
     status,
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/applications/${appReferenceId}/update-status`, {
+      const {data} = await Vue.prototype.$http.kyc.post(`/applications/${appReferenceId}/update-status`, {
         reason: reason,
         status: status
       });
@@ -748,7 +746,7 @@ const actions = {
     appReferenceId,
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/applications/${appReferenceId}`);
+      const {data} = await Vue.prototype.$http.kyc.get(`/applications/${appReferenceId}`);
       console.log('data from API', data)
       commit(MUTATE_CLIENT_INFO, {data})
     } catch (e) {
@@ -760,7 +758,7 @@ const actions = {
     id,
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/idcheck/${checkId}/docs/${id}`);
+      const {data} = await Vue.prototype.$http.kyc.get(`/idcheck/${checkId}/docs/${id}`);
       commit(MUTATE_CHECK_DOCS, {data});
     } catch (e) {
       console.log('error :', e);
@@ -771,8 +769,8 @@ const actions = {
     id,
   }) => {
     try {
-        commit(CLEAR_POA_IMG);
-      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/poacheck/${checkId}/docs/${id}`);
+      commit(CLEAR_POA_IMG);
+      const {data} = await Vue.prototype.$http.kyc.get(`/poacheck/${checkId}/docs/${id}`);
       commit(MUTATE_POA_IMG, {data});
     } catch (e) {
       console.log('error :', e);
@@ -782,7 +780,7 @@ const actions = {
     appReferenceId,
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/applications/${appReferenceId}/resent-sms`);
+      const {data} = await Vue.prototype.$http.kyc.post(`/applications/${appReferenceId}/resent-sms`);
       console.log('data from API POA', data)
     } catch (e) {
       console.log('error :', e);
@@ -794,7 +792,7 @@ const actions = {
     mobile
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/applications/${appReferenceId}/update-contact`, {
+      const {data} = await Vue.prototype.$http.kyc.post(`/applications/${appReferenceId}/update-contact`, {
         email: email,
         mobile: mobile
       });
@@ -807,7 +805,7 @@ const actions = {
     appReferenceId,
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/applications/${appReferenceId}/sancheck-enquiry`);
+      const {data} = await Vue.prototype.$http.kyc.get(`/applications/${appReferenceId}/sancheck-enquiry`);
       console.log('KYC_GET_CHECK_ENQUIRY ', data)
       commit(MUTATE_SANC_CHECK_ENQUIRY, {data});
     } catch (e) {
@@ -818,7 +816,7 @@ const actions = {
     appReferenceId,
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/applications/${appReferenceId}/sanction-rescreen`);
+      const {data} = await Vue.prototype.$http.kyc.post(`/applications/${appReferenceId}/sanction-rescreen`);
       console.log('KYC_RESCREEN_ACTION ', data)
       Promise.resolve()
     } catch (e) {
@@ -827,7 +825,7 @@ const actions = {
   },
   [KYC_GET_SANCTION_CHECK_STATUSES]: async ({commit, dispatch}) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/sancheck-statuses`);
+      const {data} = await Vue.prototype.$http.kyc.get(`/sancheck-statuses`);
       console.log('KYC_GET_SANCTION_CHECK_STATUSES ', data)
       commit(MUTATE_SANCTION_CHECK_STATUSES, {data});
     } catch (e) {
@@ -836,7 +834,7 @@ const actions = {
   },
   [KYC_GET_SANCTION_CHECK_ACTION_TYPES]: async ({commit, dispatch}) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/sancheck-action-types`);
+      const {data} = await Vue.prototype.$http.kyc.get(`/sancheck-action-types`);
       console.log('KYC_GET_SANCTION_CHECK_ACTION_TYPES ', data)
       commit(MUTATE_SANCTION_CHECK_ACTION_TYPES, {data});
     } catch (e) {
@@ -850,7 +848,7 @@ const actions = {
     id,
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/sancheck/${id}/action`, {
+      const {data} = await Vue.prototype.$http.kyc.post(`/sancheck/${id}/action`, {
         actionTypeCode,
         comment,
         operatorName,
@@ -867,7 +865,7 @@ const actions = {
     id,
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/sancheck/${id}/document-supports`, {
+      const {data} = await Vue.prototype.$http.kyc.post(`/sancheck/${id}/document-supports`, {
         content,
         mimeType,
         operatorName,
@@ -882,7 +880,7 @@ const actions = {
       id
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/sancheck/${id}/document-supports`);
+      const {data} = await Vue.prototype.$http.kyc.get(`/sancheck/${id}/document-supports`);
       console.log('KYC_GET_LIST_SUPPORT_DOCUMENTS ', data)
       commit(MUTATE_LIST_SUPPORT_DOCUMENTS, {data});
     } catch (e) {
@@ -893,7 +891,7 @@ const actions = {
     appReferenceId
     }) => {
     try {
-        const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/applications/${appReferenceId}/idcheck-enquiry`);
+        const {data} = await Vue.prototype.$http.kyc.get(`/applications/${appReferenceId}/idcheck-enquiry`);
         console.log('KYC_GET_ID_CHECK_ENQUIRY ', data)
         commit(MUTATE_ID_CHECK_ENQUIRY, {data});
     } catch (e) {
@@ -902,7 +900,7 @@ const actions = {
   },
   [KYC_GET_ID_CHECK_STATUSES]: async ({commit, dispatch}) => {
     try {
-        const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/idcheck-statuses`);
+        const {data} = await Vue.prototype.$http.kyc.get(`/idcheck-statuses`);
         console.log('KYC_GET_ID_CHECK_STATUSES ', data)
         commit(MUTATE_ID_CHECK_STATUSES, {data});
     } catch (e) {
@@ -911,7 +909,7 @@ const actions = {
   },
   [KYC_GET_ID_VALIDATION_DATAS]: async ({commit, dispatch}) => {
     try {
-        const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/id-validations-fields`);
+        const {data} = await Vue.prototype.$http.kyc.get(`/id-validations-fields`);
         console.log('KYC_GET_ID_VALIDATION_DATAS ', data)
         commit(MUTATE_ID_VALIDATION_DATAS, {data});
     } catch (e) {
@@ -920,7 +918,7 @@ const actions = {
   },
   [KYC_GET_ID_CHECK_ACTION_TYPES]: async ({commit, dispatch}) => {
     try {
-        const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/idcheck-action-types`);
+        const {data} = await Vue.prototype.$http.kyc.get(`/idcheck-action-types`);
         console.log('KYC_GET_ID_CHECK_ACTION_TYPES ', data)
         commit(MUTATE_ID_CHECK_ACTION_TYPES, {data});
     } catch (e) {
@@ -934,7 +932,7 @@ const actions = {
     id,
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/idcheck/${id}/action`, {
+      const {data} = await Vue.prototype.$http.kyc.post(`/idcheck/${id}/action`, {
         actionTypeCode,
         comment,
         operatorName,
@@ -951,7 +949,7 @@ const actions = {
     id,
   }) => {
     try {
-      const {data} = await Vue.prototype.$http.post(`${axiosConfig.BASE_URL}v1/kyc/idcheck/${id}/document-supports`, {
+      const {data} = await Vue.prototype.$http.kyc.post(`/idcheck/${id}/document-supports`, {
         content,
         mimeType,
         operatorName,
@@ -968,7 +966,7 @@ const actions = {
     }) => {
     try {
         console.log(id, fromHistoryTable);
-        const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/idcheck/${id}/document-supports`);
+        const {data} = await Vue.prototype.$http.kyc.get(`/idcheck/${id}/document-supports`);
         console.log('KYC_GET_LIST_SUPPORT_DOCUMENTS_ID ', data)
         if(!fromHistoryTable) commit(MUTATE_LIST_SUPPORT_DOCUMENTS_ID, {data});
         else commit(MUTATE_LIST_SUPPORT_DOCUMENTS_HISTORY, {data});
@@ -983,7 +981,7 @@ const actions = {
         fileName
     }) => {
     try {
-        const {data} = await Vue.prototype.$http.get(`${axiosConfig.BASE_URL}v1/kyc/idcheck/${checkId}/document-supports/${id}`);
+        const {data} = await Vue.prototype.$http.kyc.get(`/idcheck/${checkId}/document-supports/${id}`);
         console.log('KYC_DOWNLOAD_SUPPORT_DOC ', data)
         const linkSource = `data:${data.mimeType};base64,${data.content}`;
         const downloadLink = document.createElement("a");

@@ -60,7 +60,7 @@
         </RegularTable>
         <Pagination :page-count="totalPages" v-model="page"
                     @perpagechange="onPerpageChange"
-                    :perPage="perPage">
+                    :perPage="perPage" displayPerPage>
         </Pagination>
       </div>
     </div>
@@ -87,7 +87,7 @@
     GETTER_INVOICES_BY_SELLERID,
     GETTER_LOADINGSTATE_RESELLER
   } from "../../../../store/types";
-  import {formatDate} from "../../../../utils/Date";
+  import {formatDate, simpleFormatAPIDate} from "../../../../utils/Date";
   // import {formatedMoney} from "../../../../utils/inputMasks";
   import {moneyFormatAppendCurrency} from "../../../../utils/moneyFormat";
   import Pagination from "../../../UIComponents/ABAComponents/Pagenation/Pagenation";
@@ -245,7 +245,7 @@
       allInvoicesData(newVal) {
         this.allInvoices = ([...newVal.invoiceItems] || []).map(invoice => ({
           ...invoice,
-          timestamp:formatDate(invoice.timestamp,true),
+          timestamp:simpleFormatAPIDate(invoice.timestamp,true),
           itemAmount:moneyFormatAppendCurrency(invoice.itemAmount, this.currencyCode)
         }));
         this.sum = moneyFormatAppendCurrency(newVal.sum, this.currencyCode);

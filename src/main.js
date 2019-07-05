@@ -60,27 +60,28 @@ Vue.use(SideBar, {sidebarLinks: sidebarLinks})
 Vue.use(VeeValidate)
 
 Vue.use(oAuthWrapper, oAuthConfig)
+Vue.use(axiosWrapper, axiosConfig)
 
-Vue.use(oAuthKycWrapper, {
-    BASE_URL: 'https://auth.dev.transact24.com/auth',
-    REALM: 'ceevo-realm',
-    CLIENT_ID: 'kyc-svc',
-    CLIENT_SECRET: '299a61f7-dd99-4533-8db7-a43ad062a6dd',
-    TIMEOUT: 30 * 60,
-    TOKEN_EXPIRED_TIME_LESS_THAN: 2 * 60,
-    SHORTCUT: '$oAuthKyc'    
-})
-Vue.use(axiosWrapper, [
-  axiosConfig, 
-  {
-    BASE_URL: 'https://api.dev.ceevo.com/acquring/mgmt',
-    VERSION: '',
-    TYPE: '',
-    TIMEOUT: 35000,
-    SHORTCUT: '$acchttp',
-    OAUTH: '$oAuth' // same oAuth as main
-  } 
-])
+// Vue.use(oAuthKycWrapper, {
+//     BASE_URL: 'https://auth.dev.transact24.com/auth',
+//     REALM: 'ceevo-realm',
+//     CLIENT_ID: 'kyc-svc',
+//     CLIENT_SECRET: '299a61f7-dd99-4533-8db7-a43ad062a6dd',
+//     TIMEOUT: 30 * 60,
+//     TOKEN_EXPIRED_TIME_LESS_THAN: 2 * 60,
+//     SHORTCUT: '$oAuthKyc'    
+// })
+// Vue.use(axiosWrapper, [
+//   axiosConfig, 
+//   {
+//     BASE_URL: 'https://api.dev.ceevo.com/acquring/mgmt',
+//     VERSION: '',
+//     TYPE: '',
+//     TIMEOUT: 35000,
+//     SHORTCUT: '$acchttp',
+//     OAUTH: '$oAuth' // same oAuth as main
+//   } 
+// ])
 
 // config lang
 locale.use(lang)
@@ -106,12 +107,21 @@ export const router = new VueRouter({
 
 //   const isAbleAccess = (object) => {
 //     let has = Vue.prototype.$oAuth.hasPermission(to.meta.permission)
-//     if (!has && (object.name === 'Resellers Editor' || object.name === 'Edit card program')) {
+//     if (!has && isAllowResellerToView(to.meta.isAllowResellerToView)) {
+//       has = true
+//     }else if (!has && (object.name === 'Resellers Editor' || object.name === 'Edit card program')) {
 //       if (!object.query.edit && Vue.prototype.$oAuth.hasPermission(permission.RESELLER_SUBSCRIPTION_VIEW)) {
 //         has = true
 //       }
 //     }
 //     return has
+//   }
+
+//   const isAllowResellerToView = (isAllow) => {
+//     if (!isAllow) {
+//       return false
+//     }
+//     return Vue.prototype.$oAuth.isReseller()
 //   }
 
 //   const defaultTo = nextToByRole()
@@ -120,16 +130,6 @@ export const router = new VueRouter({
 //       next('/login')
 //     } else {
 //       next()
-//     }
-//   } else {
-//     if (to.path === '/login' || to.path === '/lock') {
-//       next(defaultTo)
-//     } else {
-//       if (to.meta.permission && !isAbleAccess(to)) {
-//         next(defaultTo)
-//       } else {
-//         next()
-//       }
 //     }
 //   }
 // })

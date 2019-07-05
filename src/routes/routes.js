@@ -90,7 +90,8 @@ let floatAccount = {
       name: 'approve debit',
       component: ApproveDebit,
       meta: {
-        permission: permission.DEBIT_CREDIT_INSTRUCT_APPROVE
+        permission: permission.DEBIT_CREDIT_INSTRUCT_APPROVE,
+        isAllowResellerToView: true
       }
     },
     {

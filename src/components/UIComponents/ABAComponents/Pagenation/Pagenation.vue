@@ -1,9 +1,32 @@
 <template>
-  <nav>
+  <nav :class="displayPerPage ? ['nav_with_perpage_select_input'] : ''">
     <div :class="{
     empty_pagenition:pageCount <= 1 ||( currentPage > pageCount )
     }">
       <p-pagination :page-count="pageCount" @input="pageChangeHandler" :value="currentPage"></p-pagination>
+    </div>
+    <div v-if="displayPerPage" class="page-sizer">
+      <div class="d-flex align-items-center align-content-center ">
+        <span class="px-2">{{ $t('common.pagenation.page_size') }}</span>
+        <el-select class="select-default"
+                   size="small"
+                   placeholder="selected a card program"
+                   :value="perPage"
+                   @input="handlePerPageChange"
+        >
+          <el-option v-for="page in 4"
+                     class="select-success"
+                     :value="page === 1 ? page*5 : (page)*5"
+                     :label="page === 1 ? page*5 : (page)*5"
+                     :key="page+'page__size'">
+          </el-option>
+        </el-select>
+      </div>
+      <div class="py-1" :class="{
+    empty_pagenition:pageCount <= 1
+    }">
+        <small> {{ PagingCalculation(currentPage, pageCount, perPage) }}</small>
+      </div>
     </div>
   </nav>
 </template>
@@ -25,6 +48,10 @@
       perPage: {
         type: Number,
         default: 10
+      },
+      displayPerPage: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -71,6 +98,10 @@
     justify-content: flex-end;
     align-items: center;
     position: relative;
+  }
+
+  .nav_with_perpage_select_input {
+    justify-content: center;
   }
 
   .el-select {

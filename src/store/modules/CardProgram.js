@@ -19,6 +19,19 @@ import {
   UPDATE_RESPONSE_STATE
 } from '../types';
 
+const convertData = (entities) => {
+  const list = []
+  for (const index in entities) {
+    const obj = {
+      cardProgCode: entities[index].cardProgramCode,
+      defCurrency: entities[index].defaultCurrencyCode,
+      id: entities[index].cardProgramId,
+    }
+    list.push(obj)
+  }
+  return list
+}
+
 const state = {
   allCardPrograms: [],
   allCardProgramsList: {
@@ -62,7 +75,7 @@ const actions = {
     try {
       commit(MUTATE_LOADINGSTATE_CARD_PROGRAM, 'sending')
 
-      const {data} = await Vue.prototype.$http.post('/cardprograms',  {
+      const {data} = await Vue.prototype.$http.aba1.post('/cardprograms',  {
         ...handleEmptyValues(body)
       })
       commit(MUTATE_ADD_CARD_PROGRAME, {data})
@@ -72,7 +85,7 @@ const actions = {
       dispatch(UPDATE_RESPONSE_STATE, {key: ADD_CARD_PROGRAM, status: {state: true, error: null}})
       return true
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       commit(MUTATE_LOADINGSTATE_CARD_PROGRAM, 'ideal')
       dispatch(SHOW_TOAST_MESSAGE, {message: e.response.data.detail, status: 'danger'})
       dispatch(UPDATE_RESPONSE_STATE, {key: ADD_CARD_PROGRAM, status: {state: false, error: null}})
@@ -83,8 +96,17 @@ const actions = {
   [GET_ALL_CARD_PROGRAM]: async ({commit, dispatch}) => {
     try {
       commit(MUTATE_LOADINGSTATE_CARD_PROGRAM, 'getting')
-
-      const {data} = await Vue.prototype.$http.get(`/cardprograms/all`)
+      let data = []
+      if (Vue.prototype.$oAuth.isReseller()) {
+        const resp = await Vue.prototype.$http.aba1.get(`/reseller-cardprograms/?reseller_code=${Vue.prototype.$oAuth.getCurrentResellerCode()}`)
+        // const resp = await Vue.prototype.$http.aba1.get(`http://mcaba.temp.dev.transact24.com/v1/business/reseller-cardprograms/?reseller_code=${Vue.prototype.$oAuth.getCurrentResellerCode()}`)
+        data = resp.data.cardPrograms
+        data = convertData(data)
+      } else {
+        const resp = await Vue.prototype.$http.aba1.get(`/cardprograms/all`)
+        data = resp.data
+      }
+      console.log(data)
 
       commit(MUTATE_CARD_PROGRAMES, {data})
       commit(MUTATE_LOADINGSTATE_CARD_PROGRAM, 'ideal')
@@ -101,7 +123,7 @@ const actions = {
     try {
       commit(MUTATE_LOADINGSTATE_CARD_PROGRAM, 'getting')
 
-      let {data} = await Vue.prototype.$http.get(`/cardprograms/list?
+      let {data} = await Vue.prototype.$http.aba1.get(`/cardprograms/list?
       page=${page}
       &per_page=${perPage}`.replace(/ /g, ''))
       data = {
@@ -126,7 +148,7 @@ const actions = {
     try {
       commit(MUTATE_LOADINGSTATE_CARD_PROGRAM, 'getting')
 
-      const {data} = await Vue.prototype.$http.get(`/cardprograms/${programCardId}`)
+      const {data} = await Vue.prototype.$http.aba1.get(`/cardprograms/${programCardId}`)
       commit(MUTATE_ACTIVE_CARD_PROGRAME, {data})
       commit(MUTATE_LOADINGSTATE_CARD_PROGRAM, 'ideal')
 
@@ -141,7 +163,7 @@ const actions = {
     try {
       commit(MUTATE_LOADINGSTATE_CARD_PROGRAM, 'sending')
 
-      const {data} = await Vue.prototype.$http.put(`/cardprograms/${cardProgramId}`, {...handleEmptyValues(body)})
+      const {data} = await Vue.prototype.$http.aba1.put(`/cardprograms/${cardProgramId}`, {...handleEmptyValues(body)})
       commit(MUTATE_EDIT_CARD_PROGRAME, {data, cardProgramId})
       commit(MUTATE_LOADINGSTATE_CARD_PROGRAM, 'ideal')
 

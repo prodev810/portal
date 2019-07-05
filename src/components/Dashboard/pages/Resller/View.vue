@@ -79,7 +79,8 @@
               </regular-table>
               <Pagination :page-count="totalPages" v-model="page"
                           @perpagechange="onPerpageChange"
-                          :perPage="perPage">
+                          :perPage="perPage"
+                          displayPerPage>
               </Pagination>
             </div>
           </div>
@@ -174,6 +175,10 @@
             mapViewData: 'cardProgCode'
           },
           {
+            label: 'Default Currency',
+            name: 'cardProgCurrency',
+          },
+          {
             label: 'RC', 
             name: 'resellerCode',
             i18n: 'reseller.listing.table_header.reseller_code'
@@ -184,25 +189,6 @@
             name: 'resellerName',
             i18n: 'reseller.listing.table_header.reseller_name'
           },
-
-          /**    {label: 'reseller Name', name: 'resellerName'},
-           {label: 'unique Float', name: 'uniqueFloat'},
-           {label: 'load Fee', name: 'loadFee'},
-           {label: 'percentage', name: 'loadFeePct'},
-           {label: 'Roof', name: 'loadFeeCap'},
-           {label: 'charged to', name: 'loadFeebillMethod'},
-
-           {label: 'application Fee', name: 'appFee'},
-           {label: 'charged to', name: 'appFeeBillMethod'},
-
-           {label: 'monthly Fee', name: 'monthlyFee'},
-           {label: 'charged to', name: 'monthlyFeeBillMethod'},
-
-           {label: 'api Fee', name: 'apiFee'},
-           {label: 'charged to', name: 'apiFeeBillMethod'},
-
-           {label: 'alert Contact', name: 'alertContact'},
-           {label: 'status', name: 'status'},*/
         ],
         editAll: false,
         editId: '',
@@ -225,8 +211,8 @@
           ..._resellerData,
           resellerSubscriptionList: (_resellerData.resellerSubscriptionList || []).map(resellerSub => ({
             ...resellerSub,
-            ['cardProgCode']: (this.$store.state.cardProgram.allCardPrograms.find(cardProgram => cardProgram.id === resellerSub.cardProgramID) ||
-              {cardProgCode: null}).cardProgCode
+            ['cardProgCode']: (this.$store.state.cardProgram.allCardPrograms.find(cardProgram => cardProgram.id === resellerSub.cardProgramID) || {cardProgCode: null}).cardProgCode,
+            ['cardProgCurrency']: (this.$store.state.cardProgram.allCardPrograms.find(cardProgram => cardProgram.id === resellerSub.cardProgramID) || {cardProgCode: null}).defCurrency,
           }))
         }
       }

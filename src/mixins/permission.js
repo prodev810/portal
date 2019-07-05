@@ -9,6 +9,12 @@ const permissionMixin = {
     hasPermission (permission) {
       const has = this.$oAuth.hasPermission(permission)
       return has
+    },
+    isAllowResellerToView (isAllow) {
+      if (!isAllow) {
+        return false
+      }
+      return this.$oAuth.isReseller()
     }
   }
 }

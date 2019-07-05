@@ -6,27 +6,36 @@ import {store} from '../store/store.js'
 
 const TAG = '[axios]'
 const axiosWrapper = {}
-
-axiosWrapper.install = (Vue, _configOptions = undefined) => {
-  if (typeof _configOptions === 'undefined') {
+axiosWrapper.install = (Vue, configOptions = undefined) => {
+  if (typeof configOptions === 'undefined') {
     throw new Error('please set api server config.')
   }
 
-  _configOptions.forEach(configOptions => {
+  // init $http as array
+  const apiInstances = []
+
+  // get global setting
+  const commonTimeOut = configOptions.timeout
+
+  for (const apiConfig of configOptions.apis) {
+
+    // get axios instance
     const axios = Axios.create({
-      baseURL: configOptions.BASE_URL,
-      timeout: configOptions.TIMEOUT
+      baseURL: apiConfig.BASE_URL,
+      timeout: apiConfig.TIMEOUT || commonTimeOut
     })
 
+    // interceptors for request
     axios.interceptors.request.use(async config => {
       console.log(TAG, `${config.baseURL}${config.url}`, config.method === 'get' ? config.params : config.data)
-      config.headers['Authorization'] = await Vue.prototype[configOptions.OAUTH].getAuthorizationHeader()
+      config.headers['Authorization'] = await Vue.prototype[apiConfig.OAUTH].getAuthorizationHeader()
       return config
     }, error => {
       console.error(TAG, 'Failed to send request', error)
       return Promise.reject(error)
     })
 
+    //interceptors for response
     axios.interceptors.response.use(response => {
       console.log(TAG, response)
       return response
@@ -41,12 +50,12 @@ axiosWrapper.install = (Vue, _configOptions = undefined) => {
         if (error.response.status == 401) {
           store.dispatch(SHOW_TOAST_MESSAGE, {message: 'You have been automatically logged out, please login again. ', status: 'danger'})
           try {
-            Vue.prototype[configOptions.OAUTH]
+            Vue.prototype.$oAuth
               .logout()
               .then(isSuccess => {
                 // router.push({ path: "/login" });
                 // store.dispatch(SET_AUTH_SATATE, false)
-                Vue.prototype[configOptions.OAUTH].lock()
+                Vue.prototype.$oAuth.lock()
               })
               .catch(e => {
                 console.error(e.message);
@@ -54,7 +63,6 @@ axiosWrapper.install = (Vue, _configOptions = undefined) => {
           } catch (e) {
             console.error(e);
           }
-
         }
       } else if (error.request) {
         /**
@@ -85,7 +93,8 @@ axiosWrapper.install = (Vue, _configOptions = undefined) => {
       return Promise.reject(error)
     })
 
-    Vue.prototype[configOptions.SHORTCUT] = {
+    // create http methods
+    apiInstances[apiConfig.SHORTCUT] = {
       get: (url, params = {}) => {
         return axios.get(url, {
           params: params
@@ -104,7 +113,8 @@ axiosWrapper.install = (Vue, _configOptions = undefined) => {
         return axios.patch(url, data)
       }
     }
-  })
-}
+  }
 
+  Vue.prototype.$http = apiInstances
+}
 export default axiosWrapper

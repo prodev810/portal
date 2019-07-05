@@ -48,7 +48,7 @@
             <el-option v-for="card in cardPrograms "
                        class="select-success"
                        :value="card.id"
-                       :label="card.cardProgCode"
+                       :label="`${card.cardProgCode} (${card.defCurrency})`"
                        :key="card.id">
             </el-option>
           </el-select>
@@ -100,7 +100,7 @@
             <Pagination :page-count="totalPages"
                         v-model="page"
                         @perpagechange="onPerpageChange"
-                        :perPage="perPage"></Pagination>
+                        :perPage="perPage" displayPerPage></Pagination>
           </div>
         </div>
       </div>
@@ -219,7 +219,7 @@
         perPage: 10,
         totalPages: 0,
         fromDate: '',
-        resellerCode: 'ALL',
+        resellerCode: 'All',
         toDate: ''
       }
     }, computed: {
@@ -230,18 +230,20 @@
         allCardPrograms: GETTER_ALL_CARDS
       }),
       cardPrograms() {
+        // return (this.$store.state.cardProgram.allCardPrograms || [])
+        //   .reduce((acc, i) => !!acc.find(({cardProgCode}) => i.cardProgCode === cardProgCode)
+        //     ? acc
+        //     : [...acc, i]
+        //     , [])
         return (this.$store.state.cardProgram.allCardPrograms || [])
-          .reduce((acc, i) => !!acc.find(({cardProgCode}) => i.cardProgCode === cardProgCode)
-            ? acc
-            : [...acc, i]
-            , [])
-      }, resellersMenu() {
+      },
+      resellersMenu() {
         return (this.$store.state.reseller.resellerSubscriptions || [])
           .reduce((acc, i) => !!acc.find(({resellerCode}) => i.resellerCode === resellerCode)
             ? acc
             : [...acc, i]
             , [{
-              resellerCode: 'ALL',
+              resellerCode: 'All',
               id: '____reseller__id'
             }])
       }
@@ -254,11 +256,11 @@
       }), onPerpageChange(ev) {
         this.perPage = ev;
       },
-      showSoftDocs({index: {id}}, $return = false) {
-        const {sofDocs} = this.tableData.find(({id: floatId}) => id === floatId)
+      showSoftDocs(index, $return = false) {
+        const {sofDocs} = this.tableData.find((row) => index.index.row.id === row.id)
         if ($return) return (sofDocs && sofDocs.length > 0)
         this.softDocs = sofDocs || [];
-        this.selectedFloatId = id;
+        this.selectedFloatId = index.index.row.id;
         this.showSoftUploader = true;
       }, 
       handleQuery({cardProgramId, currencyCode, resellerCode, fromDate, toDate, page, perPage} = {}) {
@@ -310,8 +312,10 @@
       },
       download() {
         let requestObj = {}
-        if (this.resellerCode !== 'ALL') {
+        if (this.resellerCode !== 'All') {
           requestObj.reseller_code = this.$oAuth.isReseller() ? this.$oAuth.getCurrentResellerCode() : this.resellerCode
+        } else if (this.$oAuth.isReseller()) {
+          requestObj.reseller_code = this.$oAuth.getCurrentResellerCode()
         }
 
         if (formatDate(this.fromDate,false,true) !== '') {
@@ -322,7 +326,7 @@
           requestObj.to_date = formatDate(this.toDate ,false,true)
         }
 
-        this.$http.get(`/cardprograms/${this.cardProgramId}/floats/reviewed/export`, requestObj).then((response) => {
+        this.$http.aba1.get(`/cardprograms/${this.cardProgramId}/floats/reviewed/export`, requestObj).then((response) => {
           const data = response.data
           const $ancoreElement = this.$refs.downloadEr;
           const blobURI = URL.createObjectURL(b64toBlob(data.encodedFile, data.contentType, data.fileSize))

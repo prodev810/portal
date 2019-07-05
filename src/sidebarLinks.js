@@ -90,7 +90,8 @@ export default [
         name: 'view float account',
         path: '/float-account/view-float-account',
         i18n: 'menu.view_float_account',
-        permission: permission.FLOAT_ACCOUNT_VIEW
+        permission: permission.FLOAT_ACCOUNT_VIEW,
+        isAllowResellerToView: true
       },
 /*      {
         name: 'view statement',

@@ -281,7 +281,7 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
    */
   const loadPermissions = async () => {
     return [permission.ALL_PERMISSION]
-    // const response = await Vue.prototype.$http.get('https://api.dev.transact24.com/mcaba/v1/v1/userprofile')
+    // const response = await Vue.prototype.$http.aba1.get('https://api.dev.transact24.com/mcaba/v1/v1/userprofile')
     // const currentUserRole = response.data.roles
     // if (currentUserRole.length > 0) {
     //   saveRoleInSessionStorage(currentUserRole[0])

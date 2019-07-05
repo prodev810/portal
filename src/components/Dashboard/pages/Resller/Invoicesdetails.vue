@@ -2,41 +2,6 @@
   <div>
     <div class="card-header bg-white border-0">
       <h4 class="card-title">xxxx details</h4>
-      <!--  <div class="row align-items-stretch invoices-search-header">
-          <div class="col-12 col-md-6 row align-items-center no-gutters">
-            <div class="col-12">Issued Date</div>
-            <div class="col-2"></div>
-            <div class="col-5 d-flex align-items-center">
-              <span class="px-2">From</span>
-              <el-date-picker v-model="issuedDateFrom" type="date"
-                              placeholder="Pick Starting Date"
-                              :picker-options="pickerOptions1">
-              </el-date-picker>
-            </div>
-            <div class="col-5 d-flex align-items-center">
-              <span class="px-2">To</span>
-              <el-date-picker v-model="issuedDateTo" type="date"
-                              placeholder="Pick Starting Date"
-                              :picker-options="pickerOptions1">
-              </el-date-picker>
-            </div>
-          </div>
-          <div class="col-12 col-md-6 row bg-sucess  align-items-center">
-            <div class="col-6">
-              <fg-input label="invoice#" v-model="invoiceNumber" placeholder="Invoice number.."></fg-input>
-            </div>
-            <div class="col-6">
-              <fg-input label="currency code" v-model="currencyCode" placeholder="currency code.."></fg-input>
-            </div>
-          </div>
-          <div class="col-12 row">
-            <div class="col-12">
-              <div class="pull-right">
-                <p-button @click="viewInvoices"    type="primary">search for invoices</p-button>
-              </div>
-            </div>
-          </div>
-        </div>-->
     </div>
     <div class="card p-2">
       <div class="card-content row">
@@ -59,7 +24,7 @@
             <pagination :page-count="totalPages"
                         v-model="page"
                         @perpagechange="onPerpageChange"
-                        :perPage="perPage"></pagination>
+                        :perPage="perPage" ></pagination>
           </div>
         </div>
       </div>
@@ -128,7 +93,7 @@
         if (!this.invoiceNumber) return;
         try {
           this.loading = true;
-          const {data} = await Vue.prototype.$http.get(`/invoices/${this.invoiceNumber}}/details?
+          const {data} = await Vue.prototype.$http.aba1.get(`/invoices/${this.invoiceNumber}}/details?
         &page=${this.page}
         &per_page=${this.perPage}`.replace(/ /g, ''))
           this.loading = false;
