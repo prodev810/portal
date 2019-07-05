@@ -126,35 +126,38 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="tableItem in listingTableData" :key="tableItem.accountReference">
+          <tr v-for="tableItem in issuingAppsInfosChecked" :key="tableItem.id">
             <td scope="col" class="text-center">
-              <p-checkbox v-model="tableItem.is_checked"
+              <p-checkbox v-model="tableItem.isChecked"
                           class="primary-custom-checkbox"></p-checkbox>
             </td>
             <td>{{tableItem.accountReference}}</td>
             <td>{{tableItem.firstName}}</td>
             <td>{{tableItem.lastName}}</td>
-            <td class="text-capitalize text-center" :class="tableItem.status">{{tableItem.status}}</td>
-            <td class="text-center" :class="[tableItem.plastic ? 'submitted' : 'failed']">{{tableItem.plastic |
+            <td class="text-capitalize text-center" :class="handleAppStatus(tableItem.issuingAppStatus)">
+              {{tableItem.issuingAppStatus}}
+            </td>
+            <td class="text-center" :class="[tableItem.isPlasticRequired ? 'submitted' : 'failed']">
+              {{tableItem.isPlasticRequired |
               booleanToYesNoFormat}}
             </td>
             <td class="pl-0 pr-0">
               <p-button outline type="primary"
-                        @click="handleReviewAccount(tableItem.accountReference)"
+                        @click="handleReviewAccount(tableItem.id)"
                         class="w-100">
                 <img class="glass-icon" :src="GlassPurpleIcon" alt="glassIcon">
                 Review
               </p-button>
             </td>
-            <td class="text-center text" :class="[tableItem.ac_created ? 'submitted': 'failed']">
-              <img v-if="tableItem.ac_created"  :src="TickIcon" alt="tickIcon">
+            <td class="text-center text" :class="[tableItem.isAccountCreated ? 'submitted': 'failed']">
+              <img v-if="tableItem.isAccountCreated" :src="TickIcon" alt="tickIcon">
               <img v-else :src="CrossIcon" alt="crossIcon">
             </td>
             <td class="pl-0 pr-0">
-              <p-button outline :type="tableItem.ac_created ? 'success' : 'danger'"
-                        @click="handleCardCreated()"
+              <p-button outline :type="tableItem.isCardCreated ? 'success' : 'danger'"
+                        @click="handleCardCreated(tableItem)"
                         class="w-100">
-                <template v-if="tableItem.ac_created ">
+                <template v-if="tableItem.isCardCreated">
                   <img class="glass-icon" :src="GlassGreenIcon" alt="glassIcon">
                   <img :src="TickIcon" alt="tickIcon">
                 </template>
@@ -165,18 +168,25 @@
               </p-button>
             </td>
             <td class="pl-0 pr-0">
-              <p-button v-if="tableItem.status === 'pending'"
+              <p-button v-if="isPendingStatus(tableItem.issuingAppStatus)"
                         outline type="primary" class="w-100">Submit
               </p-button>
-              <p-button v-if="tableItem.status === 'failed'"
+              <p-button v-if="isFailedStatus(tableItem.issuingAppStatus)"
                         outline type="primary" class="w-100">Resubmit
               </p-button>
             </td>
           </tr>
           </tbody>
         </table>
+        <div class="table-pagination">
+          <p-pagination :page-count="pageCount"
+                        v-model="currentPage"
+                        @input="handleChangePage"
+                        :perPage="perPage"></p-pagination>
+        </div>
       </div>
     </el-row>
+    <PSpinner v-if="isLoading"></PSpinner>
   </el-row>
 </template>
 
@@ -190,6 +200,26 @@
   import GlassRedIcon from '../../../../../public/static/img/dashboard_icons/icon_glass_red.svg'
   import CrossIcon from '../../../../../public/static/img/dashboard_icons/icon_cross_red.svg'
   import TickIcon from '../../../../../public/static/img/dashboard_icons/icon_tick_green.svg'
+  import PSpinner from '../../../../components/UIComponents/Spinner'
+  import PPagination from '../../../UIComponents/Pagination'
+  import {
+    ISSUING_CARD_REQUEST,
+    ISSUING_ACCOUNT_REQUEST,
+    ISSUING_GET_APPS_OVERVIEW,
+    GETTER_ISSUING_LOADINGSTATE,
+    GETTER_ISSUING_APPS_INFO,
+    GETTER_ISSUING_APPS_PAGEMETA,
+    GETTER_ISSUING_APPS_INFO_ADD_IS_CHECKED,
+  } from '@/store/types'
+  import {mapActions, mapGetters} from 'vuex'
+  import {formatDate} from "../../../../utils/Date"
+  import LOADING_STATE from '../../../../utils/loadingState'
+
+  const ISSUING_APP_STATUS_VALUES = {
+    PENDING: 'pending',
+    FAILED: 'failed',
+    SUBMITTED: 'submitted',
+  }
 
   export default {
     name: "KycApprovedEmoneyAccount",
@@ -197,6 +227,8 @@
       CustomSwitch,
       PButton,
       PCheckbox,
+      PSpinner,
+      PPagination,
       [DatePicker.name]: DatePicker,
     },
     data() {
@@ -207,8 +239,8 @@
         CrossIcon,
         TickIcon,
         filterModel: {
-          reseller: 'all',
-          status: 'submitted',
+          reseller: '',
+          status: '',
           dateFrom: '',
           dateTo: '',
           oldestFirst: 0,
@@ -221,7 +253,10 @@
           {name: 'All', value: 'all'},
         ],
         statusList: [
+          {name: 'All', value: ''},
           {name: 'Submitted', value: 'submitted'},
+          {name: 'Pending', value: 'pending'},
+          {name: 'Failed', value: 'failed'},
         ],
         listingTableCheckboxes: {
           all: 0,
@@ -238,58 +273,101 @@
           {label: 'Submit'},
         ],
         listingTableAllChecked: false,
-        listingTableData: [
-          {
-            is_checked: false,
-            accountReference: 'TSNDEVCF19650305-0001-GBP',
-            firstName: 'Peter',
-            lastName: 'Gibbons',
-            status: 'pending',
-            plastic: false,
-            ac_created: true,
-            card_created: false,
-          },
-          {
-            is_checked: false,
-            accountReference: 'TSNDEVCF19650305-0002-EUR',
-            firstName: 'Peter',
-            lastName: 'Gibbons',
-            status: 'failed',
-            plastic: true,
-            ac_created: false,
-            card_created: false,
-          },
-          {
-            is_checked: false,
-            accountReference: 'TSNDEVCF19650305-0003-USD',
-            firstName: 'Peter',
-            lastName: 'Gibbons',
-            status: 'submitted',
-            plastic: false,
-            ac_created: false,
-            card_created: true,
-          },
-        ],
+        totalPages: 0,
+        perPage: 20,
+        currentPage: 1,
+        pageCount: 0,
+        issuingAppsInfosCheckedModel: {},
       }
     },
+    mounted() {
+      this.handleSearch()
+    },
+    computed: {
+      ...mapGetters({
+        issuingAppsInfos: GETTER_ISSUING_APPS_INFO,
+        issuingAppsPageMeta: GETTER_ISSUING_APPS_PAGEMETA,
+        loadingState: GETTER_ISSUING_LOADINGSTATE,
+      }),
+      isLoading() {
+        return this.loadingState !== LOADING_STATE.IDEAL
+      },
+      issuingAppsInfosChecked() {
+        if (this.issuingAppsInfos) {
+          return this.issuingAppsInfos
+            .map(info => {
+              info.isChecked = false
+              return info
+            })
+        }
+      },
+    },
+    watch: {
+      issuingAppsPageMeta(value) {
+        this.pageCount = value.totalPages;
+        this.perPage = value.perPage;
+      },
+    },
     methods: {
+      ...mapActions({
+        getIssuingAppsOverview: ISSUING_GET_APPS_OVERVIEW,
+        getIssuingAccount: ISSUING_ACCOUNT_REQUEST,
+        getIssuingCard: ISSUING_CARD_REQUEST,
+      }),
       handleSearch() {
-        console.log('search')
+        const payload = {
+          toDate: this.getDateFormat(this.filterModel.dateTo),
+          fromDate: this.getDateFormat(this.filterModel.dateFrom),
+          lastName: this.filterModel.surname,
+          issuingAppStatus: this.filterModel.status.toUpperCase(),
+          oldestFirst: !!this.filterModel.oldestFirst,
+          accountReference: this.filterModel.accountRef,
+          clientAppRef: this.filterModel.clientAppRef,
+          resellerCode: this.filterModel.reseller,
+          issuingAppRefId: this.filterModel.appRef,
+          pageNum: this.isPagination ? this.currentPage - 1 : 0,
+          pageSize: this.perPage
+        }
+        Object.keys(payload).forEach((key) => (payload[key] == null || payload[key] === '') && delete payload[key])
+        this.getIssuingAppsOverview(payload)
+        if (!this.isPagination) this.currentPage = 1;
       },
       handleSubmit() {
         console.log('submit')
       },
       handleListingTableCheckboxes(value) {
-        this.listingTableData.forEach(item => {
-          console.log('table item', item)
-          item.is_checked = value
+        this.issuingAppsInfosChecked.forEach(item => {
+          item.isChecked = value
         })
       },
-      handleReviewAccount(accountReferenceId) {
-        this.$router.push(`/kyc/review-edit-account/${accountReferenceId}`)
+      async handleReviewAccount(accountReferenceId) {
+        const accountReq = await this.getIssuingAccount(accountReferenceId)
+        this.$router.push(`/kyc/review-edit-account/${accountReq.accountRequests[0].id}`)
       },
-      handleCardCreated() {
-        this.$router.push(`/kyc/review-edit-card`)
+      async handleCardCreated(item) {
+        if(!item.isCardCreated) return
+
+        const accountReq = await this.getIssuingCard(item.id)
+        if (accountReq && accountReq.length) {
+          this.$router.push(`/kyc/review-edit-card/${item.id}`)
+        }
+      },
+      handleChangePage(event) {
+        this.currentPage = event;
+        this.isPagination = true;
+        this.handleSearch()
+      },
+      getDateFormat(date) {
+        return (date) ? formatDate(date) : ''
+      },
+      isPendingStatus(status) {
+        return status.toLowerCase() === ISSUING_APP_STATUS_VALUES.PENDING
+      },
+      isFailedStatus(status) {
+        return status.toLowerCase() === ISSUING_APP_STATUS_VALUES.FAILED
+      },
+      handleAppStatus(status) {
+        return status.toLowerCase()
       },
     },
     filters: {
@@ -506,11 +584,17 @@
       border: 1px solid $btn-success-border !important;
     }
 
-    .btn-outline-success, .btn-outline-danger{
+    .btn-outline-success, .btn-outline-danger {
       font-size: 24px;
       line-height: 24px;
     }
 
+  }
+
+  .table-pagination {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
   }
 
 </style>

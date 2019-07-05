@@ -14,7 +14,7 @@
               <strong>Account ID</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.accountId"
+              <fg-input v-model="getCardInfo.accountId"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -24,7 +24,7 @@
               <strong>Customer Code</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.customerCode"
+              <fg-input v-model="getCardInfo.customerCode"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -34,7 +34,7 @@
               <strong>Card Holder Name</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.cardHolderName"
+              <fg-input v-model="getCardInfo.cardHolderName"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -44,7 +44,7 @@
               <strong>Fourth Line</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.fourthLine"
+              <fg-input v-model="getCardInfo.fourthLine"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -54,7 +54,7 @@
               <strong>Matrix Pid</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.matrixPid"
+              <fg-input v-model="getCardInfo.matrixPID"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -64,7 +64,7 @@
               <strong>Delivery Title</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.deliveryTitle"
+              <fg-input v-model="getCardInfo.dlvTitle"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -74,7 +74,7 @@
               <strong>Delivery First Name</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.deliveryFirstName"
+              <fg-input v-model="getCardInfo.dlvFirstName"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -84,7 +84,7 @@
               <strong>Delivery Last Name</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.deliveryLastName"
+              <fg-input v-model="getCardInfo.dlvLastName"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -94,7 +94,7 @@
               <strong>Delivery Mobile Phone</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.deliveryMobilePhone"
+              <fg-input v-model="getCardInfo.dlvMobilePhone"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -104,7 +104,7 @@
               <strong>Delivery Address 1</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.deliveryAddress1"
+              <fg-input v-model="getCardInfo.dlvAddress1"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -114,7 +114,7 @@
               <strong>Delivery Address 2</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.deliveryAddress2"
+              <fg-input v-model="getCardInfo.dlvAddress2"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -124,7 +124,7 @@
               <strong>Delivery Address 3</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.deliveryAddress3"
+              <fg-input v-model="getCardInfo.dlvAddress3"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -134,7 +134,7 @@
               <strong>Delivery City</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.deliveryCity"
+              <fg-input v-model="getCardInfo.dlvCityTown"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -144,7 +144,7 @@
               <strong>Delivery Country Code</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.deliveryCountryCode"
+              <fg-input v-model="getCardInfo.dlvCountryCode"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -154,7 +154,7 @@
               <strong>Delivery Post Code</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.deliveryPostCode"
+              <fg-input v-model="getCardInfo.dlvPostCode"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -164,7 +164,7 @@
               <strong>Delivery Region</strong>
             </label>
             <div class="d-inline-flex form-input-block">
-              <fg-input v-model="card.deliveryRegion"
+              <fg-input v-model="getCardInfo.dlvRegion"
                         class="w-100"></fg-input>
             </div>
           </el-row>
@@ -183,15 +183,30 @@
       </el-row>
 
     </el-row>
+    <PSpinner v-if="isLoading"></PSpinner>
   </el-row>
 </template>
 
 <script>
+  import {
+    ISSUING_GET_CARD_REQUEST,
+    GETTER_ISSUING_CARD,
+    ISSUING_PUT_CARD_REQUEST,
+    GETTER_ISSUING_LOADINGSTATE,
+    ISSUING_CARD_REQUEST,
+  } from '@/store/types'
+  import {mapActions, mapGetters} from 'vuex'
+  import LOADING_STATE from '../../../../utils/loadingState'
+  import PSpinner from '../../../../components/UIComponents/Spinner'
+
   export default {
     name: "KycReviewEditCardCreation",
+    components:{
+      PSpinner,
+    },
     data() {
       return {
-        card:{
+        /*cardInfo:{
           accountId: '',
           customerCode: '',
           cardHolderName: '',
@@ -208,15 +223,33 @@
           deliveryRegion: '',
           deliveryPostCode: '',
           deliveryCountryCode: '',
-        },
+        },*/
+        id: null,
       }
     },
     created(){
-      console.log('card review created')
+      if(this.$route.params && this.$route.params.id) {
+        this.id = this.$route.params.id
+        this.getCardInfo(this.id)
+      }
+    },
+    computed:{
+      ...mapGetters({
+        cardInfo: GETTER_ISSUING_CARD,
+        loadingState: GETTER_ISSUING_LOADINGSTATE,
+      }),
+      isLoading() {
+        return this.loadingState !== LOADING_STATE.IDEAL;
+      },
     },
     methods:{
+      ...mapActions({
+        getCardInfo: ISSUING_GET_CARD_REQUEST,
+        putCardRequest: ISSUING_PUT_CARD_REQUEST,
+      }),
       handleSaveCard(){
-        console.log('save card')
+        if (!this.id) return
+        this.putCardRequest({id:this.id, body: this.cardInfo})
       },
       handleClose(){
         this.$router.push('/kyc/approved-emoney-account')

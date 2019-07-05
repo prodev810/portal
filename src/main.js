@@ -83,6 +83,17 @@ Vue.use(axiosWrapper, axiosConfig)
 //   } 
 // ])
 
+/*Vue.use(axiosAbaWrapper, [
+  {
+    BASE_URL: 'https://api.dev.ceevo.com/aba-api',
+    VERSION: '',
+    TYPE: '',
+    TIMEOUT: 35000,
+    SHORTCUT: '$abahttp',
+    OAUTH: '$oAuth' // same oAuth as main
+  }
+])*/
+
 // config lang
 locale.use(lang)
 

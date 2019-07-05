@@ -18,6 +18,12 @@ export default {
       TIMEOUT: 35000,
       SHORTCUT: 'acchttp',
       OAUTH: '$oAuth' // same oAuth as main
+    },
+    {
+      BASE_URL: 'https://api.dev.ceevo.com/aba-api',
+      TIMEOUT: 35000,
+      SHORTCUT: 'abahttp',
+      OAUTH: '$oAuth' // same oAuth as main
     }
   ]
 }
