@@ -93,6 +93,7 @@ export const router = new VueRouter({
   linkActiveClass: 'active'
 })
 
+
 // router.beforeEach(async (to, from, next) => {
 //   const isAuth = await Vue.prototype.$oAuth.isAuthenticated()
 //   const nextToByRole = () => {
@@ -136,30 +137,74 @@ export const router = new VueRouter({
 
 // initProgress(router);
 
-router.beforeEach((to, from, next) => {
-    if (to.meta.requiresAuth) {
-      const auth = keycloakStore.state.security.auth
-      if (!auth.authenticated) {
-        security.init(next, to.meta.roles)
-      }
-      else {
-        if (to.meta.roles) {
-          if (security.roles(to.meta.roles[0])) {
-            next()
-          }
-          else {
-            next({ name: 'unauthorized' })
-          }
-        }
-        else {
-          next()
-        }
+router.beforeEach(async (to, from, next) => {
+  const isAuth = await Vue.prototype.$oAuth.isAuthenticated()
+  const nextToByRole = () => {
+    if (Vue.prototype.$oAuth.isNoPermissionForAll()) {
+      return '/system'
+    } else if (Vue.prototype.$oAuth.isReseller()) {
+      return '/reseller'
+    } else {
+      return '/card-program'
+    }
+  }
+
+  const isAbleAccess = (object) => {
+    let has = Vue.prototype.$oAuth.hasPermission(to.meta.permission)
+    if (!has && (object.name === 'Resellers Editor' || object.name === 'Edit card program')) {
+      if (!object.query.edit && Vue.prototype.$oAuth.hasPermission(permission.RESELLER_SUBSCRIPTION_VIEW)) {
+        has = true
       }
     }
-    else {
+    return has
+  }
+
+  const defaultTo = nextToByRole()
+  if (!isAuth) {
+    if (to.path !== '/login' && to.path !== '/lock') {
+      next('/login')
+    } else {
       next()
     }
+  } else {
+    if (to.path === '/login' || to.path === '/lock') {
+      next(defaultTo)
+    } else {
+      if (to.meta.permission && !isAbleAccess(to)) {
+        next(defaultTo)
+      } else {
+        next()
+      }
+    }
+  }
 })
+
+initProgress(router);
+
+// router.beforeEach((to, from, next) => {
+//     if (to.meta.requiresAuth) {
+//       const auth = keycloakStore.state.security.auth
+//       if (!auth.authenticated) {
+//         security.init(next, to.meta.roles)
+//       }
+//       else {
+//         if (to.meta.roles) {
+//           if (security.roles(to.meta.roles[0])) {
+//             next()
+//           }
+//           else {
+//             next({ name: 'unauthorized' })
+//           }
+//         }
+//         else {
+//           next()
+//         }
+//       }
+//     }
+//     else {
+//       next()
+//     }
+// })
 
 /* eslint-disable no-new */
 export const AbaModalEvents = new Vue()
