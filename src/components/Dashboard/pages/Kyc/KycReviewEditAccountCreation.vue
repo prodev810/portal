@@ -516,96 +516,106 @@
           </p-button>
         </el-col>
       </el-row>
-
     </el-row>
+    <PSpinner v-if="isLoading"></PSpinner>
   </el-row>
 </template>
 
 <script>
+  import PSpinner from '../../../../components/UIComponents/Spinner'
   import {
     ISSUING_GET_ACCOUNT_REQUEST,
     ISSUING_PUT_ACCOUNT_REQUEST,
     GETTER_ISSUING_LOADINGSTATE,
-    GETTER_ISSUING_ACCOUNT_INFO,
+    GETTER_ISSUING_ACCOUNT,
   } from '@/store/types'
   import {mapActions, mapGetters} from 'vuex'
+  import LOADING_STATE from '../../../../utils/loadingState'
 
   export default {
     name: "KycReviewEditAccountCreation",
+    components:{
+      PSpinner,
+    },
     data() {
       return {
-        account: {
-          accountInformation: {
-            merchantUsn: '2136855643',
-            issuerInstCode: 'HGDSBV',
-            programManagerCode: 'T24PM',
-            programOwnerCode: 'T24UK',
-            cardProgramCode: 'JFDST',
-            currencyCode: '245',
-            cardProgramID: '3',
-            resellerCode: 'Reseller$5',
-            KYCLevel: '3',
-            feeProfileID: '1',
-            customerIDType: '3',
-            customerID: 'DEBUG-TGF-1222-3231',
-            accountReference: '',
-          },
-          particulars: {
-            title: '1',
-            firstName: 'John',
-            secondName: 'Doe',
-            lastName: 'Smith',
-            maidenName: 'Copper',
-            gender: 1,
-            birthDate: '19900201',
-            email: 'jd@test.com',
-            homePhone: '+2399990345',
-            workPhone: '+2399440345',
-            mobilePhone: '+2399690395',
+        accountInfo:  {
+          accessCode: '',
+          accountReference: '',
+          birthDate: '',
+          cardHolderName: '',
+          cardProgramCode: '',
+          cardProgramId: 0,
+          currencyCode: '',
+          customerId: '',
+          customerIdType: 0,
+          email: '',
+          feeProfileId: 0,
+          firstName: '',
+          fourthLine: '',
+          gender: '',
+          homePhone: '',
+          issuerInstCode: '',
+          kycAppRefNumber: '',
+          kycLevel: 0,
+          lastName: '',
+          maidenName: '',
+          memorableWord: '',
+          merchantUSN: 0,
+          mobilePhone: '',
+          overrideAddress: {
+            address1: '',
+            address2: '',
+            address3: '',
+            city: '',
+            countryCode: '',
+            postCode: '',
+            region: ''
           },
           primaryAddress: {
-            addressline1: 'Street 11',
-            addressline2: '',
-            addressline3: '',
-            city: 'New York',
-            region: 'New York',
-            postCode: '11111',
-            countryCode: '344',
-          },
-          overrideAddress: {
-            addressline1: '',
-            addressline2: '',
-            addressline3: '',
+            address1: '',
+            address2: '',
+            address3: '',
             city: '',
-            region: '',
-            postCode: '',
             countryCode: '',
+            postCode: '',
+            region: ''
           },
-          miscellaneous: {
-            cardHolderName: 'John Smith',
-            fourthLine: 'FDD TESET',
-            KYCApprRefNumber: 'KYC-1234',
-            proofOfPassportURL: 'https://test.com/poa/1234',
-            proofOfAddressURL: 'https://test.com/poa/1256',
-            memorableWord: 'Hello',
-            accessCode: '123456',
-          },
+          programManagerCode: '',
+          programOwnerCode: '',
+          proofOfAddressUrl: '',
+          proofOfPassportUrl: '',
+          resellerCode: '',
+          secondName: '',
+          title: '',
+          workPhone: ''
         },
         id: null,
       }
     },
     created() {
-      console.log('r params', this.$route.params)
       if (this.$route.params && this.$route.params.id) {
-        //this.accountInfo.accountReference = this.$route.params.id
         this.id = this.$route.params.id
         this.getIssuingAccount(this.id)
       }
     },
+    watch:{
+      getAccountInfo(newVal){
+        console.log('account info', newVal)
+        if(newVal && newVal.requestStatus === 'FAIL'){
+          return
+        }
+        this.accountInfo = newVal
+      },
+    },
     computed: {
       ...mapGetters({
-        accountInfo: GETTER_ISSUING_ACCOUNT_INFO,
+        getAccountInfo: GETTER_ISSUING_ACCOUNT,
+        loadingState: GETTER_ISSUING_LOADINGSTATE,
       }),
+      isLoading() {
+        return this.loadingState !== LOADING_STATE.IDEAL;
+      },
     },
     methods: {
       ...mapActions({
@@ -614,8 +624,8 @@
       }),
       handleSaveAccount() {
         // console.log('save acc')
-        if (!this.id) return
-        this.putIssuingAccount({id: this.id, body: this.accountInfo})
+        //if (!this.id) return
+        this.putIssuingAccount({id: this.getAccountInfo.id, body: this.accountInfo})
       },
       handleClose() {
         this.$router.push('/kyc/approved-emoney-account')

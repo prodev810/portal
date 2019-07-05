@@ -183,21 +183,46 @@
       </el-row>
 
     </el-row>
+    <PSpinner v-if="isLoading"></PSpinner>
   </el-row>
 </template>
 
 <script>
   import {
     ISSUING_GET_CARD_REQUEST,
-    GETTER_ISSUING_CARD_INFO,
+    GETTER_ISSUING_CARD,
     ISSUING_PUT_CARD_REQUEST,
+    GETTER_ISSUING_LOADINGSTATE,
   } from '@/store/types'
   import {mapActions, mapGetters} from 'vuex'
+  import LOADING_STATE from '../../../../utils/loadingState'
+  import PSpinner from '../../../../components/UIComponents/Spinner'
 
   export default {
     name: "KycReviewEditCardCreation",
+    components:{
+      PSpinner,
+    },
     data() {
       return {
+        cardInfo:{
+          accountId: '',
+          customerCode: '',
+          cardHolderName: '',
+          fourthLine: '',
+          matrixPid: '',
+          deliveryTitle: '',
+          deliveryFirstName: '',
+          deliveryLastName: '',
+          deliveryMobilePhone: '',
+          deliveryAddress1: '',
+          deliveryAddress2: '',
+          deliveryAddress3: '',
+          deliveryCity: '',
+          deliveryRegion: '',
+          deliveryPostCode: '',
+          deliveryCountryCode: '',
+        },
         id: null,
       }
     },
@@ -209,8 +234,12 @@
     },
     computed:{
       ...mapGetters({
-        cardInfo: GETTER_ISSUING_CARD_INFO,
+        cardInfo: GETTER_ISSUING_CARD,
+        loadingState: GETTER_ISSUING_LOADINGSTATE,
       }),
+      isLoading() {
+        return this.loadingState !== LOADING_STATE.IDEAL;
+      },
     },
     methods:{
       ...mapActions({

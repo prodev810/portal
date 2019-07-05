@@ -208,6 +208,7 @@
   } from '@/store/types'
   import {mapActions, mapGetters} from 'vuex'
   import {formatDate} from "../../../../utils/Date"
+  import LOADING_STATE from '../../../../utils/loadingState'
 
   const ISSUING_APP_STATUS_VALUES = {
     PENDING: 'pending',
@@ -271,6 +272,7 @@
         perPage: 20,
         currentPage: 1,
         pageCount: 0,
+        issuingAppsInfosCheckedModel: {},
       }
     },
     mounted(){
@@ -283,7 +285,7 @@
         loadingState: GETTER_ISSUING_LOADINGSTATE,
       }),
       isLoading(){
-        return this.loadingState !== 'ideal'
+        return this.loadingState !== LOADING_STATE.IDEAL
       },
       issuingAppsInfosChecked(){
         if(this.issuingAppsInfos){
