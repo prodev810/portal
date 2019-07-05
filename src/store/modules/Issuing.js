@@ -9,13 +9,13 @@ import {
   MUTATE_ISSUING_LOADINGSTATE,
   ISSUING_PUT_CARD_REQUEST,
   ISSUING_PUT_ACCOUNT_REQUEST,
+  ISSUING_ACCOUNT_REQUEST,
+  ISSUING_CARD_REQUEST,
   GETTER_ISSUING_LOADINGSTATE,
   GETTER_ISSUING_APPS_INFO,
   GETTER_ISSUING_APPS_PAGEMETA,
   GETTER_ISSUING_ACCOUNT,
-  GETTER_ISSUING_ACCOUNT_INFO,
   GETTER_ISSUING_CARD,
-  GETTER_ISSUING_CARD_INFO,
 } from '../types'
 import LOADING_STATE from '../../utils/loadingState'
 
@@ -45,14 +45,31 @@ const actions = {
       console.log('issuing apps overview', e)
     }
   },
+  [ISSUING_ACCOUNT_REQUEST]: async ({commit}, payload) => {
+    return new Promise((resolve, reject) => {
+      Vue.prototype.$http.abahttp.get(`v1/aba/issuing-apps/${payload}/account-requests`)
+        .then(data => {
+          resolve(data.data)
+        })
+        .catch( error => reject(error))
+    })
+  },
+  [ISSUING_CARD_REQUEST]: async ({commit}, payload) => {
+    return new Promise((resolve, reject) => {
+      Vue.prototype.$http.abahttp.get(`v1/aba/issuing-apps/${payload}/card-requests`)
+        .then(data => {
+          resolve(data.data)
+        })
+        .catch( error => reject(error))
+    })
+  },
   [ISSUING_GET_ACCOUNT_REQUEST]: async ({commit}, payload) => {
     try {
       commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
-      // const {data} = await Vue.prototype.$http.abahttp.get(`v1/aba/issuing-apps/${payload}/account-requests`)
-      const {data} = await Vue.prototype.$http.abahttp.get(`v1/aba/issuing-apps/account-requests/${payload}`)
+      const {data} = await Vue.prototype.$http.abahttp.get(`v1/aba/issuing-account-request/${payload}`)
       commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
-      console.log('acc req', data)
-      const response = data.accountRequests[0]
+      //console.log('acc req', data)
+      const response = data.requestDetail
       commit(MUTATE_ISSUING_ACCOUNT_REQUEST, {data: response})
     } catch (e) {
       console.log('issuing account request', e)
@@ -64,6 +81,7 @@ const actions = {
       commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
       // const {data} = await Vue.prototype.$http.abahttp.get(`v1/aba/issuing-apps/${payload}/card-requests`)
       const {data} = await Vue.prototype.$http.abahttp.get(`v1/aba/issuing-card-request/${payload}`)
+      console.log('acc req', data)
       commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
       console.log('issuing card request', data)
       commit(MUTATE_ISSUING_CARD_REQUEST, {data: data.cardRequests})

@@ -524,6 +524,7 @@
 <script>
   import PSpinner from '../../../../components/UIComponents/Spinner'
   import {
+    ISSUING_ACCOUNT_REQUEST,
     ISSUING_GET_ACCOUNT_REQUEST,
     ISSUING_PUT_ACCOUNT_REQUEST,
     GETTER_ISSUING_LOADINGSTATE,
@@ -601,10 +602,6 @@
     },
     watch:{
       getAccountInfo(newVal){
-        console.log('account info', newVal)
-        if(newVal && newVal.requestStatus === 'FAIL'){
-          return
-        }
         this.accountInfo = newVal
       },
     },
@@ -623,9 +620,7 @@
         putIssuingAccount: ISSUING_PUT_ACCOUNT_REQUEST,
       }),
       handleSaveAccount() {
-        // console.log('save acc')
-        //if (!this.id) return
-        this.putIssuingAccount({id: this.getAccountInfo.id, body: this.accountInfo})
+        this.putIssuingAccount({id: this.id, body: this.accountInfo})
       },
       handleClose() {
         this.$router.push('/kyc/approved-emoney-account')

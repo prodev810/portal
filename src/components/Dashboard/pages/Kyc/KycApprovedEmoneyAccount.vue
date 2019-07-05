@@ -134,8 +134,11 @@
             <td>{{tableItem.accountReference}}</td>
             <td>{{tableItem.firstName}}</td>
             <td>{{tableItem.lastName}}</td>
-            <td class="text-capitalize text-center" :class="handleAppStatus(tableItem.issuingAppStatus)">{{tableItem.issuingAppStatus}}</td>
-            <td class="text-center" :class="[tableItem.isPlasticRequired ? 'submitted' : 'failed']">{{tableItem.isPlasticRequired |
+            <td class="text-capitalize text-center" :class="handleAppStatus(tableItem.issuingAppStatus)">
+              {{tableItem.issuingAppStatus}}
+            </td>
+            <td class="text-center" :class="[tableItem.isPlasticRequired ? 'submitted' : 'failed']">
+              {{tableItem.isPlasticRequired |
               booleanToYesNoFormat}}
             </td>
             <td class="pl-0 pr-0">
@@ -147,7 +150,7 @@
               </p-button>
             </td>
             <td class="text-center text" :class="[tableItem.isAccountCreated ? 'submitted': 'failed']">
-              <img v-if="tableItem.isAccountCreated"  :src="TickIcon" alt="tickIcon">
+              <img v-if="tableItem.isAccountCreated" :src="TickIcon" alt="tickIcon">
               <img v-else :src="CrossIcon" alt="crossIcon">
             </td>
             <td class="pl-0 pr-0">
@@ -200,6 +203,8 @@
   import PSpinner from '../../../../components/UIComponents/Spinner'
   import PPagination from '../../../UIComponents/Pagination'
   import {
+    ISSUING_CARD_REQUEST,
+    ISSUING_ACCOUNT_REQUEST,
     ISSUING_GET_APPS_OVERVIEW,
     GETTER_ISSUING_LOADINGSTATE,
     GETTER_ISSUING_APPS_INFO,
@@ -275,7 +280,7 @@
         issuingAppsInfosCheckedModel: {},
       }
     },
-    mounted(){
+    mounted() {
       this.handleSearch()
     },
     computed: {
@@ -284,11 +289,11 @@
         issuingAppsPageMeta: GETTER_ISSUING_APPS_PAGEMETA,
         loadingState: GETTER_ISSUING_LOADINGSTATE,
       }),
-      isLoading(){
+      isLoading() {
         return this.loadingState !== LOADING_STATE.IDEAL
       },
-      issuingAppsInfosChecked(){
-        if(this.issuingAppsInfos){
+      issuingAppsInfosChecked() {
+        if (this.issuingAppsInfos) {
           return this.issuingAppsInfos
             .map(info => {
               info.isChecked = false
@@ -306,6 +311,8 @@
     methods: {
       ...mapActions({
         getIssuingAppsOverview: ISSUING_GET_APPS_OVERVIEW,
+        getIssuingAccount: ISSUING_ACCOUNT_REQUEST,
+        getIssuingCard: ISSUING_CARD_REQUEST,
       }),
       handleSearch() {
         const payload = {
@@ -333,15 +340,17 @@
           item.isChecked = value
         })
       },
-      handleReviewAccount(accountReferenceId) {
-        this.$router.push(`/kyc/review-edit-account/${accountReferenceId}`)
+      async handleReviewAccount(accountReferenceId) {
+        const accountReq = await this.getIssuingAccount(accountReferenceId)
+        this.$router.push(`/kyc/review-edit-account/${accountReq.accountRequests[0].id}`)
       },
-      handleCardCreated(item) {
-        // console.log('is card created ', item)
-        if(item.isCardCreated){
+      async handleCardCreated(item) {
+        if(!item.isCardCreated) return
+
+        const accountReq = await this.getIssuingCard(item.id)
+        if (accountReq && accountReq.length) {
           this.$router.push(`/kyc/review-edit-card/${item.id}`)
         }
-        this.$router.push(`/kyc/review-edit-card/${item.id}`)
       },
       handleChangePage(event) {
         this.currentPage = event;
@@ -351,13 +360,13 @@
       getDateFormat(date) {
         return (date) ? formatDate(date) : ''
       },
-      isPendingStatus(status){
+      isPendingStatus(status) {
         return status.toLowerCase() === ISSUING_APP_STATUS_VALUES.PENDING
       },
-      isFailedStatus(status){
+      isFailedStatus(status) {
         return status.toLowerCase() === ISSUING_APP_STATUS_VALUES.FAILED
       },
-      handleAppStatus(status){
+      handleAppStatus(status) {
         return status.toLowerCase()
       },
     },
@@ -575,7 +584,7 @@
       border: 1px solid $btn-success-border !important;
     }
 
-    .btn-outline-success, .btn-outline-danger{
+    .btn-outline-success, .btn-outline-danger {
       font-size: 24px;
       line-height: 24px;
     }
