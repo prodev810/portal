@@ -18,7 +18,7 @@ const listing = {
     view: `View`,
     view_statement: `View Statement`,
     setup: `Setup`,
-    approve: `Approve`,
+    approve: `Approve/Decline`,
     view_invoice: `View Invoice`
   },
   table_header: {

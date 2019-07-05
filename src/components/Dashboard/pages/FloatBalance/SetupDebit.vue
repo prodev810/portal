@@ -318,10 +318,9 @@
       handleSettingDebit() {
         // TODO fix it here
         const key = 'handle_main_aciton_set_up_debit';
-
         this.showModal({
           type: 'normal',
-          message: 'Setup new debit ?',
+          message: `Set up a new ${this.dataToSend.entryType} ?`,
           copy: 'any changes will be discarded',
           mainButton: 'Ok',
           secondaryButton: 'No',
@@ -371,7 +370,7 @@
         resellerName: reseller_name,
         resellerId: reseller_id,
         cardProgId: card_program_id,
-        user: user || this.$oAuth.getUserInfo().fullName || ''
+        user: user || this.$oAuth.getUserInfo().preferredUsername || ''
       }]
     }
   }

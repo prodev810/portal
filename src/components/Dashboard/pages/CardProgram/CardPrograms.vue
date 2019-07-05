@@ -80,7 +80,8 @@
             <!--  <Pagination :page-count="10" v-model="currentPage" perpagechange="onPerpageChange" :perPage="perPage"></Pagination>-->
             <Pagination :page-count="totalPages" v-model="page"
                         @perpagechange="onPerpageChange"
-                        :perPage="perPage">
+                        :perPage="perPage"
+                        displayPerPage>
             </Pagination>
           </div>
         </div>
@@ -157,6 +158,7 @@
           {label: 'PM Inst', name: 'pmInst', i18n: 'card_program.listing.table_header.pm_inst'},
           {label: 'PO Inst', name: 'poInst', i18n: 'card_program.listing.table_header.po_inst'},
           {label: 'CPC', name: 'cardProgCode', i18n: 'card_program.listing.table_header.card_prog_code'},
+          {label: 'Default Currency', name:'defCurrency'},
           {label: 'card program description', name: 'cardProgDesc', i18n: 'card_program.listing.table_header.card_prog_desc'},
         ],
         editAll: false,
@@ -210,16 +212,16 @@
           perPage: this.perPage,
         });
       },
-      editCardProgram({index: {id}}) {
+      editCardProgram(index) {
         this.$router.history.push({
-          path: `/card-program/card/${id}`,
+          path: `/card-program/card/${index.index.row.id}`,
           query: {
             edit: true
           }
         })
-      }, viewDetailedCardProgram({index: {id}}) {
+      }, viewDetailedCardProgram(index) {
         this.$router.history.push({
-          path: `/card-program/card/${id}`,
+          path: `/card-program/card/${index.index.row.id}`,
           query: {
             edit: false
           }

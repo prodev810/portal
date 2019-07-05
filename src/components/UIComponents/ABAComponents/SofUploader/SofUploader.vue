@@ -240,7 +240,7 @@
           const onUPloadFiles = [...this.onUploadSofDocs[this.floatId]];
           await Promise.all(onUPloadFiles.map(({data, type}) => {
               let dataArr = data.split(',')
-           return   Vue.prototype.$http.post(`/floats/${this.floatId}/sofdocs`, {
+           return   Vue.prototype.$http.aba1.post(`/floats/${this.floatId}/sofdocs`, {
                 content: dataArr[1],
                 mimeType: type
               }, {
@@ -265,7 +265,7 @@
         try {
           this.deleting = [...this.deleting, id];
 
-          await Vue.prototype.$http.delete(`/floats/${this.floatId}/sofdocs/${id}`)
+          await Vue.prototype.$http.aba1.delete(`/floats/${this.floatId}/sofdocs/${id}`)
           this.$store.dispatch(SHOW_TOAST_MESSAGE, {message: this.$t('sof_uploader.toast.success_delete_upload_file'), status: 'success'})
           this.$emit('dataChanged')
           this.deleting = this.deleting.filter(i => id === i)
@@ -341,7 +341,7 @@
         try {
           let _blob = this.downloadedFiles.find(i => i.id === id)
           if (_blob) return _blob;
-          const {data} = await Vue.prototype.$http.get(`/floats/${this.floatId}/sofdocs/${id}`)
+          const {data} = await Vue.prototype.$http.aba1.get(`/floats/${this.floatId}/sofdocs/${id}`)
           if (data) {
             const {content, fileName, id, mimeType} = data;
             console.log(content, 'sof file');

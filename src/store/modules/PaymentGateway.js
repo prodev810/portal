@@ -41,7 +41,7 @@ const mutations = {
 const actions = {
   [ACTION_PG_GET_CURRENCIES]: async ({commit, dispatch}) => {
     try {
-      const { data } = await Vue.prototype.$acchttp.get('/currencies')
+      const { data } = await Vue.prototype.$http.acchttp.get('/currencies')
       commit(MUTATE_PG_CURRENCIES, { data });
     } catch (e) {
       dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_load_currencies') + e.message, status: 'danger' })
@@ -49,7 +49,7 @@ const actions = {
   },
   [ACTION_PG_GET_COUNTRIES]: async ({commit, dispatch}) => {
     try {
-      const { data } = await Vue.prototype.$acchttp.get('/countries')
+      const { data } = await Vue.prototype.$http.acchttp.get('/countries')
       commit(MUTATE_PG_COUNTRIES, { data });
     } catch (e) {
       dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_load_countries') + e.message, status: 'danger' })
@@ -57,7 +57,7 @@ const actions = {
   },
   [ACTION_PG_GET_PAYMENT_METHODS]: async ({commit, dispatch}) => {
     try {
-      const { data } = await Vue.prototype.$acchttp.get('/methods')
+      const { data } = await Vue.prototype.$http.acchttp.get('/methods')
       commit(MUTATE_PG_PAYMENT_METHODS, { data });
     } catch (e) {
       dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_load_payment_methods') + e.message, status: 'danger' })
@@ -65,14 +65,14 @@ const actions = {
   },
   [ACTION_PG_SET_PAYMENT_METHOD]: async ({commit, dispatch}, data) => {
     try {
-      await Vue.prototype.$acchttp.put(`/method/${data.code}`, data)
+      await Vue.prototype.$http.acchttp.put(`/method/${data.code}`, data)
     } catch (e) {
       dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_set_payment_method') + e.message, status: 'danger' })
     }
   },
   [ACTION_PG_GET_MERCHANTS]: async ({commit, dispatch}) => {
     try {
-      //await Vue.prototype.$acchttp.put(`/method/${data.code}`, data)
+      //await Vue.prototype.$http.acchttp.put(`/method/${data.code}`, data)
       commit(MUTATE_PG_MERCHANTS, [
         { merchant_name: 'ABC Merchant', short_code: 'ABC', merchant_id: 'xxxx-xxxx-xxxx' },
         { merchant_name: 'EUROPE Merchant', short_code: 'EUM', merchant_id: 'yyyy-yyyy-yyyy-yyyy' }

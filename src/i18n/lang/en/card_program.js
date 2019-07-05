@@ -65,6 +65,9 @@ const create = {
     kyc_classifier: `KYC class`,
     matrix_pid: `matrix PID`
   },
+  table_input_placeholder: {
+    load_fee_pct: `load fee`
+  },
   button: {
     back: `Back`,
     cancel: `Cancel`,

@@ -332,7 +332,8 @@
               validator: shouldBeNumber,
               mask: decimals(2),
               $domAttri: {step: '0.01', type: 'number'},
-              brakeAt: breakInput(8)
+              brakeAt: breakInput(8),
+              i18n_placeholder: 'card_program.create.table_input_placeholder.load_fee_pct'
             },
             {
               label: 'load fee roof', 
@@ -637,6 +638,7 @@
         const {id} = this.$route.params;
         const {edit} = this.$route.query
         this.edit = !!edit;
+        console.log(id)
         if (id) {
           if (!edit) {
             this.context = 'view';

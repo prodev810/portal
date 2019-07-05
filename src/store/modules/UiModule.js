@@ -45,7 +45,7 @@ const actions = {
     state.timeOut = setTimeout(_ => {
       state.timeOut = null;
       dispatch(HIDE_TOAST_MESSAGE)
-    }, 5000)
+    }, 10000)
   }, [HIDE_TOAST_MESSAGE]: ({commit}) => {
     commit(MUTATE_TOAST_MESSAGE, {
       ...state.snackBar,
@@ -57,7 +57,7 @@ const actions = {
   [SET_MODAL_TYPE]: ({commit}, payload) => commit(MUTATE_MODAL_TYPE, payload),
   [GET_SUPPORTED_CURRENCIES]: async ({commit}) => {
     try {
-      const {data} = await Vue.prototype.$http.get('https://api.dev.transact24.com/mcmaster-api/v1/api/currencies/all')
+      const {data} = await Vue.prototype.$http.aba1.get('https://api.dev.transact24.com/mcmaster-api/v1/api/currencies/all')
       console.log(data);
       commit(MUTATE_SUPPORTED_CURRENCIES, data)
     } catch (e) {

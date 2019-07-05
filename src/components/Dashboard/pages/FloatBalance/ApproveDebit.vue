@@ -15,7 +15,6 @@
         <div class="d-flex align-items-center align-content-center">
           <span class="px-2">{{ $t('approve_debit.listing.search_filter.card_program') }}</span>
           <el-select class="select-default"
-                     v-if=""
                      size="small"
                      placeholder="selected a card program"
                      v-model="cardProgramId"
@@ -23,7 +22,7 @@
             <el-option v-for="card in cardPrograms "
                        class="select-success"
                        :value="card.id"
-                       :label="card.cardProgCode"
+                       :label="`${card.cardProgCode} (${card.defCurrency})`"
                        :key="card.id">
             </el-option>
           </el-select>
@@ -43,11 +42,11 @@
               <template slot-scope="index">
                 <th :key="index.index.id">
                   <div class="cell">
-                    <p-button type="success" link @click="handleApprove(index.index.id)">
+                    <p-button type="success" link @click="handleApprove(index.index.row.id)">
                       {{ $t('approve_debit.listing.button.approve') }}
                     </p-button>
                     <span class="p-1"></span>
-                    <p-button type="primary" link @click="handleDecline(index.index.id)">
+                    <p-button type="primary" link @click="handleDecline(index.index.row.id)">
                       {{ $t('approve_debit.listing.button.decline') }}
                     </p-button>
                     <span class="p-1"></span>
@@ -60,7 +59,7 @@
             </regular-table>
             <Pagination :page-count="pageCount" v-model="page"
                         @perpagechange="onPerpageChange"
-                        :perPage="perPage">
+                        :perPage="perPage" displayPerPage>
             </Pagination>
           </div>
         </div>
@@ -149,9 +148,10 @@
         //     : [...acc, i]
         //     , [])
 
-        return (this.$store.state.cardProgram.allCardPrograms || []).filter((data) => {
-          return data.defCurrency === this.currency
-        })
+        // return (this.$store.state.cardProgram.allCardPrograms || []).filter((data) => {
+        //   return data.defCurrency === this.currency
+        // })
+        return (this.$store.state.cardProgram.allCardPrograms || [])
       },
       pageCount() {
         const pageMeta = this.pendingFloats.pageMeta;
@@ -167,10 +167,10 @@
         getResellers: GET_ALL_RESELLER_SUBSCRIPTIONS,
 
       }),
-      showSoftDocs({index: {id}}) {
-        const {sofDocs} = this.tableData.find(({id: floatId}) => id === floatId)
-        this.selectedFloatId = id;
-        this.softDocs = sofDocs || [];
+      showSoftDocs(index) {
+        // const {sofDocs} = this.tableData.find(({id: floatId}) => id === floatId)
+        this.selectedFloatId = index.index.row.id;
+        this.softDocs = index.index.row.sofDocs.value || [];
         this.showSoftUploader = true;
       }, onPerpageChange(ev) {
         this.perPage = ev;
@@ -226,7 +226,7 @@
 
         AbaModalEvents.$on(key, response => {
           if (response.ok) {
-            Vue.prototype.$http.put(`/floats/${id}`, {
+            Vue.prototype.$http.aba1.put(`/floats/${id}`, {
               status: 'APPROVE'
             }).then(_ => {
               this.$store.dispatch(SHOW_TOAST_MESSAGE,
@@ -255,7 +255,7 @@
 
         AbaModalEvents.$on(key, async response => {
           if (response.ok) {
-            Vue.prototype.$http.put(`/floats/${id}`, {
+            Vue.prototype.$http.aba1.put(`/floats/${id}`, {
               "reason": response.message,
               "status": "DECLINE"
             }).then(_ => {

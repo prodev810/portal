@@ -59,7 +59,7 @@
             <pagination :page-count="totalPages"
                         v-model="page"
                         @perpagechange="onPerpageChange"
-                        :perPage="perPage"></pagination>
+                        :perPage="perPage" ></pagination>
           </div>
         </div>
       </div>
@@ -159,7 +159,7 @@
         if (!(this.currencyCode && this.invoiceNumber && this.issuedDateFrom && this.issuedDateTo)) return;
         try {
           this.loading = true;
-          const {data} = await Vue.prototype.$http.get(`/invoices?
+          const {data} = await Vue.prototype.$http.aba1.get(`/invoices?
         currency_code=${this.currencyCode}
         &invoice_number=${this.invoiceNumber}
        &issued_date_from=${formatDate(this.issuedDateFrom)}

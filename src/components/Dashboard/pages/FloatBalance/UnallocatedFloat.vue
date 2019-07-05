@@ -90,7 +90,7 @@
           <pagination :page-count="totalPages"
                       v-model="page"
                       @perpagechange="onPerpageChange"
-                      :perPage="perPage"></pagination>
+                      :perPage="perPage" displayPerPage></pagination>
         </div>
       </div>
     </div>
@@ -292,8 +292,8 @@
         page,
       } = this.$route.query
 
-      this.cardProgramCode = card_program_code || 'ALL';
-      this.resellerCode = reseller_code || 'ALL';
+      this.cardProgramCode = card_program_code || 'All';
+      this.resellerCode = reseller_code || 'All';
       this.currencyCode = currency_code || this.currencyCode;
       this.unallocatedFloatDate = date || '';
       this.perPage = +per_page || this.perPage;

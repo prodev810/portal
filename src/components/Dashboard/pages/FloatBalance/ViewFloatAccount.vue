@@ -14,8 +14,8 @@
           <ul>
             <li>{{ $t('view_float_account.listing.tips.li1') }}</li>
             <li>{{ $t('view_float_account.listing.tips.li2') }}</li>
-            <li>{{ $t('view_float_account.listing.tips.li3') }}</li>
-            <li>{{ $t('view_float_account.listing.tips.li4') }}</li>
+            <li v-if="showInfo()">{{ $t('view_float_account.listing.tips.li3') }}</li>
+            <li v-if="showInfo()">{{ $t('view_float_account.listing.tips.li4') }}</li>
             <li>{{ $t('view_float_account.listing.tips.li5') }}</li>
           </ul>
         </div>
@@ -24,7 +24,6 @@
             <div class="d-flex align-items-center align-content-center">
               <span class="px-2">{{ $t('view_float_account.listing.search_filter.currency') }}</span>
               <el-select class="select-default"
-                         v-if=""
                          size="small"
                          placeholder="selected a currency"
                          v-model="currencyCode"
@@ -37,10 +36,9 @@
                 </el-option>
               </el-select>
             </div>
-            <div class="d-flex align-items-center align-content-center">
+            <div v-if="showInfo()" class="d-flex align-items-center align-content-center">
               <span class="px-2">{{ $t('view_float_account.listing.search_filter.reseller_status') }}</span>
               <el-select class="select-default"
-                         v-if=""
                          size="small"
                          placeholder="selected a currency"
                          v-model="resellerStatus"
@@ -53,10 +51,9 @@
                 </el-option>
               </el-select>
             </div>
-            <div class="d-flex align-items-center align-content-center">
+            <div v-if="showInfo()" class="d-flex align-items-center align-content-center">
               <span class="px-2">{{ $t('view_float_account.listing.search_filter.card_program') }}</span>
               <el-select class="select-default"
-                         v-if=""
                          size="small"
                          placeholder="Selected A Card Program"
                          v-model="cardProgramCode"
@@ -69,10 +66,9 @@
                 </el-option>
               </el-select>
             </div>
-            <div class="d-flex align-items-center align-content-center">
+            <div v-if="showInfo()" class="d-flex align-items-center align-content-center">
               <span class="px-2">{{ $t('view_float_account.listing.search_filter.reseller') }}</span>
               <el-select class="select-default"
-                         v-if=""
                          size="small"
                          placeholder="Selected A Reseller code"
                          v-model="resellerCode"
@@ -119,7 +115,6 @@
                 <th v-if="hasPermission(permission.STATEMENT_VIEW)">
                   <div class="cell">
                     <p-button
-                      
                       type="primary"
                       link
                       @click="viewStatement(index)"
@@ -128,7 +123,7 @@
                     </p-button>
                   </div>
                 </th>
-                <th v-if="hasPermission(permission.DEBIT_CREDIT_INSTRUCT_EDIT)">
+                <th v-if="hasPermission(permission.DEBIT_CREDIT_INSTRUCT_EDIT) && showInfo()">
                   <div class="cell">
                     <p-button
                       type="primary"
@@ -139,7 +134,7 @@
                     </p-button>
                   </div>
                 </th>
-                <th v-if="hasPermission(permission.DEBIT_CREDIT_INSTRUCT_APPROVE)">
+                <th v-if="hasPermission(permission.DEBIT_CREDIT_INSTRUCT_APPROVE) && showInfo()">
                   <div class="cell">
                     <p-button
                       type="primary"
@@ -166,7 +161,7 @@
             <Pagination :page-count="totalPages"
                         v-model="page"
                         @perpagechange="onPerpageChange"
-                        :perPage="perPage"></Pagination>
+                        :perPage="perPage" displayPerPage></Pagination>
           </div>
         </div>
       </div>
@@ -252,7 +247,7 @@
       supportedCurrencies() {
         return [{
           id: 'all__currencies__',
-          code: 'ALL'
+          code: 'All'
         }, ...(this.$store.state.cardProgram.allCardPrograms || [])
           .reduce((acc, {id, defCurrency}) => acc
             .find(({code}) => code === defCurrency) ? acc : [...acc, {
@@ -277,12 +272,13 @@
             , [{id: 'all', value: '', cardProgCode: 'All'}])
       }
 
-    }, watch: {
+    },
+    watch: {
       allFloats(newData) {
         this.tableData = (newData["viewFloatResultList"] || []).map(i => ({...i, amount: moneyFormatAppendCurrency(i.amount, i.currency)}));
         if (!newData.pageMeta) return;
         this.totalPages = newData.pageMeta.totalPages;
-      }, 
+      },
       page(page) {
         // this.getResellerData()
         this.handleQuery({page})
@@ -323,6 +319,10 @@
         getSupportedCurrencies: GET_SUPPORTED_CURRENCIES,
         getAllResellers: GET_ALL_RESELLER_SUBSCRIPTIONS
       }),
+      showInfo () {
+        const isReseller = this.$oAuth.isReseller()
+        return !isReseller
+      },
       viewStatement({index: {index}}) {
         const floatAccount = this.tableData[index];
         if (!floatAccount) return
@@ -336,7 +336,8 @@
             reseller_code: resellerCode
           }
         })
-      }, setupDebit({index: {index}}) {
+      }, 
+      setupDebit({index: {index}}) {
         //Card Program Code, Reseller Code, Reseller Name, Username, Currency
         const floatAccount = this.tableData[index];
         if (!floatAccount) return
@@ -437,7 +438,7 @@
           currencyCode: this.currencyCode,
           page: this.page,
           perPage: this.perPage,
-          resellerCode: this.resellerCode,
+          resellerCode: this.$oAuth.isReseller() ? this.$oAuth.getCurrentResellerCode() : this.resellerCode,
           resellerStatus: this.resellerStatus
         })
       }
@@ -455,8 +456,8 @@
         per_page,
       } = this.$route.query;
 
-      this.cardProgramCode = card_program_code || 'ALL';
-      this.resellerCode = reseller_code || 'ALL';
+      this.cardProgramCode = card_program_code || 'All';
+      this.resellerCode = reseller_code || 'All';
       this.fromDate = from_date || '';
       this.page = page || this.page;
       this.currencyCode = currency_code || 'EUR';

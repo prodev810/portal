@@ -72,7 +72,7 @@ const actions = {
   [ADD_FLOAT_ENTRY]: async ({commit, dispatch}, {body, id: cardProgramId, sofDocs = []}) => {
     try {
       commit(MUTATE_LOADINGSTATE_FLOAT_BALANCE, 'sending')
-      const {data} = await Vue.prototype.$http.post(`/cardprograms/${cardProgramId}/floats`, {
+      const {data} = await Vue.prototype.$http.aba1.post(`/cardprograms/${cardProgramId}/floats`, {
         ...handleEmptyValues(body)
       })
       const {id} = data;
@@ -82,7 +82,7 @@ const actions = {
         console.log('uploading');
         await Promise.all(sofDocs.map((i) => {
           i.content = i.content.split(',')[1]
-          return Vue.prototype.$http.post(`/floats/${id}/sofdocs`, {...i});
+          return Vue.prototype.$http.aba1.post(`/floats/${id}/sofdocs`, {...i});
         }))
       }
       commit(MUTATE_LOADINGSTATE_FLOAT_BALANCE, 'ideal')
@@ -94,7 +94,7 @@ const actions = {
 
         const formData = new FormData();
         formData.append('doc', files, doc)
-        await Vue.prototype.$http.post(`/floats/${floatId}/sofdocs`, formData, {
+        await Vue.prototype.$http.aba1.post(`/floats/${floatId}/sofdocs`, formData, {
           headers: {
             "Content-Type": "multipart/form-data"
           }
@@ -129,7 +129,7 @@ const actions = {
     try {
       commit(MUTATE_LOADINGSTATE_FLOAT_BALANCE, 'getting')
 
-      const {data} = await Vue.prototype.$http.get(`/floataccounts/overview?
+      const {data} = await Vue.prototype.$http.aba1.get(`/floataccounts/overview?
   ${(cardProgramCode && cardProgramCode.toLowerCase() === 'all') ? '' : `card_program_code=${cardProgramCode}&`}  
   ${(currencyCode && currencyCode.toLowerCase() === 'all') ? '' : `currency_code=${currencyCode}&`}  
     page=${page}
@@ -156,7 +156,7 @@ const actions = {
     console.log(payload);
     try {
       commit(MUTATE_LOADINGSTATE_FLOAT_BALANCE, 'getting')
-      const {data} = await Vue.prototype.$http.get(
+      const {data} = await Vue.prototype.$http.aba1.get(
         `/cardprograms/${cardProgramId}
       /floats/pending?
       page=${page}
@@ -185,7 +185,7 @@ const actions = {
     try {
       commit(MUTATE_LOADINGSTATE_FLOAT_BALANCE, 'getting')
 
-      const {data} = await Vue.prototype.$http.get(
+      const {data} = await Vue.prototype.$http.aba1.get(
         `/cardprograms/${cardProgramId}/floats/reviewed?
       page=${page}
       &per_page=${perPage}
@@ -207,7 +207,7 @@ const actions = {
   ) => {
     try {
       commit(MUTATE_LOADINGSTATE_FLOAT_BALANCE, 'getting')
-      const {data} = await Vue.prototype.$http.get(
+      const {data} = await Vue.prototype.$http.aba1.get(
         `
       /cardprograms/${cardProgramId}
       /resellers/${resellerId}/statement?
@@ -231,7 +231,7 @@ const actions = {
     try {
       commit(MUTATE_LOADINGSTATE_FLOAT_BALANCE, 'getting')
 
-      let {data} = await Vue.prototype.$http.get(
+      let {data} = await Vue.prototype.$http.aba1.get(
         `/floataccounts/unallocated-list?
       ${(cardProgramCode && cardProgramCode.toLowerCase() === 'all') ? '' : `card_program_code=${cardProgramCode}&`}  
       ${(resellerCode && resellerCode.toLowerCase() === 'all') ? '' : `reseller_code=${resellerCode}&`}  
@@ -274,7 +274,7 @@ const actions = {
   }) => {
     try {
       commit(MUTATE_LOADINGSTATE_FLOAT_BALANCE, 'getting')
-      let {data} = await Vue.prototype.$http.get(
+      let {data} = await Vue.prototype.$http.aba1.get(
         `/cardprograms/${cardProgramCode}/resellers/${resellerCode}/statement?
       currency_code=${currencyCode}
       &from_date=${fromDate}
@@ -313,7 +313,7 @@ const actions = {
     try {
       commit(MUTATE_LOADINGSTATE_FLOAT_BALANCE, 'sending')
 
-      const {data} = await Vue.prototype.$http.put(
+      const {data} = await Vue.prototype.$http.aba1.put(
         `/floats/${floatId}`
         , {
           ...handleEmptyValues(body)
@@ -333,7 +333,7 @@ const actions = {
   [ADD_SOFTDOC_TO_FLOAT]: async ({commit}, floatId, body) => {
     // Float TXN ID
     try {
-      const {data} = await Vue.prototype.$http.post(`/floats/${floatId}/sofdocs`, {
+      const {data} = await Vue.prototype.$http.aba1.post(`/floats/${floatId}/sofdocs`, {
           ...handleEmptyValues(body)
         }
       )
@@ -346,7 +346,7 @@ const actions = {
   [GET_A_SOFTDOC_BY_FLOATID]:
     async ({commit}, floatId, softFieldId) => {
       try {
-        const {data} = await Vue.prototype.$http(`/floats/${floatId}/softdocs/${softFieldId}`)
+        const {data} = await Vue.prototype.$http.aba1(`/floats/${floatId}/softdocs/${softFieldId}`)
       } catch (e) {
         console.log(e)
       }

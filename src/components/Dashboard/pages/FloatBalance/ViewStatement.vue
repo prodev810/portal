@@ -51,7 +51,6 @@
           <div class="d-flex align-items-center align-content-center">
             <span class="px-2">{{ $t('view_statement.listing.search_filter.currency') }}</span>
             <el-select class="select-default"
-                       v-if=""
                        size="small"
                        placeholder="selected a currency"
                        v-model="currencyCode"
@@ -64,10 +63,9 @@
               </el-option>
             </el-select>
           </div>
-          <div class="d-flex align-items-center align-content-center">
+          <div v-if="showInfo()" class="d-flex align-items-center align-content-center">
             <span class="px-2">{{ $t('view_statement.listing.search_filter.card_program') }}</span>
             <el-select class="select-default"
-                       v-if=""
                        size="small"
                        placeholder="Selected A Card Program Code"
                        v-model="cardProgramCode"
@@ -80,10 +78,9 @@
               </el-option>
             </el-select>
           </div>
-          <div class="d-flex align-items-center align-content-center">
+          <div v-if="showInfo()" class="d-flex align-items-center align-content-center">
             <span class="px-2">{{ $t('view_statement.listing.search_filter.reseller') }}</span>
             <el-select class="select-default"
-                       v-if=""
                        size="small"
                        placeholder="Select A Reseller Code"
                        v-model="resellerCode"
@@ -139,7 +136,7 @@
           <pagination :page-count="totalPages"
                       v-model="page"
                       @perpagechange="onPerpageChange"
-                      :perPage="perPage"></pagination>
+                      :perPage="perPage" displayPerPage></pagination>
         </div>
       </div>
     </div>
@@ -167,7 +164,7 @@
     GETTER_LOADINGSTATE_FLOAT_BALANCE,
     GETTER_SUPPORTED_CURRENCIES, GETTER_VIEW_STATEMENT
   } from "../../../../store/types";
-  import {formatDate} from "../../../../utils/Date";
+  import {formatDate, simpleFormatAPIDate} from "../../../../utils/Date";
   // import {formatedMoney} from "../../../../utils/inputMasks";
   import Pagination from "../../../UIComponents/ABAComponents/Pagenation/Pagenation";
   import PButton from "../../../UIComponents/Button";
@@ -295,7 +292,7 @@
           ...i,
           itemAmount:  moneyFormatAppendCurrency(i.itemAmount, this.currencyCode),
           itemBalance: moneyFormatAppendCurrency(i.itemBalance, this.currencyCode),
-          timestamp: formatDate(i.timestamp, true)
+          timestamp: simpleFormatAPIDate(i.timestamp, true)
         }))
         this.openingBalance = moneyFormatAppendCurrency(newVal.openingBalance, this.currencyCode)
         this.closingBalance = moneyFormatAppendCurrency(newVal.closingBalance, this.currencyCode)
@@ -355,7 +352,8 @@
           currency_code: currencyCode || this.currencyCode,
           page: page || this.page,
         }
-      }, onPerpageChange(perPage) {
+      }, 
+      onPerpageChange(perPage) {
         const newPage = (this.page * this.perPage) / perPage
         const page = Math.floor(isFinite(newPage) ? newPage : 0);
         this.perPage = perPage;
@@ -371,7 +369,7 @@
         if (!this.ready) return;
         this.getStatment({
           cardProgramCode: this.cardProgramCode,
-          resellerCode: this.resellerCode,
+          resellerCode: this.$oAuth.isReseller() ? this.$oAuth.getCurrentResellerCode() : this.resellerCode,
           currencyCode: this.currencyCode,
           fromDate: formatDate(this.fromDate),
           page: this.page,
@@ -380,7 +378,7 @@
         })
       },
       download() {
-        this.$http.get(`/cardprograms/${this.cardProgramCode}/resellers/${this.resellerCode}/statement/download`, {
+        this.$http.aba1.get(`/cardprograms/${this.cardProgramCode}/resellers/${this.resellerCode}/statement/download`, {
           from_date: formatDate(this.fromDate),
           to_date: formatDate(this.toDate),
           currency_code: this.currencyCode
@@ -392,6 +390,10 @@
           $ancoreElement.setAttribute("download", data.fileName);
           $ancoreElement.click();
         })
+      },
+      showInfo () {
+        const isReseller = this.$oAuth.isReseller()
+        return !isReseller
       }
     },
     async mounted() {
