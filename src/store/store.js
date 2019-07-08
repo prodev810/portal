@@ -7,6 +7,7 @@ import UiModule from "./modules/UiModule";
 import kyc from "./modules/Kyc";
 import paymentGateway from "./modules/PaymentGateway"
 import issuing from './modules/Issuing'
+import buisness from './modules/Business'
 
 Vue.use(Vuex)
 
@@ -19,5 +20,6 @@ export const store = new Vuex.Store({
     kyc,
     paymentGateway,
     issuing,
+    buisness,
   }
 })
