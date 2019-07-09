@@ -16,6 +16,8 @@ import {
   GETTER_ISSUING_APPS_PAGEMETA,
   GETTER_ISSUING_ACCOUNT,
   GETTER_ISSUING_CARD,
+  ISSUING_SINGLE_SUBMIT,
+  ISSUING_BATCH_SUBMIT,
 } from '../types'
 import LOADING_STATE from '../../utils/loadingState'
 
@@ -35,78 +37,117 @@ const mutations = {
 
 const actions = {
   [ISSUING_GET_APPS_OVERVIEW]: async ({commit}, payload) => {
-    try {
-      commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
-      const {data} = await Vue.prototype.$http.abahttp.get('v1/aba/issuing-apps-overview', {...payload})
-      commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
-      commit(MUTATE_ISSUING_APPS_OVERVIEW, {data})
-    } catch (e) {
-      commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
-      console.log('issuing apps overview', e)
-    }
+    return new Promise((resolve, reject) => {
+      Vue.prototype.$http.abahttp.get('v1/aba/issuing-apps-overview', {...payload})
+        .then(data => {
+          commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
+          commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
+          commit(MUTATE_ISSUING_APPS_OVERVIEW, {data: data.data})
+          resolve(data.data)
+        })
+        .catch(error => {
+          commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
+          reject(error)
+        })
+    })
   },
   [ISSUING_ACCOUNT_REQUEST]: async ({commit}, payload) => {
     return new Promise((resolve, reject) => {
-      Vue.prototype.$http.abahttp.get(`v1/aba/issuing-apps/${payload}/account-requests`)
+      Vue.prototype.$http.abahttp.post(`v1/aba/issuing-apps/${payload}/account-requests`)
         .then(data => {
           resolve(data.data)
         })
-        .catch( error => reject(error))
+        .catch(error => reject(error))
     })
   },
   [ISSUING_CARD_REQUEST]: async ({commit}, payload) => {
     return new Promise((resolve, reject) => {
-      Vue.prototype.$http.abahttp.get(`v1/aba/issuing-apps/${payload}/card-requests`)
+      Vue.prototype.$http.abahttp.post(`v1/aba/issuing-apps/${payload}/card-requests`)
         .then(data => {
           resolve(data.data)
         })
-        .catch( error => reject(error))
+        .catch(error => reject(error))
     })
   },
   [ISSUING_GET_ACCOUNT_REQUEST]: async ({commit}, payload) => {
-    try {
-      commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
-      const {data} = await Vue.prototype.$http.abahttp.get(`v1/aba/issuing-account-request/${payload}`)
-      commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
-      //console.log('acc req', data)
-      const response = data.requestDetail
-      commit(MUTATE_ISSUING_ACCOUNT_REQUEST, {data: response})
-    } catch (e) {
-      console.log('issuing account request', e)
-      commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
-    }
+    commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
+    return new Promise((resolve, reject) => {
+      Vue.prototype.$http.abahttp.get(`v1/aba/issuing-account-request/${payload}`)
+        .then(data => {
+          commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
+          commit(MUTATE_ISSUING_ACCOUNT_REQUEST, {data: data.data})
+          resolve(data.data)
+        })
+        .catch(error => {
+          commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
+          console.log('issuing account request', error)
+          reject(error)
+        })
+    })
   },
   [ISSUING_GET_CARD_REQUEST]: async ({commit}, payload) => {
     try {
       commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
-      // const {data} = await Vue.prototype.$http.abahttp.get(`v1/aba/issuing-apps/${payload}/card-requests`)
-      const {data} = await Vue.prototype.$http.abahttp.get(`v1/aba/issuing-card-request/${payload}`)
-      console.log('acc req', data)
+      const data = await Vue.prototype.$http.abahttp.get(`v1/aba/issuing-card-request/${payload}`)
       commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
-      console.log('issuing card request', data)
-      commit(MUTATE_ISSUING_CARD_REQUEST, {data: data.cardRequests})
+      console.log('card', data.data)
+      commit(MUTATE_ISSUING_CARD_REQUEST, {data: data.data})
     } catch (e) {
       commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
       console.log('issuing card request', e)
     }
   },
   [ISSUING_PUT_CARD_REQUEST]: async ({commit}, payload) => {
-    try {
-      const req = payload.body
-      const {data} = await Vue.prototype.$http.abahttp.put(`v1/aba/issuing-card-request/${payload.id}`, req)
-      //console.log('issuing put card request', {data})
-    } catch (e) {
-      console.log('issuing put card request', e)
-    }
+    commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
+    const req = payload.body
+    return new Promise((resolve, reject) => {
+      Vue.prototype.$http.abahttp.put(`v1/aba/issuing-card-request/${payload.id}`, req)
+        .then(data => {
+          commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
+          resolve(data.data)
+        })
+        .catch(error => {
+          commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
+          const errObj = JSON.stringify(error)
+          reject(JSON.parse(errObj).response.data)
+        })
+    })
   },
   [ISSUING_PUT_ACCOUNT_REQUEST]: async ({commit}, payload) => {
-    //console.log('issuing put account request', payload)
+    commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
+    const req = payload.body
+    return new Promise((resolve, reject) => {
+      Vue.prototype.$http.abahttp.put(`v1/aba/issuing-account-request/${payload.id}`, req)
+        .then(data => {
+          commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
+          resolve(data.data)
+        })
+        .catch(error => {
+          commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
+          const errObj = JSON.stringify(error)
+          reject(JSON.parse(errObj).response.data)
+        })
+    })
+  },
+  [ISSUING_SINGLE_SUBMIT]: async ({commit}, payload) => {
     try {
-      const req = payload.body
-      const {data} = await Vue.prototype.$http.abahttp.put(`v1/aba/issuing-account-request/${payload.id}`, req)
-      //console.log('issuing put account request', {data})
+      commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
+      const data = await Vue.prototype.$http.abahttp.post(`v1/aba/issuing-apps/${payload}/single-submit`)
+      console.log('singe submit', {data})
+      commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
     } catch (e) {
-      console.log('issuing put account request', e)
+      commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
+      console.log('issuing single submit', e)
+    }
+  },
+  [ISSUING_BATCH_SUBMIT]: async ({commit}, payload) => {
+    try {
+      commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
+      const data = await Vue.prototype.$http.abahttp.post(`/v1/aba/issuing-apps/batch-submit`,{body:{issuingAppIds:payload}})
+      console.log('batch submit', {data})
+    } catch (e) {
+      commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
+      console.log('issuing single submit', e)
     }
   },
 }
@@ -116,7 +157,7 @@ const getters = {
   [GETTER_ISSUING_APPS_INFO]: state => state.issuingApps.infos,
   [GETTER_ISSUING_APPS_PAGEMETA]: state => state.issuingApps.pageMeta,
   [GETTER_ISSUING_ACCOUNT]: state => state.issuingAccount,
-  [GETTER_ISSUING_CARD]: state => state.issuingCard,
+  [GETTER_ISSUING_CARD]: state => state.issuingCard.issuingCardRequestInfoData,
 }
 
 const issuing = {

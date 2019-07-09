@@ -143,7 +143,7 @@
             </td>
             <td class="pl-0 pr-0">
               <p-button outline type="primary"
-                        @click="handleReviewAccount(tableItem.id)"
+                        @click="handleReviewAccount(tableItem.accountRequest.id)"
                         class="w-100">
                 <img class="glass-icon" :src="GlassPurpleIcon" alt="glassIcon">
                 Review
@@ -169,6 +169,7 @@
             </td>
             <td class="pl-0 pr-0">
               <p-button v-if="isPendingStatus(tableItem.issuingAppStatus)"
+                        @click="addSingleSubmit(tableItem.id)"
                         outline type="primary" class="w-100">Submit
               </p-button>
               <p-button v-if="isFailedStatus(tableItem.issuingAppStatus)"
@@ -209,7 +210,10 @@
     GETTER_ISSUING_LOADINGSTATE,
     GETTER_ISSUING_APPS_INFO,
     GETTER_ISSUING_APPS_PAGEMETA,
-    GETTER_ISSUING_APPS_INFO_ADD_IS_CHECKED,
+    GETTER_ISSUING_APPS_INFO_CHECKED,
+    BUSINESS_RESELLER_CODE_LIST,
+    ISSUING_SINGLE_SUBMIT,
+    ISSUING_BATCH_SUBMIT,
   } from '@/store/types'
   import {mapActions, mapGetters} from 'vuex'
   import {formatDate} from "../../../../utils/Date"
@@ -281,6 +285,7 @@
       }
     },
     mounted() {
+      this.getResellerCodeList()
       this.handleSearch()
     },
     computed: {
@@ -288,33 +293,41 @@
         issuingAppsInfos: GETTER_ISSUING_APPS_INFO,
         issuingAppsPageMeta: GETTER_ISSUING_APPS_PAGEMETA,
         loadingState: GETTER_ISSUING_LOADINGSTATE,
+        //appsInfoChecked: GETTER_ISSUING_APPS_INFO_CHECKED,
       }),
       isLoading() {
         return this.loadingState !== LOADING_STATE.IDEAL
       },
       issuingAppsInfosChecked() {
-        if (this.issuingAppsInfos) {
-          return this.issuingAppsInfos
+        if (this.issuingAppsInfosCheckedModel.length) {
+          return this.issuingAppsInfosCheckedModel
             .map(info => {
               info.isChecked = false
               return info
             })
         }
       },
+
     },
     watch: {
       issuingAppsPageMeta(value) {
         this.pageCount = value.totalPages;
         this.perPage = value.perPage;
       },
+      issuingAppsInfos(value) {
+        const copyInfos = JSON.parse(JSON.stringify(value))
+        this.issuingAppsInfosCheckedModel = this.addIsChecked(copyInfos);
+      },
+
     },
     methods: {
       ...mapActions({
         getIssuingAppsOverview: ISSUING_GET_APPS_OVERVIEW,
-        getIssuingAccount: ISSUING_ACCOUNT_REQUEST,
-        getIssuingCard: ISSUING_CARD_REQUEST,
+        getResellerCodeList: BUSINESS_RESELLER_CODE_LIST,
+        addSingleSubmit: ISSUING_SINGLE_SUBMIT,
+        addBatchSubmit: ISSUING_BATCH_SUBMIT,
       }),
-      handleSearch() {
+      async handleSearch() {
         const payload = {
           toDate: this.getDateFormat(this.filterModel.dateTo),
           fromDate: this.getDateFormat(this.filterModel.dateFrom),
@@ -329,28 +342,36 @@
           pageSize: this.perPage
         }
         Object.keys(payload).forEach((key) => (payload[key] == null || payload[key] === '') && delete payload[key])
-        this.getIssuingAppsOverview(payload)
+        await this.getIssuingAppsOverview(payload)
         if (!this.isPagination) this.currentPage = 1;
       },
       handleSubmit() {
-        console.log('submit')
+        const body = this.issuingAppsInfosCheckedModel
+          .filter(info => info.isChecked)
+          .map(item => {
+            return item.id
+          })
+
+        this.addBatchSubmit(body)
+        console.log('submit', body)
       },
       handleListingTableCheckboxes(value) {
-        this.issuingAppsInfosChecked.forEach(item => {
+        this.issuingAppsInfosCheckedModel.forEach(item => {
           item.isChecked = value
         })
       },
-      async handleReviewAccount(accountReferenceId) {
-        const accountReq = await this.getIssuingAccount(accountReferenceId)
-        this.$router.push(`/kyc/review-edit-account/${accountReq.accountRequests[0].id}`)
+      addIsChecked(itemList) {
+        return itemList.map(info => {
+          info.isChecked = false
+          return info
+        })
+      },
+      async handleReviewAccount(accountRequest) {
+        this.$router.push(`/kyc/review-edit-account/${accountRequest}`)
       },
       async handleCardCreated(item) {
-        if(!item.isCardCreated) return
-
-        const accountReq = await this.getIssuingCard(item.id)
-        if (accountReq && accountReq.length) {
-          this.$router.push(`/kyc/review-edit-card/${item.id}`)
-        }
+        if (!item.isCardCreated) return
+        this.$router.push(`/kyc/review-edit-card/${item.cardRequest.id}`)
       },
       handleChangePage(event) {
         this.currentPage = event;

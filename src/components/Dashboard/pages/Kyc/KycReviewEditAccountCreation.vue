@@ -529,18 +529,19 @@
     ISSUING_PUT_ACCOUNT_REQUEST,
     GETTER_ISSUING_LOADINGSTATE,
     GETTER_ISSUING_ACCOUNT,
+    SHOW_TOAST_MESSAGE,
   } from '@/store/types'
   import {mapActions, mapGetters} from 'vuex'
   import LOADING_STATE from '../../../../utils/loadingState'
 
   export default {
     name: "KycReviewEditAccountCreation",
-    components:{
+    components: {
       PSpinner,
     },
     data() {
       return {
-        accountInfo:  {
+        accountInfo: {
           accessCode: '',
           accountReference: '',
           birthDate: '',
@@ -600,9 +601,9 @@
         this.getIssuingAccount(this.id)
       }
     },
-    watch:{
-      getAccountInfo(newVal){
-        this.accountInfo = newVal
+    watch: {
+      getAccountInfo(newVal) {
+        this.accountInfo = newVal.requestDetail
       },
     },
     computed: {
@@ -619,8 +620,17 @@
         getIssuingAccount: ISSUING_GET_ACCOUNT_REQUEST,
         putIssuingAccount: ISSUING_PUT_ACCOUNT_REQUEST,
       }),
-      handleSaveAccount() {
-        this.putIssuingAccount({id: this.id, body: this.accountInfo})
+      async handleSaveAccount() {
+        await this.putIssuingAccount({id: this.id, body: this.accountInfo})
+          .then(data => {
+            this.handleClose()
+          })
+          .catch(error => {
+            this.$store.dispatch(SHOW_TOAST_MESSAGE, {
+              message: error.detail,
+              status: 'danger'
+            })
+          })
       },
       handleClose() {
         this.$router.push('/kyc/approved-emoney-account')
