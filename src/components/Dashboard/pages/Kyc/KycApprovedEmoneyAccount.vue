@@ -10,8 +10,8 @@
             <label class="row-label"><strong>Reseller</strong></label>
             <div class="d-inline-flex form-input-block">
               <el-select class="w-100" v-model="filterModel.reseller">
-                <el-option v-for="item in resellerList"
-                           :key="item.value"
+                <el-option v-for="item in resellerCodeList"
+                           :key="item.name"
                            :label="item.name"
                            :value="item.value">{{item.name}}
                 </el-option>
@@ -212,6 +212,7 @@
     GETTER_ISSUING_APPS_PAGEMETA,
     GETTER_ISSUING_APPS_INFO_CHECKED,
     BUSINESS_RESELLER_CODE_LIST,
+    GETTER_BUSINESS_RESELLER_CODE_LIST,
     ISSUING_SINGLE_SUBMIT,
     ISSUING_BATCH_SUBMIT,
   } from '@/store/types'
@@ -293,7 +294,7 @@
         issuingAppsInfos: GETTER_ISSUING_APPS_INFO,
         issuingAppsPageMeta: GETTER_ISSUING_APPS_PAGEMETA,
         loadingState: GETTER_ISSUING_LOADINGSTATE,
-        //appsInfoChecked: GETTER_ISSUING_APPS_INFO_CHECKED,
+        resellerCodeList: GETTER_BUSINESS_RESELLER_CODE_LIST,
       }),
       isLoading() {
         return this.loadingState !== LOADING_STATE.IDEAL
