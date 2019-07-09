@@ -4,7 +4,7 @@ export default {
   view_card_programs: `View Card Programs`,
   reseller: `Reseller`,
   create_reseller: `Create Reseller`,
-  view_reseller: `View Reseller`,
+  view_reseller: `View Resellers`,
   float_balance: `Float Balance`,
   view_float_account: `View Float Account`,
   review_debit_credit: `Review Debit/Credit`,

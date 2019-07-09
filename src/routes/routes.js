@@ -34,6 +34,8 @@ import ResellerView from '../components/Dashboard/pages/Resller/View';
 // GeneralViews
 import NotFound from '../components/GeneralViews/NotFoundPage.vue';
 import NoPermission from '../components/Dashboard/pages/Dashboard/NoPermission.vue';
+// Named Routes
+import NAMED_ROUTES from './nameRoutes'
 
 // Charts
 const Charts = () =>
@@ -188,16 +190,25 @@ let payment_gateway = {
 let reseller = {
   path: '/reseller',
   // redirect: '/reseller/view?page=0&per_page=10',
-  redirect: '/reseller/view',
+  redirect: '/resellers/view',
   component: DashboardLayout,
   meta: {
     permission: permission.RESELLER_SUBSCRIPTION_VIEW
   },
   children: [
     {
-      path: '/reseller/view',
-      name: 'Resellers View',
-      //component: ResellerView,
+      path: '/resellers/view',
+      name: NAMED_ROUTES.RESELLERS_VIEW,
+      component: ResellerView,
+      // component: ResellerCreateCorporateModule,
+      props:{context: 'view'},
+      meta: {
+        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+      }
+    },
+    {
+      path: '/resellers/view/:id',
+      name: NAMED_ROUTES.RESELLER_VIEW_BY_ID,
       component: ResellerCreateCorporateModule,
       props:{context: 'view'},
       meta: {
@@ -206,7 +217,7 @@ let reseller = {
     },
     {
       path: '/reseller/create',
-      name: 'Resellers Create',
+      name: NAMED_ROUTES.RESELLER_CREATE,
       component: ResellerCreateCorporateModule,
       // component: ResellerCreate,
       props:{context: 'create'},
@@ -215,8 +226,8 @@ let reseller = {
       }
     },
     {
-      path: '/reseller/edit',
-      name: 'Resellers Edit',
+      path: '/reseller/edit/:id',
+      name: NAMED_ROUTES.RESELLER_EDIT,
       component: ResellerCreateCorporateModule,
       props:{context: 'edit'},
       meta: {

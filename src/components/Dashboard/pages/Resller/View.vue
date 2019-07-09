@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    
+
     <div v-if="true">
       <div class="card" v-if="true">
         <div class="card-content row">
@@ -127,7 +127,7 @@
   </div>
 </template>
 <script>
-  import { permissionMixin } from '@/mixins/permission'
+  import {permissionMixin} from '@/mixins/permission'
   import {Button} from "src/components/UIComponents";
   import {mapActions, mapGetters} from "vuex";
   import {
@@ -146,6 +146,7 @@
   import RegularTable from "../../../UIComponents/CeevoTables/RegularTable/RegularTable";
   import Loader from "../../../UIComponents/Loader";
   import Spinner from "../../../UIComponents/Spinner";
+  //import NAMED_ROUTES from '@routes/namedRoutes'
 
   export default {
     name: "CardPrograms",
@@ -165,8 +166,8 @@
           {
             //!missing name
             //TODO: fix this field
-            label: 'CPC', 
-            name: 'cardProgramID', 
+            label: 'CPC',
+            name: 'cardProgramID',
             i18n: 'reseller.listing.table_header.card_program_id',
             input: 'select',
             selectKeys: [
@@ -179,13 +180,13 @@
             name: 'cardProgCurrency',
           },
           {
-            label: 'RC', 
+            label: 'RC',
             name: 'resellerCode',
             i18n: 'reseller.listing.table_header.reseller_code'
           },
           // imagamry field
           {
-            label: 'reseller name', 
+            label: 'reseller name',
             name: 'resellerName',
             i18n: 'reseller.listing.table_header.reseller_name'
           },
@@ -241,7 +242,8 @@
         getAllCardPrograms: GET_ALL_CARD_PROGRAM,
         addReseller: ADD_RESELLER_SUBSCRIPTION,
         editReseller: EDIT_RESELLER_SUBSCRTION_BY_ID
-      }), onPerpageChange(ev) {
+      }),
+      onPerpageChange(ev) {
         const newPage = (this.page * this.perPage) / ev
         const page = Math.floor(isFinite(newPage) ? newPage : 0);
         this.perPage = ev;
@@ -263,7 +265,8 @@
             return i;
           }
         })
-      }, edit({index: {id}}) {
+      },
+      edit({index: {id}}) {
         this.$router.history.push({
           path: '/reseller/resellers/' + id,
           query: {
@@ -271,14 +274,13 @@
           }
         });
 
-      }, viewDetails({index: {id}}) {
+      },
+      viewDetails({index: {id}}) {
         this.$router.history.push({
-          path: '/reseller/resellers/' + id,
-          query: {
-            edit: false
-          }
+          path: `/reseller/edit/${id}`
         });
-      }, handleSecondaryAction() {
+      },
+      handleSecondaryAction() {
         if (this.editId || this.editAll) {
           this.editId = '';
           this.editAll = false;
@@ -290,7 +292,8 @@
         if (this.editAll || this.editId) return this.saveEdition();
 
         this.getCSVfile();
-      }, saveEdition() {
+      },
+      saveEdition() {
         // on edit ?
         if (this.editId !== '' && this.loadingState === 'ideal') {
 
@@ -328,7 +331,7 @@
             card_program_code: cardProgCode
           }
         })
-      }, 
+      },
       getResellerData() {
         this.$router.push({
           path: `/reseller/view`,

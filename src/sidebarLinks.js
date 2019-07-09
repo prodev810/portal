@@ -1,4 +1,5 @@
 import permission from '@/constants/permission'
+//import NAMED_ROUTES from '@/routes/namedRoutes'
 export default [
   {
     name: 'Card Program',
@@ -37,11 +38,23 @@ export default [
         permission: permission.RESELLER_SUBSCRIPTION_EDIT
       },
       {
-        name: 'View Reseller',
-        path: '/reseller/view',
+        name: 'View Resellers',
+        path: '/resellers/view',
         i18n: 'menu.view_reseller',
         permission: permission.RESELLER_SUBSCRIPTION_VIEW
-      }
+      },
+      {
+        name: 'View Reseller',
+        path: '/reseller/view/:id',
+        permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+        hidden: true,
+      },
+      {
+        name: 'Edit Reseller',
+        path: '/reseller/edit/:id',
+        permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+        hidden: true,
+      },
     ]
   },
   {
