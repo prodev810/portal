@@ -37,10 +37,10 @@
             <label class="row-label"><strong>Status</strong></label>
             <div class="d-inline-flex form-input-block">
               <el-select class="w-100" v-model="filterModel.status">
-                <el-option v-for="item in statusList"
-                           :key="item.value"
-                           :label="item.name"
-                           :value="item.value">{{item.name}}
+                <el-option v-for="item in issuingAppStatuses"
+                           :key="item.name"
+                           :label="item.description"
+                           :value="item.name">{{item.description}}
                 </el-option>
               </el-select>
             </div>
@@ -215,6 +215,8 @@
     GETTER_BUSINESS_RESELLER_CODE_LIST,
     ISSUING_SINGLE_SUBMIT,
     ISSUING_BATCH_SUBMIT,
+    ISSUING_GET_APPS_STATUSES,
+    GETTER_ISSUING_APPS_STATUSES,
   } from '@/store/types'
   import {mapActions, mapGetters} from 'vuex'
   import {formatDate} from "../../../../utils/Date"
@@ -287,6 +289,7 @@
     },
     mounted() {
       this.getResellerCodeList()
+      this.getIssuingAppStatuses()
       this.handleSearch()
     },
     computed: {
@@ -295,6 +298,7 @@
         issuingAppsPageMeta: GETTER_ISSUING_APPS_PAGEMETA,
         loadingState: GETTER_ISSUING_LOADINGSTATE,
         resellerCodeList: GETTER_BUSINESS_RESELLER_CODE_LIST,
+        issuingAppStatuses: GETTER_ISSUING_APPS_STATUSES,
       }),
       isLoading() {
         return this.loadingState !== LOADING_STATE.IDEAL
@@ -327,6 +331,7 @@
         getResellerCodeList: BUSINESS_RESELLER_CODE_LIST,
         addSingleSubmit: ISSUING_SINGLE_SUBMIT,
         addBatchSubmit: ISSUING_BATCH_SUBMIT,
+        getIssuingAppStatuses: ISSUING_GET_APPS_STATUSES,
       }),
       async handleSearch() {
         const payload = {
