@@ -146,7 +146,7 @@
   import RegularTable from "../../../UIComponents/CeevoTables/RegularTable/RegularTable";
   import Loader from "../../../UIComponents/Loader";
   import Spinner from "../../../UIComponents/Spinner";
-  //import NAMED_ROUTES from '@routes/namedRoutes'
+  import NAMED_ROUTES from '../../../../routes/nameRoutes'
 
   export default {
     name: "CardPrograms",
@@ -315,7 +315,8 @@
           // editing multiple cards unhandled by the api
           alert('editing multiple cards unhandled by the api currently')
         }
-      }, getCSVfile() {
+      },
+      getCSVfile() {
         const csvString = createCSVData(this.tableHeadings, this.resellerData)
         const encodedUri = encodeURI(csvString);
         fileDownlaodFromEncodedURI(encodedUri, 'reseller_sub');
@@ -361,7 +362,7 @@
       this.page = +page || this.page;
       if (!page && !per_page) {
         this.$router.push({
-          path: `/reseller/view`,
+          name: `/reseller/view`,
           query: {
             page: this.page,
             perPage: this.perPage
