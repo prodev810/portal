@@ -509,6 +509,7 @@
       <el-row>
         <el-col :md="24" class="text-center">
           <p-button round type="primary" class="mr-3"
+                    :class="{disabled: isDisabledEdit}"
                     @click="handleSaveAccount()">Save
           </p-button>
           <p-button round
@@ -541,7 +542,8 @@
     },
     data() {
       return {
-        accountInfo: {
+        accountInfo:{},
+        /*accountInfo: {
           accessCode: '',
           accountReference: '',
           birthDate: '',
@@ -591,7 +593,7 @@
           secondName: '',
           title: '',
           workPhone: ''
-        },
+        }*/
         id: null,
       }
     },
@@ -613,6 +615,9 @@
       }),
       isLoading() {
         return this.loadingState !== LOADING_STATE.IDEAL;
+      },
+      isDisabledEdit(){
+        return this.getAccountInfo.isSuccess
       },
     },
     methods: {

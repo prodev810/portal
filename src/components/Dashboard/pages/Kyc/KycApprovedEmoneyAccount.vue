@@ -351,15 +351,20 @@
         await this.getIssuingAppsOverview(payload)
         if (!this.isPagination) this.currentPage = 1;
       },
-      handleSubmit() {
+      async handleSubmit() {
         const body = this.issuingAppsInfosCheckedModel
           .filter(info => info.isChecked)
           .map(item => {
             return item.id
           })
 
-        this.addBatchSubmit(body)
-        console.log('submit', body)
+        await this.addBatchSubmit(body)
+          .then(response => {
+            if(response.status !== 200) return
+            setTimeout(()=>{
+              this.handleSearch()
+            },1000)
+          })
       },
       handleListingTableCheckboxes(value) {
         this.issuingAppsInfosCheckedModel.forEach(item => {
