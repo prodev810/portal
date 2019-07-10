@@ -542,58 +542,10 @@
     },
     data() {
       return {
-        accountInfo:{},
-        /*accountInfo: {
-          accessCode: '',
-          accountReference: '',
-          birthDate: '',
-          cardHolderName: '',
-          cardProgramCode: '',
-          cardProgramId: 0,
-          currencyCode: '',
-          customerId: '',
-          customerIdType: 0,
-          email: '',
-          feeProfileId: 0,
-          firstName: '',
-          fourthLine: '',
-          gender: '',
-          homePhone: '',
-          issuerInstCode: '',
-          kycAppRefNumber: '',
-          kycLevel: 0,
-          lastName: '',
-          maidenName: '',
-          memorableWord: '',
-          merchantUSN: 0,
-          mobilePhone: '',
-          overrideAddress: {
-            address1: '',
-            address2: '',
-            address3: '',
-            city: '',
-            countryCode: '',
-            postCode: '',
-            region: ''
-          },
-          primaryAddress: {
-            address1: '',
-            address2: '',
-            address3: '',
-            city: '',
-            countryCode: '',
-            postCode: '',
-            region: ''
-          },
-          programManagerCode: '',
-          programOwnerCode: '',
-          proofOfAddressUrl: '',
-          proofOfPassportUrl: '',
-          resellerCode: '',
-          secondName: '',
-          title: '',
-          workPhone: ''
-        }*/
+        accountInfo:{
+          primaryAddress:{},
+          overrideAddress:{},
+        },
         id: null,
       }
     },
