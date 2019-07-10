@@ -209,24 +209,6 @@
     data() {
       return {
         cardInfo: {},
-        /*cardInfo:{
-          accountId: '',
-          customerCode: '',
-          cardHolderName: '',
-          fourthLine: '',
-          matrixPid: '',
-          deliveryTitle: '',
-          deliveryFirstName: '',
-          deliveryLastName: '',
-          deliveryMobilePhone: '',
-          deliveryAddress1: '',
-          deliveryAddress2: '',
-          deliveryAddress3: '',
-          deliveryCity: '',
-          deliveryRegion: '',
-          deliveryPostCode: '',
-          deliveryCountryCode: '',
-        },*/
         id: null,
       }
     },

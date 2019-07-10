@@ -143,7 +143,7 @@
             </td>
             <td class="pl-0 pr-0">
               <p-button outline type="primary"
-                        @click="handleReviewAccount(tableItem.accountRequest.id)"
+                        @click="handleReviewAccount(tableItem)"
                         class="w-100">
                 <img class="glass-icon" :src="GlassPurpleIcon" alt="glassIcon">
                 Review
@@ -377,8 +377,10 @@
           return info
         })
       },
-      async handleReviewAccount(accountRequest) {
-        this.$router.push(`/kyc/review-edit-account/${accountRequest}`)
+      async handleReviewAccount(item) {
+        if(item && item.accountRequest) {
+          this.$router.push(`/kyc/review-edit-account/${item.accountRequest.id}`)
+        }
       },
       async handleCardCreated(item) {
         if (!item.isCardCreated) return
