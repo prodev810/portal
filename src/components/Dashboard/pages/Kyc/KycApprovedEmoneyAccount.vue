@@ -10,8 +10,8 @@
             <label class="row-label"><strong>Reseller</strong></label>
             <div class="d-inline-flex form-input-block">
               <el-select class="w-100" v-model="filterModel.reseller">
-                <el-option v-for="item in resellerList"
-                           :key="item.value"
+                <el-option v-for="item in resellerCodeList"
+                           :key="item.name"
                            :label="item.name"
                            :value="item.value">{{item.name}}
                 </el-option>
@@ -37,10 +37,10 @@
             <label class="row-label"><strong>Status</strong></label>
             <div class="d-inline-flex form-input-block">
               <el-select class="w-100" v-model="filterModel.status">
-                <el-option v-for="item in statusList"
-                           :key="item.value"
-                           :label="item.name"
-                           :value="item.value">{{item.name}}
+                <el-option v-for="item in issuingAppStatuses"
+                           :key="item.name"
+                           :label="item.description"
+                           :value="item.name">{{item.description}}
                 </el-option>
               </el-select>
             </div>
@@ -212,8 +212,11 @@
     GETTER_ISSUING_APPS_PAGEMETA,
     GETTER_ISSUING_APPS_INFO_CHECKED,
     BUSINESS_RESELLER_CODE_LIST,
+    GETTER_BUSINESS_RESELLER_CODE_LIST,
     ISSUING_SINGLE_SUBMIT,
     ISSUING_BATCH_SUBMIT,
+    ISSUING_GET_APPS_STATUSES,
+    GETTER_ISSUING_APPS_STATUSES,
   } from '@/store/types'
   import {mapActions, mapGetters} from 'vuex'
   import {formatDate} from "../../../../utils/Date"
@@ -286,6 +289,7 @@
     },
     mounted() {
       this.getResellerCodeList()
+      this.getIssuingAppStatuses()
       this.handleSearch()
     },
     computed: {
@@ -293,7 +297,8 @@
         issuingAppsInfos: GETTER_ISSUING_APPS_INFO,
         issuingAppsPageMeta: GETTER_ISSUING_APPS_PAGEMETA,
         loadingState: GETTER_ISSUING_LOADINGSTATE,
-        //appsInfoChecked: GETTER_ISSUING_APPS_INFO_CHECKED,
+        resellerCodeList: GETTER_BUSINESS_RESELLER_CODE_LIST,
+        issuingAppStatuses: GETTER_ISSUING_APPS_STATUSES,
       }),
       isLoading() {
         return this.loadingState !== LOADING_STATE.IDEAL
@@ -326,6 +331,7 @@
         getResellerCodeList: BUSINESS_RESELLER_CODE_LIST,
         addSingleSubmit: ISSUING_SINGLE_SUBMIT,
         addBatchSubmit: ISSUING_BATCH_SUBMIT,
+        getIssuingAppStatuses: ISSUING_GET_APPS_STATUSES,
       }),
       async handleSearch() {
         const payload = {
@@ -345,15 +351,20 @@
         await this.getIssuingAppsOverview(payload)
         if (!this.isPagination) this.currentPage = 1;
       },
-      handleSubmit() {
+      async handleSubmit() {
         const body = this.issuingAppsInfosCheckedModel
           .filter(info => info.isChecked)
           .map(item => {
             return item.id
           })
 
-        this.addBatchSubmit(body)
-        console.log('submit', body)
+        await this.addBatchSubmit(body)
+          .then(response => {
+            if(response.status !== 200) return
+            setTimeout(()=>{
+              this.handleSearch()
+            },1000)
+          })
       },
       handleListingTableCheckboxes(value) {
         this.issuingAppsInfosCheckedModel.forEach(item => {

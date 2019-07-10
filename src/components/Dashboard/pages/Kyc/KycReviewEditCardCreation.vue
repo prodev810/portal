@@ -172,6 +172,7 @@
           <el-col :md="24" class="mt-5">
             <div class="btn-block text-center">
               <p-button round type="primary" class="mr-3"
+                        :class="{disabled: isDisabledEdit}"
                         @click="handleSaveCard()">Save</p-button>
               <p-button round
                         @click="handleClose()">Close and Return</p-button>
@@ -243,10 +244,13 @@
       isLoading() {
         return this.loadingState !== LOADING_STATE.IDEAL;
       },
+      isDisabledEdit(){
+        return this.getCardInfo.isSuccess
+      },
     },
     watch:{
       getCardInfo(newVal){
-        this.cardInfo = newVal
+        this.cardInfo = newVal.issuingCardRequestInfoData
       }
     },
     methods:{
