@@ -3,6 +3,8 @@ import {
   MUTATE_ISSUING_LOADINGSTATE,
   BUSINESS_RESELLER_CODE_LIST,
   MUTATE_BUSINESS_RESELLER_CODE_LIST,
+  GETTER_BUSINESS_RESELLER_CODE_LIST,
+
 } from '../types'
 import LOADING_STATE from '../../utils/loadingState'
 
@@ -29,10 +31,20 @@ const actions = {
   },
 }
 
+const getters = {
+  [GETTER_BUSINESS_RESELLER_CODE_LIST]: state => {
+    const codeList = state.resellerCodeList.map(code => {
+      return {name: code, value: code}
+    })
+    return [{name: "All", value: ''}, ...codeList]
+  },
+}
+
 const business = {
   state,
   actions,
   mutations,
+  getters,
 }
 
 export default business

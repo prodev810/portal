@@ -18,6 +18,9 @@ import {
   GETTER_ISSUING_CARD,
   ISSUING_SINGLE_SUBMIT,
   ISSUING_BATCH_SUBMIT,
+  ISSUING_GET_APPS_STATUSES,
+  MUTATE_ISSUING_APPS_STATUSES,
+  GETTER_ISSUING_APPS_STATUSES,
 } from '../types'
 import LOADING_STATE from '../../utils/loadingState'
 
@@ -25,6 +28,7 @@ const state = {
   issuingApps: [],
   issuingAccount: [],
   issuingCard: [],
+  issuingAppStatuses: [],
   loadingState: LOADING_STATE.IDEAL,
 }
 
@@ -33,6 +37,7 @@ const mutations = {
   [MUTATE_ISSUING_CARD_REQUEST]: (state, {data}) => state.issuingCard = data,
   [MUTATE_ISSUING_ACCOUNT_REQUEST]: (state, {data}) => state.issuingAccount = data,
   [MUTATE_ISSUING_LOADINGSTATE]: (state, loadingState) => state.loadingState = loadingState,
+  [MUTATE_ISSUING_APPS_STATUSES]: (state, {data}) => state.issuingAppStatuses = data,
 }
 
 const actions = {
@@ -132,7 +137,8 @@ const actions = {
   [ISSUING_SINGLE_SUBMIT]: async ({commit}, payload) => {
     try {
       commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
-      const data = await Vue.prototype.$http.abahttp.post(`v1/aba/issuing-apps/${payload}/single-submit`)
+      // const data = await Vue.prototype.$http.abahttp.post(`v1/aba/issuing-apps/${payload}/single-submit`)
+      const data = await Vue.prototype.$http.abahttp.post(`v1/aba/issuing-apps/${payload}/single-submit`, {id:payload})
       console.log('singe submit', {data})
       commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
     } catch (e) {
@@ -141,13 +147,38 @@ const actions = {
     }
   },
   [ISSUING_BATCH_SUBMIT]: async ({commit}, payload) => {
-    try {
+    commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
+    return new Promise((resolve, reject)  => {
+      Vue.prototype.$http.abahttp.post(`v1/aba/issuing-apps/batch-submit`,{issuingAppIds:payload})
+        .then(data => {
+          commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
+          resolve(data)
+        })
+        .catch(error => {
+          commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
+          const errObj = JSON.stringify(error)
+          reject(JSON.parse(errObj).response.data)
+        })
+    })
+    /*try {
       commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
-      const data = await Vue.prototype.$http.abahttp.post(`/v1/aba/issuing-apps/batch-submit`,{body:{issuingAppIds:payload}})
+      const data = await Vue.prototype.$http.abahttp.post(`v1/aba/issuing-apps/batch-submit`,{issuingAppIds:payload})
       console.log('batch submit', {data})
+      commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
     } catch (e) {
       commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
-      console.log('issuing single submit', e)
+      console.log('issuing batch submit', e)
+    }*/
+  },
+  [ISSUING_GET_APPS_STATUSES]: async ({commit}) => {
+    try{
+      commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
+      const data = await Vue.prototype.$http.abahttp.get(`v1/aba/issuing-application-statuses`)
+      commit(MUTATE_ISSUING_APPS_STATUSES, {data: data.data})
+      console.log('issuing get app statuses', data.data)
+    }catch(e){
+      commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
+      console.log('issuing get app statuses', e)
     }
   },
 }
@@ -157,7 +188,13 @@ const getters = {
   [GETTER_ISSUING_APPS_INFO]: state => state.issuingApps.infos,
   [GETTER_ISSUING_APPS_PAGEMETA]: state => state.issuingApps.pageMeta,
   [GETTER_ISSUING_ACCOUNT]: state => state.issuingAccount,
-  [GETTER_ISSUING_CARD]: state => state.issuingCard.issuingCardRequestInfoData,
+  [GETTER_ISSUING_CARD]: state => state.issuingCard,
+  [GETTER_ISSUING_APPS_STATUSES]: state => {
+    return [
+      {name: '', description: 'All'},
+      ...state.issuingAppStatuses
+    ]
+  },
 }
 
 const issuing = {

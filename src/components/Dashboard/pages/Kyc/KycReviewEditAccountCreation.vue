@@ -509,6 +509,7 @@
       <el-row>
         <el-col :md="24" class="text-center">
           <p-button round type="primary" class="mr-3"
+                    :class="{disabled: isDisabledEdit}"
                     @click="handleSaveAccount()">Save
           </p-button>
           <p-button round
@@ -541,56 +542,9 @@
     },
     data() {
       return {
-        accountInfo: {
-          accessCode: '',
-          accountReference: '',
-          birthDate: '',
-          cardHolderName: '',
-          cardProgramCode: '',
-          cardProgramId: 0,
-          currencyCode: '',
-          customerId: '',
-          customerIdType: 0,
-          email: '',
-          feeProfileId: 0,
-          firstName: '',
-          fourthLine: '',
-          gender: '',
-          homePhone: '',
-          issuerInstCode: '',
-          kycAppRefNumber: '',
-          kycLevel: 0,
-          lastName: '',
-          maidenName: '',
-          memorableWord: '',
-          merchantUSN: 0,
-          mobilePhone: '',
-          overrideAddress: {
-            address1: '',
-            address2: '',
-            address3: '',
-            city: '',
-            countryCode: '',
-            postCode: '',
-            region: ''
-          },
-          primaryAddress: {
-            address1: '',
-            address2: '',
-            address3: '',
-            city: '',
-            countryCode: '',
-            postCode: '',
-            region: ''
-          },
-          programManagerCode: '',
-          programOwnerCode: '',
-          proofOfAddressUrl: '',
-          proofOfPassportUrl: '',
-          resellerCode: '',
-          secondName: '',
-          title: '',
-          workPhone: ''
+        accountInfo:{
+          primaryAddress:{},
+          overrideAddress:{},
         },
         id: null,
       }
@@ -613,6 +567,9 @@
       }),
       isLoading() {
         return this.loadingState !== LOADING_STATE.IDEAL;
+      },
+      isDisabledEdit(){
+        return this.getAccountInfo.isSuccess
       },
     },
     methods: {
