@@ -217,12 +217,14 @@
           }))
         }
       }
-    }, watch: {
+    },
+    watch: {
       resellerData(newVal) {
         this.allCardResellers = [...(newVal.resellerSubscriptionList || [])]
         if (!newVal.pageMeta) return;
         this.totalPages = newVal.pageMeta.totalPages || 0;
-      }, page() {
+      },
+      page() {
         if (typeof this.getResellerData !== 'function') return;
         this.getResellerData()
       },
@@ -266,18 +268,15 @@
           }
         })
       },
-      edit({index: {id}}) {
+      edit({index: {row: id}}) {
+        console.log('edit', id)
         this.$router.history.push({
-          path: '/reseller/resellers/' + id,
-          query: {
-            edit: true
-          }
-        });
-
+          path: `/reseller/edit/${id.id}`
+        })
       },
-      viewDetails({index: {id}}) {
+      viewDetails({index: {row: id}}) {
         this.$router.history.push({
-          path: `/reseller/edit/${id}`
+          path: `/reseller/view/${id.id}`
         });
       },
       handleSecondaryAction() {
@@ -334,18 +333,11 @@
         })
       },
       getResellerData() {
-        this.$router.push({
-          path: `/reseller/view`,
-          query: {
-            page: this.page,
-            perPage: this.perPage
-          }
-        })
-
-        let queryParams = {
+        const queryParams = {
           page: this.page,
           perPage: this.perPage,
         }
+        this.redirectByNameRoute(NAMED_ROUTES.RESELLERS_VIEW, {query: queryParams})
         if (this.$oAuth.isReseller()) {
           queryParams.resellerCode = this.$oAuth.getCurrentResellerCode()
         }
@@ -354,21 +346,23 @@
       },
       listenToInput({value}) {
         this.allCardResellers = value
-      }
+      },
+      redirectByNameRoute(name, query = {}) {
+        console.log('red by id', query)
+        this.$router.push({
+          name: name,
+          query,
+        })
+      },
     },
     mounted() {
       const {page, per_page} = this.$route.query
       this.perPage = +per_page || this.perPage;
       this.page = +page || this.page;
-      if (!page && !per_page) {
-        this.$router.push({
-          name: `/reseller/view`,
-          query: {
-            page: this.page,
-            perPage: this.perPage
-          }
-        })
-      }
+      /*if (!page && !per_page) {
+        console.log('mounted')
+        this.redirectByNameRoute(NAMED_ROUTES.RESELLERS_VIEW, {page: this.page,perPage: this.perPage})
+      }*/
       this.getResellerData()
       this.getAllCardPrograms();
       this.chagneCardProgramOptions(this.cardData)

@@ -413,7 +413,7 @@
 
           AbaModalEvents.$on(key, response => {
             if (response.ok) {
-              this.$router.push('/reseller/view')
+              this.$router.push('/resellers/view')
             } else {
               this.dirty = false;
 
@@ -432,7 +432,7 @@
       }, secondaryAction() {
         console.log('secondary');
         if (this.context === 'view' || (this.context !== 'view' && !this.dirty)) {
-          this.$router.push('/reseller/view')
+          this.$router.push('/resellers/view')
         } else {
           const key = this.context + 'reseller';
           this.showModal({
@@ -445,7 +445,7 @@
           })
           AbaModalEvents.$on(key, response => {
             AbaModalEvents.$off(key)
-            if (response.ok) this.$router.push('/reseller/view')
+            if (response.ok) this.$router.push('/resellers/view')
           })
         }
       }, handlePrimaryAction() {

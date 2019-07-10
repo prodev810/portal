@@ -16,7 +16,8 @@ import {
   MUTATE_LOADINGSTATE_CARD_PROGRAM,
   MUTATE_RESPONSESTATE_CARD_PROGRAM,
   SHOW_TOAST_MESSAGE,
-  UPDATE_RESPONSE_STATE
+  UPDATE_RESPONSE_STATE,
+  GETTER_ALL_CARD_PROGRAM_CODE,
 } from '../types';
 
 const convertData = (entities) => {
@@ -75,7 +76,7 @@ const actions = {
     try {
       commit(MUTATE_LOADINGSTATE_CARD_PROGRAM, 'sending')
 
-      const {data} = await Vue.prototype.$http.aba1.post('/cardprograms',  {
+      const {data} = await Vue.prototype.$http.aba1.post('/cardprograms', {
         ...handleEmptyValues(body)
       })
       commit(MUTATE_ADD_CARD_PROGRAME, {data})
@@ -172,7 +173,10 @@ const actions = {
     } catch (e) {
       commit(MUTATE_LOADINGSTATE_CARD_PROGRAM, 'ideal')
       const message = e.response.data.detail
-      dispatch(SHOW_TOAST_MESSAGE, {message: message && message.length > 0 ? message : i18n.t('store.card_program.error_edit_card_program') , status: 'danger'})
+      dispatch(SHOW_TOAST_MESSAGE, {
+        message: message && message.length > 0 ? message : i18n.t('store.card_program.error_edit_card_program'),
+        status: 'danger'
+      })
       dispatch(UPDATE_RESPONSE_STATE, {key: EDIT_CARD_PROGRAM, status: {state: false, error: '  EDIT_CARD_PROGRAM '}})
 
     }
@@ -182,7 +186,13 @@ const getters = {
   [GETTER_ALL_CARDS]: state => state.allCardPrograms,
   [GETTER_ACTIVE_CARD]: state => state.activeCardProgram,
   [GETTER_LOADINGSTATE_CARD_PROGRAM]: state => state.loadingState,
-  [GETTER_ALL_CARD_PROGRAM_LIST]: state => state.allCardProgramsList
+  [GETTER_ALL_CARD_PROGRAM_LIST]: state => state.allCardProgramsList,
+  [GETTER_ALL_CARD_PROGRAM_CODE]: state => {
+    return state.allCardPrograms
+      .map(card => {
+        return {name: `${card.cardProgCode} (${card.defCurrency})`, value:card.id}
+      })
+  },
 }
 
 const cardProgram = {

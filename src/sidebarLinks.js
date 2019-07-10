@@ -1,5 +1,4 @@
 import permission from '@/constants/permission'
-import NAMED_ROUTES from './routes/nameRoutes'
 export default [
   {
     name: 'Card Program',

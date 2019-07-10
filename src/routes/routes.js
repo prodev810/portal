@@ -207,7 +207,7 @@ let reseller = {
       }
     },
     {
-      path: '/resellers/view/:id',
+      path: '/reseller/view/:id',
       name: NAMED_ROUTES.RESELLER_VIEW_BY_ID,
       component: ResellerCreateCorporateModule,
       props:{context: 'view'},

@@ -3,7 +3,6 @@ import {
   MUTATE_ISSUING_LOADINGSTATE,
   BUSINESS_RESELLER_CODE_LIST,
   MUTATE_BUSINESS_RESELLER_CODE_LIST,
-
 } from '../types'
 import LOADING_STATE from '../../utils/loadingState'
 
