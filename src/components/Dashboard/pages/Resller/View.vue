@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    
+
     <div v-if="true">
       <div class="card" v-if="true">
         <div class="card-content row">
@@ -127,7 +127,7 @@
   </div>
 </template>
 <script>
-  import { permissionMixin } from '@/mixins/permission'
+  import {permissionMixin} from '@/mixins/permission'
   import {Button} from "src/components/UIComponents";
   import {mapActions, mapGetters} from "vuex";
   import {
@@ -146,6 +146,7 @@
   import RegularTable from "../../../UIComponents/CeevoTables/RegularTable/RegularTable";
   import Loader from "../../../UIComponents/Loader";
   import Spinner from "../../../UIComponents/Spinner";
+  import NAMED_ROUTES from '../../../../routes/nameRoutes'
 
   export default {
     name: "CardPrograms",
@@ -165,8 +166,8 @@
           {
             //!missing name
             //TODO: fix this field
-            label: 'CPC', 
-            name: 'cardProgramID', 
+            label: 'CPC',
+            name: 'cardProgramID',
             i18n: 'reseller.listing.table_header.card_program_id',
             input: 'select',
             selectKeys: [
@@ -179,13 +180,13 @@
             name: 'cardProgCurrency',
           },
           {
-            label: 'RC', 
+            label: 'RC',
             name: 'resellerCode',
             i18n: 'reseller.listing.table_header.reseller_code'
           },
           // imagamry field
           {
-            label: 'reseller name', 
+            label: 'reseller name',
             name: 'resellerName',
             i18n: 'reseller.listing.table_header.reseller_name'
           },
@@ -216,12 +217,14 @@
           }))
         }
       }
-    }, watch: {
+    },
+    watch: {
       resellerData(newVal) {
         this.allCardResellers = [...(newVal.resellerSubscriptionList || [])]
         if (!newVal.pageMeta) return;
         this.totalPages = newVal.pageMeta.totalPages || 0;
-      }, page() {
+      },
+      page() {
         if (typeof this.getResellerData !== 'function') return;
         this.getResellerData()
       },
@@ -241,7 +244,8 @@
         getAllCardPrograms: GET_ALL_CARD_PROGRAM,
         addReseller: ADD_RESELLER_SUBSCRIPTION,
         editReseller: EDIT_RESELLER_SUBSCRTION_BY_ID
-      }), onPerpageChange(ev) {
+      }),
+      onPerpageChange(ev) {
         const newPage = (this.page * this.perPage) / ev
         const page = Math.floor(isFinite(newPage) ? newPage : 0);
         this.perPage = ev;
@@ -263,22 +267,19 @@
             return i;
           }
         })
-      }, edit({index: {id}}) {
+      },
+      edit({index: {row: id}}) {
+        console.log('edit', id)
         this.$router.history.push({
-          path: '/reseller/resellers/' + id,
-          query: {
-            edit: true
-          }
-        });
-
-      }, viewDetails({index: {id}}) {
+          path: `/reseller/edit/${id.id}`
+        })
+      },
+      viewDetails({index: {row: id}}) {
         this.$router.history.push({
-          path: '/reseller/resellers/' + id,
-          query: {
-            edit: false
-          }
+          path: `/reseller/view/${id.id}`
         });
-      }, handleSecondaryAction() {
+      },
+      handleSecondaryAction() {
         if (this.editId || this.editAll) {
           this.editId = '';
           this.editAll = false;
@@ -290,7 +291,8 @@
         if (this.editAll || this.editId) return this.saveEdition();
 
         this.getCSVfile();
-      }, saveEdition() {
+      },
+      saveEdition() {
         // on edit ?
         if (this.editId !== '' && this.loadingState === 'ideal') {
 
@@ -312,7 +314,8 @@
           // editing multiple cards unhandled by the api
           alert('editing multiple cards unhandled by the api currently')
         }
-      }, getCSVfile() {
+      },
+      getCSVfile() {
         const csvString = createCSVData(this.tableHeadings, this.resellerData)
         const encodedUri = encodeURI(csvString);
         fileDownlaodFromEncodedURI(encodedUri, 'reseller_sub');
@@ -328,20 +331,13 @@
             card_program_code: cardProgCode
           }
         })
-      }, 
+      },
       getResellerData() {
-        this.$router.push({
-          path: `/reseller/view`,
-          query: {
-            page: this.page,
-            perPage: this.perPage
-          }
-        })
-
-        let queryParams = {
+        const queryParams = {
           page: this.page,
           perPage: this.perPage,
         }
+        this.redirectByNameRoute(NAMED_ROUTES.RESELLERS_VIEW, {query: queryParams})
         if (this.$oAuth.isReseller()) {
           queryParams.resellerCode = this.$oAuth.getCurrentResellerCode()
         }
@@ -350,21 +346,23 @@
       },
       listenToInput({value}) {
         this.allCardResellers = value
-      }
+      },
+      redirectByNameRoute(name, query = {}) {
+        console.log('red by id', query)
+        this.$router.push({
+          name: name,
+          query,
+        })
+      },
     },
     mounted() {
       const {page, per_page} = this.$route.query
       this.perPage = +per_page || this.perPage;
       this.page = +page || this.page;
-      if (!page && !per_page) {
-        this.$router.push({
-          path: `/reseller/view`,
-          query: {
-            page: this.page,
-            perPage: this.perPage
-          }
-        })
-      }
+      /*if (!page && !per_page) {
+        console.log('mounted')
+        this.redirectByNameRoute(NAMED_ROUTES.RESELLERS_VIEW, {page: this.page,perPage: this.perPage})
+      }*/
       this.getResellerData()
       this.getAllCardPrograms();
       this.chagneCardProgramOptions(this.cardData)

@@ -12,7 +12,7 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                 <strong>{{corporativeProgram | booleanToYesNoFormat}}</strong>
+                  <strong>{{corporativeProgram | booleanToYesNoFormat}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
@@ -35,12 +35,12 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.cpc}}</strong>
+                  <strong>{{reseller.cardProgCode}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.cpc">
-                    <el-option v-for="item in cpcValues"
+                  <el-select v-model="reseller.cardProgramID">
+                    <el-option v-for="item in cpcList"
                                :key="item.value"
                                :label="item.name"
                                :value="item.value">{{item.name}}
@@ -59,11 +59,11 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.reseller_code}}</strong>
+                  <strong>{{reseller.resellerCode}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.reseller_code"
+                  <fg-input v-model="reseller.resellerCode"
                             :placeholder="$t('reseller.create.table_header.reseller_code')"></fg-input>
                 </div>
               </el-col>
@@ -78,11 +78,11 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.reseller_name}}</strong>
+                  <strong>{{reseller.resellerName}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.reseller_name"
+                  <fg-input v-model="reseller.resellerName"
                             :placeholder="$t('reseller.create.table_header.reseller_name')"></fg-input>
                 </div>
               </el-col>
@@ -97,11 +97,11 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.unique_float}}</strong>
+                  <strong class="text-capitalize">{{reseller.uniqueFloat | booleanToYesNoFormat}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.unique_float">
+                  <el-select v-model="reseller.uniqueFloat">
                     <el-option v-for="item in uniqueFloatValues"
                                :key="item.value"
                                :label="item.name"
@@ -121,11 +121,11 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.alert_contact}}</strong>
+                  <strong>{{reseller.alertContact}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.alert_contact"
+                  <fg-input v-model="reseller.alertContact"
                             :placeholder="$t('reseller.create.table_header.alert_contact')"></fg-input>
                 </div>
               </el-col>
@@ -166,11 +166,11 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.load_fee}}</strong>
+                  <strong>{{reseller.loadFee}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.load_fee"
+                  <fg-input v-model="reseller.loadFee"
                             :placeholder="$t('reseller.create.table_header.load_fee')"></fg-input>
                 </div>
               </el-col>
@@ -184,11 +184,11 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.load_fee_pct}}</strong>
+                  <strong>{{reseller.loadFeePct}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.load_fee_pct"
+                  <fg-input v-model="reseller.loadFeePct"
                             :placeholder="$t('reseller.create.table_header.load_fee_pct')"></fg-input>
                 </div>
               </el-col>
@@ -202,11 +202,11 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.load_fee_cap}}</strong>
+                  <strong>{{reseller.loadFeeCap}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.load_fee_cap"
+                  <fg-input v-model="reseller.loadFeeCap"
                             :placeholder="$t('reseller.create.table_header.load_fee_cap')"></fg-input>
                 </div>
               </el-col>
@@ -220,11 +220,11 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                 <strong>{{reseller.load_fee_bill_method}}</strong>
+                  <strong>{{reseller.loadFeebillMethod}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.load_fee_bill_method">
+                  <el-select v-model="reseller.loadFeebillMethod">
                     <el-option v-for="item in chargedToValues"
                                :key="item.name"
                                :label="item.value"
@@ -243,11 +243,11 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.app_fee}}</strong>
+                  <strong>{{reseller.appFee}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.app_fee"
+                  <fg-input v-model="reseller.appFee"
                             :placeholder="$t('reseller.create.table_header.app_fee')"></fg-input>
                 </div>
               </el-col>
@@ -261,11 +261,11 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.app_fee_bill_method}}</strong>
+                  <strong>{{reseller.appFeeBillMethod}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.app_fee_bill_method">
+                  <el-select v-model="reseller.appFeeBillMethod">
                     <el-option v-for="item in chargedToValues"
                                :key="item.name"
                                :label="item.value"
@@ -284,11 +284,11 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.monthly_fee}}</strong>
+                  <strong>{{reseller.monthlyFee}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.monthly_fee"
+                  <fg-input v-model="reseller.monthlyFee"
                             :placeholder="$t('reseller.create.table_header.monthly_fee')"></fg-input>
                 </div>
               </el-col>
@@ -302,11 +302,11 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.monthly_fee_bill_method}}</strong>
+                  <strong>{{reseller.monthlyFeeBillMethod}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.monthly_fee_bill_method">
+                  <el-select v-model="reseller.monthlyFeeBillMethod">
                     <el-option v-for="item in chargedToValues"
                                :key="item.name"
                                :label="item.value"
@@ -325,11 +325,11 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.api_fee}}</strong>
+                  <strong>{{reseller.apiFee}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.api_fee"
+                  <fg-input v-model="reseller.apiFee"
                             :placeholder="$t('reseller.create.table_header.api_fee')"></fg-input>
                 </div>
               </el-col>
@@ -343,11 +343,11 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.api_fee_bill_method}}</strong>
+                  <strong>{{reseller.apiFeeBillMethod}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.api_fee_bill_method">
+                  <el-select v-model="reseller.apiFeeBillMethod">
                     <el-option v-for="item in chargedToApiValues"
                                :key="item.name"
                                :label="item.value"
@@ -363,214 +363,218 @@
       </div>
     </div>
 
-    <div class="card reseller-dynamic-references" :class="{disabled:!corporativeProgram && !isView}">
-      <div class="card-content">
-        <div class="card-title">
-          <strong>Dynamic References</strong>
-        </div>
+    <template v-if="isShowCorporativeBlock">
 
-        <el-row>
-          <el-col>
-            <strong>Customise reference fields</strong>
-            <p>Dynamic References are unique to you as a client. The dynamic reference will show up on the PDF that is
-              generated for each specific card as well as in the reporting from the activity on the system.</p>
-          </el-col>
-        </el-row>
+      <div class="card reseller-dynamic-references" :class="{disabled:!corporativeProgram && !isView}">
+        <div class="card-content">
+          <div class="card-title">
+            <strong>Dynamic References</strong>
+          </div>
 
-        <el-row>
+          <el-row>
+            <el-col>
+              <strong>Customise reference fields</strong>
+              <p>Dynamic References are unique to you as a client. The dynamic reference will show up on the PDF that is
+                generated for each specific card as well as in the reporting from the activity on the system.</p>
+            </el-col>
+          </el-row>
 
-          <el-col :md="10">
-            <div class="form-group row">
-              <label for="ref1" class="col-md-2 col-form-label"><strong>Ref 1</strong></label>
-              <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref1}}</strong>
-              <fg-input v-else
-                        v-model="resellerCorporate.dynamicReferences.ref1" id="ref1"
-                        :placeholder="'Ref 1'"></fg-input>
-            </div>
+          <el-row>
 
-            <div class="form-group row">
-              <label for="ref2" class="col-md-2 col-form-label"><strong>Ref 2</strong></label>
-              <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref2}}</strong>
-              <fg-input v-else
-                        v-model="resellerCorporate.dynamicReferences.ref2" id="ref2"
-                        :placeholder="'Ref2'"></fg-input>
-            </div>
-
-            <div class="form-group row">
-              <label for="ref3" class="col-md-2 col-form-label"><strong>Ref 3</strong></label>
-              <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref3}}</strong>
-              <fg-input v-else
-                        v-model="resellerCorporate.dynamicReferences.ref3" id="ref3"
-                        :placeholder="'Ref3'"></fg-input>
-            </div>
-
-            <div class="form-group row">
-              <label for="ref4" class="col-md-2 col-form-label"><strong>Ref 4</strong></label>
-              <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref4}}</strong>
-              <fg-input v-else
-                        v-model="resellerCorporate.dynamicReferences.ref4" id="ref4"
-                        :placeholder="'Ref4'"></fg-input>
-            </div>
-          </el-col>
-
-          <el-col :md="12">
-            <div class="form-group row">
-              <label for="ref5" class="col-md-2 col-form-label"><strong>Ref 5</strong></label>
-              <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref5}}</strong>
-              <fg-input v-else
-                        v-model="resellerCorporate.dynamicReferences.ref51" id="ref5"
-                        :placeholder="'Ref 5'"></fg-input>
-            </div>
-
-            <div class="form-group row">
-              <label for="ref6" class="col-md-2 col-form-label"><strong>Ref 6</strong></label>
-              <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref6}}</strong>
-              <fg-input v-else
-                        v-model="resellerCorporate.dynamicReferences.ref6" id="ref6"
-                        :placeholder="'Ref6'"></fg-input>
-            </div>
-
-            <div class="form-group row">
-              <label for="ref7" class="col-md-2 col-form-label"><strong>Ref 7</strong></label>
-              <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref7}}</strong>
-              <fg-input v-else
-                        v-model="resellerCorporate.dynamicReferences.ref7" id="ref7"
-                        :placeholder="'Ref7'"></fg-input>
-            </div>
-
-            <div class="form-group row">
-              <label for="ref8" class="col-md-2 col-form-label"><strong>Ref 8</strong></label>
-              <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref8}}</strong>
-              <fg-input v-else
-                        v-model="resellerCorporate.dynamicReferences.ref8" id="ref8"
-                        :placeholder="'Ref8'"></fg-input>
-            </div>
-          </el-col>
-        </el-row>
-
-      </div>
-    </div>
-
-    <div class="card reseller-account-funding" :class="{disabled:!corporativeProgram && !isView}">
-      <div class="card-content">
-        <div class="card-title">
-          <strong>2 step validation - Account funding</strong>
-        </div>
-
-        <el-row>
-          <el-col>
-            <p>When allocating money to a specific account, you can choose between 1 or 2 step load approval process. If
-              you want to have a 2 step process approval over a certain break amount, please specify the amount in the
-              “Break Value” field.</p>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :md="24" class="mb-4">
-            <label class="row-label"><strong>2 step validation</strong></label>
-            <strong v-if="isView">{{resellerCorporate.two_step_validation | booleanToYesNoFormat}}</strong>
-
-            <div v-else
-                 class="d-inline-flex">
-              <strong class="mr-1">No</strong>
-              <label class="switch">
-                <input v-model="resellerCorporate.two_step_validation" type="checkbox">
-                <span class="slider round"></span>
-              </label>
-              <strong class="ml-1">Yes</strong>
-            </div>
-          </el-col>
-
-          <el-col :md="24">
-            <label for="break-value" class="row-label"><strong>Break value 1</strong></label>
-            <strong v-if="isView">{{resellerCorporate.break_value}}</strong>
-            <fg-input v-else
-                      v-model="resellerCorporate.break_value"
-                      :placeholder="'Break value 1'"
-                      id="break-value"></fg-input>
-          </el-col>
-        </el-row>
-
-      </div>
-    </div>
-
-    <div class="card reseller-pdf-dynamic" :class="{disabled:!corporativeProgram && !isView}">
-      <div class="card-content">
-        <div class="card-title">
-          <strong>PDF Dynamic Text</strong>
-        </div>
-
-        <el-row>
-          <el-col>
-            <p>At the bottom of the Virtual Card PDF, you can create a pre-set instruction depending on your
-              requirements. You can setup multiple pre-sets if you need to customise depending on recipient.</p>
-          </el-col>
-        </el-row>
-
-        <el-row v-for="(preset, index) in dynamicPdf" :key="index">
-          <el-col :md="24" class="mb-4">
-            <div class="form-group">
-              <el-col :md="4">
-                <label class="mb-2" for="preset1">
-                  <strong class="preset-title">Preset {{index + 1}}</strong>
-                </label>
-                <p v-if="isView">
-                  <span class="mr-2">Preset Name</span>
-                  {{resellerCorporate.dynamic_pdf[index].name}}
-                </p>
+            <el-col :md="10">
+              <div class="form-group row">
+                <label for="ref1" class="col-md-2 col-form-label"><strong>Ref 1</strong></label>
+                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref1}}</strong>
                 <fg-input v-else
-                          v-model="resellerCorporate.dynamic_pdf[index].name"
-                          id="preset1"
-                          placeholder="Preset name"></fg-input>
-              </el-col>
-              <el-col :md="24">
-                <el-input type="textarea" :disabled="isView"
-                          :rows="6" placeholder="Please input"
-                          v-model="resellerCorporate.dynamic_pdf[index].preset">
-                </el-input>
-              </el-col>
-            </div>
-          </el-col>
-        </el-row>
+                          v-model="resellerCorporate.dynamicReferences.ref1" id="ref1"
+                          :placeholder="'Ref 1'"></fg-input>
+              </div>
 
-        <!-- <el-row>
-           <el-col :md="24" class="mb-4">
-             <div class="form-group">
-               <el-col :md="4">
-                 <label class="mb-2" for="preset2">
-                   <strong>Preset 2</strong>
-                 </label>
-                 <fg-input v-model="resellerCorporate.dynamic_pdf.preset2.name"
-                           id="preset2"
-                           :placeholder="'Preset name'"></fg-input>
-               </el-col>
-               <el-col :md="24">
-                 <el-input type="textarea"
-                           :rows="6" placeholder="Preset name"
-                           v-model="resellerCorporate.dynamic_pdf.preset2.preset">
-                 </el-input>
-               </el-col>
-             </div>
-           </el-col>
-         </el-row>-->
+              <div class="form-group row">
+                <label for="ref2" class="col-md-2 col-form-label"><strong>Ref 2</strong></label>
+                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref2}}</strong>
+                <fg-input v-else
+                          v-model="resellerCorporate.dynamicReferences.ref2" id="ref2"
+                          :placeholder="'Ref2'"></fg-input>
+              </div>
 
-        <el-row>
-          <el-col>
-            <p-button v-if="!isView" round @click="handleAddPreset">
-              <img :src="addIcon" alt="icon">
-              Add another preset
-            </p-button>
-          </el-col>
-        </el-row>
+              <div class="form-group row">
+                <label for="ref3" class="col-md-2 col-form-label"><strong>Ref 3</strong></label>
+                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref3}}</strong>
+                <fg-input v-else
+                          v-model="resellerCorporate.dynamicReferences.ref3" id="ref3"
+                          :placeholder="'Ref3'"></fg-input>
+              </div>
 
+              <div class="form-group row">
+                <label for="ref4" class="col-md-2 col-form-label"><strong>Ref 4</strong></label>
+                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref4}}</strong>
+                <fg-input v-else
+                          v-model="resellerCorporate.dynamicReferences.ref4" id="ref4"
+                          :placeholder="'Ref4'"></fg-input>
+              </div>
+            </el-col>
+
+            <el-col :md="12">
+              <div class="form-group row">
+                <label for="ref5" class="col-md-2 col-form-label"><strong>Ref 5</strong></label>
+                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref5}}</strong>
+                <fg-input v-else
+                          v-model="resellerCorporate.dynamicReferences.ref51" id="ref5"
+                          :placeholder="'Ref 5'"></fg-input>
+              </div>
+
+              <div class="form-group row">
+                <label for="ref6" class="col-md-2 col-form-label"><strong>Ref 6</strong></label>
+                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref6}}</strong>
+                <fg-input v-else
+                          v-model="resellerCorporate.dynamicReferences.ref6" id="ref6"
+                          :placeholder="'Ref6'"></fg-input>
+              </div>
+
+              <div class="form-group row">
+                <label for="ref7" class="col-md-2 col-form-label"><strong>Ref 7</strong></label>
+                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref7}}</strong>
+                <fg-input v-else
+                          v-model="resellerCorporate.dynamicReferences.ref7" id="ref7"
+                          :placeholder="'Ref7'"></fg-input>
+              </div>
+
+              <div class="form-group row">
+                <label for="ref8" class="col-md-2 col-form-label"><strong>Ref 8</strong></label>
+                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref8}}</strong>
+                <fg-input v-else
+                          v-model="resellerCorporate.dynamicReferences.ref8" id="ref8"
+                          :placeholder="'Ref8'"></fg-input>
+              </div>
+            </el-col>
+          </el-row>
+
+        </div>
       </div>
-    </div>
+
+      <div class="card reseller-account-funding" :class="{disabled:!corporativeProgram && !isView}">
+        <div class="card-content">
+          <div class="card-title">
+            <strong>2 step validation - Account funding</strong>
+          </div>
+
+          <el-row>
+            <el-col>
+              <p>When allocating money to a specific account, you can choose between 1 or 2 step load approval process.
+                If
+                you want to have a 2 step process approval over a certain break amount, please specify the amount in the
+                “Break Value” field.</p>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :md="24" class="mb-4">
+              <label class="row-label"><strong>2 step validation</strong></label>
+              <strong v-if="isView">{{resellerCorporate.two_step_validation | booleanToYesNoFormat}}</strong>
+
+              <div v-else
+                   class="d-inline-flex">
+                <strong class="mr-1">No</strong>
+                <label class="switch">
+                  <input v-model="resellerCorporate.two_step_validation" type="checkbox">
+                  <span class="slider round"></span>
+                </label>
+                <strong class="ml-1">Yes</strong>
+              </div>
+            </el-col>
+
+            <el-col :md="24">
+              <label for="break-value" class="row-label"><strong>Break value 1</strong></label>
+              <strong v-if="isView">{{resellerCorporate.break_value}}</strong>
+              <fg-input v-else
+                        v-model="resellerCorporate.break_value"
+                        :placeholder="'Break value 1'"
+                        id="break-value"></fg-input>
+            </el-col>
+          </el-row>
+
+        </div>
+      </div>
+
+      <div class="card reseller-pdf-dynamic" :class="{disabled:!corporativeProgram && !isView}">
+        <div class="card-content">
+          <div class="card-title">
+            <strong>PDF Dynamic Text</strong>
+          </div>
+
+          <el-row>
+            <el-col>
+              <p>At the bottom of the Virtual Card PDF, you can create a pre-set instruction depending on your
+                requirements. You can setup multiple pre-sets if you need to customise depending on recipient.</p>
+            </el-col>
+          </el-row>
+
+          <el-row v-for="(preset, index) in dynamicPdf" :key="index">
+            <el-col :md="24" class="mb-4">
+              <div class="form-group">
+                <el-col :md="4">
+                  <label class="mb-2" for="preset1">
+                    <strong class="preset-title">Preset {{index + 1}}</strong>
+                  </label>
+                  <p v-if="isView">
+                    <span class="mr-2">Preset Name</span>
+                    {{resellerCorporate.dynamic_pdf[index].name}}
+                  </p>
+                  <fg-input v-else
+                            v-model="resellerCorporate.dynamic_pdf[index].name"
+                            id="preset1"
+                            placeholder="Preset name"></fg-input>
+                </el-col>
+                <el-col :md="24">
+                  <el-input type="textarea" :disabled="isView"
+                            :rows="6" placeholder="Please input"
+                            v-model="resellerCorporate.dynamic_pdf[index].preset">
+                  </el-input>
+                </el-col>
+              </div>
+            </el-col>
+          </el-row>
+
+          <!-- <el-row>
+             <el-col :md="24" class="mb-4">
+               <div class="form-group">
+                 <el-col :md="4">
+                   <label class="mb-2" for="preset2">
+                     <strong>Preset 2</strong>
+                   </label>
+                   <fg-input v-model="resellerCorporate.dynamic_pdf.preset2.name"
+                             id="preset2"
+                             :placeholder="'Preset name'"></fg-input>
+                 </el-col>
+                 <el-col :md="24">
+                   <el-input type="textarea"
+                             :rows="6" placeholder="Preset name"
+                             v-model="resellerCorporate.dynamic_pdf.preset2.preset">
+                   </el-input>
+                 </el-col>
+               </div>
+             </el-col>
+           </el-row>-->
+
+          <el-row>
+            <el-col>
+              <p-button v-if="!isView" round @click="handleAddPreset">
+                <img :src="addIcon" alt="icon">
+                Add another preset
+              </p-button>
+            </el-col>
+          </el-row>
+
+        </div>
+      </div>
+    </template>
 
     <div class="row">
       <div class="col-md-12">
         <div class="reseller-footer d-flex justify-content-center">
           <p-button round type="primary" class="mr-3"
-                    @click="$router.push(editRoute)"
+                    @click="handleAction()"
                     v-if="isView && hasPermission(permission.RESELLER_SUBSCRIPTION_EDIT)">
             {{ $t(context === 'view' ? 'reseller.create.button.edit' : 'reseller.create.button.save') }}
           </p-button>
@@ -593,7 +597,7 @@
       </template>
       <div slot="footer" class="w-50 d-flex justify-content-between">
         <p-button round type="success"
-                  @click.native="handleClientAction">Yes
+                  @click.native="handleModalAction()">Yes
         </p-button>
         <p-button round type="default"
                   @click.native="modals.visible = false">Cancel
@@ -601,7 +605,7 @@
       </div>
     </modal>
 
-    <Spinner v-if="loadingState === 'getting'"></Spinner>
+    <Spinner v-if="isLoading"></Spinner>
   </div>
 </template>
 <script>
@@ -612,11 +616,18 @@
   import {
     ADD_RESELLER_SUBSCRIPTION,
     EDIT_RESELLER_SUBSCRTION_BY_ID,
-    GET_ALL_CARD_PROGRAM, GET_RESELLER_SUBSCRTION_BY_ID,
+    GET_ALL_CARD_PROGRAM,
+    GET_RESELLER_SUBSCRTION_BY_ID,
     GETTER_ALL_CARDS,
-    GETTER_LOADINGSTATE_RESELLER, GETTER_RESELLER_SUBSCRIPTION, SET_MODAL_TYPE, SHOW_TOAST_MESSAGE
+    GETTER_LOADINGSTATE_RESELLER,
+    GETTER_RESELLER_SUBSCRIPTION,
+    SET_MODAL_TYPE,
+    SHOW_TOAST_MESSAGE,
+    GETTER_ALL_CARD_PROGRAM_CODE,
+    GET_ALL_RESELLER_SUBSCRIPTIONS,
   } from "../../../../store/types";
   import swal from 'sweetalert2'
+  import LOADING_STATE from '../../../../utils/loadingState'
 
   import createNewRowFromHeadings from "../../../../utils/createNewRowFromHeadings";
   import {
@@ -639,7 +650,7 @@
 
   export default {
     name: "CreateCorparateModule",
-    props:['context'],
+    props: ['context'],
     mixins: [permissionMixin],
     components: {
       SlideYDownTransition,
@@ -653,26 +664,11 @@
     data() {
       return {
         addIcon,
-        editRoute: '/reseller/edit',
+        id: '',
+        isCancel: false,
+        //editRoute: `/reseller/edit/`,
         corporativeProgram: 0,
-        reseller: {
-          cpc: null,
-          status: 'Active',
-          reseller_code: null,
-          reseller_name: null,
-          unique_float: 1,
-          alert_contact: null,
-          load_fee: null,
-          load_fee_pct: null,
-          load_fee_cap: null,
-          load_fee_bill_method: 'ACCOUNT',
-          app_fee: null,
-          app_fee_bill_method: 'FLOAT',
-          monthly_fee: null,
-          monthly_fee_bill_method: 'INVOICE',
-          api_fee: null,
-          api_fee_bill_method: 'ACCOUNT',
-        },
+        reseller: {},
         resellerCorporate: {
           dynamicReferences: {
             ref1: '',
@@ -691,6 +687,21 @@
             {name: '', preset: ''},
           ],
         },
+        resellerRequestPropDelete: [
+          'cardProgCode',
+          'defCurrency',
+          'resellerId',
+          'id',
+        ],
+        resellerRequestPropModify: [
+          {name: 'apiFee', type: 'number'},
+          {name: 'appFee', type: 'number'},
+          {name: 'loadFee', type: 'number'},
+          {name: 'loadFeeCap', type: 'number'},
+          {name: 'loadFeePct', type: 'number'},
+          {name: 'monthlyFee', type: 'number'},
+          {name: 'uniqueFloat', type: 'boolean'},
+        ],
         modals: {
           visible: false,
         },
@@ -918,6 +929,7 @@
       ...mapGetters({
         cardData: GETTER_ALL_CARDS,
         loadingState: GETTER_LOADINGSTATE_RESELLER,
+        cpcList: GETTER_ALL_CARD_PROGRAM_CODE,
       }),
       resellerData() {
         const resellerSub = this.$store.state.reseller.resellerSubscription;
@@ -937,17 +949,32 @@
       isValid() {
         return Object.keys(this.valid).reduce((acc, i) => acc && this.valid[i], true)
       },
-      dynamicPdf(){
+      dynamicPdf() {
         return this.resellerCorporate.dynamic_pdf
       },
-      isView(){
+      isView() {
         return this.context === 'view'
       },
-      handleModalTitle(){
-        if(this.actionBtn === 'save'){
+      isCreate() {
+        return this.context === 'create'
+      },
+      isEdit() {
+        return this.context === 'edit'
+      },
+      isLoading(){
+        return this.loadingState !== LOADING_STATE.IDEAL
+      },
+      handleModalTitle() {
+        if (this.actionBtn === 'save') {
           return 'Save Reseller Corporate Program'
         }
         return 'Discard changes?'
+      },
+      isShowCorporativeBlock() {
+        if (this.isView) {
+          return this.corporativeProgram
+        }
+        return true
       },
     },
     watch: {
@@ -964,13 +991,22 @@
         this.sweetAlertHandler(newVal)
       },
       resellerData(newVal) {
+        console.log('w_reseller data', newVal)
         if (!newVal) return;
         this.cardReseller = [newVal]
+        this.reseller = this.modResellerModel(newVal)
       },
       editId(newVal, oldVal) {
         if (this.context === 'view' && newVal) {
           //this.context = 'edit'
         }
+      },
+      context(newVal) {
+        console.log('w_context', newVal)
+        if(newVal === 'create'){
+          this.reseller = {}
+        }
+        this.getAllResellerSubscription()
       },
       $route(newVal, oldVal) {
         const {id} = newVal.params;
@@ -981,7 +1017,6 @@
               ...this.tableHeadingsPack.secondary, ...this.tableHeadingsPack.third],
             'Reseller_new_row')];
           this.editId = 'Reseller_new_row';
-
         }
       }
     },
@@ -991,8 +1026,31 @@
         getAllCardPrograms: GET_ALL_CARD_PROGRAM,
         editReseller: EDIT_RESELLER_SUBSCRTION_BY_ID,
         getResellerSubscripiton: GET_RESELLER_SUBSCRTION_BY_ID,
-        showModal: SET_MODAL_TYPE
+        getAllResellerSubscription: GET_ALL_RESELLER_SUBSCRIPTIONS,
+        showModal: SET_MODAL_TYPE,
       }),
+      modResellerModel(reseller) {
+        reseller.uniqueFloat = Number(reseller.uniqueFloat)
+        return reseller
+      },
+      modResellerRequest(reseller) {
+        this.resellerRequestPropModify
+          .forEach(property => {
+            if(typeof reseller[property.name] !== 'undefined') {
+              reseller[property.name] = this.checkModResellerType(property.type, reseller[property.name])
+            }
+          })
+
+        return reseller
+      },
+      checkModResellerType(type, value) {
+        switch (type) {
+          case'number':
+            return Number(value)
+          case'boolean':
+            return !!value
+        }
+      },
       chagneCardProgramOptions(cardPrograms = []) {
         this.tableHeadingsPack.main = this.tableHeadingsPack.main.map(i => {
           if (i.name === 'cardProgramID') {
@@ -1019,10 +1077,9 @@
 
           AbaModalEvents.$on(key, response => {
             if (response.ok) {
-              this.$router.push('/reseller/view')
+              //this.$router.push('/resellers/view')
             } else {
               this.dirty = false;
-
             }
             AbaModalEvents.$off(key)
           })
@@ -1037,7 +1094,7 @@
           [table]: valid
         };
       },
-      secondaryAction() {
+      /*secondaryAction() {
         console.log('secondary');
         if (this.context === 'view' || (this.context !== 'view' && !this.dirty)) {
           this.$router.push('/reseller/view')
@@ -1109,39 +1166,72 @@
           }
 
         })
-      },
+      },*/
       handleAddPreset() {
         console.log('add another preset')
         this.resellerCorporate.dynamic_pdf.push({name: '', preset: ''})
       },
-      handleResellerAction(){
+      handleResellerAction() {
+        this.isCancel = false
         this.modals.visible = true
         this.actionBtn = 'save'
       },
-      handleCancelAction(){
+      handleCancelAction() {
+        this.isCancel = true
         this.actionBtn = 'cancel'
         this.modals.visible = true
       },
+      handleAction() {
+        this.isCancel = false
+        this.$router.push(this.editRoute)
+      },
+      async handleModalAction() {
+        if (this.isCancel) {
+          this.modals.visible = false
+          if(this.isView){
+            this.$router.push(`/resellers/view`)
+          }
+          if(this.resellerId){
+            this.$router.push(`/reseller/view/${this.resellerId}`)
+          }
+          return
+        }
+        const body = this.handleResellerRequestBody(this.reseller)
+        if (this.isEdit) {
+          this.editReseller({body, id: this.resellerId})
+        }
+        if (this.isCreate) {
+          await this.addReseller(body)
+            .then(data => {
+              if(data && data.data && data.data.id){
+                this.$router.push(`/reseller/view/${data.data.id}`)
+              }
+            })
+        }
+        this.modals.visible = false
+      },
+      handleResellerRequestBody(resellerData) {
+        let reseller = JSON.parse(JSON.stringify(resellerData))
+        this.resellerRequestPropDelete.forEach(name => {
+          delete reseller[name]
+        })
+        reseller = this.modResellerRequest(reseller)
+        return reseller
+      },
     },
     mounted() {
-      this.getAllCardPrograms();
-      const {id,} = this.$route.params;
-      const {edit} = this.$route.query;
-      this.edit = edit;
+      this.getAllCardPrograms()
+      const {id} = this.$route.params
       if (id) {
         this.resellerId = id
         this.editRoute = `/reseller/edit/${this.resellerId}`
-        if (edit) {
-
-          //this.context = 'edit';
-          this.editId = id;
-        } else {
-          //this.context = 'view';
-        }
+        // if (edit) {
+        //   this.editId = id;
+        // }
         // get the reseller subscription by id
-        if (this.context !== 'create') {
+        if (!this.isCreate) {
+          console.log('is not create')
           this.getResellerSubscripiton(id)
-
         }
       }
       if (this.context === 'create') {
@@ -1309,7 +1399,7 @@
     }
   }
 
-  .preset-title{
+  .preset-title {
     font-size: 20px;
     color: $label-color;
   }
@@ -1359,7 +1449,8 @@
         color: $label-color;
       }
     }
-    .btn{
+
+    .btn {
       height: 42px;
     }
   }
@@ -1407,8 +1498,8 @@
       }
     }
 
-    .el-textarea.is-disabled .el-textarea__inner{
-      background-color: transparent!important;
+    .el-textarea.is-disabled .el-textarea__inner {
+      background-color: transparent !important;
       color: $label-color;
       font-weight: bold;
     }
@@ -1417,7 +1508,7 @@
       min-width: 760px;
       text-align: center;
 
-      .modal-content{
+      .modal-content {
         .modal-header {
           border-bottom-color: transparent !important;
           margin-top: 50px;
@@ -1430,8 +1521,9 @@
 
         .modal-footer {
           border-top-color: transparent !important;
+
           .btn {
-            width: 175px!important;
+            width: 175px !important;
             height: 44px;
             margin-bottom: 50px;
           }
@@ -1446,7 +1538,7 @@
 
   }
 
-  .btn{
+  .btn {
     text-transform: unset;
   }
 </style>
