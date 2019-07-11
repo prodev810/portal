@@ -95,7 +95,6 @@ import {
   MUTATE_LIST_SUPPORT_DOCUMENTS_HISTORY,
   KYC_GET_LIST_SUPPORT_DOCUMENTS_ID,
   KYC_DOWNLOAD_SUPPORT_DOC,
-
   CLEAR_POA_IMG,
 } from '../types';
 
@@ -135,7 +134,7 @@ const state = {
   idValidationDatas: [],
   idCheckActionTypes: [],
   listSupportDocumentsId: {},
-  listSupportDocumentsHis: {}
+  listSupportDocumentsHis: {},
 }
 
 const mutations = {
@@ -738,6 +737,7 @@ const actions = {
         status: status
       });
       console.log('data from API', data)
+      Promise.resolve();
     } catch (e) {
       console.log('error :', e);
     }

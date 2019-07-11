@@ -9,7 +9,7 @@
                         <p-button round class="btn btn--close btn--shadow mr-4">Close and Return</p-button> -->
                     <div class="my-3 d-flex justify-content-between kyc-top-buttons">
                         <p-button class="btn btn--issue mr-5" type="success">Issuing</p-button>
-                        <p-button round class="btn btn--close btn--shadow mr-1">Close and Return</p-button>
+                        <p-button round class="btn btn--close btn--shadow mr-1" @click.stop.prevent="closeAndReturn">Close and Return</p-button>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
                             </div>
                             <div class="row mb-2">
                                 <div class="col-6"><p class="kyc-label pt-2">Resend Application SMS</p></div>
-                                <div class="col-6"><p-button class="btn btn--view btn--shadow m-0" round @click.stop="resendSms">send</p-button></div>
+                                <div class="col-6"><p-button class="btn btn--view btn--shadow m-0" v-if="getterClientInfo" :disabled="getterClientInfo.isCaptureRequestCompleted" round @click.stop="resendSms">send</p-button></div>
                             </div>
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                         <div class="">
                             <div class="row mb-2">
                                 <div class="col align-center">
-                                    <p-button round class="btn btn--close btn--shadow">Close and Return</p-button>
+                                    <p-button round class="btn btn--close btn--shadow" @click.stop.prevent="closeAndReturn">Close and Return</p-button>
                                     <p class="mb-0 ml-4">Return to previous menu</p>
                                 </div>
                             </div>
@@ -131,7 +131,7 @@
                                             <div class="row">
                                                 <div class="col text-center mt-3 mb-4">
                                                     <p-button round class="btn btn--ac-close mx-2" @click.stop.prevent="closeAC">Close A/C</p-button>
-                                                    <p-button round class="btn btn--ac-cancel mx-2" @click="showTerminatePopover = false">Cancel</p-button>
+                                                    <p-button round class="btn btn--ac-cancel mx-2" @click="cancelTerminatePopover">Cancel</p-button>
                                                 </div>
                                             </div>
                                         </div>
@@ -578,6 +578,7 @@ export default {
     name: "KYC-ProductConfig",
     data() {
         return {
+            prevRoute: null,
             showTerminatePopover: false,
             eyeIcon,
             editIcon,
@@ -808,6 +809,7 @@ export default {
         },
     },
     mounted() {
+        this.getApplicationStatus();
         this.start()
     },
     methods: {
@@ -826,12 +828,20 @@ export default {
             clearCheckDocs: CLEAR_CHECK_DOCS,
             clearPoaImg: CLEAR_POA_IMG,
         }),
+        cancelTerminatePopover() {
+            this.terminateBody.reason = ''
+            this.showTerminatePopover = false;
+        },
         start() {
             this.clearPoaImg();
-            this.clearCheckDocs()
-            this.getApplicationStatus();
+            this.clearCheckDocs();
             this.getAccountLog({ appReferenceId: this.appReferenceId, pageNum: this.isPagination ? this.currentPage - 1 : 0, pageSize: this.perPage})
             this.getClient({ appReferenceId: this.appReferenceId })
+        },
+        closeAndReturn() {
+            let srcPage = localStorage.getItem('src-page')
+            if (srcPage && (srcPage == 'KYC Search' || srcPage == 'KYC Work Flow')) this.$router.push({ name: srcPage });
+            else this.$router.push({ name: 'KYC Search' });
         },
         goViewId() {
             if(this.appReferenceId) this.$router.push({ name: 'KYC Id View', query: {appRef: this.appReferenceId }})
@@ -876,15 +886,20 @@ export default {
             this.isPagination = true;
             this.loadAccountLog();
         },
-        closeAC() {
-            if(!this.terminateBody.reason) return;
-            const obj = {
-                appReferenceId: this.appReferenceId,
-                reason: this.terminateBody.reason,
-                status: this.terminateBody.status,
+        async closeAC() {
+            try {
+                // if(!this.terminateBody.reason) return;
+                const obj = {
+                    appReferenceId: this.appReferenceId,
+                    reason: this.terminateBody.reason,
+                    status: this.terminateBody.status,
+                }
+                await this.terminateApplication(obj);
+                this.start();
+                this.cancelTerminatePopover();
+            } catch(e) {
+                console.log('e: ', e);
             }
-            this.terminateApplication(obj);
-            this.showTerminatePopover = false;
         },
         toggleCollapsible() {
             var el = this.$refs.collapsible;
@@ -898,7 +913,17 @@ export default {
             icon.classList.toggle('lbl-toggle--active');
         }
     },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.prevRoute = from
+        })
+    },
     watch: {
+        prevRoute(value) {
+          if(value && value.name && (value.name == 'KYC Search' || value.name == 'KYC Work Flow')) {
+            localStorage.setItem('src-page', value.name);
+          }
+      },
       getterAccountLog (value) {
         const temp = value.eventInfos;
         this.applicationData = JSON.parse(JSON.stringify(temp));
@@ -947,7 +972,7 @@ export default {
             if(!d) return '';
             return formatDate(d, true)
         }
-    }
+    },
 };
 </script>
 

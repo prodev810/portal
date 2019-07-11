@@ -112,7 +112,7 @@
   </div>
 </template>
 <script>
-  import {mapActions, mapGetters} from 'vuex';
+  import {mapActions, mapGetters, mapMutations} from 'vuex';
   import {DatePicker, Option, Select, TimeSelect, Switch} from "element-ui";
   import RegularTable from '../../../UIComponents/CeevoTables/RegularTable/RegularTable';
   import PPagination from "../../../UIComponents/Pagination";
@@ -133,6 +133,7 @@
     },
     data() {
       return {
+          prevRoute: null,
         isPagination: false,
         tableHeadings: [
           {label: 'Client Name', name: 'clientName'},
@@ -254,17 +255,50 @@
       listenToInput({value}) {
         this.outStandingApps = value;
       },
-      goForOutstandingApps() {
-        this.getOutstandingApps({
-          clientReference: this.clientName === 'ALL' ? '' : this.clientName,
-          clientType: this.selectedClientType === 'ALL' ? '' : this.selectedClientType,
-          dateFrom: formatDate(this.fromDate),
-          dateTo: formatDate(this.toDate),
-          oldestFirst: this.oldestFirst,
-          pageNum: this.isPagination ? this.currentPage - 1 : 0,
-          pageSize: this.perPage
-        });
+      goForOutstandingApps(val) {
+        let filters = null;
+        
+        if(typeof(val) === 'object') {
+            filters = val;
+        } else {
+            filters = {
+                clientName: this.clientName,
+                clientType: this.selectedClientType,
+                dateFrom: this.fromDate,
+                dateTo: this.toDate,
+                oldestFirst: this.oldestFirst,
+                pageNum: this.isPagination,
+                pageSize: this.perPage,
+                currentPage: this.currentPage
+            }
+            localStorage.setItem('workflow-filters', JSON.stringify(filters))
+        }
+        
+        const options = {
+          clientReference: filters.clientName === 'ALL' ? '' : filters.clientName,
+          clientType: filters.selectedClientType === 'ALL' ? '' : filters.selectedClientType,
+          dateFrom: formatDate(filters.fromDate),
+          dateTo: formatDate(filters.toDate),
+          oldestFirst: filters.oldestFirst,
+          pageNum: filters.isPagination ? filters.currentPage - 1 : 0,
+          pageSize: filters.pageSize
+        }
+        this.getOutstandingApps(options);
         if (!this.isPagination) this.currentPage = 1;
+      },
+      restoreOutstandingApps() {
+        let op = localStorage.getItem('workflow-filters');
+        if(op) op = JSON.parse(op);
+          if(!op || Object.entries(op).length == 0) return;
+          this.clientName = op.clientName
+            this.selectedClientType = op.clientType
+            this.fromDate = op.dateFrom
+            this.toDate = op.dateTo
+            this.oldestFirst = op.oldestFirst
+            this.isPagination = op.pageNum
+            this.perPage = op.pageSize
+            this.currentPage = op.currentPage
+          this.goForOutstandingApps(op)
       },
 
       searchHandle() {
@@ -281,7 +315,17 @@
       this.getAllClientsList();
       this.getClientTypesList();
     },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.prevRoute = from
+        })
+    },
     watch: {
+      prevRoute(value) {
+          if(value && value.name == 'KYC Main Page') {
+            this.restoreOutstandingApps()
+          }
+      },
       getOutstandingAppsData (value) {
         // Change the format of date vlaues - 'appReceivedDate', 'kycReceivedDate' ...
         const temp = value.applications;
@@ -295,7 +339,14 @@
           }
         });
         // Get Outstanding App Data for Data Table
-        this.outStandingAppsData = temp;
+        this.outStandingAppsData = temp.filter((item)=>{
+            let id = item.idCheckStatus == 'Passed' || item.idCheckStatus == 'Manual Approval';
+            let poa = item.poaCheckStatus == 'Approved'
+            let sanc = item.sanctionCheckStatus == 'No Match' || item.sanctionCheckStatus == 'Manual Approval'
+
+            if(id && poa && sanc) return false;
+            else return true;
+        });
 
         this.pageCount = value.pageMeta.totalPages;
         this.perPage = value.pageMeta.perPage;

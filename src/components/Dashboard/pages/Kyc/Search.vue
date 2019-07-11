@@ -163,7 +163,7 @@
   </div>
 </template>
 <script>
-  import {mapActions, mapGetters} from 'vuex';
+  import {mapActions, mapGetters, mapMutations} from 'vuex';
   import {
     DatePicker,
     Option,
@@ -185,7 +185,7 @@
     GETTER_APPLICATION_STATUS_LIST,
     GETTER_APPLICATION_STATUS,
     GETTER_APPLICATIONS,
-    GETTER_APPLICATION_LIST
+    GETTER_APPLICATION_LIST,
   } from "../../../../store/types";
   import eyeIcon from "../../../../../public/static/img/dashboard_icons/outline-visibility-24px.svg";
   export default {
@@ -239,7 +239,8 @@
         clientName: 'ALL',
         selectedClientType: 'ALL',
         resellerCode: 'ALL',
-        oldestFirst: true
+        oldestFirst: true,
+        prevRoute: null,
       }
     },
     computed: {
@@ -304,19 +305,40 @@
       listenToInput({ value }) {
         this.applicationData = value;
       },
-      search () {
+      search (val) {
+          let filters = null;
+        
+        if(typeof(val) === 'object') {
+            filters = val;
+        } else {
+            filters = {
+                appRef: this.appRef,
+                selectedStatus: this.selectedStatus,
+                clientRef: this.clientRef,
+                clientName: this.clientName,
+                selectedClientType: this.selectedClientType,
+                fromDate: this.fromDate,
+                toDate: this.toDate,
+                surName: this.surName,
+                oldestFirst: this.oldestFirst,
+                isPagination: this.isPagination,
+                currentPage: this.currentPage,
+                perPage: this.perPage
+            }
+            localStorage.setItem('search-filters', JSON.stringify(filters))
+        }
         const payload = {
-          appReferenceId: this.appRef,
-          applicationStatus: this.selectedStatus === 'ALL' ? '' : this.selectedStatus,
-          clientAppRef: this.clientRef,
-          clientReference: this.clientName === 'ALL' ? '' : this.clientName,
-          clientType: this.selectedClientType === 'ALL' ? '' : this.selectedClientType,
-          dateFrom: formatDate(this.fromDate),
-          dateTo: formatDate(this.toDate),
-          lastName: this.surName,
-          oldestFirst: this.oldestFirst,
-          pageNum: this.isPagination ? this.currentPage - 1 : 0,
-          pageSize: this.perPage
+          appReferenceId: filters.appRef,
+          applicationStatus: filters.selectedStatus === 'ALL' ? '' : filters.selectedStatus,
+          clientAppRef: filters.clientRef,
+          clientReference: filters.clientName === 'ALL' ? '' : filters.clientName,
+          clientType: filters.selectedClientType === 'ALL' ? '' : filters.selectedClientType,
+          dateFrom: formatDate(filters.fromDate),
+          dateTo: formatDate(filters.toDate),
+          lastName: filters.surName,
+          oldestFirst: filters.oldestFirst,
+          pageNum: filters.isPagination ? filters.currentPage - 1 : 0,
+          pageSize: filters.perPage
         };
         this.getApplicationAction(payload);
         if (!this.isPagination) this.currentPage = 1;
@@ -325,6 +347,24 @@
         this.isPagination=false;
         this.search();
         this.currentPage = 1;
+      },
+      restoreSearch() {
+          let op = localStorage.getItem('search-filters');
+          if(op) op = JSON.parse(op);
+          if(!op || Object.entries(op).length == 0) return;
+          this.appRef = op.appRef
+            this.selectedStatus = op.selectedStatus
+            this.clientRef = op.clientRef,
+            this.clientName = op.clientName
+            this.selectedClientType = op.selectedClientType
+            this.fromDate = op.fromDate
+            this.toDate = op.toDate
+            this.surName = op.surName
+            this.oldestFirst = op.oldestFirst
+            this.isPagination = op.isPagination
+            this.currentPage = op.currentPage
+            this.perPage = op.perPage
+            this.search(op);
       },
       handleInput(ev) {
         this.currentPage = ev;
@@ -337,7 +377,17 @@
       this.getClientTypesList();
       this.getApplicationStatus();
     },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.prevRoute = from
+        })
+    },
     watch: {
+       prevRoute(value) {
+          if(value && value.name == 'KYC Main Page') {
+            this.restoreSearch()
+          }
+      },
       getApplications (value) {
         // this.applicationData = value;
         const temp = value.applications;
