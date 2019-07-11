@@ -808,11 +808,7 @@ export default {
         },
     },
     mounted() {
-        this.clearPoaImg();
-        this.clearCheckDocs()
-        this.getApplicationStatus();
-        this.getAccountLog({ appReferenceId: this.appReferenceId, pageNum: this.isPagination ? this.currentPage - 1 : 0, pageSize: this.perPage})
-        this.getClient({ appReferenceId: this.appReferenceId })
+        this.start()
     },
     methods: {
         ...mapActions({
@@ -830,6 +826,13 @@ export default {
             clearCheckDocs: CLEAR_CHECK_DOCS,
             clearPoaImg: CLEAR_POA_IMG,
         }),
+        start() {
+            this.clearPoaImg();
+            this.clearCheckDocs()
+            this.getApplicationStatus();
+            this.getAccountLog({ appReferenceId: this.appReferenceId, pageNum: this.isPagination ? this.currentPage - 1 : 0, pageSize: this.perPage})
+            this.getClient({ appReferenceId: this.appReferenceId })
+        },
         goViewId() {
             if(this.appReferenceId) this.$router.push({ name: 'KYC Id View', query: {appRef: this.appReferenceId }})
         },
@@ -851,11 +854,16 @@ export default {
             this.editMobile = false;
             this.phoneNumber = this.getterClientInfo && this.getterClientInfo.contactInfo ? this.getterClientInfo.contactInfo.mobile : '';
         },
-        goUpdateContact() {
+        async goUpdateContact() {
             if(!this.phoneNumber || !this.communicationEmail) return;
-            this.updateContact({ appReferenceId: this.appReferenceId, email: this.communicationEmail, mobile: this.phoneNumber })
-            this.editEmail = false;
-            this.editMobile = false;
+            try {
+                await this.updateContact({ appReferenceId: this.appReferenceId, email: this.communicationEmail, mobile: this.phoneNumber })
+                this.editEmail = false;
+                this.editMobile = false;
+                this.start();
+            } catch(e) {
+                console.log('e: ', e);
+            }
         },
         resendSms() {
             this.kycResendSms({ appReferenceId: this.appReferenceId});

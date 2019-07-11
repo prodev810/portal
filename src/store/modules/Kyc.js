@@ -797,6 +797,7 @@ const actions = {
         mobile: mobile
       });
       console.log('data from API POA', data)
+      Promise.resolve();
     } catch (e) {
       console.log('error :', e);
     }
