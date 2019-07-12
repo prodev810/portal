@@ -90,32 +90,26 @@ const mutations = {
 const actions = {
   [ADD_RESELLER_SUBSCRIPTION]: async ({commit, dispatch}, payload) => {
     commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.GETTING)
-    // commit(MUTATE_LOADINGSTATE_RESELLER, 'sending')
     return new Promise((resolve, reject) => {
       Vue.prototype.$http.aba1.post('/reseller-subscriptions', payload)
         .then(data => {
           commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.IDEAL)
+          dispatch(SHOW_TOAST_MESSAGE, {
+            message: i18n.t('store.reseller.success_create_reseller'),
+            status: 'success'
+          })
           resolve(data)
         })
         .catch(e => {
+          const {response} = JSON.parse(JSON.stringify(e))
           commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.IDEAL)
-          dispatch(SHOW_TOAST_MESSAGE, {message: e.response.data.detail || i18n.t('store.reseller.error_create_reseller'), status: 'danger'})
-          reject(e)
+          dispatch(SHOW_TOAST_MESSAGE, {
+            message: response && response.data && response.data.detail ? response.data.detail : i18n.t('store.reseller.error_create_reseller'),
+            status: 'danger'
+          })
+          reject(response)
         })
     })
-    /* try {
-       commit(MUTATE_LOADINGSTATE_RESELLER, 'sending')
-       const response = await Vue.prototype.$http.aba1.post('/reseller-subscriptions', payload)
-       commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.IDEAL)
-       //dispatch(UPDATE_RESPONSE_STATE, {key: ADD_RESELLER_SUBSCRIPTION, status: {state: true, error: null}})
-       return true
-     } catch (e) {
-       commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.IDEAL)
-       console.log(e.response);
-       dispatch(SHOW_TOAST_MESSAGE, {message: e.response.data.detail || i18n.t('store.reseller.error_create_reseller'), status: 'danger'})
-       dispatch(UPDATE_RESPONSE_STATE, {key: ADD_RESELLER_SUBSCRIPTION, status: {state: false, error: null}})
-       return false
-     }*/
   },
   [GET_ALL_RESELLER_SUBSCRIPTIONS]: async ({commit, dispatch}) => {
     try {
@@ -188,23 +182,27 @@ const actions = {
     }
   },
   [EDIT_RESELLER_SUBSCRTION_BY_ID]: async ({commit, dispatch}, payload) => {
-    try {
-      commit(MUTATE_LOADINGSTATE_RESELLER, 'sending')
-      const {data} = await Vue.prototype.$http.aba1.put(`/reseller-subscriptions/${payload.id}`, payload.body)
-      //console.log('edit reseller response',data)
-      commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.IDEAL)
-      dispatch(UPDATE_RESPONSE_STATE, {key: ADD_RESELLER_SUBSCRIPTION, status: {state: true, error: null}})
-    } catch (e) {
-      console.log(e);
-      commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.IDEAL)
-      dispatch(UPDATE_RESPONSE_STATE, {key: ADD_RESELLER_SUBSCRIPTION, status: {state: false, error: null}})
-      //const message = e.response.data.detail
-      dispatch(SHOW_TOAST_MESSAGE, {
-        message: message && message.length > 0 ? message : i18n.t('store.reseller.error_edit_reseller_entity'),
-        status: 'danger'
-      })
-
-    }
+    commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.GETTING)
+    return new Promise((resolve, reject) => {
+      Vue.prototype.$http.aba1.put(`/reseller-subscriptions/${payload.id}`, payload.body)
+        .then(data => {
+          commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.IDEAL)
+          dispatch(SHOW_TOAST_MESSAGE, {
+            message: i18n.t('store.reseller.success_edit_reseller'),
+            status: 'success'
+          })
+          resolve(data)
+        })
+        .catch(e => {
+          const {response} = JSON.parse(JSON.stringify(e))
+          commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.IDEAL)
+          dispatch(SHOW_TOAST_MESSAGE, {
+            message: response && response.data && response.data.detail ? response.data.detail : i18n.t('store.reseller.error_edit_reseller_entity'),
+            status: 'danger'
+          })
+          reject(response)
+        })
+    })
   },
   [GET_INVOICES_BY_SELLERID]: async ({commit, dispatch}, {cardProgramCode, page, perPage, currencyCode, resellerCode, fromDate, toDate}) => {
     try {

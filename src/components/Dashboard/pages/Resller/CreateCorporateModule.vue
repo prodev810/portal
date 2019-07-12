@@ -53,7 +53,7 @@
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative  text-uppercase">{{$t('reseller.create.table_header.reseller_code')}}
-                  <span v-if="!isView" class="required-field-symbol text-uppercase">*</span>
+                  <span v-if="!isView && !isEdit" class="required-field-symbol text-uppercase">*</span>
                 </strong>
               </el-col>
               <el-col :md="17">
@@ -64,8 +64,14 @@
                 <div v-else
                      class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.resellerCode"
+                            :class="{'is-invalid': !isValidResellerCode}"
+                            :disabled="isEdit"
                             :placeholder="$t('reseller.create.table_header.reseller_code')"></fg-input>
                 </div>
+                <p v-if="!isValidResellerCode" class="invalid-feedback">
+                  <span v-if="!reseller.resellerCode">{{$t('common.form_validations.required_field')}}</span>
+                  <span v-if="!verifySpace(reseller.resellerCode)">{{$t('common.form_validations.no_space')}}</span>
+                </p>
               </el-col>
             </el-row>
 
@@ -82,9 +88,14 @@
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.resellerName"
+                  <fg-input v-model.trim="reseller.resellerName"
+                            :class="{'is-invalid': !isValidResellerName}"
                             :placeholder="$t('reseller.create.table_header.reseller_name')"></fg-input>
                 </div>
+                <p v-if="!isValidResellerName" class="invalid-feedback">
+                  <span v-if="!reseller.resellerName">{{$t('common.form_validations.required_field')}}</span>
+                  <span v-if="!verifyName(reseller.resellerName)">{{$t('common.form_validations.letters_only')}}</span>
+                </p>
               </el-col>
             </el-row>
 
@@ -126,8 +137,14 @@
                 <div v-else
                      class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.alertContact"
+                            type="email"
+                            :class="{'is-invalid': !isValidAlertContact}"
                             :placeholder="$t('reseller.create.table_header.alert_contact')"></fg-input>
                 </div>
+                <p v-if="!isValidAlertContact" class="invalid-feedback">
+                  <span v-if="!reseller.alertContact">{{$t('common.form_validations.required_field')}}</span>
+                  <span v-if="!verifyEmail(reseller.alertContact)">{{$t('common.form_validations.valid_email')}}</span>
+                </p>
               </el-col>
             </el-row>
 
@@ -171,8 +188,16 @@
                 <div v-else
                      class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.loadFee"
+                            @blur="handleNumberInput('loadFee')"
+                            :class="{'is-invalid': !isValidLoadFee}"
+                            type="number"
+                            min="0"
                             :placeholder="$t('reseller.create.table_header.load_fee')"></fg-input>
                 </div>
+                <p v-if="!isValidLoadFee" class="invalid-feedback">
+                  <span v-if="!reseller.loadFee"> {{$t('common.form_validations.required_field')}}</span>
+                  <span v-if="!reseller.loadFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                </p>
               </el-col>
             </el-row>
 
@@ -189,8 +214,16 @@
                 <div v-else
                      class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.loadFeePct"
+                            @blur="handleNumberInput('loadFeePct')"
+                            :class="{'is-invalid': !isValidLoadFeePct}"
+                            type="number"
+                            min="0"
                             :placeholder="$t('reseller.create.table_header.load_fee_pct')"></fg-input>
                 </div>
+                <p v-if="!isValidLoadFeePct" class="invalid-feedback">
+                  <span v-if="!reseller.loadFeePct"> {{$t('common.form_validations.required_field')}}</span>
+                  <span v-if="!reseller.loadFeePct"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                </p>
               </el-col>
             </el-row>
 
@@ -207,8 +240,16 @@
                 <div v-else
                      class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.loadFeeCap"
+                            @blur="handleNumberInput('loadFeeCap')"
+                            :class="{'is-invalid': !isValidLoadFeeCap}"
+                            type="number"
+                            min="0"
                             :placeholder="$t('reseller.create.table_header.load_fee_cap')"></fg-input>
                 </div>
+                <p v-if="!isValidLoadFeeCap" class="invalid-feedback">
+                  <span v-if="!reseller.loadFeeCap"> {{$t('common.form_validations.required_field')}}</span>
+                  <span v-if="!reseller.loadFeeCap"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                </p>
               </el-col>
             </el-row>
 
@@ -248,8 +289,16 @@
                 <div v-else
                      class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.appFee"
+                            @blur="handleNumberInput('appFee')"
+                            :class="{'is-invalid': !isValidAppFee}"
+                            type="number"
+                            min="0"
                             :placeholder="$t('reseller.create.table_header.app_fee')"></fg-input>
                 </div>
+                <p v-if="!isValidAppFee" class="invalid-feedback">
+                  <span v-if="!reseller.appFee"> {{$t('common.form_validations.required_field')}}</span>
+                  <span v-if="!reseller.appFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                </p>
               </el-col>
             </el-row>
 
@@ -289,8 +338,16 @@
                 <div v-else
                      class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.monthlyFee"
+                            @blur="handleNumberInput('monthlyFee')"
+                            :class="{'is-invalid': !isValidMonthlyFee}"
+                            type="number"
+                            min="0"
                             :placeholder="$t('reseller.create.table_header.monthly_fee')"></fg-input>
                 </div>
+                <p v-if="!isValidMonthlyFee" class="invalid-feedback">
+                  <span v-if="!reseller.monthlyFee"> {{$t('common.form_validations.required_field')}}</span>
+                  <span v-if="!reseller.monthlyFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                </p>
               </el-col>
             </el-row>
 
@@ -330,8 +387,16 @@
                 <div v-else
                      class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.apiFee"
+                            @blur="handleNumberInput('apiFee')"
+                            :class="{'is-invalid': !isValidApiFee}"
+                            type="number"
+                            min="0"
                             :placeholder="$t('reseller.create.table_header.api_fee')"></fg-input>
                 </div>
+                <p v-if="!isValidApiFee" class="invalid-feedback">
+                  <span v-if="!reseller.apiFee"> {{$t('common.form_validations.required_field')}}</span>
+                  <span v-if="!reseller.apiFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                </p>
               </el-col>
             </el-row>
 
@@ -536,27 +601,6 @@
             </el-col>
           </el-row>
 
-          <!-- <el-row>
-             <el-col :md="24" class="mb-4">
-               <div class="form-group">
-                 <el-col :md="4">
-                   <label class="mb-2" for="preset2">
-                     <strong>Preset 2</strong>
-                   </label>
-                   <fg-input v-model="resellerCorporate.dynamic_pdf.preset2.name"
-                             id="preset2"
-                             :placeholder="'Preset name'"></fg-input>
-                 </el-col>
-                 <el-col :md="24">
-                   <el-input type="textarea"
-                             :rows="6" placeholder="Preset name"
-                             v-model="resellerCorporate.dynamic_pdf.preset2.preset">
-                   </el-input>
-                 </el-col>
-               </div>
-             </el-col>
-           </el-row>-->
-
           <el-row>
             <el-col>
               <p-button v-if="!isView" round @click="handleAddPreset">
@@ -575,11 +619,13 @@
         <div class="reseller-footer d-flex justify-content-center">
           <p-button round type="primary" class="mr-3"
                     @click="handleAction()"
+                    :class="{'disabled':!validateClientForm}"
                     v-if="isView && hasPermission(permission.RESELLER_SUBSCRIPTION_EDIT)">
             {{ $t(context === 'view' ? 'reseller.create.button.edit' : 'reseller.create.button.save') }}
           </p-button>
           <p-button v-else
                     round type="primary" class="mr-3"
+                    :class="{'disabled':!validateClientForm}"
                     @click.native="handleResellerAction()">
             {{ $t(context === 'view' ? 'reseller.create.button.edit' : 'reseller.create.button.save') }}
           </p-button>
@@ -625,8 +671,9 @@
     SHOW_TOAST_MESSAGE,
     GETTER_ALL_CARD_PROGRAM_CODE,
     GET_ALL_RESELLER_SUBSCRIPTIONS,
+    GETTER_RESELLER_SUBSCRIPTIONS,
   } from "../../../../store/types";
-  import swal from 'sweetalert2'
+  import i18n from '@/i18n'
   import LOADING_STATE from '../../../../utils/loadingState'
 
   import createNewRowFromHeadings from "../../../../utils/createNewRowFromHeadings";
@@ -636,9 +683,13 @@
     limitedCharNumber,
     mustBeAnEmail,
     shouldBeNumber,
-    verifySpecialCharacter
+    verifySpecialCharacter,
   } from "../../../../utils/formValidations";
   import {decimals} from "../../../../utils/inputMasks";
+  import {
+    toNumber,
+    validateNumber
+  } from "../../../../utils/numberInput";
   import Button from "../../../UIComponents/Button";
   import PButton from "../../../UIComponents/Button";
   import RegularTable from "../../../UIComponents/CeevoTables/RegularTable/RegularTable";
@@ -647,6 +698,7 @@
   import PRadio from "../../../UIComponents/Inputs/Radio";
   import {Modal} from 'src/components/UIComponents'
   import addIcon from '../../../../../public/static/img/dashboard_icons/ic_add.svg'
+  import NAMED_ROUTES from '../../../../routes/nameRoutes'
 
   export default {
     name: "CreateCorparateModule",
@@ -923,6 +975,26 @@
           {name: 'Ref 4', model: 'ref4'},
         ],
         actionBtn: 'save',
+        validationList: [
+          'apiFee',
+          'apiFeeBillMethod',
+          'appFee',
+          'appFeeBillMethod',
+          'cardProgramID',
+          'loadFee',
+          'loadFeeCap',
+          'loadFeePct',
+          'loadFeebillMethod',
+          'monthlyFee',
+          'monthlyFeeBillMethod',
+          'status',
+        ],
+        validateArray: {
+          resellerName: true,
+          resellerCode: true,
+          alertContact: true,
+          uniqueFloat: true,
+        },
       };
     },
     computed: {
@@ -930,6 +1002,7 @@
         cardData: GETTER_ALL_CARDS,
         loadingState: GETTER_LOADINGSTATE_RESELLER,
         cpcList: GETTER_ALL_CARD_PROGRAM_CODE,
+        resellerSubscription: GETTER_RESELLER_SUBSCRIPTIONS,
       }),
       resellerData() {
         const resellerSub = this.$store.state.reseller.resellerSubscription;
@@ -961,7 +1034,7 @@
       isEdit() {
         return this.context === 'edit'
       },
-      isLoading(){
+      isLoading() {
         return this.loadingState !== LOADING_STATE.IDEAL
       },
       handleModalTitle() {
@@ -975,6 +1048,71 @@
           return this.corporativeProgram
         }
         return true
+      },
+      validateClientForm() {
+        let isValid = true
+        if (!this.isViewMode && Object.keys(this.reseller).length !== 0) {
+          this.validationList.forEach(item => {
+            const field = this.reseller[`${item}`]
+            if (typeof (field) === 'undefined' || field === '' || field === 0) {
+              isValid = false
+            }
+            switch (item) {
+              case'alertContact':
+                this.validateArray.alertContact = this.isValidAlertContact
+                break
+              case'resellerName':
+                this.validateArray.resellerName = this.isValidResellerName
+                break
+              case'resellerCode':
+                this.validateArray.resellerCode = this.isValidResellerCode
+                break
+              case'uniqueFloat':
+                this.validateArray.uniqueFloat = this.isValidUniqueFloat
+                break
+            }
+          })
+
+          if (typeof this.validateArray !== 'undefined') {
+            Object.keys(this.validateArray).forEach(item => {
+              if (!this.validateArray[item]) {
+                return isValid = false
+              }
+            })
+          }
+        }
+
+        return isValid
+      },
+      isValidResellerName() {
+        return this.reseller.resellerName !== '' && this.verifyName(this.reseller.resellerName)
+      },
+      isValidResellerCode() {
+        return (typeof (this.reseller.resellerCode) === 'undefined' || this.verifyContactRef(this.reseller.resellerCode))
+      },
+      isValidUniqueFloat() {
+        return (typeof (this.reseller.uniqueFloat) === 'undefined')
+      },
+      isValidAlertContact() {
+        return (typeof (this.reseller.alertContact) === 'undefined' || this.reseller.alertContact !== '' && this.verifyEmail(this.reseller.alertContact))
+      },
+      isValidLoadFee() {
+        return validateNumber(this.reseller.loadFee)
+      },
+      isValidLoadFeeCap() {
+        return validateNumber(this.reseller.loadFeeCap)
+      },
+      isValidLoadFeePct() {
+        return validateNumber(this.reseller.loadFeePct)
+      },
+      isValidApiFee() {
+        return validateNumber(this.reseller.apiFee)
+      },
+      isValidAppFee() {
+        return validateNumber(this.reseller.appFee)
+      },
+      isValidMonthlyFee() {
+        return validateNumber(this.reseller.monthlyFee)
       },
     },
     watch: {
@@ -991,7 +1129,6 @@
         this.sweetAlertHandler(newVal)
       },
       resellerData(newVal) {
-        console.log('w_reseller data', newVal)
         if (!newVal) return;
         this.cardReseller = [newVal]
         this.reseller = this.modResellerModel(newVal)
@@ -1002,14 +1139,14 @@
         }
       },
       context(newVal) {
-        console.log('w_context', newVal)
-        if(newVal === 'create'){
+        if (newVal === 'create') {
           this.reseller = {}
         }
         this.getAllResellerSubscription()
       },
       $route(newVal, oldVal) {
         const {id} = newVal.params;
+        //console.log('route')
         if (!id) {
           //this.context = 'create'
           this.cardReseller = [createNewRowFromHeadings([
@@ -1036,7 +1173,7 @@
       modResellerRequest(reseller) {
         this.resellerRequestPropModify
           .forEach(property => {
-            if(typeof reseller[property.name] !== 'undefined') {
+            if (typeof reseller[property.name] !== 'undefined') {
               reseller[property.name] = this.checkModResellerType(property.type, reseller[property.name])
             }
           })
@@ -1087,7 +1224,7 @@
       },
       listenToInput({value, valid, dirty}, table) {
         this.cardReseller = value;
-        console.log('value', value);
+        //console.log('value', value);
         this.dirty = this.dirty || !!dirty;
         this.valid = {
           ...this.valid,
@@ -1186,29 +1323,33 @@
         this.$router.push(this.editRoute)
       },
       async handleModalAction() {
+        this.modals.visible = false
         if (this.isCancel) {
-          this.modals.visible = false
-          if(this.isView){
-            this.$router.push(`/resellers/view`)
+          if (this.isView) {
+            this.$router.push({name: NAMED_ROUTES.RESELLER.RESELLERS_VIEW})
           }
-          if(this.resellerId){
+          if (this.resellerId) {
             this.$router.push(`/reseller/view/${this.resellerId}`)
           }
           return
         }
         const body = this.handleResellerRequestBody(this.reseller)
         if (this.isEdit) {
-          this.editReseller({body, id: this.resellerId})
+          await this.editReseller({body, id: this.resellerId})
+            .then(data => {
+              if (data.status) {
+                this.$router.push(`/reseller/view/${this.resellerId}`)
+              }
+            })
         }
         if (this.isCreate) {
           await this.addReseller(body)
             .then(data => {
-              if(data && data.data && data.data.id){
+              if (data && data.data && data.data.id) {
                 this.$router.push(`/reseller/view/${data.data.id}`)
               }
             })
         }
-        this.modals.visible = false
       },
       handleResellerRequestBody(resellerData) {
         let reseller = JSON.parse(JSON.stringify(resellerData))
@@ -1218,6 +1359,24 @@
         reseller = this.modResellerRequest(reseller)
         return reseller
       },
+      handleNumberInput(name) {
+        this.reseller[`${name}`] = toNumber(event.target.value)
+      },
+      verifyEmail(email) {
+        const emailCheck = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i;
+        return emailCheck.test(email);
+      },
+      verifyName(name) {
+        const nameCheck = /^[a-zA-Z ]{1,30}$/
+        return nameCheck.test(name)
+      },
+      verifyContactRef(ref) {
+        return ref !== '' && ref.length <= 6 && this.verifySpace(ref)
+      },
+      verifySpace(string) {
+        const refCheck = /\s/
+        return !refCheck.test(string)
+      },
     },
     mounted() {
       this.getAllCardPrograms()
@@ -1225,18 +1384,12 @@
       if (id) {
         this.resellerId = id
         this.editRoute = `/reseller/edit/${this.resellerId}`
-        // if (edit) {
-        //   this.editId = id;
-        // }
         // get the reseller subscription by id
         if (!this.isCreate) {
-          console.log('is not create')
           this.getResellerSubscripiton(id)
         }
       }
-      if (this.context === 'create') {
-
-
+      if (this.isCreate) {
         this.cardReseller = [createNewRowFromHeadings([...this.tableHeadingsPack.main,
           ...this.tableHeadingsPack.secondary, ...this.tableHeadingsPack.third], 'Reseller_new_row')];
         this.editId = 'Reseller_new_row';
@@ -1384,6 +1537,12 @@
     .form-control {
       border-radius: 10px !important;
       font-weight: bold;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
   }
 
@@ -1540,5 +1699,12 @@
 
   .btn {
     text-transform: unset;
+  }
+
+  .invalid-feedback {
+    display: block;
+    margin: 0;
+    position: absolute;
+    font-weight: bold;
   }
 </style>
