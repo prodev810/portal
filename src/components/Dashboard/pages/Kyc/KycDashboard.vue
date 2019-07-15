@@ -48,7 +48,7 @@
       <el-row>
         <div class="kyc__buttons kyc__buttons__bottom">
           <div>
-            <p-button round class="kyc-button--invoice">
+            <p-button @click="handleShowInvoices()" round class="kyc-button--invoice">
             <span class="kyc-button__title">
               <kyc-button-icons name="svg-invoice"/>
               Invoices
@@ -295,6 +295,9 @@
             backgroundColor: ['#7039DA', '#3ED683'],
           }]
         }
+      },
+      handleShowInvoices(){
+        this.$router.push('/kyc/invoices')
       },
     }
   }

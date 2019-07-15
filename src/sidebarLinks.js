@@ -152,6 +152,13 @@ export default [
         permission: permission.NAV_KYC_MODULE // !!! change permission
       },
       {
+        path: '/kyc/invoices',
+        name: 'KYC View All Invoices',
+        hidden: true,
+        i18n: '',
+        permission: permission.NAV_KYC_MODULE // !!! change permission
+      },
+      {
         path: '/kyc/review-edit-account/',
         name: 'KYC Review Edit Account Creation',
         hidden: true,

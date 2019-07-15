@@ -3,6 +3,7 @@ import Vue from 'vue';
 import i18n from '@/i18n'
 import {handleEmptyValues} from "../../utils/hanldeEmptyValues";
 import axiosConfig from '../../config/axios.config'
+import LOADING_STATE from '../../utils/loadingState'
 import {
   MUTATE_KYC_GET_ALL_CLIENTS,
   GETTER_KYC_GET_ALL_CLIENTS,
@@ -39,7 +40,7 @@ import {
   GETTER_POA_IMG,
   RESEND_SMS,
   KYC_UPDATE_CONTACT,
-
+  GETTER_KYC_LOADINGSTATUS,
   KYC_GET_CURRENCY_LIST,
   KYC_GET_CLIENT_STATUSES,
   MUTATE_CURRENCY_LIST,
@@ -99,7 +100,11 @@ import {
   KYC_GET_PROGRAM_INFO,
   MUTATE_PROGRAM_INFO,
   MUTATE_PARTICULARS,
-  KYC_GET_PARTICULARS
+  KYC_GET_PARTICULARS,
+  MUTATE_LOADINGSTATE_KYC,
+  GETTER_KYC_INVOICE_PAGEMETA,
+  GETTER_KYC_INVOICE_ITEMS,
+  GETTER_KYC_INVOICE_SUM,
 } from '../types';
 
 const state = {
@@ -120,7 +125,10 @@ const state = {
   currencyList: [],
   clientStatusesList: [],
   productConfigClients: [],
-  productConfigViewInvoice: [],
+  productConfigViewInvoice: {
+    pageMeta:{},
+    invoiceItems:[],
+  },
   sanCheckEnquiry: null,
   sanctionCheckStatuses: null,
   sanctionCheckActionTypes: null,
@@ -169,6 +177,7 @@ const mutations = {
   [MUTATE_LOADINGSTATE_RESELLER]: (state, loadingState) => state.loadingSate = loadingState,
   [MUTATE_INVOICES_BY_SELLERID]: (state, {data}) => state.invoices = data
   */
+  [MUTATE_LOADINGSTATE_KYC]: (state, loadingState) => state.loadingSate = loadingState,
   [MUTATE_All_CLIENTS]: (state, {data}) => {
     state.allClients = data;
   },
@@ -412,10 +421,14 @@ const actions = {
     })
   },
   [KYC_GET_PRODUCT_CONFIG_VIEW_INVOICE]: async ({commit}, payload) => {
+    commit(MUTATE_LOADINGSTATE_KYC, LOADING_STATE.GETTING)
     try {
       const {data} = await Vue.prototype.$http.kyc.get('/invoices', {...payload})
+      console.log('invoice', data)
       commit(MUTATE_PRODUCT_CONFIG_VIEW_INVOICE, {data})
+      commit(MUTATE_LOADINGSTATE_KYC, LOADING_STATE.IDEAL)
     } catch (e) {
+      commit(MUTATE_LOADINGSTATE_KYC, LOADING_STATE.IDEAL)
       console.log('error :', e);
     }
   },
@@ -1058,17 +1071,22 @@ const getters = {
   [GETTER_CHECK_DOCS]: state => state.checkDocs,
   [GETTER_POA_IMG]: state => state.poaImg,
   [GETTER_VALIDATION_DATAS]: state => {
-    if(!state.idValidationDatas || !state.idValidationDatas.length) return null;
+    if (!state.idValidationDatas || !state.idValidationDatas.length) return null;
     var d = state.idValidationDatas;
     const len = d.length;
-    const halfLength = Math.ceil(len/2);
+    const halfLength = Math.ceil(len / 2);
 
-    var leftSide = d.filter((item, i)=> i <= halfLength);
-    var rightSide = d.filter((item, i)=> i > halfLength);
+    var leftSide = d.filter((item, i) => i <= halfLength);
+    var rightSide = d.filter((item, i) => i > halfLength);
 
-    return { leftSide, rightSide, halfLength };
-  }
+    return {leftSide, rightSide, halfLength};
+  },
+  [GETTER_KYC_LOADINGSTATUS]: state => state.loadingSate,
+  [GETTER_KYC_INVOICE_ITEMS]: state => state.productConfigViewInvoice.invoiceItems,
+  [GETTER_KYC_INVOICE_PAGEMETA]: state => state.productConfigViewInvoice.pageMeta,
+  [GETTER_KYC_INVOICE_SUM]: state => state.productConfigViewInvoice.sum,
 }
+
 
 const kyc = {
   state,
