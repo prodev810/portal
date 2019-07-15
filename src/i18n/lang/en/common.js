@@ -25,7 +25,9 @@ const form_validations = {
   min_chars: `{min} CHARACTERS MINIMUM`,
   valid_email: `PLEASE ENTER A VALID EMAIL`,
   valid_iso_currency_code: `PLEASE ENTER A VALID ISO CURRENCY CODE`,
-  letters_and_digits_only: `LETTERS AND DIGITS ONLY`
+  letters_and_digits_only: `LETTERS AND DIGITS ONLY`,
+  letters_only: `LETTERS ONLY`,
+  no_space: 'THERE SHOULD BE NO SPACES.',
 }
 
 export default {

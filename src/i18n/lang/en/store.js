@@ -14,6 +14,8 @@ const float_balance = {
 }
 
 const reseller = {
+  success_create_reseller: `Created new card reseller sub successfully`,
+  success_edit_reseller: `Edited successfully`,
   error_create_reseller: `There is an error creating this Reseller, please ensure all fields are completed correctly and try again, if the problem persists, please contact Technical Support`,
   error_load_resellers: `There is an error with retrieving the data, please refresh the page and try again,if the problem persists please contact Technical Support`,
   error_load_reseller_entity: `There is an error retrieving the data. Please refresh the page and try again,if the problem persists please contact Technical Support`,
