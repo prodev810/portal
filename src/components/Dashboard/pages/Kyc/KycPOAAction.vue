@@ -105,7 +105,8 @@
             <strong>Status</strong>
           </el-col>
           <el-col :md="12">
-            <p class="kyc-poa-status" :class="[isUnverifiedStatus ?'bg-unverified': 'bg-verified']">{{poaData.checkStatusName}}</p>
+            <p class="kyc-poa-status" :class="[isUnverifiedStatus ?'bg-unverified': 'bg-verified']">
+              {{poaData.checkStatusName}}</p>
           </el-col>
         </el-row>
         <el-row>
@@ -331,7 +332,8 @@
               <tr>
                 <td><strong>Region</strong></td>
                 <td>
-                  <fg-input v-if="editRegion" v-model="poaData.submittedAddress.countyOrState" class="p-0 mr-2"></fg-input>
+                  <fg-input v-if="editRegion" v-model="poaData.submittedAddress.countyOrState"
+                            class="p-0 mr-2"></fg-input>
                   <span v-else-if="poaData && poaData.submittedAddress && poaData.submittedAddress.countyOrState">{{poaData.submittedAddress.countyOrState}}</span>
                 </td>
                 <td>
@@ -500,7 +502,7 @@
         poaActionTypes: state => state.kyc.poaActionTypes,
 
       }),
-      isUnverifiedStatus(){
+      isUnverifiedStatus() {
         return this.poaData.checkStatusName === 'Unverified'
       },
       isActionMode() {
@@ -561,7 +563,7 @@
       },
       onClickTableBtn(idx) {
       },
-      sendDataFromModal() {
+      async sendDataFromModal() {
         const id = this.poaData.checkId
         const body = {
           actionTypeCode: this.modalActionPoa,
@@ -569,7 +571,12 @@
           operatorName: this.operatorName
         }
 
-        this.saveDataFromModal({id, body})
+        await this.saveDataFromModal({id, body})
+          .then(response => {
+            if(response.status === 200){
+              this.getPoaData(this.appReferenceId)
+            }
+          })
         this.toggleModalVisible()
       },
       handleUpdatePoaCheckAddress(name) {

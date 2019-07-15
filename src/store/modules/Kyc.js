@@ -500,14 +500,25 @@ const actions = {
     }
   },
   [KYC_POST_ACTION_FROM_MODAL]: async ({commit}, payload) => {
-    try {
+    const id = payload.id
+    const body = payload.body
+    return new Promise((resolve, reject)=>{
+      Vue.prototype.$http.kyc.post(`/poacheck/${id}/action`,body)
+        .then(data => {
+          resolve(data)
+        })
+        .catch(error => {
+          reject(JSON.parse(JSON.stringify(error)).response.data)
+        })
+    })
+    /*try {
       const id = payload.id
       const body = payload.body
-      console.log({id,body})
-      const {data} = await Vue.prototype.$http.kyc.post(`/poacheck/${id}/action`,body);
+      //console.log({id,body})
+      const {data} = await Vue.prototype.$http.kyc.post(`/poacheck/${id}/action`,body)
     }catch (e) {
-      console.log('error :', e)
-    }
+      console.log('error :', JSON.parse(JSON.stringify(e)))
+    }*/
   },
   /*
   [ADD_RESELLER_SUBSCRIPTION]: async ({commit, dispatch}, {body}) => {
