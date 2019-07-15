@@ -96,6 +96,10 @@ import {
   KYC_GET_LIST_SUPPORT_DOCUMENTS_ID,
   KYC_DOWNLOAD_SUPPORT_DOC,
   CLEAR_POA_IMG,
+  KYC_GET_PROGRAM_INFO,
+  MUTATE_PROGRAM_INFO,
+  MUTATE_PARTICULARS,
+  KYC_GET_PARTICULARS
 } from '../types';
 
 const state = {
@@ -135,6 +139,9 @@ const state = {
   idCheckActionTypes: [],
   listSupportDocumentsId: {},
   listSupportDocumentsHis: {},
+
+  programInfo: null,
+  particulars: null,
 }
 
 const mutations = {
@@ -269,6 +276,12 @@ const mutations = {
   },
   [MUTATE_LIST_SUPPORT_DOCUMENTS_HISTORY]: (state, {data}) => {
     state.listSupportDocumentsHis = data;
+  },
+  [MUTATE_PROGRAM_INFO]: (state, {data}) => {
+    state.programInfo = data;
+  },
+  [MUTATE_PARTICULARS]: (state, {data}) => {
+    state.particulars = data;
   },
 }
 
@@ -992,6 +1005,30 @@ const actions = {
         downloadLink.click();
         Promise.resolve()
 
+    } catch (e) {
+        console.log('error :', e);
+    }
+  },
+  [KYC_GET_PROGRAM_INFO]: async ({commit, dispatch}, {
+    kycAppRefId
+    }) => {
+    try {
+        commit(MUTATE_PROGRAM_INFO, {data: null });
+        const {data} = await Vue.prototype.$http.abahttp.get(`/v1/aba/kyc-apps/${kycAppRefId}/program-info`);
+        console.log('KYC_GET_PROGRAM_INFO ', data)
+        commit(MUTATE_PROGRAM_INFO, {data});
+    } catch (e) {
+        console.log('error :', e);
+    }
+  },
+  [KYC_GET_PARTICULARS]: async ({commit, dispatch}, {
+    kycAppRefId
+    }) => {
+    try {
+        commit(MUTATE_PARTICULARS, {data: null });
+        const {data} = await Vue.prototype.$http.abahttp.get(`/v1/aba/kyc-apps/${kycAppRefId}/particular-info`);
+        console.log('KYC_GET_PARTICULARS ', data)
+        commit(MUTATE_PARTICULARS, {data});
     } catch (e) {
         console.log('error :', e);
     }

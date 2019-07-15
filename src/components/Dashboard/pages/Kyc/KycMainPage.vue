@@ -47,13 +47,40 @@
                     <regular-table class="kyc-t-card" striped responsive condensed :headings="ApplicationInfoTableHeadings" :value="ApplicationInfoTableValues" :productConfig="true" />
                 </div>
             </div>
-
-            <div class="col-xl-4 mb-5">
+            <div class="col-xl-4 mb-5" v-if="programInfo">
                 <h3 class="kyc__section__header">Program Info</h3>
                 <div class="kyc-info-box">
-                    <div class="row" v-for="(item, k) in programInfo" :key="k">
-                        <div class="col-6"><p class="kyc-label">{{ item.name }}</p></div>
-                        <div class="col-6"><p class="kyc-value">{{ item.value }}</p></div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Issuer inst Code</p></div>
+                        <div class="col-6"><p class="kyc-value">{{ programInfo.issuerInstCode }}</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">PM inst Code</p></div>
+                        <div class="col-6"><p class="kyc-value">{{ programInfo.programManagerCode }}</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">PO inst Code</p></div>
+                        <div class="col-6"><p class="kyc-value">{{ programInfo.programOwnerCode }}</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Reseller Code</p></div>
+                        <div class="col-6"><p class="kyc-value">{{ programInfo.resellerCode }}</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Card Program Code</p></div>
+                        <div class="col-6"><p class="kyc-value">{{ programInfo.cardProgramCode }}</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Default Fee Profile</p></div>
+                        <div class="col-6"><p class="kyc-value">{{ programInfo.defaultCurrency }}</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">Fee Profile</p></div>
+                        <div class="col-6"><p class="kyc-value">{{ programInfo.feeProfile }}</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p class="kyc-label">KYC Level</p></div>
+                        <div class="col-6"><p class="kyc-value">{{ programInfo.kycLevel }}</p></div>
                     </div>
                 </div>
                 
@@ -73,7 +100,7 @@
                                 <div class="col-6">
                                     <div class="">
                                         <fg-input v-if="editEmail" v-model="communicationEmail" class="p-0 mr-2"></fg-input>
-                                        <span v-else-if="getterClientInfo && getterClientInfo.contactInfo" class="color-primary mr-2" >{{ getterClientInfo.contactInfo.email }}</span>
+                                        <span v-else-if="getterClientInfo && getterClientInfo.contactInfo" class="color-primary mr-2 word-break" >{{ getterClientInfo.contactInfo.email }}</span>
                                         <img v-if="!editEmail" :src="editIcon" width="20" @click="editEmail = !editEmail" />
                                         <p-button v-if="editEmail" class="btn btn--view mb-4 mr-2" round @click.stop="goUpdateContact">Update Contact</p-button>
                                         <p-button v-if="editEmail" class="btn btn--view mb-4" round @click.stop="cancelEmail">Cancel</p-button>
@@ -327,140 +354,150 @@
         </div>
     </div>
 
-    <div class="container-fluid mt-5">
-        <div class="kyc__section">
-            <h3 class="kyc__section__header">Particulars</h3>
+    <div v-if="particulars">
+        <div class="container-fluid mt-5">
+            <div class="kyc__section">
+                <h3 class="kyc__section__header">Particulars</h3>
+            </div>
         </div>
-    </div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xl-4 mb-5">
-                <div class="kyc-info-box particulars">
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Title</p></div>
-                        <div class="col-6"><p class="kyc-value">Mr</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">First Name</p></div>
-                        <div class="col-6"><p class="kyc-value">Erik</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Second Name</p></div>
-                        <div class="col-6"><p class="kyc-value">Sven</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Last Name</p></div>
-                        <div class="col-6"><p class="kyc-value">Hakans</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Maiden Name</p></div>
-                        <div class="col-6"><p class="kyc-value"></p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Gender</p></div>
-                        <div class="col-6"><p class="kyc-value">M</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">YYYY-MM-DD</p></div>
-                        <div class="col-6"><p class="kyc-value">1980-01-31</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Email</p></div>
-                        <div class="col-6"><p class="kyc-value"><span class="color-primary">abc@e-mail.com</span></p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Mobile</p></div>
-                        <div class="col-6"><p class="kyc-value">+493242345</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Home</p></div>
-                        <div class="col-6"><p class="kyc-value"></p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Work</p></div>
-                        <div class="col-6"><p class="kyc-value"></p></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-4 mb-5">
-                <div class="kyc-info-box particulars">
-                    <div class="row">
-                        <div class="col"><p class="kyc-label font-weight-bold mb-4">Address</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Address Line 1</p></div>
-                        <div class="col-6"><p class="kyc-value">Wilhelm-Epstein Strasse 14</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Address Line 2</p></div>
-                        <div class="col-6"><p class="kyc-value">Erik</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Address Line 3</p></div>
-                        <div class="col-6"><p class="kyc-value">Sven</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">City / Town</p></div>
-                        <div class="col-6"><p class="kyc-value">Frankfurt</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Post Code</p></div>
-                        <div class="col-6"><p class="kyc-value">60431</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Region</p></div>
-                        <div class="col-6"><p class="kyc-value">Frankfurt</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <el-select size="small" class=" mr-3 particulars-input" placeholder="Selected A Country" v-model="countryAddr">
-                                <el-option v-for="(cntry, index) in countryList" class="select-success" :value="cntry.country_name" :label="`${cntry.country_name}`" :key="index" />
-                            </el-select>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-4 mb-5">
+                    <div class="kyc-info-box particulars">
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Title</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.title }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">First Name</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.firstName }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Second Name</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.secondName }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Last Name</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.lastName }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Maiden Name</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.maidenName }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Gender</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.gender }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">YYYY-MM-DD</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.birthDate }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Email</p></div>
+                            <div class="col-6"><p class="kyc-value"><span class="color-primary word-break">{{ particulars.email }}</span></p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Mobile</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.mobilePhone }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Home</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.homePhone }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Work</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.workPhone }}</p></div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-xl-4 mb-5">
-                <div class="kyc-info-box particulars">
-                    <div class="row">
-                        <div class="col"><p class="kyc-label font-weight-bold mb-4">Override Address</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Address Line 1</p></div>
-                        <div class="col-6"><p class="kyc-value"></p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Address Line 2</p></div>
-                        <div class="col-6"><p class="kyc-value"></p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Address Line 3</p></div>
-                        <div class="col-6"><p class="kyc-value"></p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">City / Town</p></div>
-                        <div class="col-6"><p class="kyc-value"></p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Post Code</p></div>
-                        <div class="col-6"><p class="kyc-value"></p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><p class="kyc-label">Region</p></div>
-                        <div class="col-6"><p class="kyc-value"></p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <el-select size="small" class=" mr-3 particulars-input" placeholder="Selected A Country" v-model="countryAddr">
-                                <el-option v-for="(cntry, index) in countryList" class="select-success" :value="cntry.country_name" :label="`${cntry.country_name}`" :key="index" />
-                            </el-select>
+                <div class="col-xl-4 mb-5" v-if="particulars.address">
+                    <div class="kyc-info-box particulars">
+                        <div class="row">
+                            <div class="col"><p class="kyc-label font-weight-bold mb-4">Address</p></div>
                         </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Address Line 1</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.address.address1 }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Address Line 2</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.address.address2 }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Address Line 3</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.address.address3 }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">City / Town</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.address.city }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Post Code</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.address.postCode }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Region</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.address.region }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Country</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.address.countryCode }}</p></div>
+                        </div>
+                        <!-- <div class="row">
+                            <div class="col">
+                                <el-select disabled size="small" class=" mr-3 particulars-input" placeholder="Selected A Country" v-model="particulars.address.countryCode">
+                                    <el-option v-for="(cntry, index) in countryList" class="select-success" :value="cntry.country_code" :label="`${cntry.country_name}`" :key="index" />
+                                </el-select>
+                            </div>
+                        </div> -->
                     </div>
                 </div>
-                
+
+                <div class="col-xl-4 mb-5" v-if="particulars.overrideAddress">
+                    <div class="kyc-info-box particulars">
+                        <div class="row">
+                            <div class="col"><p class="kyc-label font-weight-bold mb-4">Override Address</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Address Line 1</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.overrideAddress.address1 }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Address Line 2</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.overrideAddress.address2 }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Address Line 3</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.overrideAddress.address3 }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">City / Town</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.overrideAddress.city }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Post Code</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.overrideAddress.postCode }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Region</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.overrideAddress.region }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><p class="kyc-label">Country</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.overrideAddress.countryCode }}</p></div>
+                        </div>
+                        <!-- <div class="row">
+                            <div class="col">
+                                <el-select disabled size="small" class=" mr-3 particulars-input" placeholder="Selected A Country" v-model="particulars.overrideAddress.countryCode">
+                                    <el-option v-for="(cntry, index) in countryList" class="select-success" :value="cntry.country_code" :label="`${cntry.country_name}`" :key="index" />
+                                </el-select>
+                            </div>
+                        </div> -->
+                    </div>
+                    
+                </div>
             </div>
         </div>
     </div>
@@ -569,6 +606,8 @@ import {
     KYC_UPDATE_CONTACT,
     CLEAR_CHECK_DOCS,
     CLEAR_POA_IMG,
+    KYC_GET_PROGRAM_INFO,
+    KYC_GET_PARTICULARS,
 } from "@/store/types";
 import eyeIcon from '../../../../../public/static/img/dashboard_icons/outline-visibility-24px-1.svg';
 import editIcon from '../../../../../public/static/img/dashboard_icons/ic_edit.svg';
@@ -628,40 +667,6 @@ export default {
                 reason: '',
                 status: 'APPLICATION_CLOSE'
             },
-            programInfo: [
-                {
-                    name: 'Issuer inst Code',
-                    value: 'FRICK'
-                },
-                {
-                    name: 'PM inst Code',
-                    value: 'CEEVO'
-                },
-                {
-                    name: 'PO inst Code',
-                    value: 'BITST'
-                },
-                {
-                    name: 'Reseller Code',
-                    value: 'SDFDS'
-                },
-                {
-                    name: 'Card Program Code',
-                    value: 'Black'
-                },
-                {
-                    name: 'Default Free Profile',
-                    value: 'EUR'
-                },
-                {
-                    name: 'Free Profile',
-                    value: '1'
-                },
-                {
-                    name: 'KYC Level',
-                    value: 'FDD'
-                },
-            ],
             countryOverrideAddr: 'Germany',
             countryAddr: 'Germany',
         };
@@ -683,6 +688,12 @@ export default {
             gettersCheckDocs: GETTER_CHECK_DOCS,
             getterPoaImg: GETTER_POA_IMG,
         }),
+        particulars() {
+            return this.$store.state.kyc.particulars;
+        },
+        programInfo() {
+            return this.$store.state.kyc.programInfo;
+        },
         appReferenceId() {
             if(this.$route.query) return this.$route.query.appRef
         },
@@ -811,6 +822,8 @@ export default {
     mounted() {
         this.getApplicationStatus();
         this.start()
+        this.getProgramInfo({ kycAppRefId:  this.appReferenceId })
+        this.getParticulars({ kycAppRefId:  this.appReferenceId })
     },
     methods: {
         ...mapActions({
@@ -823,6 +836,8 @@ export default {
             downloadPoaImage: KYC_DOWNLOAD_POA_IMAGE,
             kycResendSms: RESEND_SMS,
             updateContact: KYC_UPDATE_CONTACT,
+            getProgramInfo: KYC_GET_PROGRAM_INFO,
+            getParticulars: KYC_GET_PARTICULARS
         }),
         ...mapMutations({
             clearCheckDocs: CLEAR_CHECK_DOCS,
@@ -1092,6 +1107,10 @@ export default {
             background-color: rgba(#FF6A6A, 0.5) !important;
         }
     }
+}
+
+.word-break {
+    word-wrap: break-word;
 }
 
 .kyc {

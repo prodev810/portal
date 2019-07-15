@@ -191,7 +191,7 @@
                                         </div>
                                     </div>
 
-                                    <p-button slot="reference" round class="btn btn--close btn--shadow bg-sanction">Action</p-button>
+                                    <p-button :disabled="sancheck.checkStatusName == 'No Match'" slot="reference" round class="btn btn--close btn--shadow bg-sanction">Action</p-button>
                                 </el-popover>
                             </div>
                         </div>
@@ -442,10 +442,15 @@ export default {
         close() {
             if(this.appReferenceId) this.$router.push({ name: 'KYC Main Page', query: {appRef: this.appReferenceId }})
         },
-        doManualUpdate() {
-            if(!this.manualUpdate.actionTypeCode || !this.manualUpdate.comment || !this.$route.query || !this.$route.query.id) return ;
-            this.manualUpdateAction({ ...this.manualUpdate, id: this.$route.query.id });
-            this.closeActionPopup()
+        async doManualUpdate() {
+           try {
+                if(typeof(this.manualUpdate.actionTypeCode) !== 'number' || !this.manualUpdate.comment || !this.$route.query || !this.$route.query.id) return ;
+                await this.manualUpdateAction({ ...this.manualUpdate, id: this.$route.query.id });
+                this.start();
+                this.closeActionPopup()
+           } catch(e) {
+               console.log('e: ', e);
+           }
         },
         closeActionPopup() {
             this.actionPopup = false;
