@@ -30,12 +30,14 @@
             <el-row :gutter="20">
               <el-col :md="6">
                 <strong>Client Reference</strong>
-                <el-input v-model="clientReference"
+                <strong v-if="isSingleInvoice"> : {{clientReference}}</strong>
+                <el-input v-else v-model="clientReference"
                           @change="handleFilterInvoice"></el-input>
               </el-col>
               <el-col :md="6">
                 <strong>Client Name</strong>
-                <el-input v-model="clientName"
+                <strong v-if="isSingleInvoice"> : {{clientName}}</strong>
+                <el-input v-else v-model="clientName"
                           @change="handleFilterInvoice"></el-input>
               </el-col>
             </el-row>
@@ -44,7 +46,7 @@
                          :headings="tableHeadings"
                          :value="productConfigViewInvoiceList">
           </regular-table>
-          <el-row class="d-flex justify-content-end">
+          <el-row v-if="!isEmptyTable" class="d-flex justify-content-end">
             <strong class="kyc__invoice__total">
               <b class="text-uppercase">Sum</b> {{productConfigViewInvoiceTotal | numberToMoneyFormat}}
             </strong>
@@ -58,27 +60,38 @@
         </div>
       </div>
     </el-col>
+    <PSpinner v-if="isLoading"></PSpinner>
   </el-row>
-
 </template>
 
 <script>
   import RegularTable from "@/components/UIComponents/CeevoTables/RegularTable/RegularTable"
-  import {mapState, mapActions} from 'vuex'
+  import {mapState, mapActions, mapGetters} from 'vuex'
   import {
     KYC_GET_PRODUCT_CONFIG_VIEW_INVOICE,
+    GETTER_KYC_LOADINGSTATUS,
+    GETTER_KYC_INVOICE_ITEMS,
+    GETTER_KYC_INVOICE_PAGEMETA,
+    GETTER_KYC_INVOICE_SUM,
   } from "../../../../store/types"
   import {moneyFormat} from '../../../../utils/moneyFormat'
   import {formatDate} from "../../../../utils/Date"
+  import {kycModuleDateFormatWithoutSec} from "../../../../utils/kycModuleDateFormat"
   import PPagination from "../../../UIComponents/Pagination"
+  import PSpinner from '../../../../components/UIComponents/Spinner'
+  import LOADING_STATE from '../../../../utils/loadingState'
 
   export default {
     name: "KycViewInvoice",
     components: {
-      RegularTable, PPagination,
+      RegularTable, PPagination, PSpinner,
     },
+    props: ['mode'],
     created() {
-      // this.getProductConfigInvoices()
+      if (this.$route.query) {
+        this.clientName = this.$route.query.clientName
+        this.clientReference = this.$route.query.clientReference
+      }
       this.handleFilterInvoice()
     },
     data() {
@@ -103,22 +116,35 @@
       }
     },
     computed: {
-      ...mapState({
-        productConfigViewInvoicePageMeta: state => state.kyc.productConfigViewInvoice.pageMeta,
-        productConfigViewInvoiceItem: state => state.kyc.productConfigViewInvoice.invoiceItems,
-        productConfigViewInvoiceTotal: state => state.kyc.productConfigViewInvoice.sum
+      ...mapGetters({
+        kycLoadingState: GETTER_KYC_LOADINGSTATUS,
+        productConfigViewInvoiceItem: GETTER_KYC_INVOICE_ITEMS,
+        productConfigViewInvoiceTotal: GETTER_KYC_INVOICE_SUM,
+        productConfigViewInvoicePageMeta: GETTER_KYC_INVOICE_PAGEMETA,
       }),
       getInvoiceCurrency() {
         return this.productConfigViewInvoiceItem[0].itemCurrency
       },
       productConfigViewInvoiceList() {
         if (this.productConfigViewInvoiceItem) {
-          return this.productConfigViewInvoiceItem.map(invoice => {
-            invoice.timestamp = invoice.timestamp.replace('Z', '').replace('T', '-').replace(/:/g, '-')
-            invoice.itemAmount = `${this.getInvoiceCurrency} ${this.getMoneyFormat(invoice.itemAmount)}`
-            return invoice
+          const invoiceItem = JSON.parse(JSON.stringify(this.productConfigViewInvoiceItem))
+          return invoiceItem.map(invoice => {
+           if(invoice){
+             invoice.timestamp = kycModuleDateFormatWithoutSec(invoice.timestamp)
+             invoice.itemAmount = `${this.getInvoiceCurrency} ${this.getMoneyFormat(invoice.itemAmount)}`
+             return invoice
+           }
           })
         }
+      },
+      isEmptyTable() {
+        return this.productConfigViewInvoiceItem ? !this.productConfigViewInvoiceItem.length : true
+      },
+      isLoading(){
+        return this.kycLoadingState !== LOADING_STATE.IDEAL
+      },
+      isSingleInvoice(){
+        return this.mode === 'single'
       },
     },
     watch: {
@@ -140,7 +166,7 @@
           toDate: this.getDateFormat(this.toDate),
           fromDate: this.getDateFormat(this.fromDate),
           clientName: this.clientName,
-          clientReference: this.clientReference.toUpperCase(),
+          clientReference: this.clientReference ? this.clientReference.toUpperCase() : '',
           pageNum: this.isPagination ? this.currentPage - 1 : 0,
           pageSize: this.perPage
         }

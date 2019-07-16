@@ -291,6 +291,14 @@ const kyc = {
       }
     },
     {
+      path: '/kyc/invoices',
+      name: 'KYC View All Invoices',
+      component: () => import('../components/Dashboard/pages/Kyc/KycViewInvoice'),
+      meta: {
+        permission: permission.RESELLER_INVOICE_VIEW
+      }
+    },
+    {
       path: '/kyc/review-edit-account/:id',
       name: 'KYC Review Edit Account Creation',
       component: () => import('../components/Dashboard/pages/Kyc/KycReviewEditAccountCreation'),
@@ -375,10 +383,10 @@ const kyc = {
       }
     },
     {
-      path: '/kyc/product-config/view-invoice/:id',
+      path: '/kyc/product-config/view-invoice',
       name: 'KYC Product Config View Invoice',
+      props:{mode: 'single'},
       component: () => import('../components/Dashboard/pages/Kyc/KycViewInvoice'),
-      props:{mode: 'edit'},
       meta: {
         permission: permission.RESELLER_INVOICE_VIEW
       }
