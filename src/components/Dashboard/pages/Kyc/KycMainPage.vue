@@ -443,7 +443,7 @@
                         </div>
                         <div class="row">
                             <div class="col-6"><p class="kyc-label">Country</p></div>
-                            <div class="col-6"><p class="kyc-value">{{ particulars.address.countryCode }}</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.address.countryName }}</p></div>
                         </div>
                         <!-- <div class="row">
                             <div class="col">
@@ -486,7 +486,7 @@
                         </div>
                         <div class="row">
                             <div class="col-6"><p class="kyc-label">Country</p></div>
-                            <div class="col-6"><p class="kyc-value">{{ particulars.overrideAddress.countryCode }}</p></div>
+                            <div class="col-6"><p class="kyc-value">{{ particulars.overrideAddress.countryName  }}</p></div>
                         </div>
                         <!-- <div class="row">
                             <div class="col">

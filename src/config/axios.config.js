@@ -2,7 +2,7 @@ export default {
   timeout: 35000,
   apis: [
     {
-      BASE_URL: 'https://kyc.temp.dev.transact24.com/v1/kyc',
+      BASE_URL: 'https://api.dev.ceevo.com/kyc-api/v1/kyc',
       TIMEOUT: 35000,
       SHORTCUT: 'kyc',
       OAUTH: '$oAuth' // same oAuth as main
