@@ -80,7 +80,7 @@
             </div>
         </div>
 
-        <p-button class="btn mt-0 btn--kyc-id-action btn--shadow bg-purple" round slot="reference">Action</p-button>
+        <p-button :disabled="disabled" class="btn mt-0 btn--kyc-id-action btn--shadow bg-purple" round slot="reference">Action</p-button>
     </el-popover>
 </template>
 
@@ -117,7 +117,8 @@
             'uploadSupportDocument',
             'getListSupportDocs',
             'listSupportDocuments',
-            'id'
+            'id',
+            'disabled',
         ],
         data() {
             return {
@@ -190,15 +191,20 @@
             docListenToInput({value}) {
                 this.docActionTableValue = value;
             },
-            doManualUpdate() {
-                if (typeof(this.manualUpdate.actionTypeCode) !== 'number' || !this.manualUpdate.comment || !this.id) {
-                    return;
+            async doManualUpdate() {
+                try {
+                    if (typeof(this.manualUpdate.actionTypeCode) !== 'number' || !this.manualUpdate.comment || !this.id) {
+                        return;
+                    }
+                    await this.manualUpdateAction({
+                        ...this.manualUpdate,
+                        id: this.id
+                    });
+                    this.$emit('refresh');
+                    this.closeActionPopup();
+                } catch(e) {
+                    console.log('e: ', e);
                 }
-                this.manualUpdateAction({
-                    ...this.manualUpdate,
-                    id: this.id
-                });
-                this.closeActionPopup();
             },
             closeActionPopup() {
                 this.actionPopup = false;

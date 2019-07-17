@@ -90,7 +90,9 @@
                         </div>
                         <div class="col-xl-6 mb-3">
                             <kyc-id-action v-if="$route.name == 'KYC Id Action'"
+                                @refresh="start"
                                 :id="id"
+                                :disabled="idCheck.checkStatusName == 'Manual Approved'"
                                 :getListSupportDocs="getListSupportDocs" 
                                 :listSupportDocuments="listSupportDocuments"
                                 :actionLegend="idCheckActionTypes" 
@@ -570,9 +572,9 @@ export default {
             if(!this.idCheck || !this.idCheck.checkStatusName) return {}
             const status = this.idCheck.checkStatusName
             return {
-                'bg-bright-red': status == 'Failed' || status == 'Manually Declined',
+                'bg-bright-red': status == 'Failed' || status == 'Manually Declined' || status == 'Manual Declined',
                 'bg-light-red': status == 'Unknown' || status == 'Skipped' || status == 'Caution' || status == 'Attention',
-                'bg-green': status == 'Passed' || status == 'Manual Approval',
+                'bg-green': status == 'Passed' || status == 'Manual Approval' || status == 'Manual Approved',
                 'bg-orange': status == 'New ID Requested' || status == 'Update ID Request',
             }
         },
@@ -600,11 +602,7 @@ export default {
         }
     },
     mounted() {
-        this.clearCheckDocs();
-        this.getIdCheckEnquiry({ appReferenceId: this.appReferenceId  })
-        this.getIdCheckStatuses();
-        this.getIdValidationDatas();
-        this.getIdCheckActionTypes();
+        this.start()
     },
     methods: {
         ...mapActions({
@@ -621,6 +619,13 @@ export default {
         ...mapMutations({
             clearCheckDocs: CLEAR_CHECK_DOCS
         }),
+        start() {
+            this.clearCheckDocs();
+            this.getIdCheckEnquiry({ appReferenceId: this.appReferenceId  })
+            this.getIdCheckStatuses();
+            this.getIdValidationDatas();
+            this.getIdCheckActionTypes();
+        },
         close() {
             if(this.appReferenceId) this.$router.push({ name: 'KYC Main Page', query: {appRef: this.appReferenceId }})
         },

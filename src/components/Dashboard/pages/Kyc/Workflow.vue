@@ -263,11 +263,11 @@
         } else {
             filters = {
                 clientName: this.clientName,
-                clientType: this.selectedClientType,
-                dateFrom: this.fromDate,
-                dateTo: this.toDate,
+                selectedClientType: this.selectedClientType,
+                fromDate: this.fromDate,
+                toDate: this.toDate,
                 oldestFirst: this.oldestFirst,
-                pageNum: this.isPagination,
+                isPagination: this.isPagination,
                 pageSize: this.perPage,
                 currentPage: this.currentPage
             }
@@ -291,11 +291,11 @@
         if(op) op = JSON.parse(op);
           if(!op || Object.entries(op).length == 0) return;
           this.clientName = op.clientName
-            this.selectedClientType = op.clientType
-            this.fromDate = op.dateFrom
-            this.toDate = op.dateTo
+            this.selectedClientType = op.selectedClientType
+            this.fromDate = op.fromDate
+            this.toDate = op.toDate
             this.oldestFirst = op.oldestFirst
-            this.isPagination = op.pageNum
+            this.isPagination = op.isPagination
             this.perPage = op.pageSize
             this.currentPage = op.currentPage
           this.goForOutstandingApps(op)
