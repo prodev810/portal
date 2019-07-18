@@ -1116,6 +1116,9 @@
       },
     },
     watch: {
+      reseller(newVal){
+        this.isStartEdit = true
+      },
       cardData(newVal) {
         this.chagneCardProgramOptions(newVal);
       },

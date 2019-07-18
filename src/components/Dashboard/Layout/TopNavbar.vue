@@ -147,9 +147,9 @@
       logout() {
         this.$oAuth
           .logout()
-          .then(isSuccess => {
+          /*.then(isSuccess => {
             this.$router.push({path: "/login"});
-          })
+          })*/
           .catch(e => {
             console.error(e.message);
           });

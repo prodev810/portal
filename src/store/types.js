@@ -289,3 +289,15 @@ export const MUTATE_BUSINESS_RESELLER_CODE_LIST = 'MUTATE_BUSINESS_RESELLER_CODE
 // -> getters
 export const GETTER_BUSINESS_RESELLER_CODE_LIST = 'GETTER_BUSINESS_RESELLER_CODE_LIST'
 
+/* User Info */
+// -> actions
+export const USER_INFO = 'USER_INFO'
+export const USER_ROLES = 'USER_ROLES'
+
+// -> mutations
+export const MUTATE_USER_INFO = 'MUTATE_USER_INFO'
+export const MUTATE_USER_ROLES = 'MUTATE_USER_ROLES'
+
+// -> getters
+export const GETTER_USER_INFO = 'GETTER_USER_INFO'
+export const GETTER_USER_ROLES = 'GETTER_USER_ROLES'

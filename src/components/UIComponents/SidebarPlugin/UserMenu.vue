@@ -42,6 +42,11 @@
 </template>
 <script>
   import {CollapseTransition} from "vue2-transitions";
+  import {
+    USER_INFO,
+    GETTER_USER_INFO,
+  } from '@/store/types'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     components: {
@@ -51,12 +56,22 @@
       return {
         isClosed: true
       };
-    }, computed: {
-      userName() {
-        return this.$oAuth.getUserInfo().fullName
-      }
+    },
+    created(){
+      this.getUserInfo()
+    },
+    computed: {
+      ...mapGetters({
+        userData: GETTER_USER_INFO,
+      }),
+      userName(){
+        return this.userData.name
+      },
     },
     methods: {
+      ...mapActions({
+        getUserInfo: USER_INFO,
+      }),
       toggleMenu(e) {
         e.preventDefault();
         // this.isClosed = !this.isClosed;

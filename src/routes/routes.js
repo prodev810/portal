@@ -47,7 +47,9 @@ let cardProgram = {
   redirect: '/card-program/view',
   component: DashboardLayout,
   meta: {
-    permission: permission.CARD_PROGRAM_VIEW
+    //permission: permission.CARD_PROGRAM_VIEW,
+    requiresAuth: true,
+    roles: ['*'],
   },
   children: [
     {
@@ -55,7 +57,9 @@ let cardProgram = {
       name: 'Create card program',
       component: Create,
       meta: {
-        permission: permission.CARD_PROGRAM_EDIT
+        //permission: permission.CARD_PROGRAM_EDIT,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -63,7 +67,9 @@ let cardProgram = {
       name: 'Edit card program',
       component: Create,
       meta: {
-        permission: permission.CARD_PROGRAM_EDIT
+        //permission: permission.CARD_PROGRAM_EDIT,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -71,7 +77,9 @@ let cardProgram = {
       name: 'View Card Programs',
       component: CardPrograms,
       meta: {
-        permission: permission.CARD_PROGRAM_VIEW
+        //permission: permission.CARD_PROGRAM_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     }
   ]
@@ -84,7 +92,9 @@ let floatAccount = {
   redirect: '/float-account/approve-debits',
   component: DashboardLayout,
   meta: {
-    permission: permission.DEBIT_CREDIT_INSTRUCT_APPROVE
+    //permission: permission.DEBIT_CREDIT_INSTRUCT_APPROVE,
+    requiresAuth: true,
+    roles: ['*'],
   },
   children: [
     {
@@ -92,7 +102,9 @@ let floatAccount = {
       name: 'approve debit',
       component: ApproveDebit,
       meta: {
-        permission: permission.DEBIT_CREDIT_INSTRUCT_APPROVE,
+        //permission: permission.DEBIT_CREDIT_INSTRUCT_APPROVE,
+        requiresAuth: true,
+        roles: ['*'],
         isAllowResellerToView: true
       }
     },
@@ -101,7 +113,9 @@ let floatAccount = {
       name: 'review debit',
       component: PreviewDebit,
       meta: {
-        permission: permission.DEBIT_CREDIT_INSTRUCT_VIEW
+        //permission: permission.DEBIT_CREDIT_INSTRUCT_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -109,7 +123,9 @@ let floatAccount = {
       name: 'setup debit',
       component: SetupDebit,
       meta: {
-        permission: permission.DEBIT_CREDIT_INSTRUCT_EDIT
+        //permission: permission.DEBIT_CREDIT_INSTRUCT_EDIT,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -117,7 +133,9 @@ let floatAccount = {
       name: 'unallocated float',
       component: UnallocatedFloat,
       meta: {
-        permission: permission.UNALLOCATED_FLOAT_VIEW
+        //permission: permission.UNALLOCATED_FLOAT_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -125,7 +143,9 @@ let floatAccount = {
       name: 'view statement',
       component: ViewStatement,
       meta: {
-        permission: permission.STATEMENT_VIEW
+        //permission: permission.STATEMENT_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -133,7 +153,9 @@ let floatAccount = {
       name: 'view float account',
       component: ViewFloatAccount,
       meta: {
-        permission: permission.FLOAT_ACCOUNT_VIEW
+        //permission: permission.FLOAT_ACCOUNT_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     }
   ]
@@ -149,7 +171,9 @@ let payment_gateway = {
   //redirect: '/payment-gateway/view',
   component: DashboardLayout,
   meta: {
-    permission: permission.RESELLER_SUBSCRIPTION_VIEW
+    //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+    requiresAuth: true,
+    roles: ['*'],
   },
   children: [
     {
@@ -157,7 +181,9 @@ let payment_gateway = {
       name: 'Payment gateway - Settings',
       component: PGSettings,
       meta: {
-        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+        //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -165,7 +191,9 @@ let payment_gateway = {
       name: 'Payment gateway - View payment method',
       component: PGEditPaymentMethod,
       meta: {
-        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+        //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -173,7 +201,9 @@ let payment_gateway = {
       name: 'Payment gateway - Merchant',
       component: PGMerchant,
       meta: {
-        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+        //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -181,7 +211,9 @@ let payment_gateway = {
       name: 'Payment gateway - View merchant',
       component: PGEditMerchant,
       meta: {
-        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+        //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     }
   ]
@@ -193,7 +225,9 @@ let reseller = {
   redirect: '/resellers/view',
   component: DashboardLayout,
   meta: {
-    permission: permission.RESELLER_SUBSCRIPTION_VIEW
+    //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+    requiresAuth: true,
+    roles: ['*'],
   },
   children: [
     {
@@ -201,18 +235,22 @@ let reseller = {
       name: NAMED_ROUTES.RESELLERS_VIEW,
       component: ResellerView,
       // component: ResellerCreateCorporateModule,
-      props:{context: 'view'},
+      props: {context: 'view'},
       meta: {
-        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+        //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
       path: '/reseller/view/:id',
       name: NAMED_ROUTES.RESELLER_VIEW_BY_ID,
       component: ResellerCreateCorporateModule,
-      props:{context: 'view'},
+      props: {context: 'view'},
       meta: {
-        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+        //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -220,18 +258,22 @@ let reseller = {
       name: NAMED_ROUTES.RESELLER_CREATE,
       component: ResellerCreateCorporateModule,
       // component: ResellerCreate,
-      props:{context: 'create'},
+      props: {context: 'create'},
       meta: {
-        permission: permission.RESELLER_SUBSCRIPTION_EDIT
+        //permission: permission.RESELLER_SUBSCRIPTION_EDIT,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
       path: '/reseller/edit/:id',
       name: NAMED_ROUTES.RESELLER_EDIT,
       component: ResellerCreateCorporateModule,
-      props:{context: 'edit'},
+      props: {context: 'edit'},
       meta: {
-        permission: permission.RESELLER_SUBSCRIPTION_EDIT
+        //permission: permission.RESELLER_SUBSCRIPTION_EDIT,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -239,7 +281,9 @@ let reseller = {
       name: 'Resellers Editor',
       component: ResellerCreate,
       meta: {
-        permission: permission.RESELLER_SUBSCRIPTION_EDIT
+        //permission: permission.RESELLER_SUBSCRIPTION_EDIT,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -247,14 +291,18 @@ let reseller = {
       name: 'Search Invoices',
       component: SearchInvoices,
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     }, {
       path: '/reseller/details',
       name: 'Invoice Details',
       component: Invoicesdetails,
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -262,7 +310,9 @@ let reseller = {
       name: 'Reseller Invoice',
       component: ResellerInvoice,
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     }
   ]
@@ -277,9 +327,11 @@ const kyc = {
     {
       path: '/kyc/dashboard',
       name: 'KYC Dashboard',
-      component:KycDashboard,
+      component: KycDashboard,
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW // !!! change
+        //permission: permission.RESELLER_INVOICE_VIEW, // !!! change,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -287,7 +339,9 @@ const kyc = {
       name: 'KYC Approved Emoney Account',
       component: () => import('../components/Dashboard/pages/Kyc/KycApprovedEmoneyAccount'),
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -295,7 +349,9 @@ const kyc = {
       name: 'KYC View All Invoices',
       component: () => import('../components/Dashboard/pages/Kyc/KycViewInvoice'),
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -303,7 +359,9 @@ const kyc = {
       name: 'KYC Review Edit Account Creation',
       component: () => import('../components/Dashboard/pages/Kyc/KycReviewEditAccountCreation'),
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -311,23 +369,29 @@ const kyc = {
       name: 'KYC Review Edit Card Creation',
       component: () => import('../components/Dashboard/pages/Kyc/KycReviewEditCardCreation'),
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
       path: '/kyc/register',
       name: 'KYC Register',
-      component:Kyc,
+      component: Kyc,
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
       path: '/kyc/workflow',
       name: 'KYC Work Flow',
-      component:Workflow,
+      component: Workflow,
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -336,7 +400,9 @@ const kyc = {
       name: 'KYC Search',
       component: () => import('../components/Dashboard/pages/Kyc/Search'),
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -344,7 +410,9 @@ const kyc = {
       name: 'KYC Main Page',
       component: () => import('../components/Dashboard/pages/Kyc/KycMainPage'),
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
@@ -352,123 +420,177 @@ const kyc = {
       name: 'KYC Product Config',
       component: () => import('../components/Dashboard/pages/Kyc/KycProductConfig'),
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
-      path:'/kyc/product-config/create-client',
+      path: '/kyc/product-config/create-client',
       name: 'KYC Product Config Create Client',
       component: () => import('../components/Dashboard/pages/Kyc/KycClient'),
-      props:{mode: 'create'},
+      props: {mode: 'create'},
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
       path: '/kyc/product-config/view-client/:id',
       name: 'KYC Product Config View Client',
       component: () => import('../components/Dashboard/pages/Kyc/KycClient'),
-      props:{mode: 'view'},
+      props: {mode: 'view'},
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
       path: '/kyc/product-config/edit-client/:id',
       name: 'KYC Product Config Edit Client',
       component: () => import('../components/Dashboard/pages/Kyc/KycClient'),
-      props:{mode: 'edit'},
+      props: {mode: 'edit'},
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
       path: '/kyc/product-config/view-invoice',
       name: 'KYC Product Config View Invoice',
-      props:{mode: 'single'},
+      props: {mode: 'single'},
       component: () => import('../components/Dashboard/pages/Kyc/KycViewInvoice'),
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
       path: '/kyc/poa-action/:appReferenceId',
       name: 'KYC POA Action',
       component: () => import('../components/Dashboard/pages/Kyc/KycPOAAction'),
-      props:{mode: 'action'},
+      props: {mode: 'action'},
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
       path: '/kyc/poa-view/:appReferenceId',
       name: 'KYC POA View',
       component: () => import('../components/Dashboard/pages/Kyc/KycPOAAction'),
-      props:{mode: 'view'},
+      props: {mode: 'view'},
       meta: {
-        permission: permission.RESELLER_INVOICE_VIEW
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
     },
     {
-        path: '/kyc/sanction-action',
-        name: 'KYC Sanction Action',
-        component: () => import('../components/Dashboard/pages/Kyc/SanctionAction'),
-        meta: {
-          permission: permission.RESELLER_INVOICE_VIEW
-        }
-      },
-      {
-        path: '/kyc/sanction-view',
-        name: 'KYC Sanction View',
-        component: () => import('../components/Dashboard/pages/Kyc/SanctionAction'),
-        meta: {
-          permission: permission.RESELLER_INVOICE_VIEW
-        }
-      },
-      {
-        path: '/kyc/ID-view',
-        name: 'KYC Id View',
-        component: () => import('../components/Dashboard/pages/Kyc/KycId.vue'),
-        meta: {
-          permission: permission.RESELLER_INVOICE_VIEW
-        }
-      },
-      {
-        path: '/kyc/ID-action',
-        name: 'KYC Id Action',
-        component: () => import('../components/Dashboard/pages/Kyc/KycId.vue'),
-        meta: {
-          permission: permission.RESELLER_INVOICE_VIEW
-        }
+      path: '/kyc/sanction-action',
+      name: 'KYC Sanction Action',
+      component: () => import('../components/Dashboard/pages/Kyc/SanctionAction'),
+      meta: {
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
       }
+    },
+    {
+      path: '/kyc/sanction-view',
+      name: 'KYC Sanction View',
+      component: () => import('../components/Dashboard/pages/Kyc/SanctionAction'),
+      meta: {
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
+      }
+    },
+    {
+      path: '/kyc/ID-view',
+      name: 'KYC Id View',
+      component: () => import('../components/Dashboard/pages/Kyc/KycId.vue'),
+      meta: {
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
+      }
+    },
+    {
+      path: '/kyc/ID-action',
+      name: 'KYC Id Action',
+      component: () => import('../components/Dashboard/pages/Kyc/KycId.vue'),
+      meta: {
+        //permission: permission.RESELLER_INVOICE_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
+      }
+    }
   ]
 }
 let loginPage = {
   path: '/login',
   name: 'Login',
-  component: Login
+  component: Login,
+  meta: {
+    requiresAuth: true,
+    roles: ['*'],
+  }
 };
 
 let registerPage = {
   path: '/register',
   name: 'Register',
-  component: Register
+  component: Register,
+  meta: {
+    requiresAuth: true,
+    roles: ['*'],
+  }
 };
 
 let lockPage = {
   path: '/lock',
   name: 'Lock',
-  component: Lock
+  component: Lock,
+  meta: {
+    requiresAuth: true,
+    roles: ['*'],
+  }
+};
+
+let unauthorizedPage = {
+  path: '/unauthorized',
+  name: 'Unauthorized',
+  component: () => import('../components/GeneralViews/UnauthorizedPage.vue'),
+  meta: {
+    //permission: permission.RESELLER_INVOICE_VIEW,
+    requiresAuth: true,
+    roles: ['*'],
+  }
 };
 
 let system = {
   path: '/system',
   component: DashboardLayout,
+  meta: {
+    //permission: permission.RESELLER_INVOICE_VIEW,
+    requiresAuth: true,
+    roles: ['*'],
+  },
   children: [
     {
       path: '/',
       name: 'empty_view',
-      component: NoPermission
+      component: NoPermission,
+      meta: {
+        requiresAuth: true,
+        roles: ['*'],
+      }
     }
   ]
 
@@ -479,16 +601,28 @@ const routes = [
     path: '/',
     component: DashboardLayout,
     redirect: '/card-program',
+    meta: {
+      requiresAuth: true,
+      roles: ['*'],
+    },
     children: [
       {
         path: 'calendar',
         name: 'Calendar',
-        component: Calendar
+        component: Calendar,
+        meta: {
+          requiresAuth: true,
+          roles: ['*'],
+        }
       },
       {
         path: 'charts',
         name: 'Charts',
-        component: Charts
+        component: Charts,
+        meta: {
+          requiresAuth: true,
+          roles: ['*'],
+        }
       }
     ]
   },
@@ -501,6 +635,7 @@ const routes = [
   payment_gateway,
   kyc,
   system,
+  unauthorizedPage,
   {path: '*', component: NotFound}
 ];
 
