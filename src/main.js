@@ -8,13 +8,15 @@ import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
 import App from './App.vue'
 
-import keycloakStore from 'plugin-vuejs-keycloak'
+// import keycloakStore from 'plugin-vuejs-keycloak'
 import security from 'plugin-vuejs-keycloak/security'
+
 
 
 // Plugins
 // Element-UI
-import { Select, Option, Row, Col, Input, Tooltip, Table, TableColumn, DatePicker } from 'element-ui'
+import {Select, Option, Row, Col, Input, Tooltip, Table, TableColumn, DatePicker} from 'element-ui'
+
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(Row)
@@ -39,7 +41,7 @@ import './assets/sass/demo.scss'
 //  plugins import
 import axiosWrapper from './plugins/axios'
 import oAuthWrapper from './plugins/oAuth'
-import oAuthKycWrapper from './plugins/oAuthKyc'
+//import oAuthKycWrapper from './plugins/oAuthKyc'
 import sidebarLinks from './sidebarLinks'
 
 // configs
@@ -59,6 +61,7 @@ Vue.use(VueNotify)
 Vue.use(SideBar, {sidebarLinks: sidebarLinks})
 Vue.use(VeeValidate)
 
+// Vue.use(oAuthKycWrapper, oAuthConfig)
 Vue.use(oAuthWrapper, oAuthConfig)
 Vue.use(axiosWrapper, axiosConfig)
 
@@ -98,10 +101,11 @@ Vue.use(axiosWrapper, axiosConfig)
 locale.use(lang)
 
 // configure router
-export const router = new VueRouter({
+const router = new VueRouter({
   routes,
   mode: 'history',
-  linkActiveClass: 'active'
+  scrollBehavior: () => ({y: 0}),
+  linkActiveClass: 'active',
 })
 
 
@@ -148,7 +152,7 @@ export const router = new VueRouter({
 
 // initProgress(router);
 
-router.beforeEach(async (to, from, next) => {
+/*router.beforeEach(async (to, from, next) => {
   const isAuth = await Vue.prototype.$oAuth.isAuthenticated()
   const nextToByRole = () => {
     if (Vue.prototype.$oAuth.isNoPermissionForAll()) {
@@ -188,34 +192,32 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   }
-})
+})*/
 
 initProgress(router);
 
-// router.beforeEach((to, from, next) => {
-//     if (to.meta.requiresAuth) {
-//       const auth = keycloakStore.state.security.auth
-//       if (!auth.authenticated) {
-//         security.init(next, to.meta.roles)
-//       }
-//       else {
-//         if (to.meta.roles) {
-//           if (security.roles(to.meta.roles[0])) {
-//             next()
-//           }
-//           else {
-//             next({ name: 'unauthorized' })
-//           }
-//         }
-//         else {
-//           next()
-//         }
-//       }
-//     }
-//     else {
-//       next()
-//     }
-// })
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth) {
+    const auth = store.state.security.auth
+    if (!auth.authenticated) {
+      // security.init(next, to.meta.roles) TODO: uncomment when roles confirmed
+      security.init(next, null) // TODO: comment when roles confirmed
+    } else {
+      if (to.meta.roles) {
+        if (true) { // TODO: comment when roles confirmed
+        // if (security.roles(to.meta.roles[0])) { TODO: uncomment when roles confirmed
+          next()
+        } else {
+          next({name: 'Unauthorized'})
+        }
+      } else {
+        next()
+      }
+    }
+  } else {
+    next()
+  }
+})
 
 /* eslint-disable no-new */
 export const AbaModalEvents = new Vue()
@@ -223,7 +225,6 @@ export const AbaModalEvents = new Vue()
 new Vue({
   el: '#app',
   store,
-  keycloakStore,
   render: h => h(App),
   router,
   i18n

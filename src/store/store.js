@@ -7,12 +7,15 @@ import UiModule from "./modules/UiModule";
 import kyc from "./modules/Kyc";
 import paymentGateway from "./modules/PaymentGateway"
 import issuing from './modules/Issuing'
-import buisness from './modules/Business'
+import business from './modules/Business'
+import security from 'plugin-vuejs-keycloak/modules/security'
+import userInfo from './modules/UserInfo'
 
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
-  modules: { 
+  modules: {
+    security,
     cardProgram, 
     floatBalance, 
     reseller, 
@@ -20,6 +23,7 @@ export const store = new Vuex.Store({
     kyc,
     paymentGateway,
     issuing,
-    buisness,
+    business,
+    userInfo,
   }
 })
