@@ -201,14 +201,22 @@
                     </p>
                   </el-col>
                   <el-col class="d-flex justify-content-end">
-                    <p-button
-                      type="default"
-                      class="kyc-poa-modal-browse-btn"
-                      round
-                      @click="clickOnBrowseBtn"
-                    >
-                      Browse
-                    </p-button>
+                    <div class="d-flex justify-content-end align-items-center">
+                      <!--<p-button round type="default" class="kyc-poa-modal-browse-btn"
+                                @click="clickOnBrowseBtn">Browse</p-button>-->
+                      <div class="file-upload btn btn--browse" v-if="!file">
+                        Browse
+                        <input @change="getFile" class="" type="file">
+                      </div>
+                      <p-button :disabled="sending" @click.stop.prevent="doUploadSupportDocument"
+                                class="btn btn--upload"
+                                round v-if="file">
+                        <Loader class="mr-2 align-middle" v-if="sending"></Loader>
+                        Upload
+                      </p-button>
+                      <span class="file-name ml-2" v-if="file">{{ file.name }}</span>
+                      <span @click.stop="file = null" class="ml-2 file-cancel" v-if="file">x</span>
+                    </div>
                   </el-col>
                 </el-row>
                 <el-row class="mb-4">
@@ -415,6 +423,8 @@
     KYC_POST_ACTION_FROM_MODAL
   } from "../../../../store/types"
   import {kycModuleDateFormat} from '../../../../utils/kycModuleDateFormat'
+  import Loader from "../../../UIComponents/Loader"
+  import {toBase64} from "../../../../utils/fileToBase64.js";
 
   export default {
     name: "KycPOAAction",
@@ -425,6 +435,7 @@
       RegularTable,
       PButton,
       Modal,
+      Loader,
     },
     data() {
       return {
@@ -442,6 +453,8 @@
         editCountry: false,
         visible: false,
         img: false,
+        sending: false,
+        file: '',
         poaStatus: 'Unverified',
         verificationList: [
           'POA is an approved bill type',
@@ -482,10 +495,11 @@
       const data = await this.getPoaData(this.appReferenceId).catch(err => console.log(err));
       if (data) {
         const checkId = data.checkId
-        const id = data.poaCheckDoc.id
+        const id = (data.poaCheckDoc && data.poaCheckDoc.id) || null
+        if (!id || !checkId) return
         const body = {checkId, id}
         this.getPoaDocs(body)
-        this.getPoaDownloadSupportDoc(body)
+        //this.getPoaDownloadSupportDoc(body)
         this.getListUploadedDocument({id: checkId})
       }
       this.getPoaActionTypes()
@@ -555,9 +569,6 @@
       handleClose() {
         this.$router.push({name: 'KYC Main Page', query: {appRef: this.appReferenceId}})
       },
-      clickOnBrowseBtn() {
-
-      },
       toggleModalVisible() {
         this.modals.visible = !this.modals.visible
       },
@@ -570,12 +581,9 @@
           comment: this.modalTextarea,
           operatorName: this.operatorName
         }
-
         await this.saveDataFromModal({id, body})
-          .then(response => {
-            if(response.status === 200){
-              this.getPoaData(this.appReferenceId)
-            }
+          .then(() => {
+            this.getPoaData(this.appReferenceId)
           })
         this.toggleModalVisible()
       },
@@ -588,6 +596,33 @@
       handleDateFormat(value) {
         if (!value) return ''
         return kycModuleDateFormat(value).substring(0, 16)
+      },
+      async doUploadSupportDocument() {
+        const id = this.poaData.checkId || null
+        if (!this.file || !id) {
+          return
+        }
+        const {size, name, type} = this.file;
+        const operatorName = this.operatorName || ''
+        const mimeType = type
+        try {
+          this.sending = true
+          const content = await toBase64(this.file)
+          await this.sendDocumentSupports({content, mimeType, operatorName, id})
+            .then(() => {
+              this.getListUploadedDocument({id})
+            })
+          // await this.uploadSupportDocument({content, mimeType, operatorName, id})
+          // await this.getListSupportDocs({id: this.id})
+          this.file = null
+          this.sending = false
+        } catch (e) {
+          this.sending = false
+          console.log(e)
+        }
+      },
+      getFile(event) {
+        this.file = event.target.files[0];
       },
     },
     filters: {
@@ -978,14 +1013,6 @@
     top: 3px;
   }
 
-  .kyc-poa-modal-browse-btn {
-    width: 126px;
-    margin: 0;
-    height: 26px;
-    line-height: 6px;
-    font-size: 11px;
-  }
-
   .kyc-poa-action-btn {
     width: 198px;
     text-transform: none;
@@ -1033,4 +1060,78 @@
       }
     }
   }
+
+  .file-upload {
+    position: relative;
+    border-radius: 30px;
+    cursor: pointer;
+
+    & input {
+      cursor: pointer;
+
+      &::-webkit-file-upload-button {
+        cursor: pointer;
+      }
+
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      left: 0;
+      top: 0;
+    }
+  }
+
+  .file-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    display: inline-block;
+    @media(min-width: 1400px) {
+      max-width: 250px;
+    }
+  }
+
+  .file-cancel {
+    background: grey;
+    border-radius: 50% 50%;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .btn {
+    text-transform: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    &--shadow {
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+    }
+
+    &--browse, &--upload {
+      min-width: 140px;
+    }
+
+    &--upload {
+      background-color: #7039DA;
+    }
+
+    &--view {
+      min-width: 150px;
+    }
+
+    &--browse, &--view, &--upload {
+      padding: 8px 22px;
+    }
+
+  }
+
 </style>

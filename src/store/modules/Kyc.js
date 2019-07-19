@@ -427,7 +427,6 @@ const actions = {
   [KYC_GET_POA_CHECK_ENQUIRY]: async ({commit}, payload) => {
     return new Promise ( async (resolve, reject) => {
       try{
-        console.log({payload})
         // I get some App Ref from search module, but how i can get current app ref I dont know
         const {data} = await Vue.prototype.$http.kyc.get(`/applications/${payload}/poacheck-enquiry`).catch( err => reject(err));
         commit(MUTATE_POA_CHECK_ENQUIRY, {data});
@@ -462,22 +461,31 @@ const actions = {
     }
   },
   [KYC_POST_UPLOAD_DOCUMENT_SUPPORTS]: async ({commit}, payload) => {
-    try {
-      const {data} = await Vue.prototype.$http.kyc.post(`/poacheck/${payload}/document-supports`)
-    }catch (e) {
-      console.log('error :', e)
-    }
-  },
-  // [KYC_GET_POA_UPOADED_DOCUMENT]: async ({commit}, payload) => {
-  //   try {
-  //     // console.log('payload', payload)
-  //     const {data} = await Vue.prototype.$http.kyc.get(`/poacheck/{payload}/document-supports`);
-  //     commit(MUTATE_POA_UPLOADED_DOCUMENT, {data})
-  //   }catch (e) {
-  //     console.log('error :', e)
-  //   }
-  // },
+    const {content, mimeType, operatorName} = payload
+    const body = {content:content, mimeType:mimeType, operatorName:operatorName}
 
+    return new Promise((resolve, reject) => {
+      Vue.prototype.$http.kyc.post(`/poacheck/${payload.id}/document-supports`,body)
+        .then(data => {
+          resolve(data)
+        })
+        .catch(error => {
+          console.log('error :', JSON.parse(JSON.stringify(error)))
+          reject(JSON.parse(JSON.stringify(error)))
+        })
+    })
+
+    /*try {
+      console.log({content})
+      console.log({mimeType})
+      console.log({operatorName})
+      console.log({payload})
+      const {data} = await Vue.prototype.$http.kyc.post(`/poacheck/${payload.id}/document-supports`,body)
+      console.log({data})
+    }catch (e) {
+      console.log('error :', JSON.parse(JSON.stringify(e)))
+    }*/
+  },
   [KYC_GET_POA_CHECK_STATUSES]: async ({commit}, payload) => {
     try {
       const {data} = await Vue.prototype.$http.kyc.get(`/poacheck-statuses/`);
