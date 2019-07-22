@@ -48,7 +48,9 @@
       <el-row>
         <div class="kyc__buttons kyc__buttons__bottom">
           <div>
-            <p-button @click="handleShowInvoices()" round class="kyc-button--invoice">
+            <p-button @click="handleShowInvoices()"
+                      v-if="hasPermission(permission.KYC_DASHBOARD_ALL_INVOICES)"
+                      round class="kyc-button--invoice">
             <span class="kyc-button__title">
               <kyc-button-icons name="svg-invoice"/>
               Invoices
@@ -148,6 +150,7 @@
   import LineChart from "@/components/UIComponents/Charts/LineChart"
   import ChartCard from "@/components/UIComponents/Cards/ChartCard"
   import KycButtonIcons from './KycButtonIcons'
+  import { permissionMixin } from '@/mixins/permission'
 
   const durationValues = [
     {value: 30, label: '30 Days'},
@@ -157,6 +160,7 @@
 
   export default {
     name: "KycDashboard",
+    mixins: [permissionMixin],
     components: {RegularTable, PButton, LineChart, ChartCard, KycButtonIcons},
     data() {
       return {

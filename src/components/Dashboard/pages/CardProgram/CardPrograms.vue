@@ -20,64 +20,40 @@
         </div>
       </div>
     </div>
-    
-    <div class="card">
+
+    <div class="card" v-if="hasPermission(permission.CARD_PROGRAM_LISTING)">
       <div class="card-content row">
         <div class="col-sm-12  tabel-wrapper">
           <div class="p-1">
-            <regular-table
-              striped
-              :headings="tableHeadings"
-              :value="allCardPrograms"
-              @input="listenToInput"
-              :editAll="editAll"
-              :editId="editId"
-              :uneditableFields="uneditableFields"
-            >
+            <regular-table striped
+                           :headings="tableHeadings"
+                           :value="allCardPrograms"
+                           @input="listenToInput"
+                           :editAll="editAll"
+                           :editId="editId"
+                           :uneditableFields="uneditableFields">
               <template slot-scope="index">
                 <th>
                   <div class="cell">
-                    <!-- <AbaButton
-                       context="primary"
-                       :key="index.index.index+index.index.id"
-                       @click="editCardProgram(index)"
-                       tooltip="edit card program"
-
-                     >
-                       <i class="fa  fa-pencil"></i>
-                     </AbaButton>-->
-                    <p-button
-                      @click="editCardProgram(index)"
-                      :key="index.index.index+index.index.id+'edit'"
-                      type="primary"
-                      link=""
-                      v-if="hasPermission(permission.CARD_PROGRAM_EDIT)"
-                    >
+                    <p-button @click="editCardProgram(index)"
+                              :key="index.index.index+index.index.id+'edit'"
+                              type="primary"
+                              link=""
+                              v-if="hasPermission(permission.CARD_PROGRAM_EDIT)">
                       {{ $t('card_program.listing.button.edit') }}
                     </p-button>
                     <span class="px-1"></span>
-                    <!--       <AbaButton
-                             context="primary"
-                             :key="index.index.index+index.index.id"
-                             @click="viewDetailedCardProgram(index)"
-                             tooltip="view card program"
-                           >
-                             <i class="fa  fa-eye"></i>
-                           </AbaButton>-->
-                    <p-button
-                      @click="viewDetailedCardProgram(index)"
-                      :key="index.index.index+index.index.id+'view'"
-                      type="primary"
-                      link=""
-                      v-if="hasPermission(permission.CARD_PROGRAM_VIEW)"
-                    >
+                    <p-button @click="viewDetailedCardProgram(index)"
+                              :key="index.index.index+index.index.id+'view'"
+                              type="primary"
+                              link=""
+                              v-if="hasPermission(permission.CARD_PROGRAM_VIEW)">
                       {{ $t('card_program.listing.button.view') }}
                     </p-button>
                   </div>
                 </th>
               </template>
             </regular-table>
-            <!--  <Pagination :page-count="10" v-model="currentPage" perpagechange="onPerpageChange" :perPage="perPage"></Pagination>-->
             <Pagination :page-count="totalPages" v-model="page"
                         @perpagechange="onPerpageChange"
                         :perPage="perPage"
@@ -91,19 +67,6 @@
       <div class="row">
         <div class="col-md-12  ">
           <div class="pull-right ">
-            <!-- 
-            <p-button round :type="editId || editAll ?'primary':'success'" @click="handleEditAction">
-              <div class="d-flex align-items-center">
-                <Loader v-if="loadingState ==='sending'"></Loader>
-                {{editId || editAll ? 'SAVE':'Download'}}
-              </div>
-            </p-button>
-            -->
-            <!--
-            <p-button round :type="editId || editAll ? 'secondary' :'primary'" @click="handleSecondaryAction">
-              {{editId || editAll ?'cancel' :'back'}}
-            </p-button>
-            -->
           </div>
         </div>
       </div>
@@ -117,7 +80,7 @@
   </div>
 </template>
 <script>
-  import { permissionMixin } from '@/mixins/permission'
+  import {permissionMixin} from '@/mixins/permission'
   import {Button} from 'src/components/UIComponents';
   import {mapActions, mapGetters} from 'vuex'
   import {
@@ -158,8 +121,12 @@
           {label: 'PM Inst', name: 'pmInst', i18n: 'card_program.listing.table_header.pm_inst'},
           {label: 'PO Inst', name: 'poInst', i18n: 'card_program.listing.table_header.po_inst'},
           {label: 'CPC', name: 'cardProgCode', i18n: 'card_program.listing.table_header.card_prog_code'},
-          {label: 'Default Currency', name:'defCurrency'},
-          {label: 'card program description', name: 'cardProgDesc', i18n: 'card_program.listing.table_header.card_prog_desc'},
+          {label: 'Default Currency', name: 'defCurrency'},
+          {
+            label: 'card program description',
+            name: 'cardProgDesc',
+            i18n: 'card_program.listing.table_header.card_prog_desc'
+          },
         ],
         editAll: false,
         editId: '',
@@ -266,13 +233,13 @@
       },
       listenToInput({value}) {
         this.allCardPrograms = value;
-      }, 
+      },
       getCSVfile() {
         console.log('getCSVfile')
         const csvString = createCSVData(this.tableHeadings, this.cardData.cardProgramList)
         const encodedUri = encodeURI(csvString);
         fileDownlaodFromEncodedURI(encodedUri, 'cardProgram');
-      }, 
+      },
       onPerpageChange(ev) {
         const newPage = (this.page * this.perPage) / ev
         const page = Math.floor(isFinite(newPage) ? newPage : 0);

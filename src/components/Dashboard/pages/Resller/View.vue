@@ -21,7 +21,7 @@
     </div>
 
     <div v-if="true">
-      <div class="card" v-if="true">
+      <div class="card" v-if="hasPermission(permission.RESELLER_SUBSCRIPTION_LISTING)">
         <div class="card-content row">
           <div class="col-sm-12 tabel-wrapper">
             <div class="p-1">
@@ -86,27 +86,6 @@
           </div>
         </div>
       </div>
-      <transition name="fade" mode="out-in">
-        <div class="row">
-          <div class="col-md-12  ">
-            <div class="pull-right ">
-              <!--
-              <p-button round :type="editId || editAll ?'primary':'success'" @click="handleEditAction">
-                <div class="d-flex align-items-center">
-                  <Loader v-if="loadingState ==='sending'"></Loader>
-                  {{editId || editAll ? 'SAVE':'Download'}}
-                </div>
-              </p-button>
-              -->
-              <!--
-              <p-button round :type="editId || editAll ? 'secondary' :'primary'" @click="handleSecondaryAction">
-                {{editId || editAll ?'cancel' :'back'}}
-              </p-button>
-              -->
-            </div>
-          </div>
-        </div>
-      </transition>
     </div>
     <!-- No Data -->
     <div class="no-data" v-else>
