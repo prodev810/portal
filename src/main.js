@@ -200,12 +200,12 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
     const auth = store.state.security.auth
     if (!auth.authenticated) {
-      // security.init(next, to.meta.roles) TODO: uncomment when roles confirmed
+      // security.init(next, to.meta.roles) // TODO: uncomment when roles confirmed
       security.init(next, null) // TODO: comment when roles confirmed
     } else {
       if (to.meta.roles) {
         if (true) { // TODO: comment when roles confirmed
-        // if (security.roles(to.meta.roles[0])) { TODO: uncomment when roles confirmed
+        // if (security.roles(to.meta.roles[0])) { // TODO: uncomment when roles confirmed
           next()
         } else {
           next({name: 'Unauthorized'})
