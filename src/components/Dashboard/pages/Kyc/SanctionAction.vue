@@ -191,7 +191,7 @@
                                         </div>
                                     </div>
 
-                                    <p-button :disabled="sancheck.checkStatusName == 'No Match'" slot="reference" round class="btn btn--close btn--shadow bg-sanction">Action</p-button>
+                                    <p-button :disabled="sancheck.checkStatusName == 'No Match' || sancheck.checkStatusName == 'Manual Approved'" slot="reference" round class="btn btn--close btn--shadow bg-sanction">Action</p-button>
                                 </el-popover>
                             </div>
                         </div>
@@ -373,7 +373,7 @@ export default {
             return {
                 'bg-bright-red': status == 'Manual Decline',
                 'bg-light-red': status == 'HIT',
-                'bg-green': status == 'No Match' || status == 'Manual Approval',
+                'bg-green': status == 'No Match' || status == 'Manual Approval' || status == 'Manual Approved',
             }
         },
         actionLegend() {
