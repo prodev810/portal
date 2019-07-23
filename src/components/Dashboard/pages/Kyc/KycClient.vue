@@ -24,31 +24,32 @@
           <el-input v-model="client.clientName"
                     @blur="handleFormInput"
                     :validate-event="true"
-                    :class="{'input-outline':isEditMode, 'is-invalid': !isValidClientName}"
+                    :class="{ 'is-invalid': !isValidClientName}"
                     v-else-if="client"></el-input>
           <p v-if="!isValidClientName" class="invalid-feedback">
             <span v-if="!client.clientName">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
-            {{KYC_CLIENT_VALIDATION_MESSAGES.letters}}
+            <span v-if="client.clientName && client.clientName.length > 50">{{KYC_CLIENT_VALIDATION_MESSAGES.max50}}</span>
+            <span v-if="client.clientName && !verifyName(client.clientName)">{{KYC_CLIENT_VALIDATION_MESSAGES.letters}}</span>
           </p>
         </el-col>
       </el-row>
 
       <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
-          <p class="kyc-client-row__text kyc-client-row__title">Client Reference
+          <p class="kyc-client-row__text kyc-client-row__title">Client App Ref
             <span v-if="!isViewMode" class="required-input">*</span>
           </p>
         </el-col>
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="isViewMode">{{client.clientReference}}</p>
-          <el-input v-model.trim="client.clientReference"
-                    :class="{'input-outline':isEditMode, 'is-invalid': !isValidClientReference}"
+          <el-input v-model.trim="client.clientReference" :disabled="isEditMode"
+                    :class="{ 'is-invalid': !isValidClientReference}"
                     v-else-if="client"></el-input>
           <p v-if="!isValidClientReference" class="invalid-feedback">
             <span v-if="!client.clientReference">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
-            <span v-if="client.clientReference.length > 6">{{KYC_CLIENT_VALIDATION_MESSAGES.max6}}</span>
-            <span v-if="!verifySpace(client.clientReference)">{{KYC_CLIENT_VALIDATION_MESSAGES.noSpace}}</span>
+            <span v-if="client.clientReference && client.clientReference.length > 12">{{KYC_CLIENT_VALIDATION_MESSAGES.max12}}</span>
+            <span v-if="client.clientReference && !verifyAlphaNumeric(client.clientReference)">{{KYC_CLIENT_VALIDATION_MESSAGES.alphaNumeric}}</span>
           </p>
         </el-col>
       </el-row>
@@ -67,7 +68,8 @@
                     v-else-if="client"></el-input>
           <p v-if="!isValidContactName" class="invalid-feedback">
             <span v-if="!client.contactName">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
-            {{KYC_CLIENT_VALIDATION_MESSAGES.letters}}
+            <span v-if="client.contactName && client.contactName.length > 50">{{KYC_CLIENT_VALIDATION_MESSAGES.max50}}</span>
+            <span v-if="client.contactName && !verifyName(client.contactName)">{{KYC_CLIENT_VALIDATION_MESSAGES.letters}}</span>
           </p>
         </el-col>
       </el-row>
@@ -87,7 +89,9 @@
                     type="email" v-else-if="client"></el-input>
           <p v-if="!isValidContactEmail" class="invalid-feedback">
             <span v-if="!client.contactEmail">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
-            {{KYC_CLIENT_VALIDATION_MESSAGES.email}}
+            <span v-if="client.contactEmail.length > 64">{{KYC_CLIENT_VALIDATION_MESSAGES.max64}}</span>
+            <span v-if="client.contactEmail && !verifyEmail(client.contactEmail)">{{KYC_CLIENT_VALIDATION_MESSAGES.email}}</span>
+            
           </p>
         </el-col>
       </el-row>
@@ -303,8 +307,9 @@
                     type="number" min="0"
                     v-else></el-input>
           <p v-if="!isValidApplicationFee" class="invalid-feedback">
-            {{KYC_CLIENT_VALIDATION_MESSAGES.required}}
-            {{KYC_CLIENT_VALIDATION_MESSAGES.number}}
+            <span v-if="!client.applicationFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
+            <span v-if="parseFloat(client.applicationFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
+            <span v-if="!checkFee(client.applicationFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
           </p>
         </el-col>
       </el-row>
@@ -323,8 +328,9 @@
                     type="number" min="0"
                     v-else></el-input>
           <p v-if="!isValidIdCheckFee" class="invalid-feedback">
-            {{KYC_CLIENT_VALIDATION_MESSAGES.required}}
-            {{KYC_CLIENT_VALIDATION_MESSAGES.number}}
+            <span v-if="!client.idCheckFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
+            <span v-if="parseFloat(client.idCheckFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
+            <span v-if="!checkFee(client.idCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
           </p>
         </el-col>
       </el-row>
@@ -343,8 +349,9 @@
                     :class="{'is_invalid': !isValidPoaCheckFee}"
                     v-else></el-input>
           <p v-if="!isValidPoaCheckFee" class="invalid-feedback">
-            {{KYC_CLIENT_VALIDATION_MESSAGES.required}}
-            {{KYC_CLIENT_VALIDATION_MESSAGES.number}}
+            <span v-if="!client.poaCheckFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
+            <span v-if="parseFloat(client.poaCheckFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
+            <span v-if="!checkFee(client.poaCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
           </p>
         </el-col>
       </el-row>
@@ -365,8 +372,9 @@
                     type="number" min="0"
                     v-else></el-input>
           <p v-if="!isValidSanctionCheckFee" class="invalid-feedback">
-            {{KYC_CLIENT_VALIDATION_MESSAGES.required}}
-            {{KYC_CLIENT_VALIDATION_MESSAGES.number}}
+            <span v-if="!client.sanctionCheckFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
+            <span v-if="parseFloat(client.sanctionCheckFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
+            <span v-if="!checkFee(client.sanctionCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
           </p>
         </el-col>
       </el-row>
@@ -385,8 +393,9 @@
                     type="number" min="0"
                     v-else></el-input>
           <p v-if="!isValidSmsFee" class="invalid-feedback">
-            {{KYC_CLIENT_VALIDATION_MESSAGES.required}}
-            {{KYC_CLIENT_VALIDATION_MESSAGES.number}}
+            <span v-if="!client.smsFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
+            <span v-if="parseFloat(client.smsFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
+            <span v-if="!checkFee(client.smsFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
           </p>
         </el-col>
       </el-row>
@@ -508,12 +517,17 @@
     data() {
       return {
         KYC_CLIENT_VALIDATION_MESSAGES: {
-          required: 'This field is required.',
-          number: 'This field must be greater that 0.',
-          email: 'This field must be valid email address.',
-          max6: 'This field must be no more than 6 characters.',
-          letters: 'This field must not have numbers.',
+          required: 'This field is required. ',
+          number: 'This field must be greater that 0. ',
+          email: 'This field must be valid email address. ',
+          max6: 'This field must be no more than 6 characters. ',
+          max12: 'This field must be no more than 12 characters. ',
+          max64: 'This field must be no more than 64 characters. ',
+          max50: 'This field must be no more than 50 characters. ',
+          letters: 'This field must not have symbols.',
           noSpace: 'There should be no spaces.',
+          alphaNumeric: 'Only alphanumeric characters are allowed. ',
+          fee: 'Fee is not valid. ',
         },
         rescreenIntervalScheduleSelectValue: null,
         modals: {
@@ -557,6 +571,7 @@
           'contactEmail',
           'contactName',
           'idCheckFee',
+          'sanctionCheckFee',
           'poaCheckFee',
           'smsFee',
         ],
@@ -697,31 +712,31 @@
         return isValid
       },
       isValidClientName() {
-        return this.client.clientName !== '' && this.verifyName(this.client.clientName)
+        return (typeof (this.client.clientName) === 'undefined' || (this.client.clientName !== '' && this.verifyName(this.client.clientName) && this.checkLength(this.client.clientName, 10)))
       },
       isValidClientReference() {
-        return (typeof (this.client.clientReference) === 'undefined' || this.verifyContactRef(this.client.clientReference))
+        return (typeof (this.client.clientReference) === 'undefined' || (this.verifyAlphaNumeric(this.client.clientReference) && this.checkLength(this.client.clientReference, 12)) ) 
       },
       isValidSanctionCheckFee() {
-        return (typeof (this.client.sanctionCheckFee) === 'undefined' || this.client.sanctionCheckFee !== '' && this.client.sanctionCheckFee > 0)
+        return (typeof (this.client.sanctionCheckFee) === 'undefined' || (this.client.sanctionCheckFee !== '' && this.client.sanctionCheckFee > 0 && this.checkFee(this.client.sanctionCheckFee)))
       },
       isValidApplicationFee() {
-        return (typeof (this.client.applicationFee) === 'undefined' || this.client.applicationFee !== '' && this.client.applicationFee > 0)
+        return (typeof (this.client.applicationFee) === 'undefined' || (this.client.applicationFee !== '' && this.client.applicationFee > 0 && this.checkFee(this.client.applicationFee)))
       },
       isValidContactEmail() {
-        return (typeof (this.client.contactEmail) === 'undefined' || this.client.contactEmail !== '' && this.verifyEmail(this.client.contactEmail))
+        return (typeof (this.client.contactEmail) === 'undefined' || (this.client.contactEmail !== '' && this.verifyEmail(this.client.contactEmail) && this.checkLength(this.client.clientReference, 64)))
       },
       isValidContactName() {
-        return this.client.contactName !== '' && this.verifyName(this.client.contactName)
+        return (typeof (this.client.contactName) === 'undefined' ||  (this.client.contactName !== '' && this.verifyName(this.client.contactName) && this.checkLength(this.client.contactName, 50)))
       },
       isValidPoaCheckFee() {
-        return (typeof (this.client.poaCheckFee) === 'undefined' || this.client.poaCheckFee !== '' && this.client.poaCheckFee > 0)
+        return (typeof (this.client.poaCheckFee) === 'undefined' || (this.client.poaCheckFee !== '' && this.client.poaCheckFee > 0 && this.checkFee(this.client.poaCheckFee)))
       },
       isValidIdCheckFee() {
-        return (typeof (this.client.idCheckFee) === 'undefined' || this.client.idCheckFee !== '' && this.client.idCheckFee > 0)
+        return (typeof (this.client.idCheckFee) === 'undefined' || (this.client.idCheckFee !== '' && this.client.idCheckFee > 0 && this.checkFee(this.client.idCheckFee)))
       },
       isValidSmsFee() {
-        return (typeof (this.client.smsFee) === 'undefined' || this.client.smsFee !== '' && this.client.smsFee > 0)
+        return (typeof (this.client.smsFee) === 'undefined' || (this.client.smsFee !== '' && this.client.smsFee > 0 && this.checkFee(this.client.smsFee)))
       },
     },
     methods: {
@@ -839,8 +854,8 @@
         return emailCheck.test(email);
       },
       verifyName(name) {
-        const nameCheck = /^[a-zA-Z ]{1,30}$/
-        return nameCheck.test(name)
+        const nameCheck = /^(?=.*[A-Za-z0-9])[A-Za-z0-9 ]*$/
+        return nameCheck.test(name) 
       },
       verifyContactRef(ref){
         return ref !== '' && ref.length <= 6 && this.verifySpace(ref)
@@ -849,6 +864,23 @@
         const refCheck = /\s/
         return !refCheck.test(string)
       },
+      verifyAlphaNumeric(string) {
+        const refCheck = /^[a-z0-9]+$/i
+        return refCheck.test(string)
+      },
+      checkLength(string, maxlen) {
+         
+          if(typeof (string) === 'string') {
+              return string.length <= maxlen;
+          }
+          return false;
+      },
+      checkFee(fee) {
+        const reg = /^[0-9]+(\.[0-9]{1,2})?$/gm
+        let str = fee.toString();
+        str = str.substring(0,1) == '.' ? `0${str}` : str;
+        return reg.test(str)
+      }
     }
   }
 </script>
