@@ -4,7 +4,8 @@
       <el-row>
         <div class="d-flex justify-content-between">
           <span class="kyc__product__title">Overview KYC Clients</span>
-          <router-link to="/kyc/product-config/create-client">
+          <router-link to="/kyc/product-config/create-client"
+                       v-if="hasPermission(permission.KYC_PRODUCT_CONFIG_CREATE_CLIENT)">
             <p-button class="text-capitalize" round>Create new client</p-button>
           </router-link>
         </div>
@@ -68,9 +69,11 @@
   import {KYC_GET_PRODUCT_CONFIG_ALL_CLIENTS} from "../../../../store/types"
   import PPagination from "../../../UIComponents/Pagination.vue"
   import clientTypes from '../../../../utils/clientTypes'
+  import {permissionMixin} from '@/mixins/permission'
 
   export default {
     name: "KycProductConfig",
+    mixins: [permissionMixin],
     components: {
       RegularTable, PButton, PPagination,
     },
@@ -114,17 +117,17 @@
             return this.productConfigClients.pageMeta.totalPages
           }
         },
-        set: function(value){
+        set: function (value) {
           return value
         },
       },
-      perPage:{
-        get: function(){
+      perPage: {
+        get: function () {
           if (this.productConfigClients && this.productConfigClients.pageMeta) {
             return this.productConfigClients.pageMeta.perPage
           }
         },
-        set: function(value){
+        set: function (value) {
           return value
         }
       },
@@ -153,16 +156,16 @@
       handleEditClient(clientId) {
         this.$router.push({path: `/kyc/product-config/edit-client/${clientId}`});
       },
-      handleViewInvoice({index:{row}}) {
-        const query = {clientName:row.clientName.value,clientReference:row.clientReference.value}
+      handleViewInvoice({index: {row}}) {
+        const query = {clientName: row.clientName.value, clientReference: row.clientReference.value}
         console.log(query)
-        this.$router.push({path: `/kyc/product-config/view-invoice`, query:query});
+        this.$router.push({path: `/kyc/product-config/view-invoice`, query: query});
       },
       handleChangePage(event) {
         const pageNum = event - 1;
         this.getProductConfigClient({pageNum})
       },
-      handleProductConfigApiData(){
+      handleProductConfigApiData() {
         return this.productConfigClients.clientInfos.map(data => {
 
           const classes = {};

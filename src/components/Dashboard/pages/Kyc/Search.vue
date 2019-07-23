@@ -1,6 +1,7 @@
 <template>
   <div class="search-content">
-    <div class="row filter">
+    <div class="row filter"
+         v-if="hasPermission(permission.KYC_SEARCH_FILTER)">
       <h2 class="col-12 sub-head">Filter</h2>
       <div class="col-md-6 col-sm-12 left-col">
         <div class="item">
@@ -163,7 +164,7 @@
   </div>
 </template>
 <script>
-  import {mapActions, mapGetters, mapMutations} from 'vuex';
+  import {mapActions, mapGetters} from 'vuex';
   import {
     DatePicker,
     Option,
@@ -175,21 +176,21 @@
 
   import RegularTable from '../../../UIComponents/CeevoTables/RegularTable/RegularTable';
   import {formatDate} from "../../../../utils/Date";
-  import {paginateArray, pageCount} from "../../../../utils/pagination";
   import PPagination from "../../../UIComponents/Pagination";
   import {
     GETTER_All_CLIENTS_LIST,
-    GETTER_All_CLIENTS,
-    GETTER_CLIENT_TYPES,
     GETTER_CLIENT_TYPES_LIST,
     GETTER_APPLICATION_STATUS_LIST,
-    GETTER_APPLICATION_STATUS,
     GETTER_APPLICATIONS,
     GETTER_APPLICATION_LIST,
   } from "../../../../store/types";
   import eyeIcon from "../../../../../public/static/img/dashboard_icons/outline-visibility-24px.svg";
+  import {permissionMixin} from '@/mixins/permission';
+  import PERMISSION from '../../../../constants/permission';
+
   export default {
     name: "Search",
+    mixins: [permissionMixin],
     components: {
       RegularTable,
       PPagination,
@@ -241,6 +242,10 @@
         resellerCode: 'ALL',
         oldestFirst: true,
         prevRoute: null,
+        permissionsList: [
+          {role: PERMISSION.KYC_SEARCH_ACTION, button: 'action'},
+          {role: PERMISSION.KYC_SEARCH_VIEW, button: 'view'}
+        ]
       }
     },
     computed: {
@@ -307,7 +312,7 @@
       },
       search (val) {
           let filters = null;
-        
+
         if(typeof(val) === 'object') {
             filters = val;
         } else {
@@ -344,6 +349,7 @@
         if (!this.isPagination) this.currentPage = 1;
       },
       searchHandle () {
+        this.tableHeadings = this.showButtons(this.permissionsList, this.tableHeadings)
         this.isPagination=false;
         this.search();
         this.currentPage = 1;
@@ -376,6 +382,7 @@
       this.getAllClientsList();
       this.getClientTypesList();
       this.getApplicationStatus();
+      /*this.tableHeadings = this.showButtons(this.permissionsList, this.tableHeadings)*/
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
@@ -407,7 +414,7 @@
         this.perPage = value.pageMeta.perPage;
 
         this.pagedData = this.applicationData;
-      }
+      },
     }
   }
 </script>
