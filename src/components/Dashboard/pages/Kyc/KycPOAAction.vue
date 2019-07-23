@@ -425,6 +425,7 @@
   import {kycModuleDateFormat} from '../../../../utils/kycModuleDateFormat'
   import Loader from "../../../UIComponents/Loader"
   import {toBase64} from "../../../../utils/fileToBase64.js";
+  import { formatDate } from "../../../../utils/Date";
 
   export default {
     name: "KycPOAAction",
@@ -628,7 +629,7 @@
     filters: {
       kycDateFormat(value) {
         if (!value) return ''
-        return kycModuleDateFormat(value).substring(0, 16)
+        return formatDate(value, true)
       },
     },
   }
@@ -636,12 +637,19 @@
 
 <style scoped lang="scss">
   @import "../../../../assets/sass/paper/variables";
+  @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 
   $table-border-gray: #dee2e6;
   $unverified-status-color: #FDD9DA;
 
+  strong {
+      font-weight: 600;
+  }
+
   .kyc-poa {
     font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
 
     p {
       margin-bottom: 0;
