@@ -6,53 +6,41 @@
         <div class="item">
           <div class="col-4 field-title">Client</div>
           <div class="col-8 select">
-            <el-select
-              class=""
-              size="large"
-              placeholder=""
-              v-model="clientName"
-            >
-              <el-option
-                v-for="client in clients "
-                class="select-success"
-                :value="client.name"
-                :label="client.name"
-                :key="client.id"
-              />
+            <el-select size="large"
+                       placeholder=""
+                       v-model="clientName">
+              <el-option v-for="client in clients "
+                         class="select-success"
+                         :value="client.name"
+                         :label="client.name"
+                         :key="client.id"/>
             </el-select>
           </div>
         </div>
         <div class="item">
           <div class="col-4 field-title">Date</div>
           <div class="col-4 date">
-            <el-date-picker
-              v-model="fromDate"
-              type="date"
-              placeholder="From"
-            />
+            <el-date-picker v-model="fromDate"
+                            type="date"
+                            placeholder="From"/>
           </div>
           <div class="col-4 date">
-            <el-date-picker
-              v-model="toDate"
-              type="date"
-              placeholder="To"
-            />
+            <el-date-picker v-model="toDate"
+                            type="date"
+                            placeholder="To"/>
           </div>
         </div>
         <div class="item">
           <div class="col-4 field-title">Type</div>
           <div class="col-8 select">
-            <el-select class=""
-                       size="large"
+            <el-select size="large"
                        placeholder=""
-                       v-model="selectedClientType"
-            >
+                       v-model="selectedClientType">
               <el-option v-for="clientType in clientTypes "
                          class="select-success"
                          :value="clientType.name"
                          :label="clientType.name"
-                         :key="clientType.id"
-              >
+                         :key="clientType.id">
               </el-option>
             </el-select>
           </div>
@@ -77,12 +65,10 @@
         <div class="item">
           <div class="col-4 field-title">Start Workflow</div>
           <div class="col-8 start">
-            <p-button
-              type="primary"
-              class="start-button"
-              @click="searchHandle"
-            >
-              Go
+            <p-button type="primary"
+                      class="start-button"
+                      v-if="hasPermission(permission.KYC_WORKFLOW)"
+                      @click="searchHandle">Go
             </p-button>
           </div>
         </div>
@@ -92,19 +78,17 @@
       <div class="table">
         <h2 class="col-12 sub-head">Listing</h2>
         <div class="p-1 tableWrapper">
-          <regular-table
-            striped
-            :headings="tableHeadings"
-            :value="pagedData"
-            @input="listenToInput"
-            :editAll="editAll"
-            :editId="editId"
-            :uneditableFields="uneditableFields"
-            :oldestFirst="oldestFirst"
-          >
-          </regular-table>
+          <regular-table striped
+                         :headings="tableHeadings"
+                         :value="pagedData"
+                         @input="listenToInput"
+                         :editAll="editAll"
+                         :editId="editId"
+                         :uneditableFields="uneditableFields"
+                         :oldestFirst="oldestFirst"></regular-table>
           <div class="table-pagination">
-            <p-pagination :page-count="pageCount" v-model="currentPage" @input="handleInput" :perPage="perPage"></p-pagination>
+            <p-pagination :page-count="pageCount" v-model="currentPage" @input="handleInput"
+                          :perPage="perPage"></p-pagination>
           </div>
         </div>
       </div>
@@ -112,16 +96,23 @@
   </div>
 </template>
 <script>
-  import {mapActions, mapGetters, mapMutations} from 'vuex';
+  import {mapActions, mapGetters} from 'vuex';
   import {DatePicker, Option, Select, TimeSelect, Switch} from "element-ui";
   import RegularTable from '../../../UIComponents/CeevoTables/RegularTable/RegularTable';
   import PPagination from "../../../UIComponents/Pagination";
   import {formatDate} from "../../../../utils/Date";
-  import {paginateArray, pageCount} from "../../../../utils/pagination";
-  import {GETTER_All_CLIENTS_LIST,GETTER_All_CLIENTS, GETTER_CLIENT_TYPES, GETTER_CLIENT_TYPES_LIST, GETTER_OUTSTANDING_APPS_LIST, GETTER_OUTSTANDING_APPS} from "../../../../store/types";
+  import {permissionMixin} from '@/mixins/permission';
+  import PERMISSION from '../../../../constants/permission';
+  import {
+    GETTER_All_CLIENTS_LIST,
+    GETTER_CLIENT_TYPES_LIST,
+    GETTER_OUTSTANDING_APPS_LIST,
+    GETTER_OUTSTANDING_APPS
+  } from "../../../../store/types";
 
   export default {
     name: "Workflow",
+    mixins: [permissionMixin],
     components: {
       RegularTable,
       PPagination,
@@ -133,7 +124,7 @@
     },
     data() {
       return {
-          prevRoute: null,
+        prevRoute: null,
         isPagination: false,
         tableHeadings: [
           {label: 'Client Name', name: 'clientName'},
@@ -155,20 +146,20 @@
         allClients: [],
         outStandingAppsData: [
           {
-            appReceivedDate:"",
-            appReferenceId:"",
-            applicationStatus:"",
-            clientAppRef:"",
-            clientName:"",
-            clientReference:"",
-            firstName:"",
-            fullName:"",
-            idCheckStatus:"",
-            kycReceivedDate:"",
-            lastName:"",
+            appReceivedDate: "",
+            appReferenceId: "",
+            applicationStatus: "",
+            clientAppRef: "",
+            clientName: "",
+            clientReference: "",
+            firstName: "",
+            fullName: "",
+            idCheckStatus: "",
+            kycReceivedDate: "",
+            lastName: "",
             outstandingDays: "",
-            poaCheckStatus:"",
-            sanctionCheckStatus:""
+            poaCheckStatus: "",
+            sanctionCheckStatus: ""
           }
         ],
         pagedData: null,
@@ -185,7 +176,9 @@
         selectedClientType: 'ALL',
         resellerCode: 'ALL',
         oldestFirst: true,
-
+        permissionsList: [
+          {role: PERMISSION.KYC_WORKFLOW_MAIN_PAGE, button: 'action'}
+        ],
         pickerOptions1: {
           shortcuts: [{
             text: 'Today',
@@ -218,23 +211,23 @@
         getOutstandingAppsData: GETTER_OUTSTANDING_APPS,
       }),
       // Clients from Store
-      clients () {
+      clients() {
         const clients = [];
         const clientsAPI = (this.$store.state.kyc.allClients || [])
           .reduce((acc, i) => [...acc, i], []);
         clients.push(
-          { name: 'ALL' },
+          {name: 'ALL'},
           ...clientsAPI
         );
         return clients;
       },
       // Client Types from Store
-      clientTypes () {
+      clientTypes() {
         const types = [];
         const typesAPI = (this.$store.state.kyc.clientTypes || [])
           .reduce((acc, i) => [...acc, i], []);
         types.push(
-          { name: 'ALL' },
+          {name: 'ALL'},
           ...typesAPI
         );
         return types;
@@ -257,23 +250,23 @@
       },
       goForOutstandingApps(val) {
         let filters = null;
-        
-        if(typeof(val) === 'object') {
-            filters = val;
+
+        if (typeof (val) === 'object') {
+          filters = val;
         } else {
-            filters = {
-                clientName: this.clientName,
-                selectedClientType: this.selectedClientType,
-                fromDate: this.fromDate,
-                toDate: this.toDate,
-                oldestFirst: this.oldestFirst,
-                isPagination: this.isPagination,
-                pageSize: this.perPage,
-                currentPage: this.currentPage
-            }
-            localStorage.setItem('workflow-filters', JSON.stringify(filters))
+          filters = {
+            clientName: this.clientName,
+            selectedClientType: this.selectedClientType,
+            fromDate: this.fromDate,
+            toDate: this.toDate,
+            oldestFirst: this.oldestFirst,
+            isPagination: this.isPagination,
+            pageSize: this.perPage,
+            currentPage: this.currentPage
+          }
+          localStorage.setItem('workflow-filters', JSON.stringify(filters))
         }
-        
+
         const options = {
           clientReference: filters.clientName === 'ALL' ? '' : filters.clientName,
           clientType: filters.selectedClientType === 'ALL' ? '' : filters.selectedClientType,
@@ -288,20 +281,20 @@
       },
       restoreOutstandingApps() {
         let op = localStorage.getItem('workflow-filters');
-        if(op) op = JSON.parse(op);
-          if(!op || Object.entries(op).length == 0) return;
-          this.clientName = op.clientName
-            this.selectedClientType = op.selectedClientType
-            this.fromDate = op.fromDate
-            this.toDate = op.toDate
-            this.oldestFirst = op.oldestFirst
-            this.isPagination = op.isPagination
-            this.perPage = op.pageSize
-            this.currentPage = op.currentPage
-          this.goForOutstandingApps(op)
+        if (op) op = JSON.parse(op);
+        if (!op || Object.entries(op).length == 0) return;
+        this.clientName = op.clientName
+        this.selectedClientType = op.selectedClientType
+        this.fromDate = op.fromDate
+        this.toDate = op.toDate
+        this.oldestFirst = op.oldestFirst
+        this.isPagination = op.isPagination
+        this.perPage = op.pageSize
+        this.currentPage = op.currentPage
+        this.goForOutstandingApps(op)
       },
-
       searchHandle() {
+        this.tableHeadings = this.showButtons(this.permissionsList, this.tableHeadings)
         this.isPagination = false;
         this.goForOutstandingApps('page');
       },
@@ -316,17 +309,17 @@
       this.getClientTypesList();
     },
     beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.prevRoute = from
-        })
+      next(vm => {
+        vm.prevRoute = from
+      })
     },
     watch: {
       prevRoute(value) {
-          if(value && value.name == 'KYC Main Page') {
-            this.restoreOutstandingApps()
-          }
+        if (value && value.name == 'KYC Main Page') {
+          this.restoreOutstandingApps()
+        }
       },
-      getOutstandingAppsData (value) {
+      getOutstandingAppsData(value) {
         // Change the format of date vlaues - 'appReceivedDate', 'kycReceivedDate' ...
         const temp = value.applications;
         temp.map((item, index) => {
@@ -339,13 +332,13 @@
           }
         });
         // Get Outstanding App Data for Data Table
-        this.outStandingAppsData = temp.filter((item)=>{
-            let id = item.idCheckStatus == 'Passed' || item.idCheckStatus == 'Manual Approval';
-            let poa = item.poaCheckStatus == 'Approved'
-            let sanc = item.sanctionCheckStatus == 'No Match' || item.sanctionCheckStatus == 'Manual Approval'
+        this.outStandingAppsData = temp.filter((item) => {
+          let id = item.idCheckStatus == 'Passed' || item.idCheckStatus == 'Manual Approval';
+          let poa = item.poaCheckStatus == 'Approved'
+          let sanc = item.sanctionCheckStatus == 'No Match' || item.sanctionCheckStatus == 'Manual Approval'
 
-            if(id && poa && sanc) return false;
-            else return true;
+          if (id && poa && sanc) return false;
+          else return true;
         });
 
         this.pageCount = value.pageMeta.totalPages;
@@ -375,6 +368,7 @@
         .el-select {
           width: 100%;
         }
+
         .el-input {
           .el-input__inner {
             border-radius: 0 !important;
@@ -382,14 +376,17 @@
           }
         }
       }
-      .date{
+
+      .date {
         div {
           width: 100% !important;
+
           &:first-child {
             margin-right: 17px !important;
           }
         }
       }
+
       .start-button {
         padding: 5px 60px;
         margin: -5px 0px !important;
@@ -400,8 +397,9 @@
         text-transform: none;
       }
     }
+
     .table {
-      margin-top : 50px;
+      margin-top: 50px;
     }
 
     .switch {
@@ -469,12 +467,13 @@
       font-size: 28px;
       font-weight: bold;
     }
-    
+
     .table {
       .tableWrapper {
         box-shadow: 0px 10px 40px rgba(41, 41, 41, 0.15);
         padding: 0;
       }
+
       .table-pagination {
         display: flex;
         justify-content: flex-end;
@@ -482,6 +481,6 @@
       }
     }
   }
-  
+
 
 </style>

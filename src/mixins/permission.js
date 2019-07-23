@@ -15,6 +15,19 @@ const permissionMixin = {
         return false
       }
       return this.$oAuth.isReseller()
+    },
+    showButtons(permissions, tableHeadings){
+      permissions.forEach(permission => {
+        if(!this.hasPermission(permission.role)){
+          tableHeadings
+            .forEach((item, index) => {
+              if(item.name === permission.button){
+                tableHeadings.splice(index, 1)
+              }
+            })
+        }
+      })
+      return tableHeadings
     }
   }
 }

@@ -15,8 +15,7 @@
               <div>
                 <span class="px-2">{{ $t('unallocated_float.listing.search_filter.target_date') }}</span>
                 <el-date-picker v-model="unallocatedFloatDate" type="date"
-                                placeholder="Please Pick A date"
-                >
+                                placeholder="Please Pick A date">
                 </el-date-picker>
               </div>
             </div>
@@ -71,7 +70,9 @@
             </el-select>
           </div>
           <div class="d-flex align-items-center align-content-center">
-            <p-button @click="viewUnallocatedFloat" type="primary" :disabled="!ready">
+            <p-button @click="viewUnallocatedFloat" type="primary"
+                      v-if="hasPermission(permission.UNALLOCATED_FLOAT_VIEW)"
+                      :disabled="!ready">
               {{ $t('unallocated_float.listing.button.view') }}
             </p-button>
           </div>
@@ -99,6 +100,7 @@
   </div>
 </template>
 <script>
+  import { permissionMixin } from '@/mixins/permission'
   import {Button, DatePicker, Option, Select} from "element-ui";
   import {mapActions, mapGetters} from 'vuex';
   import {moneyFormatAppendCurrency} from "../../../../utils/moneyFormat";
@@ -123,6 +125,7 @@
 
   export default {
     name: 'UnallocatedFloat',
+    mixins: [permissionMixin],
     components: {
       Pagination,
       Spinner,

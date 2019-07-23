@@ -26,7 +26,8 @@
 
       <el-row>
         <div class="kyc__buttons">
-          <router-link to="/kyc/workflow">
+          <router-link to="/kyc/workflow"
+                       v-if="hasPermission(permission.KYC_DASHBOARD_WORKFLOW)">
             <p-button round class="kyc-button--queue">
               <span class="kyc-button__title">
                 <kyc-button-icons name="svg-queue"/>
@@ -34,7 +35,8 @@
               </span>
             </p-button>
           </router-link>
-          <router-link to="/kyc/search">
+          <router-link to="/kyc/search"
+                       v-if="hasPermission(permission.KYC_DASHBOARD_WORKFLOW)">
             <p-button round class="kyc-button--glass">
               <span class="kyc-button__title">
               <kyc-button-icons name="svg-glass"/>
@@ -48,7 +50,9 @@
       <el-row>
         <div class="kyc__buttons kyc__buttons__bottom">
           <div>
-            <p-button @click="handleShowInvoices()" round class="kyc-button--invoice">
+            <p-button @click="handleShowInvoices()"
+                      v-if="hasPermission(permission.KYC_DASHBOARD_ALL_INVOICES)"
+                      round class="kyc-button--invoice">
             <span class="kyc-button__title">
               <kyc-button-icons name="svg-invoice"/>
               Invoices
@@ -56,7 +60,8 @@
             </p-button>
           </div>
 
-          <div class="kyc__issuing">
+          <div class="kyc__issuing"
+               v-if="hasPermission(permission.KYC_DASHBOARD_WORKFLOW)">
             <span>ISSUING ONLY</span><br/>
             <router-link to="/kyc/approved-emoney-account">
               <p-button round class="kyc-button--mobile">
@@ -137,7 +142,7 @@
   </el-row>
 </template>
 <script>
-  import {mapActions, mapGetters, mapState} from 'vuex'
+  import {mapActions, mapState} from 'vuex'
   import {
     KYC_GET_ALL_CLIENTS,
     KYC_GET_STATISTICS,
@@ -148,6 +153,7 @@
   import LineChart from "@/components/UIComponents/Charts/LineChart"
   import ChartCard from "@/components/UIComponents/Cards/ChartCard"
   import KycButtonIcons from './KycButtonIcons'
+  import {permissionMixin} from '@/mixins/permission'
 
   const durationValues = [
     {value: 30, label: '30 Days'},
@@ -157,6 +163,7 @@
 
   export default {
     name: "KycDashboard",
+    mixins: [permissionMixin],
     components: {RegularTable, PButton, LineChart, ChartCard, KycButtonIcons},
     data() {
       return {
@@ -296,7 +303,7 @@
           }]
         }
       },
-      handleShowInvoices(){
+      handleShowInvoices() {
         this.$router.push('/kyc/invoices')
       },
     }

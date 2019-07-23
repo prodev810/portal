@@ -620,7 +620,7 @@
           <p-button round type="primary" class="mr-3"
                     @click="handleAction()"
                     :class="{'disabled':!validateClientForm}"
-                    v-if="isView && hasPermission(permission.RESELLER_SUBSCRIPTION_EDIT)">
+                    v-if="isView && hasPermission([permission.RESELLER_SUBSCRIPTION_EDIT, permission.RESELLER_SUBSCRIPTION_CREATE])">
             {{ $t(context === 'view' ? 'reseller.create.button.edit' : 'reseller.create.button.save') }}
           </p-button>
           <p-button v-else

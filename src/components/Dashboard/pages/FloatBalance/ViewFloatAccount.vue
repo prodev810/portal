@@ -19,7 +19,8 @@
             <li>{{ $t('view_float_account.listing.tips.li5') }}</li>
           </ul>
         </div>
-        <div class=" w-100 pt-2 ">
+        <div class=" w-100 pt-2"
+             v-if="hasPermission(permission.FLOAT_ACCOUNT_LISTING)">
           <div class="d-flex align-items-center align-content-center justify-content-end">
             <div class="d-flex align-items-center align-content-center">
               <span class="px-2">{{ $t('view_float_account.listing.search_filter.currency') }}</span>
@@ -84,8 +85,8 @@
             <div class="d-flex align-items-center align-content-center">
               <span class="px-2"></span>
               <p-button @click="getAllFloats" type="primary"
-                        :disabled="!ready"
-              > 
+                        v-if="hasPermission(permission.FLOAT_ACCOUNT_SEARCH)"
+                        :disabled="!ready">
               {{ $t('view_float_account.listing.button.view') }}
               </p-button>
             </div>
@@ -94,7 +95,8 @@
       </div>
     </div>
     <div>
-      <div class="card">
+      <div class="card"
+           v-if="hasPermission(permission.FLOAT_ACCOUNT_LISTING)">
         <div class="card-content row">
           <div class="col-sm-12">
             <regular-table

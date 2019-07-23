@@ -5,9 +5,12 @@
         <h2 class="col-12 kyc-poa__sub-head m-0">Application Info</h2>
       </el-col>
       <el-col :sm="12" class="justify-content-end d-flex">
-        <p-button @click="handleClose" type="default" round class="kyc-poa-close-btn">Close</p-button>
+        <p-button @click="handleClose"
+                  v-if="hasPermission(permission.KYC_POA_VIEW)"
+                  type="default" round class="kyc-poa-close-btn">Close</p-button>
       </el-col>
     </el-row>
+
     <el-row>
       <el-col :md="8">
         <el-row class="mb-1">
@@ -424,12 +427,15 @@
   } from "../../../../store/types"
   import {kycModuleDateFormat} from '../../../../utils/kycModuleDateFormat'
   import Loader from "../../../UIComponents/Loader"
-  import {toBase64} from "../../../../utils/fileToBase64.js";
+  import {toBase64} from "../../../../utils/fileToBase64.js"
+  import {permissionMixin} from '@/mixins/permission'
+  import PERMISSION from '../../../../constants/permission'
   import { formatDate } from "../../../../utils/Date";
 
   export default {
     name: "KycPOAAction",
     props: ['mode'],
+    mixins: [permissionMixin],
     components: {
       [Popover.name]: Popover,
       [Card.name]: Card,
@@ -521,7 +527,7 @@
         return this.poaData.checkStatusName === 'Unverified'
       },
       isActionMode() {
-        return this.mode === 'action'
+        return this.hasPermission(PERMISSION.KYC_POA_ACTION)
       },
       customCheckHistory() {
         if (this.poaData.checkHistories) {
