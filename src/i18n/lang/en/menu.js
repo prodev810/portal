@@ -22,5 +22,6 @@ export default {
     transaction: 'Transaction'
   },
   kyc_kyc_mainpage: `KYC Main Page`,
-  kyc_product_config: `Product Config`
+  kyc_product_config: `Product Config`,
+  logout: 'Logout',
 }

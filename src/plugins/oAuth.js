@@ -16,10 +16,16 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
    * public - Logout with OAuth
    */
   const logout = async () => {
-    await store.getters.SECURITY_AUTH.logout()
-      .success(res => console.log(res))
-      .error(err => console.log(err))
-    return true
+    // store.state.security.auth.authenticated = false
+    // localStorage.clear();
+    // sessionStorage.clear();
+    console.log('logout')
+    store.getters.SECURITY_AUTH.logout()
+    // console.log(store.state.security)
+    /*const logoutURL = await store.getters.SECURITY_AUTH.createLogoutUrl()
+    console.log({logoutURL})
+    store.getters.SECURITY_AUTH.logout({redirectUri:logoutURL})
+    return true*/
   }
 
   /**
@@ -49,11 +55,11 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
     let userRole = store.getters.GETTER_USER_ROLE
     if(!userRole) userRole = store.getters.SECURITY_AUTH.realmAccess.roles
     //console.log(store.getters.SECURITY_AUTH)
-    // console.log(name)
+    //console.log(name)
     // console.log('action', action)
     // console.log( ROLES_PERMISSIONS)
     // console.log( {userRole})
-    // console.log( ROLES_PERMISSIONS[userRole])
+    //console.log( ROLES_PERMISSIONS[userRole])
     // console.log( typeof ROLES_PERMISSIONS[userRole])
     if(!userRole || typeof ROLES_PERMISSIONS[userRole] === 'undefined' || !ROLES_PERMISSIONS[userRole].length) return false
     // console.log( userRole)

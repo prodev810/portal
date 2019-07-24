@@ -2,16 +2,6 @@
   <div class="sidebar" :data-color="backgroundColor" :data-active-color="activeColor">
     <div class="logo__container">
       <router-link to="/" class="logo">
-        <!--    <a class="simple-text logo-mini"
-               href="void(0)">
-              <div class="logo-img">
-                <img :src="logo" alt="">
-              </div>
-            </a>
-            <a class="simple-text logo-normal"
-               href="https://www.creative-tim.com/vue-paper-dashboard-pro">
-              {{ title }}
-        </a>-->
         <img :src="logo" alt="cevoo" class="img-responsive cevoo-image">
       </router-link>
     </div>
@@ -21,16 +11,26 @@
         <slot name="links">
           <template v-for="(link, index) in sidebarLinks">
             <!--<sidebar-item v-show="hasPermission(link.permission) || isAllowResellerToView(link.isAllowResellerToView)" -->
-            <sidebar-item :key="link.name + index" :link="link" >
-              <sidebar-item
-                v-for="(subLink, index) in link.children"
-                :key="subLink.name + index"
-                :link="subLink">
+            <sidebar-item :key="link.name + index"
+                          :link="link">
+              <sidebar-item v-for="(subLink, index) in link.children"
+                            :key="subLink.name + index"
+                            :link="subLink">
                 <!--v-show="hasPermission(subLink.permission) || isAllowResellerToView(subLink.isAllowResellerToView)">-->
               </sidebar-item>
             </sidebar-item>
           </template>
         </slot>
+        <li @click="handleLogout()">
+          <a href="#">
+            <div class="pull-left sidebar__IconWrapper">
+              <img src="/static/img/dashboard_icons/ic_kyc_module.svg" alt="" class="img-responsive">
+            </div>
+            <p>Logout
+              <b class="ti-angle-right pull-right turn"></b>
+            </p>
+          </a>
+        </li>
       </ul>
     </div>
   </div>
@@ -99,7 +99,10 @@
         PerfectScroll.initialize(this.$refs.sidebarScrollArea, {
           suppressScrollX: true
         });
-      }
+      },
+      handleLogout() {
+        this.$oAuth.logout()
+      },
     },
     mounted() {
       this.initScrollBarAsync();
