@@ -24,11 +24,9 @@
         <li @click="handleLogout()">
           <a href="#">
             <div class="pull-left sidebar__IconWrapper">
-              <img src="/static/img/dashboard_icons/ic_kyc_module.svg" alt="" class="img-responsive">
+              <img src="/static/img/dashboard_icons/ic_logout_line_white.png" alt="" class="img-responsive ic-logout">
             </div>
-            <p>Logout
-              <b class="ti-angle-right pull-right turn"></b>
-            </p>
+            <p class="btn-text">Logout</p>
           </a>
         </li>
       </ul>
@@ -136,6 +134,16 @@
     transition: all 0.3s ease;
     padding: 0;
   }
+
+  .ic-logout{
+    width: 30px;
+    height: 30px;
+  }
+
+  .btn-text {
+    padding-left: 40px;
+  }
+
 
   @media (min-width: 992px) {
     .navbar-search-form-mobile,
