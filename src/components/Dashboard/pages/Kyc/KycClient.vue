@@ -683,15 +683,31 @@
               case'contactEmail':
                 this.validateArray.contactEmail = this.isValidContactEmail
                 break
+              case'clientReference':
+                this.validateArray.clientReference = this.isValidClientReference
+                break
               case'clientName':
                 this.validateArray.clientName = this.isValidClientName
                 break
               case'contactName':
                 this.validateArray.contactName = this.isValidContactName
                 break
-              case'clientReference':
-                this.validateArray.clientReference = this.isValidClientReference
+              case'sanctionCheckFee':
+                this.validateArray.sanctionCheckFee = this.isValidSanctionCheckFee
                 break
+              case'applicationFee':
+                this.validateArray.applicationFee = this.isValidApplicationFee
+                break
+              case'isValidPoaCheckFee':
+                this.validateArray.poaCheckFee = this.isValidPoaCheckFee
+                break
+              case'idCheckFee':
+                this.validateArray.idCheckFee = this.isValidIdCheckFee
+                break
+              case'smsFee':
+                this.validateArray.smsFee = this.isValidSmsFee
+                break
+              
             }
           })
           this.validationObjectList.forEach(item => {
@@ -791,7 +807,7 @@
           this.isLoad = true
           const response = await this.createProductConfigClient({body: copyClient})
             .catch(err => {
-              this.notifyVue('bottom', 'center', err.detail)
+              this.notifyVue('bottom', 'center', err.message)
               this.client = cloneClient
               this.isLoad = false
             });
