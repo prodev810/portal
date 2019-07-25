@@ -199,6 +199,7 @@
     },
     watch: {
       resellerData(newVal) {
+        console.log('resellerData', newVal)
         this.allCardResellers = [...(newVal.resellerSubscriptionList || [])]
         if (!newVal.pageMeta) return;
         this.totalPages = newVal.pageMeta.totalPages || 0;
@@ -299,10 +300,8 @@
         const encodedUri = encodeURI(csvString);
         fileDownlaodFromEncodedURI(encodedUri, 'reseller_sub');
       },
-      goToInvoice({index: {id}}) {
-        const {resellerCode, cardProgCode} = this.resellerData.resellerSubscriptionList.find(reseller => reseller.id === id);
-        console.log(this.resellerData.resellerSubscriptionList.find(reseller => reseller.id === id));
-        // this.$router.history.push('/reseller/invoice/' + resellerCode + "/" + cardProgCode)
+      goToInvoice({index: {row:id}}) {
+        const {resellerCode, cardProgCode} = this.resellerData.resellerSubscriptionList.find(reseller => reseller.id === id.id);
         this.$router.push({
           path: '/reseller/invoice',
           query: {

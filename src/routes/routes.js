@@ -175,7 +175,7 @@ let payment_gateway = {
     requiresAuth: true,
     roles: ['*'],
   },
-  children: [
+  children:[
     {
       path: '/payment-gateway/settings',
       name: 'Payment gateway - Settings',
