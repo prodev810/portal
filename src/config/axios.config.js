@@ -14,7 +14,7 @@ export default {
       OAUTH: '$oAuth' // same oAuth as main
     },
     {
-      BASE_URL: 'https://api.dev.ceevo.com/acquring/mgmt',
+      BASE_URL: 'https://api.dev.ceevo.com/payment-mgmt',
       TIMEOUT: 35000,
       SHORTCUT: 'acchttp',
       OAUTH: '$oAuth' // same oAuth as main

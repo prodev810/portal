@@ -134,6 +134,7 @@
           <el-col :md="18" class="pl-2">
 
             <p-button v-if="isActionMode"
+                      :disabled="poaData.checkStatusName == 'Approved'"
                       @click="toggleModalVisible"
                       type="primary"
                       class="btn-poa-action"
