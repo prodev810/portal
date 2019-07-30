@@ -150,7 +150,7 @@
             :oldestFirst="oldestFirst"
           >
           </regular-table>
-          <div class="table-pagination">
+          <div class="table-pagination" v-if="applicationData && applicationData.length">
             <p-pagination
               :page-count="pageCount"
               v-model="currentPage"

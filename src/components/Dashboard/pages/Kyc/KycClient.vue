@@ -21,7 +21,7 @@
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="isViewMode">{{client.clientName}}</p>
-          <el-input v-model="client.clientName"
+          <el-input v-model.trim="client.clientName"
                     @blur="handleFormInput"
                     :validate-event="true"
                     :class="{ 'is-invalid': !isValidClientName}"
@@ -36,7 +36,7 @@
 
       <el-row class="kyc-client-row d-flex align-items-center">
         <el-col :sm="10">
-          <p class="kyc-client-row__text kyc-client-row__title">Client App Ref
+          <p class="kyc-client-row__text kyc-client-row__title">Client Reference
             <span v-if="!isViewMode" class="required-input">*</span>
           </p>
         </el-col>
@@ -48,7 +48,7 @@
                     v-else-if="client"></el-input>
           <p v-if="!isValidClientReference" class="invalid-feedback">
             <span v-if="!client.clientReference">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
-            <span v-if="client.clientReference && client.clientReference.length > 12">{{KYC_CLIENT_VALIDATION_MESSAGES.max12}}</span>
+            <span v-if="client.clientReference && client.clientReference.length > 6">{{KYC_CLIENT_VALIDATION_MESSAGES.max6}}</span>
             <span v-if="client.clientReference && !verifyAlphaNumeric(client.clientReference)">{{KYC_CLIENT_VALIDATION_MESSAGES.alphaNumeric}}</span>
           </p>
         </el-col>
@@ -63,7 +63,7 @@
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="isViewMode">{{client.contactName}}</p>
-          <el-input v-model="client.contactName"
+          <el-input v-model.trim="client.contactName"
                     :class="{'is-invalid': !isValidContactName}"
                     v-else-if="client"></el-input>
           <p v-if="!isValidContactName" class="invalid-feedback">
@@ -84,14 +84,13 @@
              v-if="isViewMode">
             <a :href="'mailto:' + client.contactEmail" class="kyc-client-row__link">{{client.contactEmail}}</a>
           </p>
-          <el-input v-model="client.contactEmail"
+          <el-input v-model.trim="client.contactEmail"
                     :class="{'is-invalid': !isValidContactEmail}"
                     type="email" v-else-if="client"></el-input>
           <p v-if="!isValidContactEmail" class="invalid-feedback">
             <span v-if="!client.contactEmail">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
-            <span v-if="client.contactEmail.length > 64">{{KYC_CLIENT_VALIDATION_MESSAGES.max64}}</span>
-            <span v-if="client.contactEmail && !verifyEmail(client.contactEmail)">{{KYC_CLIENT_VALIDATION_MESSAGES.email}}</span>
-            
+            <span v-if="client.contactEmail && !checkLength(client.contactEmail, 64)">{{KYC_CLIENT_VALIDATION_MESSAGES.max64}}</span>
+            <span v-if="client.contactEmail && !verifyEmail(client.contactEmail)">{{KYC_CLIENT_VALIDATION_MESSAGES.email}}</span>          
           </p>
         </el-col>
       </el-row>
@@ -310,6 +309,7 @@
             <span v-if="!client.applicationFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
             <span v-if="parseFloat(client.applicationFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
             <span v-if="!checkFee(client.applicationFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
+            <span v-if="!checkMax(client.applicationFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.maxFee}}</span>
           </p>
         </el-col>
       </el-row>
@@ -331,6 +331,7 @@
             <span v-if="!client.idCheckFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
             <span v-if="parseFloat(client.idCheckFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
             <span v-if="!checkFee(client.idCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
+            <span v-if="!checkMax(client.idCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.maxFee}}</span>
           </p>
         </el-col>
       </el-row>
@@ -352,6 +353,7 @@
             <span v-if="!client.poaCheckFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
             <span v-if="parseFloat(client.poaCheckFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
             <span v-if="!checkFee(client.poaCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
+            <span v-if="!checkMax(client.poaCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.maxFee}}</span>
           </p>
         </el-col>
       </el-row>
@@ -375,6 +377,7 @@
             <span v-if="!client.sanctionCheckFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
             <span v-if="parseFloat(client.sanctionCheckFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
             <span v-if="!checkFee(client.sanctionCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
+            <span v-if="!checkMax(client.sanctionCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.maxFee}}</span>
           </p>
         </el-col>
       </el-row>
@@ -396,6 +399,7 @@
             <span v-if="!client.smsFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
             <span v-if="parseFloat(client.smsFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
             <span v-if="!checkFee(client.smsFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
+            <span v-if="!checkMax(client.smsFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.maxFee}}</span>
           </p>
         </el-col>
       </el-row>
@@ -522,12 +526,14 @@
           email: 'This field must be valid email address. ',
           max6: 'This field must be no more than 6 characters. ',
           max12: 'This field must be no more than 12 characters. ',
+          max6: 'This field must be no more than 6 characters. ',
           max64: 'This field must be no more than 64 characters. ',
           max50: 'This field must be no more than 50 characters. ',
           letters: 'This field must not have symbols.',
           noSpace: 'There should be no spaces.',
           alphaNumeric: 'Only alphanumeric characters are allowed. ',
           fee: 'Fee is not valid. ',
+          maxFee: 'Maximum value is 1000000000 ',
         },
         rescreenIntervalScheduleSelectValue: null,
         modals: {
@@ -586,6 +592,11 @@
           contactName: true,
           clientReference: true,
           contactEmail: true,
+          sanctionCheckFee: true,
+          applicationFee: true,
+          poaCheckFee: true,
+          idCheckFee: true,
+          smsFee: true,
         },
         isLoad: false,
       }
@@ -601,7 +612,6 @@
       },
     },
     async created() {
-
       this.getClientStatuses()
 
       this.clientId = this.$route.params.id
@@ -610,7 +620,10 @@
 
       if (this.clientId) {
         const responseClient = await this.getProductConfigClientById({id: this.clientId})
-          .catch(err => console.log('error get client by id', err))
+          .catch(err => {
+              this.notifyVue('bottom', 'center', `${err.message || ''} ${err.detail || ''}`)
+              console.log('error get client by id', err)
+              })
         if (responseClient) {
           responseClient.issuing = responseClient.clientType === 'ISSUING' ? 'Yes' : 'No'
           this.client = responseClient
@@ -621,6 +634,7 @@
       }
 
       this.getDateRange(1, 30, this.dateIntervalList)
+      this.start();
     },
     watch: {
       mode() {
@@ -630,6 +644,9 @@
           this.rescreenIntervalScheduleSelectValue = this.handleRescreenIntervalItemLabel()
         }
       },
+      $route: function() {
+          this.start()
+      }
     },
     computed: {
       ...mapState({
@@ -698,7 +715,7 @@
               case'applicationFee':
                 this.validateArray.applicationFee = this.isValidApplicationFee
                 break
-              case'isValidPoaCheckFee':
+              case'poaCheckFee':
                 this.validateArray.poaCheckFee = this.isValidPoaCheckFee
                 break
               case'idCheckFee':
@@ -707,7 +724,6 @@
               case'smsFee':
                 this.validateArray.smsFee = this.isValidSmsFee
                 break
-              
             }
           })
           this.validationObjectList.forEach(item => {
@@ -728,31 +744,31 @@
         return isValid
       },
       isValidClientName() {
-        return (typeof (this.client.clientName) === 'undefined' || (this.client.clientName !== '' && this.verifyName(this.client.clientName) && this.checkLength(this.client.clientName, 10)))
+        return (typeof (this.client.clientName) === 'undefined' || (this.client.clientName !== '' && this.verifyName(this.client.clientName) && this.checkLength(this.client.clientName, 50)))
       },
       isValidClientReference() {
-        return (typeof (this.client.clientReference) === 'undefined' || (this.verifyAlphaNumeric(this.client.clientReference) && this.checkLength(this.client.clientReference, 12)) ) 
+        return (typeof (this.client.clientReference) === 'undefined' || (this.verifyAlphaNumeric(this.client.clientReference) && this.checkLength(this.client.clientReference, 6)) ) 
       },
       isValidSanctionCheckFee() {
-        return (typeof (this.client.sanctionCheckFee) === 'undefined' || (this.client.sanctionCheckFee !== '' && this.client.sanctionCheckFee > 0 && this.checkFee(this.client.sanctionCheckFee)))
+        return (typeof (this.client.sanctionCheckFee) === 'undefined' || (this.client.sanctionCheckFee !== '' && this.client.sanctionCheckFee > 0 && this.checkFee(this.client.sanctionCheckFee) && this.checkMax(this.client.sanctionCheckFee)))
       },
       isValidApplicationFee() {
-        return (typeof (this.client.applicationFee) === 'undefined' || (this.client.applicationFee !== '' && this.client.applicationFee > 0 && this.checkFee(this.client.applicationFee)))
+        return (typeof (this.client.applicationFee) === 'undefined' || (this.client.applicationFee !== '' && this.client.applicationFee > 0 && this.checkFee(this.client.applicationFee)  && this.checkMax(this.client.applicationFee)))
       },
       isValidContactEmail() {
-        return (typeof (this.client.contactEmail) === 'undefined' || (this.client.contactEmail !== '' && this.verifyEmail(this.client.contactEmail) && this.checkLength(this.client.clientReference, 64)))
+        return (typeof (this.client.contactEmail) === 'undefined' || (this.client.contactEmail !== '' && this.verifyEmail(this.client.contactEmail) && this.checkLength(this.client.contactEmail, 64)))
       },
       isValidContactName() {
         return (typeof (this.client.contactName) === 'undefined' ||  (this.client.contactName !== '' && this.verifyName(this.client.contactName) && this.checkLength(this.client.contactName, 50)))
       },
       isValidPoaCheckFee() {
-        return (typeof (this.client.poaCheckFee) === 'undefined' || (this.client.poaCheckFee !== '' && this.client.poaCheckFee > 0 && this.checkFee(this.client.poaCheckFee)))
+        return (typeof (this.client.poaCheckFee) === 'undefined' || (this.client.poaCheckFee !== '' && this.client.poaCheckFee > 0 && this.checkFee(this.client.poaCheckFee) && this.checkMax(this.client.poaCheckFee)))
       },
       isValidIdCheckFee() {
-        return (typeof (this.client.idCheckFee) === 'undefined' || (this.client.idCheckFee !== '' && this.client.idCheckFee > 0 && this.checkFee(this.client.idCheckFee)))
+        return (typeof (this.client.idCheckFee) === 'undefined' || (this.client.idCheckFee !== '' && this.client.idCheckFee > 0 && this.checkFee(this.client.idCheckFee) && this.checkMax(this.client.idCheckFee)))
       },
       isValidSmsFee() {
-        return (typeof (this.client.smsFee) === 'undefined' || (this.client.smsFee !== '' && this.client.smsFee > 0 && this.checkFee(this.client.smsFee)))
+        return (typeof (this.client.smsFee) === 'undefined' || (this.client.smsFee !== '' && this.client.smsFee > 0 && this.checkFee(this.client.smsFee) && this.checkMax(this.client.smsFee)))
       },
     },
     methods: {
@@ -763,6 +779,27 @@
         updateProductConfigClient: KYC_PUT_PRODUCT_CONFIG_CLIENT,
         createProductConfigClient: KYC_CREATE_PRODUCT_CONFIG_CLIENT,
       }),
+      async start() {
+          this.getClientStatuses()
+
+            this.clientId = this.$route.params.id
+
+            this.getCurrencyList()
+
+            if (this.clientId) {
+                const responseClient = await this.getProductConfigClientById({id: this.clientId})
+                .catch(err => console.log('error get client by id', err))
+                if (responseClient) {
+                responseClient.issuing = responseClient.clientType === 'ISSUING' ? 'Yes' : 'No'
+                this.client = responseClient
+                }
+            }
+            if (this.mode !== 'create') {
+                this.rescreenIntervalScheduleSelectValue = this.handleRescreenIntervalItemLabel()
+            }
+
+            this.getDateRange(1, 30, this.dateIntervalList)
+      },
       ucFirst(string) {
         if (!string) return ''
         string = string.toLowerCase()
@@ -787,7 +824,10 @@
           delete this.client.issuing
           delete this.client.id
           const response = await this.updateProductConfigClient({id: this.clientId, body: this.client})
-            .catch(err => console.log('error put client by id', err));
+            .catch(err => {
+                console.log('error put client by id', err)
+                this.notifyVue('bottom', 'center', `${err.message || ''} ${err.detail || ''}`)
+            });
           this.$router.push({path: `/kyc/product-config/view-client/${this.clientId}`});
         }
         if (this.mode === 'create') {
@@ -807,7 +847,7 @@
           this.isLoad = true
           const response = await this.createProductConfigClient({body: copyClient})
             .catch(err => {
-              this.notifyVue('bottom', 'center', err.message)
+              this.notifyVue('bottom', 'center', `${err.message || ''} ${err.detail || ''}`)
               this.client = cloneClient
               this.isLoad = false
             });
@@ -885,7 +925,6 @@
         return refCheck.test(string)
       },
       checkLength(string, maxlen) {
-         
           if(typeof (string) === 'string') {
               return string.length <= maxlen;
           }
@@ -896,8 +935,11 @@
         let str = fee.toString();
         str = str.substring(0,1) == '.' ? `0${str}` : str;
         return reg.test(str)
+      },
+      checkMax(fee) {
+        return parseFloat(fee) <= 1000000000;
       }
-    }
+    },
   }
 </script>
 

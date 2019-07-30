@@ -78,17 +78,19 @@
       <div class="table">
         <h2 class="col-12 sub-head">Listing</h2>
         <div class="p-1 tableWrapper">
-          <regular-table striped
-                         :headings="tableHeadings"
-                         :value="pagedData"
-                         @input="listenToInput"
-                         :editAll="editAll"
-                         :editId="editId"
-                         :uneditableFields="uneditableFields"
-                         :oldestFirst="oldestFirst"></regular-table>
-          <div class="table-pagination">
-            <p-pagination :page-count="pageCount" v-model="currentPage" @input="handleInput"
-                          :perPage="perPage"></p-pagination>
+          <regular-table
+            striped
+            :headings="tableHeadings"
+            :value="pagedData"
+            @input="listenToInput"
+            :editAll="editAll"
+            :editId="editId"
+            :uneditableFields="uneditableFields"
+            :oldestFirst="oldestFirst"
+          >
+          </regular-table>
+          <div class="table-pagination" v-if="pagedData && pagedData.length">
+            <p-pagination :page-count="pageCount" v-model="currentPage" @input="handleInput" :perPage="perPage"></p-pagination>
           </div>
         </div>
       </div>
