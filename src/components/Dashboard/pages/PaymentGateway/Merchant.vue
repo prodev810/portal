@@ -15,6 +15,8 @@
 </template>
 
 <script>
+
+    import {mapActions, mapState} from 'vuex';
 import {
   ACTION_PG_GET_MERCHANTS
 } from '@/store/types'
@@ -35,15 +37,31 @@ export default {
     }
   },
   async mounted () {
-    await this.$store.dispatch(ACTION_PG_GET_MERCHANTS)
+    this.getMerchants();
     this.loading = false
   },
   computed: {
-    merchant () {
-      return this.$store.state.paymentGateway.merchants
-    }
+      ...mapState({
+          merchant: (state) => {
+
+              if( state.paymentGateway.merchants.data!=undefined ) {
+                  let m = JSON.parse( JSON.stringify(state.paymentGateway.merchants.data) );
+                      let new_m = m.map(item =>{
+                          return {
+                              merchant_name:item.merchant_name,
+                              short_code:item.ext_merchant_id,
+                              merchant_id:item.merchant_id
+                          }
+                      });
+                      return new_m;
+              }
+          }
+      }),
   },
   methods: {
+      ...mapActions({
+          getMerchants: ACTION_PG_GET_MERCHANTS
+      }),
     viewMerchant (index) {
       this.$router.push(`/payment-gateway/merchant/${this.merchant[index.index.index].merchant_id}`)
     }

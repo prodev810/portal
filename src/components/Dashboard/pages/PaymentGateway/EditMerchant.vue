@@ -116,7 +116,7 @@
               </PGRow>         
 
               <PGRow labeli18n="payment_gateway.merchant.edit_merchant.choose_currency" :viewMode="false" required>
-                <CeevoSelect slot="edit" 
+               <CeevoSelect slot="edit"
                              v-model="newFloatAccountData.currency"
                              placeholder="Currency"
                              :options="currencies"/>
@@ -139,7 +139,7 @@
             </div>                        
 
             <template slot="footer">
-              <p-button type="primary" @click.native="modalAddFloatAccount = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click="floatAccountEdit()">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>
   
@@ -174,7 +174,7 @@
             </div>                        
 
             <template slot="footer">
-              <p-button type="primary" @click.native="modalAddProcessingProfile = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click="editProcessingProfileData()">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>
 
@@ -217,7 +217,7 @@
             </div>                        
 
             <template slot="footer">
-              <p-button type="primary" @click.native="modalAddProcessingProfileFee = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click="editnewProcessingProfileFee()">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>
 
@@ -240,7 +240,7 @@
             </el-table>                  
 
             <template slot="footer">
-              <p-button type="primary" @click.native="modalProcessingProfileFeeHistory = false">{{ $i18n.t('payment_gateway.button_close') }}</p-button>
+              <p-button type="primary" @click="editProcessingProfileFeeHistory()">{{ $i18n.t('payment_gateway.button_close') }}</p-button>
             </template> 
           </modal>
 
@@ -269,7 +269,7 @@
             </div>                        
 
             <template slot="footer">
-              <p-button type="primary" @click.native="modalAddReserve = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click="editReserve()">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>          
 
@@ -308,7 +308,7 @@
             </div>                        
 
             <template slot="footer">
-              <p-button type="primary" @click.native="modalAddSettlementProfile = false">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
+              <p-button type="primary" @click="editSettlementProfile()">{{ $i18n.t('payment_gateway.button_save') }}</p-button>
             </template> 
           </modal>        
 
@@ -324,9 +324,11 @@
 </template>
 
 <script>
+    import {mapActions, mapState} from 'vuex';
 import {
-  SHOW_TOAST_MESSAGE,
-  ACTION_PG_GET_MERCHANTS
+    SHOW_TOAST_MESSAGE,
+    ACTION_PG_GET_MERCHANTS,
+    ACTION_PG_GET_CURRENCIES
 } from '@/store/types'
 import Collapse from '@/components/UIComponents/Collapse/Collapse'
 import CollapseItem from '@/components/UIComponents/Collapse/CollapseItem'
@@ -358,7 +360,7 @@ export default {
     return {
       loading: true,
       viewMode: true,
-      merchantData: {},      
+      // merchantData: {},
       // Float account
       headerFloatAccount: [
         { name: 'name', i18n: 'payment_gateway.merchant.edit_merchant.headerFloatAccount.name' },
@@ -369,7 +371,13 @@ export default {
         { name: 'masterpayment', balance: 'EUR 9999.00', last_update: '2019-03-01 11:51:43.0' }
       ],
       modalAddFloatAccount: false,
-      newFloatAccountData: {},
+      newFloatAccountData: {
+          // name:'',
+          // currency:'',
+          // opening_balance:0,
+          // date:'',
+          // default_float:false
+      },
       // Processing profile
       headerProcessingProfile: [
         { name: 'business_type', i18n: 'payment_gateway.merchant.edit_merchant.headerProcessingProfile.business_type' },
@@ -414,33 +422,90 @@ export default {
       modalAddSettlementProfile: false,
       newSettlementProfile: {},
       // dummy data
-      currencies: [
-        { value: 'EUR', label: 'Euro' },
-        { value: 'USD', label: 'US Dolllar' }
-      ],
+      // currencies: [
+      //   { value: 'EUR', label: 'Euro' },
+      //   { value: 'USD', label: 'US Dolllar' }
+      // ],
       headerSettlementBankAcoount: [
 
       ]
     }
   },
+    computed: {
+        ...mapState({
+            merchantData: (state) => {
+                if( state.paymentGateway.merchants.data ){
+                    return {
+                        merchant_id: state.paymentGateway.merchants.data.merchant_id,
+                        short_code: state.paymentGateway.merchants.data.ext_merchant_id,
+                        merchant_name: state.paymentGateway.merchants.data.merchant_name,
+                    }
+                }else{
+                    return {
+                        merchant_id: '',
+                        short_code: '',
+                        merchant_name: '',
+                    }
+                }
+            },
+            currencies:(state) => {
+
+                if( state.paymentGateway.currencies ){
+                    let curr = JSON.parse( JSON.stringify( state.paymentGateway.currencies ) );
+                    let new_c = curr.map(item =>{
+                        return {
+                            value: item.currency_code,
+                            label: item.currency_code
+                        }
+                    });
+                    return new_c;
+                }
+
+            }
+
+        }),
+    },
   async created () {
-    await this.$store.dispatch(ACTION_PG_GET_MERCHANTS)
-    this.getData()
+    this.getData();
+    this.getCurrencyList();
     this.loading = false
   },
   methods: {
+      ...mapActions({
+          getMerchant: ACTION_PG_GET_MERCHANTS,
+          getCurrencyList:ACTION_PG_GET_CURRENCIES
+      }),
     formatDate (date) {
       return moment(date).format('YYYY-MM-DD hh:mm:ss')
     },
     getData () {
-      let pm = this.$store.state.paymentGateway.merchants.filter(value => value.merchant_id === this.$route.params.id)
-
-      if (pm.length > 0) {
-        this.merchantData = pm[0]
-      } else {
-        this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$i18n.t('payment_gateway.merchant.edit_merchant.error_unknown_id') + this.$route.params.id, status: 'danger' })
-      }      
+        if( !this.$route.params.id ) return false;
+        this.getMerchant(this.$route.params.id);
     },
+      floatAccountEdit(){
+          this.modalAddFloatAccount = false;
+          console.log( 'newFloatAccountData',this.newFloatAccountData );
+      },
+      editProcessingProfileData(){
+          this.modalAddProcessingProfile = false;
+          console.log( 'newProcessingProfileData',this.newProcessingProfileData );
+      },
+      editnewProcessingProfileFee(){
+          this.modalAddProcessingProfileFee = false;
+          console.log( 'newProcessingProfileFee',this.newProcessingProfileFee );
+      },
+      editProcessingProfileFeeHistory(){
+          this.modalProcessingProfileFeeHistory = false;
+          console.log( 'headerProcessingProfileFeeHistory',this.headerProcessingProfileFeeHistory );
+      },
+      editReserve(){
+          this.modalAddReserve = false;
+          console.log( 'newReserve',this.newReserve );
+      },
+      editSettlementProfile(){
+          this.modalAddSettlementProfile = false;
+          console.log( 'newSettlementProfile',this.newSettlementProfile );
+      },
     onSave () {
       if (this.viewMode) {
         this.viewMode = false

@@ -35,13 +35,13 @@ const mutations = {
   },
   [MUTATE_PG_MERCHANTS]: (state, data) => {
     state.merchants = data
-  }
+  },
 }
 
 const actions = {
   [ACTION_PG_GET_CURRENCIES]: async ({commit, dispatch}) => {
     try {
-      const { data } = await Vue.prototype.$http.acchttp.get('/currencies')
+      const { data } = await Vue.prototype.$http.acchttp.get('/currencies');
       commit(MUTATE_PG_CURRENCIES, { data });
     } catch (e) {
       dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_load_currencies') + e.message, status: 'danger' })
@@ -70,13 +70,18 @@ const actions = {
       dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_set_payment_method') + e.message, status: 'danger' })
     }
   },
-  [ACTION_PG_GET_MERCHANTS]: async ({commit, dispatch}) => {
+  [ACTION_PG_GET_MERCHANTS]: async ({commit, dispatch}, id) => {
     try {
-      //await Vue.prototype.$http.acchttp.put(`/method/${data.code}`, data)
-      commit(MUTATE_PG_MERCHANTS, [
-        { merchant_name: 'ABC Merchant', short_code: 'ABC', merchant_id: 'xxxx-xxxx-xxxx' },
-        { merchant_name: 'EUROPE Merchant', short_code: 'EUM', merchant_id: 'yyyy-yyyy-yyyy-yyyy' }
-      ])
+
+      if( id === undefined ){
+          const{data} = await Vue.prototype.$http.acchttp.get(`/merchant-profile`);
+          commit(MUTATE_PG_MERCHANTS, {data})
+      }else{
+          const{data} = await Vue.prototype.$http.acchttp.get(`/merchant-profile/${id}`);
+          commit(MUTATE_PG_MERCHANTS, {data})
+      }
+
+
     } catch (e) {
       dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + e.message, status: 'danger' })
     }
