@@ -61,8 +61,8 @@
               >
                 <el-option v-for="cardprogram in cardPrograms"
                            class="select-success"
-                           :value="cardprogram.cardProgCode"
-                           :label="cardprogram.value || cardprogram.cardProgCode"
+                           :value="cardprogram.cardProgramCode"
+                           :label="cardprogram.cardProgramCode"
                            :key="cardprogram.id">
                 </el-option>
               </el-select>
@@ -251,16 +251,16 @@
           id: 'all__currencies__',
           code: 'All'
         }, ...(this.$store.state.cardProgram.allCardPrograms || [])
-          .reduce((acc, {id, defCurrency}) => acc
-            .find(({code}) => code === defCurrency) ? acc : [...acc, {
+          .reduce((acc, {id, defaultCurrencyCode}) => acc
+            .find(({code}) => code === defaultCurrencyCode) ? acc : [...acc, {
             id: id + 'curr',
-            code: defCurrency
+            code: defaultCurrencyCode
           }], [])
         ]
       },
       resellers() {
         return (this.$store.state.reseller.resellerSubscriptions || [])
-          .reduce((acc, i) => !!acc.find(({resellerId}) => i.resellerId === resellerId)
+          .reduce((acc, i) => !!acc.find(({resellerId}) => i.id === resellerId)
             ? acc
             : [...acc, i]
             , [{id: 'all', value: '', resellerCode: 'All'}])
@@ -268,7 +268,9 @@
       },
       cardPrograms() {
         return (this.$store.state.cardProgram.allCardPrograms || [])
-          .reduce((acc, i) => !!acc.find(({cardProgCode}) => i.cardProgCode === cardProgCode)
+          .reduce((acc, i) => acc.find(({cardProgramCode}) => {
+            return i.cardProgramCode === cardProgramCode
+          })
             ? acc
             : [...acc, i]
             , [{id: 'all', value: '', cardProgCode: 'All'}])
@@ -363,7 +365,7 @@
             reseller_name: resellerName,
             // card_program_id: card.id || '',
             card_program_id: cardProgId,
-            reseller_id: resellerSub.resellerId || '',
+            reseller_id: resellerSub.id || '',
           }
         })
 
@@ -385,21 +387,14 @@
         const floatAccount = this.tableData[index];
         // console.log(floatAccount);
         if (!floatAccount) return
-        // const {cardProgCode} = floatAccount
-        // const card = this.cardPrograms.find(card => card.cardProgCode === cardProgCode)
-
-        // this.$router.push({
-        //   path: '/float-account/approve-debit',
-        //   query: {
-        //     card_program_id: card.id || ''
-        //   }
-        // })
-        const { cardProgId, currency } = floatAccount
+        const { cardProgId, currency, resellerCode, resellerName } = floatAccount
         this.$router.push({
           path: '/float-account/approve-debit',
           query: {
             card_program_id: cardProgId,
-            currency: currency
+            currency: currency,
+            reseller_code: resellerCode,
+            reseller_name: resellerName
           }
         })
       },

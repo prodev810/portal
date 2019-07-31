@@ -104,7 +104,7 @@ const actions = {
         data = resp.data.cardPrograms
         data = convertData(data)
       } else {
-        const resp = await Vue.prototype.$http.aba1.get(`/cardprograms/all`)
+        const resp = await Vue.prototype.$http.aba1.get(`/program-mgnt/cardprogram-codes/`)
         data = resp.data
       }
       console.log(data)
@@ -124,7 +124,7 @@ const actions = {
     try {
       commit(MUTATE_LOADINGSTATE_CARD_PROGRAM, 'getting')
 
-      let {data} = await Vue.prototype.$http.aba1.get(`/cardprograms/list?
+      let {data} = await Vue.prototype.$http.aba1.get(`/cardprograms?
       page=${page}
       &per_page=${perPage}`.replace(/ /g, ''))
       data = {
@@ -190,7 +190,7 @@ const getters = {
   [GETTER_ALL_CARD_PROGRAM_CODE]: state => {
     return state.allCardPrograms
       .map(card => {
-        return {name: `${card.cardProgCode} (${card.defCurrency})`, value:card.id}
+        return {name: card.alias, value:card.id}
       })
   },
 }

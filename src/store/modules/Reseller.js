@@ -89,9 +89,10 @@ const mutations = {
 };
 const actions = {
   [ADD_RESELLER_SUBSCRIPTION]: async ({commit, dispatch}, payload) => {
+    const requestData = handleEmptyValues(payload)
     commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.GETTING)
     return new Promise((resolve, reject) => {
-      Vue.prototype.$http.aba1.post('/reseller-subscriptions', payload)
+      Vue.prototype.$http.aba1.post('/reseller-subscriptions', requestData)
         .then(data => {
           commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.IDEAL)
           dispatch(SHOW_TOAST_MESSAGE, {
@@ -116,7 +117,7 @@ const actions = {
       commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.GETTING)
 
       const {data} = await Vue.prototype.$http.aba1.get(
-        `/reseller-subscriptions/all`
+        `/program-mgnt/reseller-codes/`
       );
 
       commit(MUTATE_GET_ALL_RESELLER_SUBSCRIPTIONS, {data});
@@ -135,7 +136,7 @@ const actions = {
   } = {page: 0, perPage: 20}) => {
     try {
       commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.GETTING)
-      let requestStr = `/reseller-subscriptions/list?page=${page}&per_page=${perPage}`
+      let requestStr = `/reseller-subscriptions?page=${page}&per_page=${perPage}`
       if (resellerCode) {
         requestStr += `&reseller_code=${resellerCode}`
       }
@@ -184,7 +185,28 @@ const actions = {
   [EDIT_RESELLER_SUBSCRTION_BY_ID]: async ({commit, dispatch}, payload) => {
     commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.GETTING)
     return new Promise((resolve, reject) => {
-      Vue.prototype.$http.aba1.put(`/reseller-subscriptions/${payload.id}`, payload.body)
+
+      const requestData = {
+        alertContact: payload.body.alertContact,
+        apiFee: payload.body.apiFee,
+        apiFeeBillMethod: payload.body.apiFeeBillMethod,
+        appFee: payload.body.appFee,
+        appFeeBillMethod: payload.body.appFeeBillMethod,
+        cardProgramID: payload.body.cardProgramID,
+        loadFee: payload.body.loadFee,
+        loadFeeCap: payload.body.loadFeeCap,
+        loadFeePct: payload.body.loadFeePct,
+        loadFeebillMethod: payload.body.loadFeebillMethod,
+        monthlyFee: payload.body.monthlyFee,
+        monthlyFeeBillMethod: payload.body.monthlyFeeBillMethod,
+        resellerCode: payload.body.resellerCode,
+        resellerName: payload.body.resellerName,
+        resellerType: payload.body.resellerType,
+        status: payload.body.status,
+        uniqueFloat: payload.body.uniqueFloat
+      }
+
+      Vue.prototype.$http.aba1.put(`/reseller-subscriptions/${payload.id}`, requestData)
         .then(data => {
           commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.IDEAL)
           dispatch(SHOW_TOAST_MESSAGE, {

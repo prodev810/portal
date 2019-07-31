@@ -82,7 +82,8 @@
     GET_ALL_RESELLER_SUBSCRIPTIONS,
     GETTER_ALL_CARDS,
     GETTER_FLOATS,
-    GETTER_LOADINGSTATE_FLOAT_BALANCE, GETTER_RESELLER_SUBSCRIPTIONS, SET_MODAL_TYPE, SHOW_TOAST_MESSAGE
+    GETTER_LOADINGSTATE_FLOAT_BALANCE, GETTER_RESELLER_SUBSCRIPTIONS, SET_MODAL_TYPE, SHOW_TOAST_MESSAGE,
+    GETTER_USER_INFO
   } from '../../../../store/types';
   import createNewRowFromHeadings from "../../../../utils/createNewRowFromHeadings";
   import {breakInput, mustBeAValidISOcurrency, shouldBeNumber} from "../../../../utils/formValidations";
@@ -184,7 +185,7 @@
     },
     computed: {
       ...mapGetters({
-
+        userInfo: GETTER_USER_INFO,
         loadingState: GETTER_LOADINGSTATE_FLOAT_BALANCE,
       }),
       creationResponseState() { return this.$store.state.UiModule.responseState[ADD_FLOAT_ENTRY]},
@@ -197,8 +198,9 @@
             , [])
       },
       resellerSubscriptions() {
+        console.log(this.$store.state.reseller.resellerSubscriptions)
         return (this.$store.state.reseller.resellerSubscriptions || [])
-          .reduce((acc, i) => !!acc.find(({resellerId}) => i.resellerId === resellerId)
+          .reduce((acc, i) => !!acc.find(({id}) => i.id === id)
             ? acc
             : [...acc, i]
             , [])
@@ -349,6 +351,7 @@
       }
     },
     mounted() {
+      console.log(this.$route.query);
       this.getAllResellerSubscription();
       this.getAllCards();
       this.editId = 'setup_debit_new_row'
@@ -361,7 +364,7 @@
         card_program_id,
         reseller_id,
       } = this.$route.query;
-      console.log(reseller_name, 'reseller name');
+
       this.tableData = [{
         ...createNewRowFromHeadings(this.tableHeadings, 'setup_debit_new_row'),
         cardProgCode: card_program_code,
@@ -370,7 +373,7 @@
         resellerName: reseller_name,
         resellerId: reseller_id,
         cardProgId: card_program_id,
-        user: user || this.$oAuth.getUserInfo().preferredUsername || ''
+        user: this.userInfo.preferred_username  || ''
       }]
     }
   }

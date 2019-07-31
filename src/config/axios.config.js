@@ -8,7 +8,7 @@ export default {
       OAUTH: '$oAuth' // same oAuth as main
     },
     {
-      BASE_URL: 'https://api.dev.ceevo.com/aba-api/internal/v1/business',
+      BASE_URL: 'https://api.dev.ceevo.com/biz-api/v1/business',
       TIMEOUT: 35000,
       SHORTCUT: 'aba1',
       OAUTH: '$oAuth' // same oAuth as main

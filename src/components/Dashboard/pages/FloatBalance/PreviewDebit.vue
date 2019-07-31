@@ -48,7 +48,7 @@
             <el-option v-for="card in cardPrograms "
                        class="select-success"
                        :value="card.id"
-                       :label="`${card.cardProgCode} (${card.defCurrency})`"
+                       :label="card.alias"
                        :key="card.id">
             </el-option>
           </el-select>
@@ -282,17 +282,19 @@
           this.reviewedFloats
         )) return;
         console.log('massaged');
-        const {cardProgCode} = this.cardPrograms.find(({id}) => id === this.cardProgramId);
+        const {cardProgramCode} = this.cardPrograms.find(({id}) => id === this.cardProgramId);
+        console.log('cardProgramCode', this.reviewedFloats['reviewedFloatAccountEntryResultList'])
         this.tableData = this.reviewedFloats['reviewedFloatAccountEntryResultList']
           .map(float => {
-            const {resellerName, resellerCode} = this.resellers.find(({resellerId}) => float.resellerId === resellerId);
-            const {cardProgCode} = this.allCardPrograms.find(({id}) => float.cardProgId === id);
+            console.log('float', float);
+            const {name, resellerCode} = this.resellers.find(({id}) => float.resellerId === id);
+            const {cardProgramCode} = this.allCardPrograms.find(({id}) => float.cardProgId === id);
             return {
               ...float,
               amount: moneyFormatAppendCurrency(float.amount, float.currency),
-              resellerName,
+              resellerName: name,
               resellerCode,
-              cardProgCode,
+              cardProgCode: cardProgramCode,
               withSof: (float.sofDocs && float.sofDocs.length > 0) ? 'yes' : 'no',
 
             }

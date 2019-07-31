@@ -22,7 +22,7 @@
             <el-option v-for="card in cardPrograms "
                        class="select-success"
                        :value="card.id"
-                       :label="`${card.cardProgCode} (${card.defCurrency})`"
+                       :label="card.alias"
                        :key="card.id">
             </el-option>
           </el-select>
@@ -127,6 +127,8 @@
         ],
         tableData: [],
         cardProgramId: '',
+        resellerCode: '',
+        resellerName: '',
         currency: '',
         selectedFloatId: '',
         softDocs: [],
@@ -182,11 +184,12 @@
         )) return;
         const {cardProgCode} = this.cardPrograms.find(({id}) => id === this.cardProgramId);
         this.tableData = (this.pendingFloats['floatAccountEntryResultList'] || []).map(float => {
-          const {resellerName, resellerCode} = this.resellers.find(({cardProgramID}) => float.cardProgId === cardProgramID);
+          // console.log(this.resellers)
+          // const {name, resellerCode} = this.resellers.find(({cardProgramID}) => float.cardProgId === cardProgramID);
           return {
             ...float,
-            resellerName,
-            resellerCode,
+            resellerName: this.resellerName,
+            resellerCode: this.resellerCode,
             cardProgCode,
             withSof: (float.sofDocs && float.sofDocs.length > 0) ? 'yes' : 'no',
             amount: moneyFormatAppendCurrency(float.amount, float.currency || 'EUR')
@@ -320,19 +323,23 @@
     mounted() {
       this.getAllCards()
       this.getResellers()
-      const {page, per_page, card_program_id, currency} = this.$route.query
+      const {page, per_page, card_program_id, currency, reseller_code, reseller_name} = this.$route.query
       if (card_program_id !== 'undefined' && card_program_id) {
         this.page = +page || this.page;
         this.perPage = +per_page || this.perPage;
         this.cardProgramId = card_program_id || this.cardProgramId;
         this.currency = currency || this.currency
+        this.resellerCode = reseller_code || this.resellerCode
+        this.resellerName = reseller_name || this.resellerName
         this.$router.push({
           path: `/float-account/approve-debit`,
           query: {
             card_program_id: this.cardProgramId,
             page: this.page,
             per_page: this.perPage,
-            currency: this.currency
+            currency: this.currency,
+            reseller_code: this.resellerCode,
+            reseller_name: this.resellerName
           }
         })
       }

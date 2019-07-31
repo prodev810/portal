@@ -338,7 +338,7 @@
             {cardProgCode: null})
         return !this.$route.params.id ? resellerSub : {
           ...resellerSub,
-          ['cardProgCode']: `${currencyCardProgram.cardProgCode} (${currencyCardProgram.defCurrency})`
+          ['cardProgCode']: currencyCardProgram.alias
         }
       },
       creationResponseState() { return this.$store.state.UiModule.responseState[ADD_RESELLER_SUBSCRIPTION]},
@@ -392,7 +392,7 @@
           if (i.name === 'cardProgramID') {
             return {
               ...i,
-              selectKeys: cardPrograms.map(cardProgram => ({name: `${cardProgram.cardProgCode} (${cardProgram.defCurrency})`, value: cardProgram.id}))
+              selectKeys: cardPrograms.map(cardProgram => ({name: cardProgram.alias, value: cardProgram.id}))
             }
           } else {
             return i;
@@ -486,7 +486,7 @@
               if (this.editId === 'Reseller_new_row') {
                 // create
                 // todo fix redirect
-                this.addReseller({body})
+                this.addReseller(body)
                 return;
               } else {
                 //massage data -> remove edit prop

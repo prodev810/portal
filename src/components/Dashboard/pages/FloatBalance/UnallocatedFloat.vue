@@ -48,8 +48,8 @@
             >
               <el-option v-for="card in cardPrograms"
                          class="select-success"
-                         :value="card.cardProgCode"
-                         :label="card.cardProgCode"
+                         :value="card.cardProgramCode"
+                         :label="card.cardProgramCode"
                          :key="card.id">
               </el-option>
             </el-select>
@@ -177,7 +177,7 @@
       },
       resellers() {
         return (this.$store.state.reseller.resellerSubscriptions || [])
-          .reduce((acc, i) => !!acc.find(({resellerId}) => i.resellerId === resellerId)
+          .reduce((acc, i) => !!acc.find(({id}) => i.id === id)
             ? acc
             : [...acc, i]
             , [{id: 'all', value: '', resellerCode: 'All'}])
@@ -185,17 +185,17 @@
 
       }, supportedCurrencies() {
         return (this.$store.state.cardProgram.allCardPrograms || [])
-          .reduce((acc, i) => !!acc.find(({code}) => i.defCurrency === code)
+          .reduce((acc, i) => !!acc.find(({code}) => i.defaultCurrencyCode === code)
             ? acc
             : [...acc, {
               id: i.id + 'curr',
-              code: i.defCurrency
+              code: i.defaultCurrencyCode
             }]
             , [])
       },
       cardPrograms() {
         return (this.$store.state.cardProgram.allCardPrograms || [])
-          .reduce((acc, i) => !!acc.find(({cardProgCode}) => i.cardProgCode === cardProgCode)
+          .reduce((acc, i) => !!acc.find(({cardProgramCode}) => i.cardProgramCode === cardProgramCode)
             ? acc
             : [...acc, i]
             , [{id: 'all', value: '', cardProgCode: 'All'}])

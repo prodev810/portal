@@ -156,7 +156,7 @@
           },
           {
             label: 'Default Currency',
-            name: 'cardProgCurrency',
+            name: 'defCurrency',
           },
           {
             label: 'RC',
@@ -189,11 +189,13 @@
         const _resellerData = this.resellersList || {};
         return {
           ..._resellerData,
-          resellerSubscriptionList: (_resellerData.resellerSubscriptionList || []).map(resellerSub => ({
-            ...resellerSub,
-            ['cardProgCode']: (this.$store.state.cardProgram.allCardPrograms.find(cardProgram => cardProgram.id === resellerSub.cardProgramID) || {cardProgCode: null}).cardProgCode,
-            ['cardProgCurrency']: (this.$store.state.cardProgram.allCardPrograms.find(cardProgram => cardProgram.id === resellerSub.cardProgramID) || {cardProgCode: null}).defCurrency,
-          }))
+          resellerSubscriptionList: (_resellerData.resellerSubscriptionList || []).map(resellerSub => {
+            return {
+              ...resellerSub,
+              ['cardProgCode']: (this.$store.state.cardProgram.allCardPrograms.find(cardProgram => cardProgram.id === resellerSub.cardProgramID) || {cardProgCode: null}).cardProgramCode,
+              ['cardProgCurrency']: (this.$store.state.cardProgram.allCardPrograms.find(cardProgram => cardProgram.id === resellerSub.cardProgramID) || {cardProgCode: null}).defaultCurrencyCode,
+            }
+          })
         }
       }
     },

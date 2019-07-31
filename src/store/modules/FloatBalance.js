@@ -275,12 +275,14 @@ const actions = {
     try {
       commit(MUTATE_LOADINGSTATE_FLOAT_BALANCE, 'getting')
       let {data} = await Vue.prototype.$http.aba1.get(
-        `/cardprograms/${cardProgramCode}/resellers/${resellerCode}/statement?
+        `/statement?
       currency_code=${currencyCode}
       &from_date=${fromDate}
       &page=${page}
       &per_page=${perPage}
       &to_date=${toDate}
+      &card_program_code=${cardProgramCode}
+      &reseller_code=${resellerCode}
       `
           .replace(/ /g, ''))
 

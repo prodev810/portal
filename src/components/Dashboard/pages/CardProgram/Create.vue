@@ -301,7 +301,7 @@
             },
             {
               label: 'default currency', 
-              name: 'defCurrency', 
+              name: 'defaultCurrencyCode', 
               i18n: 'card_program.create.table_header.def_currency',
               required: true,
               validator: [mustBeAValidISOcurrency],

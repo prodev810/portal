@@ -121,7 +121,7 @@
           {label: 'PM Inst', name: 'pmInst', i18n: 'card_program.listing.table_header.pm_inst'},
           {label: 'PO Inst', name: 'poInst', i18n: 'card_program.listing.table_header.po_inst'},
           {label: 'CPC', name: 'cardProgCode', i18n: 'card_program.listing.table_header.card_prog_code'},
-          {label: 'Default Currency', name: 'defCurrency'},
+          {label: 'Default Currency', name: 'defaultCurrencyCode'},
           {
             label: 'card program description',
             name: 'cardProgDesc',
