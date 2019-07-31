@@ -19,7 +19,7 @@ export default {
       type: String,
       default: ''
     },
-    value: Number,
+    value: [Number, String],
     options: Array
   },
   computed: {
