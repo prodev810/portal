@@ -236,6 +236,7 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
   const startCountDown = () => {
     interval = setInterval(async () => {
       let count = getCountDownFromSessionStorage()
+        console.log( 'count',count );
       if (count < configOptions.TIMEOUT) {
         let isValid = await isValidTokenData()
         if (!isValid) {

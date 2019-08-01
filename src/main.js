@@ -65,6 +65,13 @@ Vue.use(VeeValidate)
 Vue.use(oAuthWrapper, oAuthConfig)
 Vue.use(axiosWrapper, axiosConfig)
 
+Vue.prototype.$oAuth.startCountDown();
+
+window.addEventListener('click',() => { Vue.prototype.$oAuth.setLockTimeout(oAuthConfig.LOCK_TIMEOUT);});
+window.addEventListener("mousemove", ()=> {Vue.prototype.$oAuth.setLockTimeout(oAuthConfig.LOCK_TIMEOUT);});
+window.addEventListener("keypress", ()=>{Vue.prototype.$oAuth.setLockTimeout(oAuthConfig.LOCK_TIMEOUT);});
+
+
 // Vue.use(oAuthKycWrapper, {
 //     BASE_URL: 'https://auth.dev.transact24.com/auth',
 //     REALM: 'ceevo-realm',
