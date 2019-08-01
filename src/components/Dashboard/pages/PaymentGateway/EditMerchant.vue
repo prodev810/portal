@@ -328,7 +328,8 @@
 import {
     SHOW_TOAST_MESSAGE,
     ACTION_PG_GET_MERCHANTS,
-    ACTION_PG_GET_CURRENCIES
+    ACTION_PG_GET_CURRENCIES,
+    ACTION_PG_GET_SINGLE_MERCHANT
 } from '@/store/types'
 import Collapse from '@/components/UIComponents/Collapse/Collapse'
 import CollapseItem from '@/components/UIComponents/Collapse/CollapseItem'
@@ -428,26 +429,16 @@ export default {
       // ],
       headerSettlementBankAcoount: [
 
-      ]
+      ],
+        merchantData:{
+            merchant_id:null,
+            short_code: null,//state.paymentGateway.merchants.data.ext_merchant_id,
+            merchant_name: null,
+        }
     }
   },
     computed: {
         ...mapState({
-            merchantData: (state) => {
-                if( state.paymentGateway.merchants.data ){
-                    return {
-                        merchant_id: state.paymentGateway.merchants.data.merchant_id,
-                        short_code: state.paymentGateway.merchants.data.ext_merchant_id,
-                        merchant_name: state.paymentGateway.merchants.data.merchant_name,
-                    }
-                }else{
-                    return {
-                        merchant_id: '',
-                        short_code: '',
-                        merchant_name: '',
-                    }
-                }
-            },
             currencies:(state) => {
 
                 if( state.paymentGateway.currencies ){
@@ -465,14 +456,14 @@ export default {
 
         }),
     },
-  async created () {
+  created () {
     this.getData();
     this.getCurrencyList();
     this.loading = false
   },
   methods: {
       ...mapActions({
-          getMerchant: ACTION_PG_GET_MERCHANTS,
+          getMerchant: ACTION_PG_GET_SINGLE_MERCHANT,
           getCurrencyList:ACTION_PG_GET_CURRENCIES
       }),
     formatDate (date) {
@@ -480,7 +471,12 @@ export default {
     },
     getData () {
         if( !this.$route.params.id ) return false;
-        this.getMerchant(this.$route.params.id);
+
+        this.getMerchant(this.$route.params.id).then(data=>{
+            this.merchantData.merchant_id = data.merchant_id;
+            this.merchantData.short_code  = data.ext_merchant_id;
+            this.merchantData.merchant_name = data.merchant_name;
+        });
     },
       floatAccountEdit(){
           this.modalAddFloatAccount = false;

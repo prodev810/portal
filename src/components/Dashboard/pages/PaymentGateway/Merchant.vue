@@ -43,7 +43,6 @@ export default {
   computed: {
       ...mapState({
           merchant: (state) => {
-
               if( state.paymentGateway.merchants.data!=undefined ) {
                   let m = JSON.parse( JSON.stringify(state.paymentGateway.merchants.data) );
                       let new_m = m.map(item =>{

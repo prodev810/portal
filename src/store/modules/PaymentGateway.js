@@ -1,19 +1,20 @@
 import Vue from 'vue';
 import i18n from '@/i18n'
 import {
-  SHOW_TOAST_MESSAGE,
-  MUTATE_PG_CURRENCIES,
-  MUTATE_PG_COUNTRIES,
-  MUTATE_PG_PAYMENT_METHODS,
-  MUTATE_PG_MERCHANTS,
-  GETTER_PG_CURRENCIES,
-  GETTER_PG_COUNTRIES,
-  GETTER_PG_PAYMENT_METHODS,
-  ACTION_PG_GET_CURRENCIES,
-  ACTION_PG_GET_COUNTRIES,
-  ACTION_PG_GET_PAYMENT_METHODS,
-  ACTION_PG_SET_PAYMENT_METHOD,
-  ACTION_PG_GET_MERCHANTS
+    SHOW_TOAST_MESSAGE,
+    MUTATE_PG_CURRENCIES,
+    MUTATE_PG_COUNTRIES,
+    MUTATE_PG_PAYMENT_METHODS,
+    MUTATE_PG_MERCHANTS,
+    GETTER_PG_CURRENCIES,
+    GETTER_PG_COUNTRIES,
+    GETTER_PG_PAYMENT_METHODS,
+    ACTION_PG_GET_CURRENCIES,
+    ACTION_PG_GET_COUNTRIES,
+    ACTION_PG_GET_PAYMENT_METHODS,
+    ACTION_PG_SET_PAYMENT_METHOD,
+    ACTION_PG_GET_MERCHANTS,
+    ACTION_PG_GET_SINGLE_MERCHANT
 } from '../types';
 
 const state = {
@@ -72,20 +73,22 @@ const actions = {
   },
   [ACTION_PG_GET_MERCHANTS]: async ({commit, dispatch}, id) => {
     try {
-
-      if( id === undefined ){
           const{data} = await Vue.prototype.$http.acchttp.get(`/merchant-profile`);
           commit(MUTATE_PG_MERCHANTS, {data})
-      }else{
-          const{data} = await Vue.prototype.$http.acchttp.get(`/merchant-profile/${id}`);
-          commit(MUTATE_PG_MERCHANTS, {data})
-      }
-
-
     } catch (e) {
       dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + e.message, status: 'danger' })
     }
-  }
+  },
+    [ACTION_PG_GET_SINGLE_MERCHANT]: ({commit, dispatch}, id) => {
+        return new Promise ( (resolve, reject) => {
+            Vue.prototype.$http.acchttp.get(`/merchant-profile/${id}`).then( data => {
+                resolve(data.data);
+            }).catch( error => {
+                dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + e.message, status: 'danger' });
+                reject(error)
+            });
+        });
+    }
 }
 
 const getters = {
