@@ -105,12 +105,12 @@
                      class="select-primary kyc__custom__primary__select w-100"
                      v-model="client.issuing">
             <el-option v-for="item in selectYesNoValue"
-                       :key="item.value"
+                       :key="`a-${item.value}`"
                        :label="item.name"
                        :value="item.value">{{item.name}}
             </el-option>
           </el-select>
-          <span v-else class="kyc-client-row__text">{{ client.issuing }}</span>
+          <span v-else class="kyc-client-row__text">{{ client.issuing | booleanToYesNoFormat }}</span>
         </el-col>
       </el-row>
 
@@ -124,7 +124,7 @@
                      class="select-primary kyc__custom__primary__select w-100"
                      v-model="client.idCheckRequired">
             <el-option v-for="item in selectYesNoValue"
-                       :key="item.value"
+                       :key="`b-${item.value}`"
                        :label="item.name"
                        :value="item.value">{{item.name}}
             </el-option>
@@ -143,7 +143,7 @@
                      class="select-primary kyc__custom__primary__select w-100"
                      v-model="client.sanctionCheckRequired">
             <el-option v-for="item in selectYesNoValue"
-                       :key="item.value"
+                       :key="`c-${item.value}`"
                        :label="item.name"
                        :value="item.value">{{item.name}}
             </el-option>
@@ -163,7 +163,7 @@
                      class="select-primary kyc__custom__primary__select w-100"
                      v-model="client.poaCheckRequired">
             <el-option v-for="item in selectYesNoValue"
-                       :key="item.value"
+                       :key="`d-${item.value}`"
                        :label="item.name"
                        :value="item.value">{{item.name}}
             </el-option>
@@ -414,8 +414,8 @@
             <el-select v-if="client && client.kycReminderSchedule"
                        class="select-primary kyc__custom__primary__select w-100"
                        v-model="client.kycReminderSchedule.intervalVal">
-              <el-option v-for="item in dateIntervalList"
-                         :key="item"
+              <el-option v-for="(item, k) in dateIntervalList"
+                         :key="`x-${k}`"
                          :label="addDateRangeLabel(item)"
                          :value="item">
               </el-option>
@@ -436,8 +436,8 @@
             <el-select v-if="client && client.autoCloseSchedule"
                        class="select-primary kyc__custom__primary__select w-100"
                        v-model="client.autoCloseSchedule.intervalVal">
-              <el-option v-for="item in dateIntervalList"
-                         :key="item"
+              <el-option v-for="(item, k) in dateIntervalList"
+                         :key="`y-${k}`"
                          :label="addDateRangeLabel(item)"
                          :value="item">
               </el-option>
@@ -460,8 +460,8 @@
             <el-select v-if="client && client.kycAutoFollowupCloseSchedule"
                        class="select-primary kyc__custom__primary__select w-100"
                        v-model="client.kycAutoFollowupCloseSchedule.intervalVal">
-              <el-option v-for="item in dateIntervalList"
-                         :key="item"
+              <el-option v-for="(item, k) in dateIntervalList"
+                         :key="`z-${k}`"
                          :label="addDateRangeLabel(item)"
                          :value="item">
               </el-option>
@@ -790,7 +790,7 @@
                 const responseClient = await this.getProductConfigClientById({id: this.clientId})
                 .catch(err => console.log('error get client by id', err))
                 if (responseClient) {
-                responseClient.issuing = responseClient.clientType === 'ISSUING' ? 'Yes' : 'No'
+                responseClient.issuing = responseClient.clientType === 'ISSUING' ? true : false
                 this.client = responseClient
                 }
             }
@@ -825,8 +825,8 @@
           delete this.client.id
           const response = await this.updateProductConfigClient({id: this.clientId, body: this.client})
             .catch(err => {
-                console.log('error put client by id', err)
-                this.notifyVue('bottom', 'center', `${err.message || ''} ${err.detail || ''}`)
+              console.log('error put client by id', err.response.data.message, err.response.data.detail)
+              this.notifyVue('bottom', 'center', `${err.response.data.message || ''} ${err.response.data.detail || ''}`)
             });
           this.$router.push({path: `/kyc/product-config/view-client/${this.clientId}`});
         }
@@ -847,7 +847,7 @@
           this.isLoad = true
           const response = await this.createProductConfigClient({body: copyClient})
             .catch(err => {
-              this.notifyVue('bottom', 'center', `${err.message || ''} ${err.detail || ''}`)
+              this.notifyVue('bottom', 'center', `${err.response.data.message || ''} ${err.response.data.detail || ''}`)
               this.client = cloneClient
               this.isLoad = false
             });

@@ -22,7 +22,7 @@ const actions = {
   [BUSINESS_RESELLER_CODE_LIST]: async ({commit}) => {
     try {
       commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.GETTING)
-      const {data} = await Vue.prototype.$http.aba1.get('reseller-code-list')
+      const {data} = await Vue.prototype.$http.aba1.get('/program-mgnt/reseller-codes/')
       commit(MUTATE_ISSUING_LOADINGSTATE, LOADING_STATE.IDEAL)
       commit(MUTATE_BUSINESS_RESELLER_CODE_LIST, {data})
     } catch (e) {
@@ -33,8 +33,8 @@ const actions = {
 
 const getters = {
   [GETTER_BUSINESS_RESELLER_CODE_LIST]: state => {
-    const codeList = state.resellerCodeList.map(code => {
-      return {name: code, value: code}
+    const codeList = state.resellerCodeList.map(({resellerCode}) => {
+      return {name: resellerCode, value: resellerCode}
     })
     return [{name: "All", value: ''}, ...codeList]
   },
