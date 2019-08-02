@@ -51,7 +51,7 @@ pipeline {
                             includeHtmlReports: false,
                             includeJsonReports: false,
                             includeVulnReports: false,
-                            isAutoupdateDisabled: false,
+                            isAutoupdateDisabled: true,
                             outdir: '',
                             scanpath: 'package*.json,src/**/*,*.lock,*.js,static/**/*',
                             skipOnScmChange: false,
