@@ -19,9 +19,12 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
     // store.state.security.auth.authenticated = false
     // localStorage.clear();
     // sessionStorage.clear();
-    console.log('logout')
-    store.getters.SECURITY_AUTH.logout()
-    // console.log(store.state.security)
+
+      sessionStorage.removeItem('lock_time');
+      console.log('logout')
+      store.getters.SECURITY_AUTH.logout()
+
+      // console.log(store.state.security)
     /*const logoutURL = await store.getters.SECURITY_AUTH.createLogoutUrl()
     console.log({logoutURL})
     store.getters.SECURITY_AUTH.logout({redirectUri:logoutURL})
@@ -72,8 +75,35 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
     return role === 'ROLE_ABA_RESELLER'
   }
 
-  Vue.prototype.$oAuth = {
+    const setLockTimeout = (value )=>{
+          sessionStorage.setItem('lock_time', value);
+    };
+
+    const startCountDown = () => {
+        setLockTimeout();
+
+        let interval = setInterval(async () => {
+            let count = sessionStorage.getItem('lock_time');
+
+            // console.log( 'count',count );
+            if (count <= 0 ) {
+              clearInterval(interval);
+              logout();
+              return false;
+            }
+            count--;
+            setLockTimeout( count );
+
+        }, 1000)
+    };
+
+
+
+
+    Vue.prototype.$oAuth = {
     logout,
+    startCountDown,
+    setLockTimeout,
     getAuthorizationHeader,
     hasPermission,
     isReseller,
