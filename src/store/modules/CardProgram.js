@@ -104,7 +104,7 @@ const actions = {
         data = resp.data.cardPrograms
         data = convertData(data)
       } else {
-        const resp = await Vue.prototype.$http.aba1.get(`/program-mgnt/cardprogram-codes/`)
+        const resp = await Vue.prototype.$http.aba1.get(`/program-mgnt/cardprogram-codes`)
         data = resp.data
       }
       console.log(data)
