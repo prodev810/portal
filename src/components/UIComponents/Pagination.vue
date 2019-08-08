@@ -52,6 +52,7 @@
       totalPages() {
         if (this.pageCount > 0) return this.pageCount
         if (this.total > 0) {
+            console.log( 'this.total',this.total );
           return Math.ceil(this.total / this.perPage)
         }
         return 1

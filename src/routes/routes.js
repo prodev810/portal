@@ -31,6 +31,8 @@ import PGMerchant from '@/components/Dashboard/pages/PaymentGateway/Merchant'
 import PGEditMerchant from '@/components/Dashboard/pages/PaymentGateway/EditMerchant'
 // Reseller
 import ResellerView from '../components/Dashboard/pages/Resller/View';
+//Clients
+import Clients from '../components/Dashboard/pages/Client/Clients';
 // GeneralViews
 import NotFound from '../components/GeneralViews/NotFoundPage.vue';
 import NoPermission from '../components/Dashboard/pages/Dashboard/NoPermission.vue';
@@ -217,6 +219,66 @@ let payment_gateway = {
       }
     }
   ]
+};
+
+let client = {
+    path: '/client',
+    // redirect: '/reseller/view?page=0&per_page=10',
+    redirect: '/clients/view',
+    component: DashboardLayout,
+    meta: {
+        //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
+    },
+    children: [
+        {
+            path: '/clients/view',
+            name: 'Clients view',
+            component: Clients,
+            // component: ResellerCreateCorporateModule,
+            props: {context: 'view'},
+            meta: {
+                //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+                requiresAuth: true,
+                roles: ['*'],
+            }
+        },
+        {
+            path: '/client/:id',
+            name: 'Client View',
+            component: Clients,
+            props: {context: 'view'},
+            meta: {
+                //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+                requiresAuth: true,
+                roles: ['*'],
+            }
+        },
+        {
+            path: '/client/create',
+            name: 'Client Create',
+            component: Clients,
+            // component: ResellerCreate,
+            props: {context: 'create'},
+            meta: {
+                //permission: permission.RESELLER_SUBSCRIPTION_EDIT,
+                requiresAuth: true,
+                roles: ['*'],
+            }
+        },
+        {
+            path: '/client/edit/:id',
+            name: 'Client Edit',
+            component: Clients,
+            props: {context: 'edit'},
+            meta: {
+                //permission: permission.RESELLER_SUBSCRIPTION_EDIT,
+                requiresAuth: true,
+                roles: ['*'],
+            }
+        }
+    ]
 };
 
 let reseller = {
@@ -626,17 +688,18 @@ const routes = [
       }
     ]
   },
-  cardProgram,
-  loginPage,
-  registerPage,
-  lockPage,
-  floatAccount,
-  reseller,
-  payment_gateway,
-  kyc,
-  system,
-  unauthorizedPage,
-  {path: '*', component: NotFound}
+    cardProgram,
+    loginPage,
+    registerPage,
+    lockPage,
+    floatAccount,
+    client,
+    reseller,
+    payment_gateway,
+    kyc,
+    system,
+    unauthorizedPage,
+    {path: '*', component: NotFound}
 ];
 
 export default routes;
