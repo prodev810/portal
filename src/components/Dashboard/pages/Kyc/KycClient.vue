@@ -21,7 +21,7 @@
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="isViewMode">{{client.clientName}}</p>
-          <el-input v-model.trim="client.clientName"
+          <el-input v-model="client.clientName"
                     @blur="handleFormInput"
                     :validate-event="true"
                     :class="{ 'is-invalid': !isValidClientName}"
@@ -30,6 +30,7 @@
             <span v-if="!client.clientName">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
             <span v-if="client.clientName && client.clientName.length > 50">{{KYC_CLIENT_VALIDATION_MESSAGES.max50}}</span>
             <span v-if="client.clientName && !verifyName(client.clientName)">{{KYC_CLIENT_VALIDATION_MESSAGES.letters}}</span>
+            <span v-if="client.clientName && verifyName(client.clientName) && !checkLastCharIsNotSpace(client.clientName)">{{KYC_CLIENT_VALIDATION_MESSAGES.noSpaceEnding}}</span>
           </p>
         </el-col>
       </el-row>
@@ -48,7 +49,7 @@
                     v-else-if="client"></el-input>
           <p v-if="!isValidClientReference" class="invalid-feedback">
             <span v-if="!client.clientReference">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
-            <span v-if="client.clientReference && client.clientReference.length > 6">{{KYC_CLIENT_VALIDATION_MESSAGES.max6}}</span>
+            <span v-if="client.clientReference && client.clientReference.length > 12">{{KYC_CLIENT_VALIDATION_MESSAGES.max12}}</span>
             <span v-if="client.clientReference && !verifyAlphaNumeric(client.clientReference)">{{KYC_CLIENT_VALIDATION_MESSAGES.alphaNumeric}}</span>
           </p>
         </el-col>
@@ -63,13 +64,14 @@
         <el-col :sm="14">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="isViewMode">{{client.contactName}}</p>
-          <el-input v-model.trim="client.contactName"
+          <el-input v-model="client.contactName"
                     :class="{'is-invalid': !isValidContactName}"
                     v-else-if="client"></el-input>
           <p v-if="!isValidContactName" class="invalid-feedback">
             <span v-if="!client.contactName">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
             <span v-if="client.contactName && client.contactName.length > 50">{{KYC_CLIENT_VALIDATION_MESSAGES.max50}}</span>
             <span v-if="client.contactName && !verifyName(client.contactName)">{{KYC_CLIENT_VALIDATION_MESSAGES.letters}}</span>
+            <span v-if="client.contactName && verifyName(client.contactName) && !checkLastCharIsNotSpace(client.contactName)">{{KYC_CLIENT_VALIDATION_MESSAGES.noSpaceEnding}}</span>
           </p>
         </el-col>
       </el-row>
@@ -534,6 +536,7 @@
           alphaNumeric: 'Only alphanumeric characters are allowed. ',
           fee: 'Fee is not valid. ',
           maxFee: 'Maximum value is 1000000000 ',
+          noSpaceEnding: 'This field does not allow space endings',
         },
         rescreenIntervalScheduleSelectValue: null,
         modals: {
@@ -744,10 +747,10 @@
         return isValid
       },
       isValidClientName() {
-        return (typeof (this.client.clientName) === 'undefined' || (this.client.clientName !== '' && this.verifyName(this.client.clientName) && this.checkLength(this.client.clientName, 50)))
+        return (typeof (this.client.clientName) === 'undefined' || (this.client.clientName !== '' && this.verifyName(this.client.clientName) && this.checkLength(this.client.clientName, 50) && this.checkLastCharIsNotSpace(this.client.clientName)))
       },
       isValidClientReference() {
-        return (typeof (this.client.clientReference) === 'undefined' || (this.verifyAlphaNumeric(this.client.clientReference) && this.checkLength(this.client.clientReference, 6)) ) 
+        return (typeof (this.client.clientReference) === 'undefined' || (this.verifyAlphaNumeric(this.client.clientReference) && this.checkLength(this.client.clientReference, 12)) ) 
       },
       isValidSanctionCheckFee() {
         return (typeof (this.client.sanctionCheckFee) === 'undefined' || (this.client.sanctionCheckFee !== '' && this.client.sanctionCheckFee > 0 && this.checkFee(this.client.sanctionCheckFee) && this.checkMax(this.client.sanctionCheckFee)))
@@ -759,7 +762,7 @@
         return (typeof (this.client.contactEmail) === 'undefined' || (this.client.contactEmail !== '' && this.verifyEmail(this.client.contactEmail) && this.checkLength(this.client.contactEmail, 64)))
       },
       isValidContactName() {
-        return (typeof (this.client.contactName) === 'undefined' ||  (this.client.contactName !== '' && this.verifyName(this.client.contactName) && this.checkLength(this.client.contactName, 50)))
+        return (typeof (this.client.contactName) === 'undefined' ||  (this.client.contactName !== '' && this.verifyName(this.client.contactName) && this.checkLength(this.client.contactName, 50) && this.checkLastCharIsNotSpace(this.client.contactName)))
       },
       isValidPoaCheckFee() {
         return (typeof (this.client.poaCheckFee) === 'undefined' || (this.client.poaCheckFee !== '' && this.client.poaCheckFee > 0 && this.checkFee(this.client.poaCheckFee) && this.checkMax(this.client.poaCheckFee)))
@@ -847,7 +850,24 @@
           this.isLoad = true
           const response = await this.createProductConfigClient({body: copyClient})
             .catch(err => {
-              this.notifyVue('bottom', 'center', `${err.response.data.message || ''} ${err.response.data.detail || ''}`)
+              let message = '';
+              let detail = '';
+              
+              if (err.data) {
+                if (err.data.message) {
+                  message = err.data.message;
+                }
+                if (err.data.detail) {
+                  detail = err.data.detail;
+                }
+              } else if (err.message) {
+                message = err.message;
+              } else if (err.detail) {
+                detail = err.detail;
+              } else {
+                // not match
+              }
+              this.notifyVue('bottom', 'center', `${message} ${detail}`)
               this.client = cloneClient
               this.isLoad = false
             });
@@ -938,6 +958,9 @@
       },
       checkMax(fee) {
         return parseFloat(fee) <= 1000000000;
+      },
+      checkLastCharIsNotSpace (value) {
+        return value.substring(value.length - 1) !== ' ';
       }
     },
   }
