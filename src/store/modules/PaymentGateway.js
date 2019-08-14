@@ -14,7 +14,9 @@ import {
     ACTION_PG_GET_PAYMENT_METHODS,
     ACTION_PG_SET_PAYMENT_METHOD,
     ACTION_PG_GET_MERCHANTS,
-    ACTION_PG_GET_SINGLE_MERCHANT
+    ACTION_PG_GET_SINGLE_MERCHANT,
+    ACTION_PG_GET_PROCESSING_PROFILE,
+    ACTION_PG_GET_FLOAT_ACCOUNT
 } from '../types';
 
 const state = {
@@ -85,6 +87,27 @@ const actions = {
                 resolve(data.data);
             }).catch( error => {
                 dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + e.message, status: 'danger' });
+                reject(error)
+            });
+        });
+    },
+    [ACTION_PG_GET_PROCESSING_PROFILE]: ({commit, dispatch}, id) => {
+        return new Promise ( (resolve, reject) => {
+            Vue.prototype.$http.acchttp.get(`/processing-profile/${id}`).then( data => {
+                resolve(data.data);
+            }).catch( error => {
+                dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + e.message, status: 'danger' });
+                reject(error)
+            });
+        });
+    },
+    [ACTION_PG_GET_FLOAT_ACCOUNT]: ({commit, dispatch}, id) => {
+        return new Promise ( (resolve, reject) => {
+            Vue.prototype.$http.acchttp.get(`/float-account/${id}`).then( data => {
+                resolve(data.data);
+            }).catch( error => {
+                console.log( 'Float Account Error',JSON.parse(JSON.stringify(error) ) );
+                // dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + e.message, status: 'danger' });
                 reject(error)
             });
         });
