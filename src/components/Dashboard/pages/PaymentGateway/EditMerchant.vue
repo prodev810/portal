@@ -329,7 +329,9 @@ import {
     SHOW_TOAST_MESSAGE,
     ACTION_PG_GET_MERCHANTS,
     ACTION_PG_GET_CURRENCIES,
-    ACTION_PG_GET_SINGLE_MERCHANT
+    ACTION_PG_GET_SINGLE_MERCHANT,
+    ACTION_PG_GET_PROCESSING_PROFILE,
+    ACTION_PG_GET_FLOAT_ACCOUNT
 } from '@/store/types'
 import Collapse from '@/components/UIComponents/Collapse/Collapse'
 import CollapseItem from '@/components/UIComponents/Collapse/CollapseItem'
@@ -464,7 +466,9 @@ export default {
   methods: {
       ...mapActions({
           getMerchant: ACTION_PG_GET_SINGLE_MERCHANT,
-          getCurrencyList:ACTION_PG_GET_CURRENCIES
+          getCurrencyList:ACTION_PG_GET_CURRENCIES,
+          getProcessingProfile:ACTION_PG_GET_PROCESSING_PROFILE,
+          getFloatAccount:ACTION_PG_GET_FLOAT_ACCOUNT
       }),
     formatDate (date) {
       return moment(date).format('YYYY-MM-DD hh:mm:ss')
@@ -476,8 +480,20 @@ export default {
             this.merchantData.merchant_id = data.merchant_id;
             this.merchantData.short_code  = data.ext_merchant_id;
             this.merchantData.merchant_name = data.merchant_name;
+            this.getPProfile();
+            this.getFAccount();
         });
     },
+      getPProfile(){
+          this.getMerchant(this.$route.params.id).then(data=>{
+              console.log( 'data Processing Profile',data );
+          });
+      },
+      getFAccount(){
+          this.getFloatAccount(this.$route.params.id).then(data=>{
+              console.log( 'data FloatAccount',data );
+          });
+      },
       floatAccountEdit(){
           this.modalAddFloatAccount = false;
           console.log( 'newFloatAccountData',this.newFloatAccountData );
