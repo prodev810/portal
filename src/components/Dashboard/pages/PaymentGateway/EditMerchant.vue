@@ -329,7 +329,8 @@ import {
     SHOW_TOAST_MESSAGE,
     ACTION_PG_GET_MERCHANTS,
     ACTION_PG_GET_CURRENCIES,
-    ACTION_PG_GET_SINGLE_MERCHANT
+    ACTION_PG_GET_SINGLE_MERCHANT,
+    ACTION_PG_GET_MERCHANT_PROCESSING_PROFILE
 } from '@/store/types'
 import Collapse from '@/components/UIComponents/Collapse/Collapse'
 import CollapseItem from '@/components/UIComponents/Collapse/CollapseItem'
@@ -464,6 +465,7 @@ export default {
   methods: {
       ...mapActions({
           getMerchant: ACTION_PG_GET_SINGLE_MERCHANT,
+          getMerchantProcessing: ACTION_PG_GET_MERCHANT_PROCESSING_PROFILE,
           getCurrencyList:ACTION_PG_GET_CURRENCIES
       }),
     formatDate (date) {
@@ -476,6 +478,10 @@ export default {
             this.merchantData.merchant_id = data.merchant_id;
             this.merchantData.short_code  = data.ext_merchant_id;
             this.merchantData.merchant_name = data.merchant_name;
+        });
+
+        this.getMerchantProcessing(this.$route.params.id).then( data =>{
+           console.log( 'PROCESS', data );
         });
     },
       floatAccountEdit(){

@@ -42,7 +42,11 @@
         } else if (this.$route.path.split('/').slice(-1)[0] == "search") {
           return "Search";
 
-        } else if (this.$route.path.split('/').slice(-1)[0] == "kyc-mainpage") {
+        }
+          else if (this.$route.path.split('/').slice(-1)[0] == "ipg") {
+            return "IPG";
+        }
+        else if (this.$route.path.split('/').slice(-1)[0] == "kyc-mainpage") {
           return "KYC Main Page";
 
         } else if (this.$route.path.split('/').slice(-1)[0] === 'product-config') {
