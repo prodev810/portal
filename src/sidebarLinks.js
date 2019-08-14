@@ -130,7 +130,23 @@ export default [
         permission: permission.UNALLOCATED_FLOAT_VIEW
       }
     ]
-  }, 
+  },
+  {
+        name: 'Flexmonster',
+        i18n: 'menu.flexmonster',
+        permission: permission.ALL_PERMISSION,
+        icon: 'ti-panel',
+        image: 'ic_reseller.svg',
+        path:'/ipg',
+      collapsed: true,
+      children: [
+          {
+              path: '/ipg',
+              name: 'IPG',
+              i18n: 'menu.flexmonster',
+              permission: permission.ALL_PERMISSION,
+          }]
+  },
   {
     name: 'KYC Module',
     i18n: 'menu.kyc_module',

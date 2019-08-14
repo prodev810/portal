@@ -14,7 +14,8 @@ import {
     ACTION_PG_GET_PAYMENT_METHODS,
     ACTION_PG_SET_PAYMENT_METHOD,
     ACTION_PG_GET_MERCHANTS,
-    ACTION_PG_GET_SINGLE_MERCHANT
+    ACTION_PG_GET_SINGLE_MERCHANT,
+    ACTION_PG_GET_MERCHANT_PROCESSING_PROFILE
 } from '../types';
 
 const state = {
@@ -82,6 +83,16 @@ const actions = {
     [ACTION_PG_GET_SINGLE_MERCHANT]: ({commit, dispatch}, id) => {
         return new Promise ( (resolve, reject) => {
             Vue.prototype.$http.acchttp.get(`/merchant-profile/${id}`).then( data => {
+                resolve(data.data);
+            }).catch( error => {
+                dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + e.message, status: 'danger' });
+                reject(error)
+            });
+        });
+    },
+    [ACTION_PG_GET_MERCHANT_PROCESSING_PROFILE]: ({commit, dispatch}, id) => {
+        return new Promise ( (resolve, reject) => {
+            Vue.prototype.$http.acchttp.get(`/processing-profile/${id}`).then( data => {
                 resolve(data.data);
             }).catch( error => {
                 dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + e.message, status: 'danger' });

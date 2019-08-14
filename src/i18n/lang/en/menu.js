@@ -6,6 +6,7 @@ export default {
   create_reseller: `Create Reseller`,
   view_reseller: `View Resellers`,
   float_balance: `Float Balance`,
+  flexmonster: `IPG MIS`,
   view_float_account: `View Float Account`,
   review_debit_credit: `Review Debit/Credit`,
   unallocated_float: `Unallocated Float`,

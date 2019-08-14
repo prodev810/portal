@@ -20,6 +20,7 @@ import ResellerCreateCorporateModule from '../components/Dashboard/pages/Resller
 import ResellerInvoice from '../components/Dashboard/pages/Resller/Invoice';
 import Invoicesdetails from "../components/Dashboard/pages/Resller/Invoicesdetails";
 import SearchInvoices from "../components/Dashboard/pages/Resller/SearchInvoices";
+import Flexmonster from "../components/Dashboard/pages/Flexmonster/Flexmonster";
 // Kyc
 import Kyc from "../components/Dashboard/pages/Kyc/Kyc";
 import KycDashboard from "../components/Dashboard/pages/Kyc/KycDashboard";
@@ -160,6 +161,29 @@ let floatAccount = {
     }
   ]
 };
+
+
+// Flexmonster IPG
+const flexmonster_ipg = {
+    path: '/ipg',
+    component: DashboardLayout,
+    meta: {
+        requiresAuth: true,
+        roles: ['*'],
+    },
+    children:[
+        {
+            path: '/ipg',
+            name: 'Flexmonster',
+            component: Flexmonster,
+            meta: {
+                //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+                requiresAuth: true,
+                roles: ['*'],
+            }
+        }]
+}
+
 
 // payment gateway routes
 
@@ -597,45 +621,47 @@ let system = {
 }
 
 const routes = [
-  {
-    path: '/',
-    component: DashboardLayout,
-    redirect: '/card-program',
-    meta: {
-      requiresAuth: true,
-      roles: ['*'],
-    },
-    children: [
-      {
-        path: 'calendar',
-        name: 'Calendar',
-        component: Calendar,
-        meta: {
-          requiresAuth: true,
-          roles: ['*'],
-        }
+    {
+      path: '/',
+      component: DashboardLayout,
+      redirect: '/card-program',
+      meta: {
+        requiresAuth: true,
+        roles: ['*'],
       },
-      {
-        path: 'charts',
-        name: 'Charts',
-        component: Charts,
-        meta: {
-          requiresAuth: true,
-          roles: ['*'],
+      children: [
+        {
+          path: 'calendar',
+          name: 'Calendar',
+          component: Calendar,
+          meta: {
+            requiresAuth: true,
+            roles: ['*'],
+          }
+        },
+        {
+          path: 'charts',
+          name: 'Charts',
+          component: Charts,
+          meta: {
+            requiresAuth: true,
+            roles: ['*'],
+          }
         }
-      }
-    ]
-  },
-  cardProgram,
-  loginPage,
-  registerPage,
-  lockPage,
-  floatAccount,
-  reseller,
-  payment_gateway,
-  kyc,
-  system,
-  unauthorizedPage,
+      ]
+    },
+    cardProgram,
+    loginPage,
+    registerPage,
+    lockPage,
+    floatAccount,
+    flexmonster_ipg,
+    reseller,
+    payment_gateway,
+    kyc,
+    system,
+    unauthorizedPage,
+
   {path: '*', component: NotFound}
 ];
 
