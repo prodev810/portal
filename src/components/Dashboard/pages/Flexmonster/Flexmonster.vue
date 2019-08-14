@@ -39,13 +39,13 @@ import 'flexmonster/flexmonster.min.css';
                         "dataSource": {
                             "dataSourceType": "elasticsearch",
                             /* the host for the connection */
-                            // "node": "https://5396525c3a47458dbff3ff819b4724cc.eu-west-1.aws.found.io:9243",
-                            "node": "https://olap.flexmonster.com:9200",
+                            "node": "https://5396525c3a47458dbff3ff819b4724cc.eu-west-1.aws.found.io:9243",
+                            // "node": "https://olap.flexmonster.com:9200",
                             /* the name of Elasticsearch index to connect */
                             "index": "fm-product-sales"
                         }
                     },
-                    licenseKey: "Z7N1-XCI642-6K3711-546Y3Y"
+                    licenseKey: "Z78W-XBCA6H-0Y6O5Z-4C4P1K"
                 });
                 console.log( 'pivot', pivot );
             }
