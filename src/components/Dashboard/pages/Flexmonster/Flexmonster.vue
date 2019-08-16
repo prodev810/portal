@@ -38,11 +38,10 @@ import 'flexmonster/flexmonster.min.css';
                     report: {
                         "dataSource": {
                             "dataSourceType": "elasticsearch",
-                            /* the host for the connection */
-                            "node": "https://5396525c3a47458dbff3ff819b4724cc.eu-west-1.aws.found.io:9243",
-                            // "node": "https://olap.flexmonster.com:9200",
-                            /* the name of Elasticsearch index to connect */
-                            "index": "fm-product-sales"
+                            "node": "https://flexmon:mjjT63e@55396525c3a47458dbff3ff819b4724cc.eu-west-1.aws.found.io:9243/",
+                            // "index": "omnipay-bfc-mp*",
+                            "index": "",
+
                         }
                     },
                     licenseKey: "Z78W-XBCA6H-0Y6O5Z-4C4P1K"
