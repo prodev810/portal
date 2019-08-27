@@ -46,7 +46,6 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
       return `Bearer ${token}`
     }
     token = store.getters.SECURITY_AUTH.token
-
     return `Bearer ${token}`
   }
 

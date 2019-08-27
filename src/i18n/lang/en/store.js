@@ -13,6 +13,10 @@ const float_balance = {
   success_edit_float_entity: `Edited float entry successfully`
 }
 
+const clients = {
+    error_load_clients: `There is an error with retrieving the data, please refresh the page and try again,if the problem persists please contact Technical Support`
+}
+
 const reseller = {
   success_create_reseller: `Created new card reseller sub successfully`,
   success_edit_reseller: `Edited successfully`,
@@ -35,9 +39,10 @@ const paymentGateway = {
 }
 
 export default {
-  card_program,
-  float_balance,
-  reseller,
-  ui_module,
-  paymentGateway
+    card_program,
+    float_balance,
+    reseller,
+    clients,
+    ui_module,
+    paymentGateway
 }

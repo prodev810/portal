@@ -1,5 +1,6 @@
 import menu from './menu'
 import reseller from './reseller'
+import client from './client'
 import card_program from './card_program'
 import invoice from './invoice'
 import approve_debit from './approve_debit'
@@ -21,6 +22,7 @@ import kyc from './kyc'
 export default {
   menu,
   reseller,
+  client,
   card_program,
   invoice,
   approve_debit,

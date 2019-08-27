@@ -37,7 +37,7 @@ axiosWrapper.install = (Vue, configOptions = undefined) => {
 
     //interceptors for response
     axios.interceptors.response.use(response => {
-      console.log(TAG, response)
+      console.log(TAG + '_resp', response)
       return response
     }, error => {
       let consoleMsg = ''

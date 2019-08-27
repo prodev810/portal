@@ -24,6 +24,13 @@ export default {
       TIMEOUT: process.env.VUE_APP_API_CALL_TIMEOUT,
       SHORTCUT: 'abahttp',
       OAUTH: '$oAuth' // same oAuth as main
+    },
+    {
+        BASE_URL: 'https://api.dev.ceevo.com/client-mgmt',
+        TIMEOUT: 35000,
+        SHORTCUT: 'clhttp',
+        OAUTH: '$oAuth' // same oAuth as main
     }
+
   ]
 }
