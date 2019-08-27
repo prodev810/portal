@@ -1,0 +1,9 @@
+{
+    "realm": "ceevo-ad",
+    "auth-server-url": "https://auth.dev.transact24.com/auth",
+    "ssl-required": "external",
+    "resource": "portal-app",
+    "use-resource-role-mappings": false,
+    "public-client": true,
+    "confidential-port": 0
+}

@@ -1,0 +1,76 @@
+// vim: set softtabstop=4:shiftwidth=4:expandtab:tabstop=4:autoindent
+
+pipeline {
+    parameters {
+        gitParameter (
+            defaultValue: 'master',
+            description: 'Branch or tag to deploy',
+            name: 'deploy_branch',
+            quickFilterEnabled: true,
+            selectedValue: 'TOP',
+            sortMode: 'DESCENDING_SMART',
+            tagFilter: 'release-*',
+            type: 'PT_BRANCH_TAG')
+    }
+    environment {
+        def nodeEnv = 'NodeJS 10'
+    }
+
+    agent any
+
+    options {
+        timestamps()
+	disableConcurrentBuilds()
+        skipDefaultCheckout()
+    }
+
+    stages {
+        stage('Preparation') {
+            steps {
+                dir('dist') {
+                    deleteDir()
+                }
+
+		checkout scm
+		echo "Checking out branch/tag: ${params.deploy_branch}"
+                sh "git checkout ${params.deploy_branch}"
+
+                nodejs(nodeEnv) {
+                    sh "npm install -g yarn synp"
+                    sh "yarn install && rm -f package-lock.json && synp -s yarn.lock"
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                nodejs(nodeEnv) {
+                    sh "yarn run build"
+                }
+            }
+        }
+
+        stage('S3 Push') {
+            steps {
+		withAWS(region:'eu-west-3', credentials:'AWS-135683813613-jenkins.dev-wwwpublisher') {
+		    s3Upload(
+			bucket: 'portal.ceevo.com',
+			excludePathPattern: '.travis.yml,LICENSE,README.md,gulpfile.js,package*.json,scss/**,**/.gitkeep,**/.gitignore',
+			includePathPattern: '**',
+			path: '',
+			workingDir: 'dist/',
+			metadatas: ["build_no:${BUILD_NUMBER}", "deploy_tag:${params.deploy_branch}"]
+			//,"by:${currentBuild.getBuildCauses}"]
+			)
+		}
+            }
+        }
+    }
+
+    post {
+	unsuccessful {
+	    emailext (subject: '$DEFAULT_SUBJECT', body: '$DEFAULT_CONTENT', recipientProviders: [culprits(), brokenTestsSuspects(), brokenBuildSuspects()])
+
+	}
+    }
+}

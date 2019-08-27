@@ -302,7 +302,7 @@
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="client && client.applicationFee && isViewMode">{{ client.applicationFee |
             numberMoneyFormat }}</p>
-          <el-input v-model="client.applicationFee"
+          <el-input v-model="client.applicationFee" step="0.01"
                     @blur="handleNumberInput('applicationFee')"
                     :class="{'is_invalid': !isValidApplicationFee}"
                     type="number" min="0"
@@ -324,7 +324,7 @@
         <el-col :sm="11">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="client && client.idCheckFee && isViewMode">{{ client.idCheckFee | numberMoneyFormat }}</p>
-          <el-input v-model="client.idCheckFee"
+          <el-input v-model="client.idCheckFee" step="0.01"
                     @blur="handleNumberInput('idCheckFee')"
                     :class="{'is_invalid': !isValidIdCheckFee}"
                     type="number" min="0"
@@ -346,7 +346,7 @@
         <el-col :sm="11">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="client && client.poaCheckFee  && isViewMode">{{ client.poaCheckFee | numberMoneyFormat }}</p>
-          <el-input v-model="client.poaCheckFee"
+          <el-input v-model="client.poaCheckFee" step="0.01"
                     @blur="handleNumberInput('poaCheckFee')"
                     type="number" min="0"
                     :class="{'is_invalid': !isValidPoaCheckFee}"
@@ -370,7 +370,7 @@
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="client && client.sanctionCheckFee && isViewMode">
             {{ client.sanctionCheckFee | numberMoneyFormat}}</p>
-          <el-input v-model="client.sanctionCheckFee"
+          <el-input v-model="client.sanctionCheckFee" step="0.01"
                     @blur="handleNumberInput('sanctionCheckFee')"
                     :class="{'is_invalid': !isValidSanctionCheckFee}"
                     type="number" min="0"
@@ -392,7 +392,7 @@
         <el-col :sm="11">
           <p class="kyc-client-row__text kyc-client-row__name"
              v-if="client && client.smsFee && isViewMode">{{ client.smsFee | numberMoneyFormat}}</p>
-          <el-input v-model="client.smsFee"
+          <el-input v-model="client.smsFee" step="0.01"
                     @blur="handleNumberInput('smsFee')"
                     :class="{'is_invalid': !isValidSmsFee}"
                     type="number" min="0"
@@ -615,28 +615,6 @@
       },
     },
     async created() {
-      this.getClientStatuses()
-
-      this.clientId = this.$route.params.id
-
-      this.getCurrencyList()
-
-      if (this.clientId) {
-        const responseClient = await this.getProductConfigClientById({id: this.clientId})
-          .catch(err => {
-              this.notifyVue('bottom', 'center', `${err.message || ''} ${err.detail || ''}`)
-              console.log('error get client by id', err)
-              })
-        if (responseClient) {
-          responseClient.issuing = responseClient.clientType === 'ISSUING' ? 'Yes' : 'No'
-          this.client = responseClient
-        }
-      }
-      if (this.mode !== 'create') {
-        this.rescreenIntervalScheduleSelectValue = this.handleRescreenIntervalItemLabel()
-      }
-
-      this.getDateRange(1, 30, this.dateIntervalList)
       this.start();
     },
     watch: {
@@ -809,8 +787,10 @@
         return string.charAt(0).toUpperCase() + string.slice(1)
       },
       getDateRange(start, end, dateArray) {
-        for (let i = start; i <= end; i++) {
-          dateArray.push(i)
+        if (dateArray.length === 0) {
+          for (let i = start; i <= end; i++) {
+            dateArray.push(i)
+          }
         }
       },
       addDateRangeLabel(value) {
@@ -910,7 +890,8 @@
         if (value && value.toString().indexOf('e') == -1) {
           this.client[`${name}`] = Math.abs(Number(value))
         } else {
-          this.client[`${name}`] = 0
+          this.$set(this.client, name, 0)
+          // this.client[`${name}`] = 0
         }
       },
       notifyVue(verticalAlign, horizontalAlign, msg, type = 'danger') {

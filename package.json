@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build": "vue-cli-service build",
-    "dev": "vue-cli-service serve --open"
+    "dev": "vue-cli-service serve --open",
+    "build-testing": "vue-cli-service build --mode development"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -28,6 +29,7 @@
     "sweetalert2": "^6.11.4",
     "vee-validate": "^2.1.0-beta.6",
     "vue": "^2.5.16",
+    "vue-application-insights": "^1.0.6",
     "vue-chartjs": "^3.3.2",
     "vue-clickaway": "^2.2.2",
     "vue-directive-tooltip": "^1.5.0",

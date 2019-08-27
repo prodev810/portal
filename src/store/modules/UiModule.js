@@ -1,5 +1,4 @@
 import {
-  GET_SUPPORTED_CURRENCIES,
   GETTER_AUTH_SATATE, GETTER_MODAL_TYPE, GETTER_SUPPORTED_CURRENCIES,
   GETTER_TOAST_MESSAGE,
   HIDE_TOAST_MESSAGE, MUTATE_AUTH_SATATE, MUTATE_MODAL_TYPE,
@@ -55,15 +54,6 @@ const actions = {
   [UPDATE_RESPONSE_STATE]: ({commit}, {key, status}) => commit(MUTATE_RESPONSESTATE_STATE, {key, status}),
   [SET_AUTH_SATATE]: ({commit}, loginSate) => commit(MUTATE_AUTH_SATATE, loginSate),
   [SET_MODAL_TYPE]: ({commit}, payload) => commit(MUTATE_MODAL_TYPE, payload),
-  [GET_SUPPORTED_CURRENCIES]: async ({commit}) => {
-    try {
-      const {data} = await Vue.prototype.$http.aba1.get('https://api.dev.transact24.com/mcmaster-api/v1/api/currencies/all')
-      console.log(data);
-      commit(MUTATE_SUPPORTED_CURRENCIES, data)
-    } catch (e) {
-      console.log(e.response, 'There was an error retrieving the currencies requested, please try again. If the problem persists please contact technical support');
-    }
-  }
 }
 const mutations = {
   [MUTATE_TOAST_MESSAGE]: (state, payload) => {

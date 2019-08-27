@@ -73,7 +73,7 @@ pipeline {
         stage('Build') {
             steps {
                     nodejs(nodeEnv) {
-                        sh "NODE_ENV=development npx yarn run build"
+                        sh "yarn run build-testing"
                     }
             }
         }

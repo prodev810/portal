@@ -1,14 +1,20 @@
 <template>
-  <el-select class="ceevo-select"
-             :placeholder="placeholder"
-             v-model="selectedValue">
-    <el-option v-for="option in options"
-              class="ceevo-select"
-              :value="option.value"
-              :label="option.label"
-              :key="option.label">
-    </el-option>
-  </el-select>
+  <div>
+    <div :class="[{'div-error-style': error !== ''}]">
+      <el-select @change="change"
+                class="ceevo-select"
+                :placeholder="placeholder"
+                v-model="selectedValue">
+        <el-option v-for="option in options"
+                  class="ceevo-select"
+                  :value="option.value"
+                  :label="option.label"
+                  :key="option.label">
+        </el-option>
+      </el-select>
+    </div>
+    <div v-if="error !== ''" class="text-danger invalid-feedback aba__form--error" style="display: block;">{{ error }}</div>
+  </div>
 </template>
 
 <script>
@@ -20,7 +26,11 @@ export default {
       default: ''
     },
     value: [Number, String],
-    options: Array
+    options: Array,
+    error: {
+      type: String,
+      default: ''
+    }
   },
   computed: {
     selectedValue: {
@@ -30,6 +40,11 @@ export default {
       set (value) {
         this.$emit('input', value)
       }
+    }
+  },
+  methods: {
+    change (val) {
+      this.$emit('change', val)
     }
   }
 }
@@ -48,6 +63,9 @@ $hoverColor: #999999;
 .el-select-dropdown__item.ceevo-select.selected {
   background-color: #2ED684;
   color: white;
+}
+.div-error-style {
+  border: 1px solid #ef8157;
 }
 </style>
 

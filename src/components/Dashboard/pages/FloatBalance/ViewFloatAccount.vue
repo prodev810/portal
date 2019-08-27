@@ -178,7 +178,7 @@
   import {mapActions, mapGetters} from 'vuex'
   import {
     GET_ALL_CARD_PROGRAM,
-    GET_ALL_FLOATS, GET_ALL_RESELLER_SUBSCRIPTIONS, GET_SUPPORTED_CURRENCIES,
+    GET_ALL_FLOATS, GET_ALL_RESELLER_SUBSCRIPTIONS,
     GETTER_ALL_CARDS,
     GETTER_FLOATS,
     GETTER_LOADINGSTATE_FLOAT_BALANCE, GETTER_RESELLER_SUBSCRIPTIONS,
@@ -320,7 +320,6 @@
       ...mapActions({
         getFloats: GET_ALL_FLOATS,
         getAllCards: GET_ALL_CARD_PROGRAM,
-        getSupportedCurrencies: GET_SUPPORTED_CURRENCIES,
         getAllResellers: GET_ALL_RESELLER_SUBSCRIPTIONS
       }),
       showInfo () {

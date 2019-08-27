@@ -227,7 +227,6 @@ const actions = {
 
     }
   }, [GET_UNALLOCATED_FLOAT]: async ({commit, dispatch}, {currencyCode, perPage, page, resellerCode, cardProgramCode, date}) => {
-    //https://api.dev.transact24.com/mcbiz/v1/v1/business/floataccounts/unallocated-list?card_program_code=T24WSilver&currency_code=EUR&page=1&per_page=20&reseller_code=TCC_001&target_date=2018-12-19
     try {
       commit(MUTATE_LOADINGSTATE_FLOAT_BALANCE, 'getting')
 
