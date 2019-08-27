@@ -15,15 +15,37 @@ Link to [Documentation](https://cristijora.github.io/paper-dashboard-pro/documen
 ## Build Setup
 
 ### install dependencies
-`npm install`
+`yarn install`
 ### serve with hot reload at localhost:8080
-`npm run dev`
+`yarn run dev`
+### build for testing with minification
+`yarn run build-testing`
 ### build for production with minification
-`npm run build`
-### run unit tests
-`npm run unit`
-### run and watch unit tests
-`npm run unit:watch`
+`yarn run build`
+### run unit tests (skip this command, we don`t have any unit tests here)
+`yarn run unit`
+### run and watch unit tests (skip this command, we don`t have any unit tests here)
+`yarn run unit:watch`
 
+## Env setting
+
+### vue environment file
+`.env` for global setting
+
+`.env.development` for dev and testing.
+
+`.env.production` for production only.
+### keycloak environment file
+`environments/keycloak/development/keycloak.json` for dev and testing.
+
+`environments/keycloak/production/keycloak.json` for production only.
+
+## NOTE
+If use `npm` command before, we suggest remove 'node_modules' folder and run `yarn install` to setup components and `yarn run dev` to startup project.
+
+DON`T update/upgrade components version unless you know what your want and keep current functions work normally.
+
+### Guide
+(Yarn)[https://yarnpkg.com/en/]
 
 [CHANGELOG]: ./CHANGELOG.md

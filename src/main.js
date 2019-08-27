@@ -49,9 +49,9 @@ import axiosConfig from './config/axios.config'
 import oAuthConfig from './config/oAuth.config'
 
 import {store} from './store/store.js'
-import {GET_SUPPORTED_CURRENCIES} from "./store/types";
 import i18n from './i18n'
 import permission from '@/constants/permission'
+import VueAppInsights from 'vue-application-insights'
 
 // plugin setup
 Vue.use(VueRouter)
@@ -225,6 +225,18 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+if (process.env.VUE_APP_AI_KEY !== '') {
+  // console.log('has VUE_APP_AI_KEY')
+  Vue.use(VueAppInsights, {
+    id: process.env.VUE_APP_AI_KEY,
+    router
+  })
+
+  Vue.config.errorHandler = function  (error, vm, info) {
+    window.appInsights.trackException(error);
+    console.error(error)
+  }
+}
 
 /* eslint-disable no-new */
 export const AbaModalEvents = new Vue()

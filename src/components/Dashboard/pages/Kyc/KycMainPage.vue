@@ -6,7 +6,7 @@
           <div class="kyc__section kyc__section__buttons d-flex justify-content-between align-items-center flex-wrap">
             <h3 class="kyc__section__header mb-0 mb-xl-0 mr-4">Product Config</h3>
             <div class="my-3 d-flex justify-content-between kyc-top-buttons">
-              <p-button class="btn btn--issue mr-5" type="success">Issuing</p-button>
+              <p-button class="btn btn--issue mr-5" type="success" v-if="getterClientInfo && getterClientInfo.clientType !== 'STANDARD'">Issuing</p-button>
               <p-button round class="btn btn--close btn--shadow mr-1"
                         v-if="hasPermission(permission.KYC_MAIN_PAGE_BACK_SEARCH)"
                         @click.stop.prevent="closeAndReturn">Close and Return
@@ -763,7 +763,8 @@
         ]
         if (!this.getterClientInfo) return obj;
         obj[0].value = this.getterClientInfo.appReferenceId
-        obj[1].value = this.getterClientInfo.clientAppRef
+        // obj[1].value = this.getterClientInfo.clientAppRef
+        obj[1].value = this.getterClientInfo.clientReference
         obj[2].value = this.getterClientInfo.applicationStatus
         obj[3].value = this.getterClientInfo.verifyAttempts
         obj[4].value = formatDate(this.getterClientInfo.lastSmsSentDate, true)

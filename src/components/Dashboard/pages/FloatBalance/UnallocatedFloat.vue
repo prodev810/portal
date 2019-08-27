@@ -108,7 +108,6 @@
     GET_ALL_CARD_PROGRAM,
     GET_ALL_FLOATS,
     GET_ALL_RESELLER_SUBSCRIPTIONS,
-    GET_SUPPORTED_CURRENCIES,
     GET_UNALLOCATED_FLOAT,
     GETTER_ALL_CARDS,
     GETTER_FLOATS,
@@ -244,7 +243,6 @@
       ...mapActions({
         getFloats: GET_ALL_FLOATS,
         getAllCards: GET_ALL_CARD_PROGRAM,
-        getSupportedCurrencies: GET_SUPPORTED_CURRENCIES,
         getAllResellers: GET_ALL_RESELLER_SUBSCRIPTIONS,
         getUnallocatedFloats: GET_UNALLOCATED_FLOAT
       }),

@@ -298,21 +298,22 @@ oAuthWrapper.install = (Vue, configOptions = undefined) => {
    * private - load permission after login
    */
   const loadPermissions = async () => {
-    const response = await Vue.prototype.$http.aba1.get('https://api.dev.transact24.com/mcaba/v1/v1/userprofile')
-    const currentUserRole = response.data.roles
-    if (currentUserRole.length > 0) {
-      saveRoleInSessionStorage(currentUserRole[0])
-    }
-    const currentResellerCode = response.data.resellerCodes
-    if (currentResellerCode.length > 0) {
-      saveResellerCodeInSessionStorage(currentResellerCode[0])
-    }
+    // const response = await Vue.prototype.$http.aba1.get('https://api.dev.transact24.com/mcaba/v1/v1/userprofile')
+    // const currentUserRole = response.data.roles
+    // if (currentUserRole.length > 0) {
+    //   saveRoleInSessionStorage(currentUserRole[0])
+    // }
+    // const currentResellerCode = response.data.resellerCodes
+    // if (currentResellerCode.length > 0) {
+    //   saveResellerCodeInSessionStorage(currentResellerCode[0])
+    // }
     
-    if (response.data.isSuperUser) {
-      return [permission.ALL_PERMISSION]
-    } else {
-      return response.data.permissions
-    }
+    // if (response.data.isSuperUser) {
+    //   return [permission.ALL_PERMISSION]
+    // } else {
+    //   return response.data.permissions
+    // }
+    return [permission.ALL_PERMISSION]
   }
 
   /**

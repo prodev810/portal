@@ -117,7 +117,7 @@ const actions = {
       commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.GETTING)
 
       const {data} = await Vue.prototype.$http.aba1.get(
-        `/program-mgnt/reseller-codes/`
+        `/program-mgnt/reseller-codes`
       );
 
       commit(MUTATE_GET_ALL_RESELLER_SUBSCRIPTIONS, {data});
