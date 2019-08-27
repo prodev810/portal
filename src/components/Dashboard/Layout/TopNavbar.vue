@@ -36,6 +36,7 @@
       };
     }, computed: {
       mainMenuTitle() {
+          console.log('Split', this.$route.path.split('/') );
         if (this.$route.path.split('/').slice(-1)[0] == "workflow") {
           return "Work flow";
 
@@ -51,7 +52,11 @@
           return "POA Action";
         } else if (this.$route.path.split('/')[2] === 'poa-view') {
           return "POA View";
-        } else if (this.$route.path.split('/')[1] === 'reseller') {
+        }
+        else if (this.$route.path.split('/')[1] === 'client') {
+          return "Client View";
+        }
+        else if (this.$route.path.split('/')[1] === 'reseller') {
           if (this.$route.path.split('/')[2] === 'create') {
             return "Create Reseller Corporate";
           } else if (this.$route.path.split('/')[2] === 'view') {

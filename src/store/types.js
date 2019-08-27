@@ -74,6 +74,7 @@ export const GETTER_VIEW_STATEMENT = 'GETTER_VIEW_STATEMENT';
 
 /** client actions */
 export const ACTION_GET_ALL_CLIENTS_LIST = 'ACTION_GET_ALL_CLIENTS_LIST';
+export const ACTION_GET_CLIENT = 'ACTION_GET_CLIENT';
 // -> mutations
 export const MUTATE_GET_ALL_CLIENTS_LIST = 'MUTATE_GET_ALL_CLIENTS_LIST';
 // -> getters

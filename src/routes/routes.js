@@ -33,6 +33,7 @@ import PGEditMerchant from '@/components/Dashboard/pages/PaymentGateway/EditMerc
 import ResellerView from '../components/Dashboard/pages/Resller/View';
 //Clients
 import Clients from '../components/Dashboard/pages/Client/Clients';
+import EditClient from '../components/Dashboard/pages/Client/EditClient';
 // GeneralViews
 import NotFound from '../components/GeneralViews/NotFoundPage.vue';
 import NoPermission from '../components/Dashboard/pages/Dashboard/NoPermission.vue';
@@ -222,7 +223,7 @@ let payment_gateway = {
 };
 
 let client = {
-    path: '/client',
+    path: '/clients',
     // redirect: '/reseller/view?page=0&per_page=10',
     redirect: '/clients/view',
     component: DashboardLayout,
@@ -236,8 +237,6 @@ let client = {
             path: '/clients/view',
             name: 'Clients view',
             component: Clients,
-            // component: ResellerCreateCorporateModule,
-            props: {context: 'view'},
             meta: {
                 //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
                 requiresAuth: true,
@@ -247,7 +246,7 @@ let client = {
         {
             path: '/client/:id',
             name: 'Client View',
-            component: Clients,
+            component: EditClient,
             props: {context: 'view'},
             meta: {
                 //permission: permission.RESELLER_SUBSCRIPTION_VIEW,

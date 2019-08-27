@@ -44,9 +44,9 @@ export default {
     return {
       loading: true,
       clientHeader: [
-        { name: 'accountName', i18n: 'client.listing.table_header.name' },
-        { name: 'accountStage', i18n: 'client.listing.table_header.stage' },
-        { name: 'companyName', i18n: 'client.listing.table_header.company' },
+        { name: 'account_name', i18n: 'client.listing.table_header.name' },
+        { name: 'merchant_account_stage.name', i18n: 'client.listing.table_header.stage' },
+        { name: 'company_name', i18n: 'client.listing.table_header.company' },
         { name: 'country', i18n: 'client.listing.table_header.country' },
         { name: 'email', i18n: 'client.listing.table_header.email' },
         { name: 'createdDate', i18n: 'client.listing.table_header.date' }
@@ -82,8 +82,8 @@ export default {
           getClients: ACTION_GET_ALL_CLIENTS_LIST
       }),
       viewClient(index) {
-          // let client_id = index.index.row.id
-          // this.$router.push(`/client/${client_id}`)
+          let client_id = index.index.row.id
+          this.$router.push(`/client/${client_id}`)
       },
       handleInput(ev) {
           console.log( ev );

@@ -64,30 +64,30 @@ export default [
         image: 'ic_reseller.svg',
         collapsed: true,
         children: [
-            {
-                name: 'Create Client',
-                path: '/client/create',
-                i18n: 'menu.create_client',
-                permission: permission.CLIENT_EDIT
-            },
+            // {
+            //     name: 'Create Client',
+            //     path: '/client/create',
+            //     i18n: 'menu.create_client',
+            //     permission: permission.CLIENT_EDIT
+            // },
             {
                 name: 'View Clients',
                 path: '/clients/view',
                 i18n: 'menu.view_client',
                 permission: permission.CLIENT_VIEW
             },
-            {
-                name: 'View Client',
-                path: '/client/view/:id',
-                permission: permission.CLIENT_VIEW,
-                hidden: true,
-            },
-            {
-                name: 'Edit Client',
-                path: '/client/edit/:id',
-                permission: permission.CLIENT_EDIT,
-                hidden: true,
-            },
+            // {
+            //     name: 'View Client',
+            //     path: '/client/view/:id',
+            //     permission: permission.CLIENT_VIEW,
+            //     hidden: true,
+            // },
+            // {
+            //     name: 'Edit Client',
+            //     path: '/client/edit/:id',
+            //     permission: permission.CLIENT_EDIT,
+            //     hidden: true,
+            // },
         ]
     },
   {
