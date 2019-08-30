@@ -84,7 +84,9 @@
 </template>
 
 <script>
-    import {mapActions, mapState} from 'vuex';
+import {mapActions, mapState} from 'vuex'
+import moment from 'moment'
+
 import {
     SHOW_TOAST_MESSAGE,
     ACTION_GET_CLIENT
@@ -158,7 +160,7 @@ export default {
                   this.clientData.active = data.active;
                   this.clientData.company_name = data.company_name;
                   this.clientData.country = data.country;
-                  this.clientData.created_date = data.created_date;
+                  this.clientData.created_date = moment(data.created_date).format('YYYY-MM-DD HH:MM:SS');
                   this.clientData.crm_id = data.crm_id;
                   this.clientData.display_currency = data.crm_id;
                   this.clientData.email = data.email;
