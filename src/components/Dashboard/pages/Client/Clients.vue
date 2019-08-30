@@ -12,11 +12,11 @@
         </td>
       </template>
     </regular-table>
-    <div class="table-pagination mt-2" v-if="clientsRaw && clientsRaw.length">
+    <div class="table-pagination mt-2" v-if="clientFiltered && clientFiltered.length">
       <p-pagination
               v-model="currentPage"
               :perPage="perPage"              
-              :total="clientsRaw.length"
+              :total="clientFiltered.length"
               @input="handleInput"
               displayPerPage
       ></p-pagination>
@@ -66,8 +66,13 @@ export default {
     ...mapState({
       clientsRaw: state => state.Clients.clients  
     }),
+    clientFiltered () {      
+      return this.search_company
+        ? this.clientsRaw.filter(item => item.company_name.toLowerCase().includes(this.search_company.toLowerCase()))
+        : this.clientsRaw
+    },
     clientsPaged () {
-      return this.clientsRaw.slice((this.currentPage - 1) * this.perPage, this.currentPage * this.perPage)
+      return this.clientFiltered.slice((this.currentPage - 1) * this.perPage, this.currentPage * this.perPage)
     }
         // totalPages:(state) => {
         //     return state.Clients.clients.totalPages
