@@ -5,20 +5,19 @@
     <regular-table
       striped responsive condensed bordered
       :headings="clientHeader"
-      :value="clients">
+      :value="clientsPaged">
       <template slot-scope="index">              
         <td>
           <p-button type="primary" @click="viewClient(index)" size="sm" outline round>{{ $i18n.t('client.listing.button.view_client') }}</p-button>
         </td>
       </template>
     </regular-table>
-    <div class="table-pagination" v-if="clients && clients.length">
+    <div class="table-pagination mt-2" v-if="clientsRaw && clientsRaw.length">
       <p-pagination
-              :pageCount="currentPage"
-              :total="totalPages"
               v-model="currentPage"
+              :perPage="perPage"              
+              :total="clientsRaw.length"
               @input="handleInput"
-              :perPage="perPage"
               displayPerPage
       ></p-pagination>
     </div>
@@ -51,11 +50,11 @@ export default {
         { name: 'email', i18n: 'client.listing.table_header.email' },
         { name: 'createdDate', i18n: 'client.listing.table_header.date' }
       ],
-        search_company:'',
-        totalPages: 25,
-        perPage: 20,
-        currentPage:1,
-        pageCount: 2,
+      search_company:'',
+      //totalPages: 25,
+      perPage: 20,
+      currentPage:1
+      //pageCount: 2,
     }
   },
   mounted () {
@@ -64,18 +63,18 @@ export default {
     this.loading = false
   },
   computed: {
-      ...mapState({
-          clients:  (state) => {
-              return state.Clients.clients
-          },
-           // totalPages:(state) => {
-           //     return state.Clients.clients.totalPages
-           // },
-          // currentPage: (state)  =>{
-          //     return state.Clients.clients.number
-          // }
-
-      }),
+    ...mapState({
+      clientsRaw: state => state.Clients.clients  
+    }),
+    clientsPaged () {
+      return this.clientsRaw.slice((this.currentPage - 1) * this.perPage, this.currentPage * this.perPage)
+    }
+        // totalPages:(state) => {
+        //     return state.Clients.clients.totalPages
+        // },
+      // currentPage: (state)  =>{
+      //     return state.Clients.clients.number
+      // }
   },
   methods: {
       ...mapActions({

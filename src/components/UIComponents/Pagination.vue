@@ -1,5 +1,5 @@
 <template>
-  <ul class="pagination" :class="paginationClass">
+  <ul class="pagination d-flex justify-content-center" :class="paginationClass">
     <li class="page-item prev-page" :class="{disabled: value === 1}">
       <a class="page-link" aria-label="Previous" @click="prevPage">
         <span aria-hidden="true"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
