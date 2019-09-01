@@ -21,7 +21,7 @@ const actions = {
     try {
       // Load countries only once
       if (state.countries.length === 0) {
-        let response = await Vue.prototype.$http.aba1.get(`/program-1mgnt/country-codes`)
+        let response = await Vue.prototype.$http.aba1.get(`/program-mgnt/country-codes`)
         commit(MUTATE_SET_COUNTRIES, response.data)  
       }
     } catch (error) {
