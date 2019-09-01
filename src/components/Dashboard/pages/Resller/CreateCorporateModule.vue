@@ -1190,6 +1190,8 @@
               ...this.tableHeadingsPack.secondary, ...this.tableHeadingsPack.third],
             'Reseller_new_row')];
           this.editId = 'Reseller_new_row';
+        } else {
+          this.loadData()
         }
       }
     },
@@ -1366,7 +1368,7 @@
 
         if (this.isCancel) {
           if (this.isView) {
-            // We need to do this next tick because otherwise we encounter page scroll bar disappear
+            // We need to do this next tick because otherwise we encounter page scrollbar disappear
             // Looks like some conflict with modal
             this.$nextTick(() => {
               this.$router.push('/reseller/view')
@@ -1422,29 +1424,33 @@
         const refCheck = /\s/
         return !refCheck.test(string)
       },
+      loadData () {
+        this.getAllCardPrograms()
+
+        const { id } = this.$route.params
+
+        if (id) {
+          this.resellerId = id
+          this.editRoute = `/reseller/edit/${this.resellerId}`
+          // get the reseller subscription by id
+          if (!this.isCreate) {
+            this.getResellerSubscripiton(id)
+          }
+        }
+        if (this.isCreate) {
+          this.cardReseller = [createNewRowFromHeadings([...this.tableHeadingsPack.main,
+            ...this.tableHeadingsPack.secondary, ...this.tableHeadingsPack.third], 'Reseller_new_row')];
+          this.editId = 'Reseller_new_row';
+          this.chagneCardProgramOptions(this.cardData)
+        }
+      }
     },
     created () {
+      // Request countries if they not loaded yet
       this.getCountries()
     },
     mounted () {
-      this.getAllCardPrograms()
-
-      const { id } = this.$route.params
-
-      if (id) {
-        this.resellerId = id
-        this.editRoute = `/reseller/edit/${this.resellerId}`
-        // get the reseller subscription by id
-        if (!this.isCreate) {
-          this.getResellerSubscripiton(id)
-        }
-      }
-      if (this.isCreate) {
-        this.cardReseller = [createNewRowFromHeadings([...this.tableHeadingsPack.main,
-          ...this.tableHeadingsPack.secondary, ...this.tableHeadingsPack.third], 'Reseller_new_row')];
-        this.editId = 'Reseller_new_row';
-        this.chagneCardProgramOptions(this.cardData)
-      }
+      this.loadData()
     },
     filters: {
       booleanToYesNoFormat: (value) => {
