@@ -644,18 +644,20 @@
     <div class="row">
       <div class="col-md-12">
         <div class="reseller-footer d-flex justify-content-center">
+          <!--
           <p-button round type="primary" class="mr-3"
                     @click="handleAction()"
-                    :class="{'disabled':!validateClientForm}"
-                    v-if="isView && hasPermission([permission.RESELLER_SUBSCRIPTION_EDIT, permission.RESELLER_SUBSCRIPTION_CREATE])">
+                    :class="{ 'disabled': !validateClientForm || !hasPermission([permission.RESELLER_SUBSCRIPTION_EDIT, permission.RESELLER_SUBSCRIPTION_CREATE])}">
             {{ $t(context === 'view' ? 'reseller.create.button.edit' : 'reseller.create.button.save') }}
           </p-button>
-          <p-button v-else
-                    round type="primary" class="mr-3"
-                    :class="{'disabled':!validateClientForm}"
-                    @click.native="handleResellerAction()">
+          -->
+
+          <p-button round type="primary" class="mr-3"
+                    @click="handleAction()"
+                    :class="{ 'disabled': !validateClientForm }">
             {{ $t(context === 'view' ? 'reseller.create.button.edit' : 'reseller.create.button.save') }}
           </p-button>
+
           <p-button round @click="handleCancelAction()">{{ $t('reseller.create.button.cancel') }}</p-button>
         </div>
       </div>
@@ -1249,7 +1251,7 @@
 
           AbaModalEvents.$on(key, response => {
             if (response.ok) {
-              //this.$router.push('/resellers/view')
+              //this.$router.push('/reseller/view')
             } else {
               this.dirty = false;
             }
@@ -1343,11 +1345,6 @@
         console.log('add another preset')
         this.resellerCorporate.dynamic_pdf.push({name: '', preset: ''})
       },
-      handleResellerAction() {
-        this.isCancel = false
-        this.modals.visible = true
-        this.actionBtn = 'save'
-      },
       handleCancelAction() {
         this.isCancel = true
         this.actionBtn = 'cancel'
@@ -1355,16 +1352,29 @@
       },
       handleAction() {
         this.isCancel = false
-        this.$router.push(this.editRoute)
+
+        if (this.isView) {
+          this.$router.push(this.editRoute)
+        } else {
+          this.isCancel = false
+          this.modals.visible = true
+          this.actionBtn = 'save'
+        }
       },
       async handleModalAction() {
         this.modals.visible = false
+
         if (this.isCancel) {
           if (this.isView) {
-            this.$router.push({name: NAMED_ROUTES.RESELLER.RESELLERS_VIEW})
-          }
-          if (this.resellerId) {
-            this.$router.push(`/reseller/view/${this.resellerId}`)
+            // We need to do this next tick because otherwise we encounter page scroll bar disappear
+            // Looks like some conflict with modal
+            this.$nextTick(() => {
+              this.$router.push('/reseller/view')
+            })            
+          } else {
+            if (this.resellerId) {
+              this.$router.push(`/reseller/view/${this.resellerId}`)
+            }
           }
           return
         }
@@ -1418,7 +1428,9 @@
     },
     mounted () {
       this.getAllCardPrograms()
-      const {id} = this.$route.params
+
+      const { id } = this.$route.params
+
       if (id) {
         this.resellerId = id
         this.editRoute = `/reseller/edit/${this.resellerId}`

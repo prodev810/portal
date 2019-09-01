@@ -283,7 +283,7 @@ let client = {
 let reseller = {
   path: '/reseller',
   // redirect: '/reseller/view?page=0&per_page=10',
-  redirect: '/resellers/view',
+  redirect: '/reseller/view',
   component: DashboardLayout,
   meta: {
     //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
@@ -292,8 +292,8 @@ let reseller = {
   },
   children: [
     {
-      path: '/resellers/view',
-      name: NAMED_ROUTES.RESELLERS_VIEW,
+      path: '/reseller/view',
+      name: NAMED_ROUTES.RESELLER.RESELLERS_VIEW,
       component: ResellerView,
       // component: ResellerCreateCorporateModule,
       props: {context: 'view'},
@@ -305,7 +305,7 @@ let reseller = {
     },
     {
       path: '/reseller/view/:id',
-      name: NAMED_ROUTES.RESELLER_VIEW_BY_ID,
+      name: NAMED_ROUTES.RESELLER.RESELLER_VIEW_BY_ID,
       component: ResellerCreateCorporateModule,
       props: {context: 'view'},
       meta: {
@@ -316,7 +316,7 @@ let reseller = {
     },
     {
       path: '/reseller/create',
-      name: NAMED_ROUTES.RESELLER_CREATE,
+      name: NAMED_ROUTES.RESELLER.RESELLER_CREATE,
       component: ResellerCreateCorporateModule,
       // component: ResellerCreate,
       props: {context: 'create'},
@@ -328,7 +328,7 @@ let reseller = {
     },
     {
       path: '/reseller/edit/:id',
-      name: NAMED_ROUTES.RESELLER_EDIT,
+      name: NAMED_ROUTES.RESELLER.RESELLER_EDIT,
       component: ResellerCreateCorporateModule,
       props: {context: 'edit'},
       meta: {
