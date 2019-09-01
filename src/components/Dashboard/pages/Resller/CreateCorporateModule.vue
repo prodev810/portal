@@ -2,7 +2,7 @@
   <div>
     <div class="card">
       <div class="card-content">
-        <el-row class="reseller-form-column">
+        <el-row class="reseller-form-column" gutter="24">
           <el-col :md="11">
 
             <el-row class="w-100 d-flex align-items-center mb-3">
@@ -444,11 +444,11 @@
             </el-col>
           </el-row>
 
-          <el-row>
+          <el-row gutter="24" class="m-0">
 
-            <el-col :md="10">
+            <el-col :md="12">
               <div class="form-group row">
-                <label for="ref1" class="col-md-2 col-form-label"><strong>Ref 1</strong></label>
+                <label for="ref1" class="col-form-label"><strong>Ref 1</strong></label>
                 <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref1}}</strong>
                 <fg-input v-else
                           v-model="resellerCorporate.dynamicReferences.ref1" id="ref1"
@@ -456,7 +456,7 @@
               </div>
 
               <div class="form-group row">
-                <label for="ref2" class="col-md-2 col-form-label"><strong>Ref 2</strong></label>
+                <label for="ref2" class="col-form-label"><strong>Ref 2</strong></label>
                 <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref2}}</strong>
                 <fg-input v-else
                           v-model="resellerCorporate.dynamicReferences.ref2" id="ref2"
@@ -464,7 +464,7 @@
               </div>
 
               <div class="form-group row">
-                <label for="ref3" class="col-md-2 col-form-label"><strong>Ref 3</strong></label>
+                <label for="ref3" class="col-form-label"><strong>Ref 3</strong></label>
                 <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref3}}</strong>
                 <fg-input v-else
                           v-model="resellerCorporate.dynamicReferences.ref3" id="ref3"
@@ -472,7 +472,7 @@
               </div>
 
               <div class="form-group row">
-                <label for="ref4" class="col-md-2 col-form-label"><strong>Ref 4</strong></label>
+                <label for="ref4" class="col-form-label"><strong>Ref 4</strong></label>
                 <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref4}}</strong>
                 <fg-input v-else
                           v-model="resellerCorporate.dynamicReferences.ref4" id="ref4"
@@ -482,7 +482,7 @@
 
             <el-col :md="12">
               <div class="form-group row">
-                <label for="ref5" class="col-md-2 col-form-label"><strong>Ref 5</strong></label>
+                <label for="ref5" class="col-form-label"><strong>Ref 5</strong></label>
                 <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref5}}</strong>
                 <fg-input v-else
                           v-model="resellerCorporate.dynamicReferences.ref51" id="ref5"
@@ -490,7 +490,7 @@
               </div>
 
               <div class="form-group row">
-                <label for="ref6" class="col-md-2 col-form-label"><strong>Ref 6</strong></label>
+                <label for="ref6" class="col-form-label"><strong>Ref 6</strong></label>
                 <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref6}}</strong>
                 <fg-input v-else
                           v-model="resellerCorporate.dynamicReferences.ref6" id="ref6"
@@ -498,7 +498,7 @@
               </div>
 
               <div class="form-group row">
-                <label for="ref7" class="col-md-2 col-form-label"><strong>Ref 7</strong></label>
+                <label for="ref7" class="col-form-label"><strong>Ref 7</strong></label>
                 <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref7}}</strong>
                 <fg-input v-else
                           v-model="resellerCorporate.dynamicReferences.ref7" id="ref7"
@@ -506,7 +506,7 @@
               </div>
 
               <div class="form-group row">
-                <label for="ref8" class="col-md-2 col-form-label"><strong>Ref 8</strong></label>
+                <label for="ref8" class="col-form-label"><strong>Ref 8</strong></label>
                 <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref8}}</strong>
                 <fg-input v-else
                           v-model="resellerCorporate.dynamicReferences.ref8" id="ref8"
@@ -1529,7 +1529,7 @@
 
   /deep/ {
     .el-select {
-      width: 350px;
+      width: 100%;
     }
 
     .el-input__inner, .el-textarea__inner {
@@ -1553,10 +1553,11 @@
     /deep/ {
       .form-group {
         margin-bottom: 0;
+        width: 100%;
       }
 
       .form-control {
-        width: 350px;
+        width: 100%;
       }
     }
   }
@@ -1585,9 +1586,17 @@
 
   .reseller-dynamic-references {
     /deep/ {
-      .form-control {
-        width: 360px !important;
+        & .form-group {
+          width: 100%;
+        & .form-control {
+          //width: 360px !important;
+          width: 100% !important;
+        }
       }
+    }
+
+    & label.col-form-label {
+      margin-left: 8px;
     }
   }
 
