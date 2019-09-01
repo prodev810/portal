@@ -38,11 +38,16 @@ const paymentGateway = {
   error_get_merchants: 'Error while loading merchants: '
 }
 
+const countries = {
+  error_load_countries: 'Error while loading countries'
+}
+
 export default {
     card_program,
     float_balance,
     reseller,
     clients,
     ui_module,
-    paymentGateway
+    paymentGateway,
+    countries
 }

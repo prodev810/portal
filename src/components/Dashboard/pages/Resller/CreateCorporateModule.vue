@@ -2,7 +2,7 @@
   <div>
     <div class="card">
       <div class="card-content">
-        <el-row class="reseller-form-column" gutter="24">
+        <el-row class="reseller-form-column" :gutter="24">
           <el-col :md="11">
 
             <el-row class="w-100 d-flex align-items-center mb-3">
@@ -148,6 +148,7 @@
               </el-col>
             </el-row>
 
+            <!-- Status -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.status')}}
@@ -171,6 +172,32 @@
                 </div>
               </el-col>
             </el-row>
+
+            <!-- Country code -->
+            <el-row class="w-100 d-flex align-items-center mb-3">
+              <el-col :md="7">
+                <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.country')}}
+                  <span v-if="!isView" class="required-field-symbol">*</span>
+                </strong>
+              </el-col>
+              <el-col :md="17">
+                <div v-if="isView"
+                     class="w-100 d-flex align-items-center">
+                  <strong>{{reseller.status}}</strong>
+                </div>
+                <div v-else
+                     class="w-100 d-flex align-items-center">
+                  <el-select v-model="reseller.country">
+                    <el-option v-for="item in countries"
+                               :key="item.alpha2Code"
+                               :label="item.name"
+                               :value="item.name">{{item.name}}
+                    </el-option>
+                  </el-select>
+                </div>
+              </el-col>
+            </el-row>
+
 
           </el-col>
           <el-col :md="13">
@@ -444,7 +471,7 @@
             </el-col>
           </el-row>
 
-          <el-row gutter="24" class="m-0">
+          <el-row :gutter="24" class="m-0">
 
             <el-col :md="12">
               <div class="form-group row">
@@ -657,7 +684,7 @@
 <script>
   import {permissionMixin} from '@/mixins/permission'
   import SlideYDownTransition from "vue2-transitions/src/Slide/SlideYDownTransition";
-  import {mapActions, mapGetters} from "vuex";
+  import { mapActions, mapGetters, mapState } from "vuex"
   import {AbaModalEvents} from "../../../../main";
   import {
     ADD_RESELLER_SUBSCRIPTION,
@@ -672,7 +699,8 @@
     GETTER_ALL_CARD_PROGRAM_CODE,
     GET_ALL_RESELLER_SUBSCRIPTIONS,
     GETTER_RESELLER_SUBSCRIPTIONS,
-  } from "../../../../store/types";
+    ACTION_GET_COUNTRIES
+  } from "@/store/types"
   import i18n from '@/i18n'
   import LOADING_STATE from '../../../../utils/loadingState'
 
@@ -998,6 +1026,9 @@
       };
     },
     computed: {
+      ...mapState({
+        countries: state => state.countries.countries
+      }),
       ...mapGetters({
         cardData: GETTER_ALL_CARDS,
         loadingState: GETTER_LOADINGSTATE_RESELLER,
@@ -1168,6 +1199,7 @@
         getResellerSubscripiton: GET_RESELLER_SUBSCRTION_BY_ID,
         getAllResellerSubscription: GET_ALL_RESELLER_SUBSCRIPTIONS,
         showModal: SET_MODAL_TYPE,
+        getCountries: ACTION_GET_COUNTRIES
       }),
       modResellerModel(reseller) {
         reseller.uniqueFloat = Number(reseller.uniqueFloat)
@@ -1381,7 +1413,10 @@
         return !refCheck.test(string)
       },
     },
-    mounted() {
+    created () {
+      this.getCountries()
+    },
+    mounted () {
       this.getAllCardPrograms()
       const {id} = this.$route.params
       if (id) {
@@ -1406,6 +1441,7 @@
     }
   };
 </script>
+
 <style scoped lang="scss">
   $switcher-bg: #2ED684;
   $label-color: #292929;
