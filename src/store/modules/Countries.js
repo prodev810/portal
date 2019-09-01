@@ -3,7 +3,8 @@ import i18n from '@/i18n'
 import {
   SHOW_TOAST_MESSAGE,
   MUTATE_SET_COUNTRIES,
-  ACTION_GET_COUNTRIES
+  ACTION_GET_COUNTRIES,
+  GETTER_GET_COUNTRY_BY_CODE
 } from '@/store/types.js'
 
 const state = {
@@ -33,10 +34,20 @@ const actions = {
   }
 }
 
+const getters = {
+  [GETTER_GET_COUNTRY_BY_CODE]: state => (code) => {
+    let res = state.countries.find(x => x.alpha2Code === code)
+    return res
+      ? res.name
+      : (i18n.t('store.countries.unknown_country') + code)
+  }
+}
+
 const countries = {
   state,
   actions,
-  mutations
+  mutations,
+  getters
 }
 
 export default countries

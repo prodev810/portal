@@ -183,15 +183,15 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.status}}</strong>
+                  <strong>{{ getCountryByCode(reseller.countryCode) }}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.country">
+                  <el-select v-model="reseller.countryCode">
                     <el-option v-for="item in countries"
                                :key="item.alpha2Code"
                                :label="item.name"
-                               :value="item.name">{{item.name}}
+                               :value="item.alpha2Code">{{item.name}}
                     </el-option>
                   </el-select>
                 </div>
@@ -701,7 +701,8 @@
     GETTER_ALL_CARD_PROGRAM_CODE,
     GET_ALL_RESELLER_SUBSCRIPTIONS,
     GETTER_RESELLER_SUBSCRIPTIONS,
-    ACTION_GET_COUNTRIES
+    ACTION_GET_COUNTRIES,
+    GETTER_GET_COUNTRY_BY_CODE
   } from "@/store/types"
   import i18n from '@/i18n'
   import LOADING_STATE from '../../../../utils/loadingState'
@@ -1036,6 +1037,7 @@
         loadingState: GETTER_LOADINGSTATE_RESELLER,
         cpcList: GETTER_ALL_CARD_PROGRAM_CODE,
         resellerSubscription: GETTER_RESELLER_SUBSCRIPTIONS,
+        getCountryByCode: GETTER_GET_COUNTRY_BY_CODE
       }),
       resellerData() {
         const resellerSub = this.$store.state.reseller.resellerSubscription;
@@ -1182,15 +1184,15 @@
       },
       $route(newVal, oldVal) {
         const {id} = newVal.params;
-        //console.log('route')
-        if (!id) {
-          //this.context = 'create'
+        
+        if (!id) {        
           this.cardReseller = [createNewRowFromHeadings([
               ...this.tableHeadingsPack.main,
               ...this.tableHeadingsPack.secondary, ...this.tableHeadingsPack.third],
             'Reseller_new_row')];
           this.editId = 'Reseller_new_row';
         } else {
+          // Update data
           this.loadData()
         }
       }
@@ -1380,7 +1382,11 @@
           }
           return
         }
+
+        //console.log('Reseller:', this.reseller)
         const body = this.handleResellerRequestBody(this.reseller)
+        //console.log('Body:', body)
+
         if (this.isEdit) {
           await this.editReseller({body, id: this.resellerId})
             .then(data => {

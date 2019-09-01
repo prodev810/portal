@@ -39,7 +39,8 @@ const paymentGateway = {
 }
 
 const countries = {
-  error_load_countries: 'Error while loading countries'
+  error_load_countries: 'Error while loading countries',
+  unknown_country: 'Unknown country, code:'
 }
 
 export default {

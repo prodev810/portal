@@ -184,8 +184,7 @@ const actions = {
   },
   [EDIT_RESELLER_SUBSCRTION_BY_ID]: async ({commit, dispatch}, payload) => {
     commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.GETTING)
-    return new Promise((resolve, reject) => {
-
+    return new Promise((resolve, reject) => {      
       const requestData = {
         alertContact: payload.body.alertContact,
         apiFee: payload.body.apiFee,
@@ -193,6 +192,7 @@ const actions = {
         appFee: payload.body.appFee,
         appFeeBillMethod: payload.body.appFeeBillMethod,
         cardProgramID: payload.body.cardProgramID,
+        countryCode: payload.body.countryCode,
         loadFee: payload.body.loadFee,
         loadFeeCap: payload.body.loadFeeCap,
         loadFeePct: payload.body.loadFeePct,
@@ -205,7 +205,7 @@ const actions = {
         status: payload.body.status,
         uniqueFloat: payload.body.uniqueFloat
       }
-
+      
       Vue.prototype.$http.aba1.put(`/reseller-subscriptions/${payload.id}`, requestData)
         .then(data => {
           commit(MUTATE_LOADINGSTATE_RESELLER, LOADING_STATE.IDEAL)
