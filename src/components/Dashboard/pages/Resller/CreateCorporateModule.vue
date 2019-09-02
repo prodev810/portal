@@ -512,7 +512,7 @@
                 <label for="ref5" class="col-form-label"><strong>Ref 5</strong></label>
                 <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref5}}</strong>
                 <fg-input v-else
-                          v-model="resellerCorporate.dynamicReferences.ref51" id="ref5"
+                          v-model="resellerCorporate.dynamicReferences.ref5" id="ref5"
                           :placeholder="'Ref 5'"></fg-input>
               </div>
 
@@ -610,7 +610,7 @@
                     <strong class="preset-title">Preset {{index + 1}}</strong>
                   </label>
                   <p v-if="isView">
-                    <span class="mr-2">Preset Name</span>
+                    <span class="mr-2">Preset Name:</span>
                     {{resellerCorporate.dynamic_pdf[index].name}}
                   </p>
                   <fg-input v-else
@@ -684,786 +684,793 @@
   </div>
 </template>
 <script>
-  import {permissionMixin} from '@/mixins/permission'
-  import SlideYDownTransition from "vue2-transitions/src/Slide/SlideYDownTransition";
-  import { mapActions, mapGetters, mapState } from "vuex"
-  import {AbaModalEvents} from "../../../../main";
-  import {
-    ADD_RESELLER_SUBSCRIPTION,
-    EDIT_RESELLER_SUBSCRTION_BY_ID,
-    GET_ALL_CARD_PROGRAM,
-    GET_RESELLER_SUBSCRTION_BY_ID,
-    GETTER_ALL_CARDS,
-    GETTER_LOADINGSTATE_RESELLER,
-    GETTER_RESELLER_SUBSCRIPTION,
-    SET_MODAL_TYPE,
-    SHOW_TOAST_MESSAGE,
-    GETTER_ALL_CARD_PROGRAM_CODE,
-    GET_ALL_RESELLER_SUBSCRIPTIONS,
-    GETTER_RESELLER_SUBSCRIPTIONS,
-    ACTION_GET_COUNTRIES,
-    GETTER_GET_COUNTRY_BY_CODE
-  } from "@/store/types"
-  import i18n from '@/i18n'
-  import LOADING_STATE from '../../../../utils/loadingState'
+const resellerCorporateTemplate = {
+  two_step_validation: 0,  
+  break_value: '',
+  dynamicReferences: {
+    ref1: '',
+    ref2: '',
+    ref3: '',
+    ref4: '',
+    ref5: '',
+    ref6: '',
+    ref7: '',
+    ref8: '',
+  },
+  dynamic_pdf: [
+    {name: '', preset: ''},
+    {name: '', preset: ''},
+  ]
+}
 
-  import createNewRowFromHeadings from "../../../../utils/createNewRowFromHeadings";
-  import {
-    breakInput,
-    exactNumber,
-    limitedCharNumber,
-    mustBeAnEmail,
-    shouldBeNumber,
-    verifySpecialCharacter,
-  } from "../../../../utils/formValidations";
-  import {decimals} from "../../../../utils/inputMasks";
-  import {
-    toNumber,
-    validateNumber
-  } from "../../../../utils/numberInput";
-  import Button from "../../../UIComponents/Button";
-  import PButton from "../../../UIComponents/Button";
-  import RegularTable from "../../../UIComponents/CeevoTables/RegularTable/RegularTable";
-  import Loader from "../../../UIComponents/Loader";
-  import Spinner from "../../../UIComponents/Spinner";
-  import PRadio from "../../../UIComponents/Inputs/Radio";
-  import {Modal} from 'src/components/UIComponents'
-  import addIcon from '../../../../../public/static/img/dashboard_icons/ic_add.svg'
-  import NAMED_ROUTES from '../../../../routes/nameRoutes'
+import { permissionMixin } from '@/mixins/permission'
+import SlideYDownTransition from "vue2-transitions/src/Slide/SlideYDownTransition";
+import { mapActions, mapGetters, mapState } from "vuex"
+import {AbaModalEvents} from "../../../../main";
+import {
+  ADD_RESELLER_SUBSCRIPTION,
+  EDIT_RESELLER_SUBSCRTION_BY_ID,
+  GET_ALL_CARD_PROGRAM,
+  GET_RESELLER_SUBSCRTION_BY_ID,
+  GETTER_ALL_CARDS,
+  GETTER_LOADINGSTATE_RESELLER,
+  GETTER_RESELLER_SUBSCRIPTION,
+  SET_MODAL_TYPE,
+  SHOW_TOAST_MESSAGE,
+  GETTER_ALL_CARD_PROGRAM_CODE,
+  GET_ALL_RESELLER_SUBSCRIPTIONS,
+  GETTER_RESELLER_SUBSCRIPTIONS,
+  ACTION_GET_COUNTRIES,
+  GETTER_GET_COUNTRY_BY_CODE
+} from "@/store/types"
+import i18n from '@/i18n'
+import LOADING_STATE from '../../../../utils/loadingState'
 
-  export default {
-    name: "CreateCorparateModule",
-    props: ['context'],
-    mixins: [permissionMixin],
-    components: {
-      SlideYDownTransition,
-      Spinner,
-      Loader,
-      PButton, RegularTable,
-      [Button.name]: Button,
-      PRadio,
-      Modal,
-    },
-    data() {
-      return {
-        addIcon,
-        id: '',
-        isCancel: false,
-        //editRoute: `/reseller/edit/`,
-        corporativeProgram: 0,
-        reseller: {},
-        resellerCorporate: {
-          dynamicReferences: {
-            ref1: '',
-            ref2: '',
-            ref3: '',
-            ref4: '',
-            ref5: '',
-            ref6: '',
-            ref7: '',
-            ref8: '',
+import createNewRowFromHeadings from "../../../../utils/createNewRowFromHeadings";
+import {
+  breakInput,
+  exactNumber,
+  limitedCharNumber,
+  mustBeAnEmail,
+  shouldBeNumber,
+  verifySpecialCharacter,
+} from "../../../../utils/formValidations";
+import {decimals} from "../../../../utils/inputMasks";
+import {
+  toNumber,
+  validateNumber
+} from "../../../../utils/numberInput";
+import Button from "../../../UIComponents/Button";
+import PButton from "../../../UIComponents/Button";
+import RegularTable from "../../../UIComponents/CeevoTables/RegularTable/RegularTable";
+import Loader from "../../../UIComponents/Loader";
+import Spinner from "../../../UIComponents/Spinner";
+import PRadio from "../../../UIComponents/Inputs/Radio";
+import {Modal} from 'src/components/UIComponents'
+import addIcon from '../../../../../public/static/img/dashboard_icons/ic_add.svg'
+import NAMED_ROUTES from '../../../../routes/nameRoutes'
+
+export default {
+  name: "CreateCorparateModule",
+  props: ['context'],
+  mixins: [permissionMixin],
+  components: {
+    SlideYDownTransition,
+    Spinner,
+    Loader,
+    PButton, RegularTable,
+    [Button.name]: Button,
+    PRadio,
+    Modal,
+  },
+  data() {
+    return {
+      addIcon,
+      id: '',
+      isCancel: false,
+      //editRoute: `/reseller/edit/`,
+      corporativeProgram: 0,
+      reseller: {},
+      resellerCorporate: JSON.parse(JSON.stringify(resellerCorporateTemplate)),
+      resellerRequestPropDelete: [
+        'cardProgCode',
+        'defCurrency',
+        'resellerId',
+        'id',
+      ],
+      resellerRequestPropModify: [
+        {name: 'apiFee', type: 'number'},
+        {name: 'appFee', type: 'number'},
+        {name: 'loadFee', type: 'number'},
+        {name: 'loadFeeCap', type: 'number'},
+        {name: 'loadFeePct', type: 'number'},
+        {name: 'monthlyFee', type: 'number'},
+        {name: 'uniqueFloat', type: 'boolean'},
+      ],
+      modals: {
+        visible: false,
+      },
+      secondLine: ['loadFee', 'loadFeePct', 'loadFeeCap', 'appFee'],
+      thirdLine: ['monthlyFee', 'apiFee'],
+      edit: false,
+      dirty: false,
+      tableHeadingsPack: {
+        main: [
+          {
+            label: 'CPC',
+            name: 'cardProgramID',
+            i18n: 'reseller.create.table_header.card_program_id',
+            input: 'select',
+            mapViewData: 'cardProgCode',
+            required: true,
+            selectKeys: [
+              {name: '', value: null}
+            ],
           },
-          break_value: '',
-          two_step_validation: 0,
-          dynamic_pdf: [
-            {name: '', preset: ''},
-            {name: '', preset: ''},
-          ],
-        },
-        resellerRequestPropDelete: [
-          'cardProgCode',
-          'defCurrency',
-          'resellerId',
-          'id',
-        ],
-        resellerRequestPropModify: [
-          {name: 'apiFee', type: 'number'},
-          {name: 'appFee', type: 'number'},
-          {name: 'loadFee', type: 'number'},
-          {name: 'loadFeeCap', type: 'number'},
-          {name: 'loadFeePct', type: 'number'},
-          {name: 'monthlyFee', type: 'number'},
-          {name: 'uniqueFloat', type: 'boolean'},
-        ],
-        modals: {
-          visible: false,
-        },
-        secondLine: ['loadFee', 'loadFeePct', 'loadFeeCap', 'appFee'],
-        thirdLine: ['monthlyFee', 'apiFee'],
-        edit: false,
-        dirty: false,
-        tableHeadingsPack: {
-          main: [
-            {
-              label: 'CPC',
-              name: 'cardProgramID',
-              i18n: 'reseller.create.table_header.card_program_id',
-              input: 'select',
-              mapViewData: 'cardProgCode',
-              required: true,
-              selectKeys: [
-                {name: '', value: null}
-              ],
-            },
-            {
-              label: 'RC',
-              name: 'resellerCode',
-              i18n: 'reseller.create.table_header.reseller_code',
-              required: true,
-              validator: [
-                verifySpecialCharacter,
-                exactNumber(5)
-              ],
-              brakeAt: breakInput(5)
-            },
-            {
-              label: 'Reseller Name',
-              name: 'resellerName',
-              i18n: 'reseller.create.table_header.reseller_name',
-              required: true,
-              validator: [
-                verifySpecialCharacter,
-                limitedCharNumber(0, 20)
-              ],
-              brakeAt: breakInput(20)
-            },
-            {
-              label: 'Unique Float',
-              name: 'uniqueFloat',
-              i18n: 'reseller.create.table_header.unique_float',
-              required: true,
-              input: 'select',
-              selectKeys: [{name: 'yes', value: true}]
-            },
-            {
-              label: 'alert Contact',
-              name: 'alertContact',
-              i18n: 'reseller.create.table_header.alert_contact',
-              required: true,
-              validator: [mustBeAnEmail],
-              brakeAt: breakInput(64)
-            },
+          {
+            label: 'RC',
+            name: 'resellerCode',
+            i18n: 'reseller.create.table_header.reseller_code',
+            required: true,
+            validator: [
+              verifySpecialCharacter,
+              exactNumber(5)
+            ],
+            brakeAt: breakInput(5)
+          },
+          {
+            label: 'Reseller Name',
+            name: 'resellerName',
+            i18n: 'reseller.create.table_header.reseller_name',
+            required: true,
+            validator: [
+              verifySpecialCharacter,
+              limitedCharNumber(0, 20)
+            ],
+            brakeAt: breakInput(20)
+          },
+          {
+            label: 'Unique Float',
+            name: 'uniqueFloat',
+            i18n: 'reseller.create.table_header.unique_float',
+            required: true,
+            input: 'select',
+            selectKeys: [{name: 'yes', value: true}]
+          },
+          {
+            label: 'alert Contact',
+            name: 'alertContact',
+            i18n: 'reseller.create.table_header.alert_contact',
+            required: true,
+            validator: [mustBeAnEmail],
+            brakeAt: breakInput(64)
+          },
 
-            {
-              label: 'Status',
-              name: 'status',
-              i18n: 'reseller.create.table_header.status',
-              required: true,
-              input: 'select',
-              selectKeys: [
-                //  {name: '', value: null},
-                {name: 'Active', value: 'ACTIVE'},
-                {name: 'Closed', value: 'CLOSED'},
-                {name: 'Pending Approval', value: 'PENDING'}
-              ]
-            },
-          ],
-          secondary: [
-            {
-              label: 'load Fee',
-              name: 'loadFee',
-              i18n: 'reseller.create.table_header.load_fee',
-              mask: decimals(2),
-              validator: [shouldBeNumber],
-              $domAttri: {step: '0.01', type: 'number'},
-              brakeAt: breakInput(8)
-            },
-            {
-              label: 'load fee percentage',
-              name: 'loadFeePct',
-              i18n: 'reseller.create.table_header.load_fee_pct',
-              mask: decimals(2), validator: [shouldBeNumber],
-              $domAttri: {step: '0.01', type: 'number'},
-              brakeAt: breakInput(8),
-              required: false,
-            },
-            {
-              label: 'load fee roof',
-              name: 'loadFeeCap',
-              i18n: 'reseller.create.table_header.load_fee_cap',
-              mask: decimals(2), validator: [shouldBeNumber],
-              $domAttri: {step: '0.01', type: 'number'},
-              brakeAt: breakInput(8)
-            },
-            {
-              label: 'Charged To',
-              name: 'loadFeebillMethod',
-              i18n: 'reseller.create.table_header.load_fee_bill_method',
-              input: 'select',
-              selectKeys: [
-                {name: '', value: null},
-                {name: 'ACCOUNT', value: 'ACCOUNT'},
-                {name: 'FLOAT', value: 'FLOAT'},
-                {name: 'INVOICE', value: 'INVOICE'}]
-            },
-            /*application*/
-            {
-              label: 'application fee',
-              name: 'appFee',
-              i18n: 'reseller.create.table_header.app_fee',
-              mask: decimals(2),
-              validator: [shouldBeNumber],
-              $domAttri: {step: '0.01', type: 'number'},
-              brakeAt: breakInput(8)
+          {
+            label: 'Status',
+            name: 'status',
+            i18n: 'reseller.create.table_header.status',
+            required: true,
+            input: 'select',
+            selectKeys: [
+              //  {name: '', value: null},
+              {name: 'Active', value: 'ACTIVE'},
+              {name: 'Closed', value: 'CLOSED'},
+              {name: 'Pending Approval', value: 'PENDING'}
+            ]
+          },
+        ],
+        secondary: [
+          {
+            label: 'load Fee',
+            name: 'loadFee',
+            i18n: 'reseller.create.table_header.load_fee',
+            mask: decimals(2),
+            validator: [shouldBeNumber],
+            $domAttri: {step: '0.01', type: 'number'},
+            brakeAt: breakInput(8)
+          },
+          {
+            label: 'load fee percentage',
+            name: 'loadFeePct',
+            i18n: 'reseller.create.table_header.load_fee_pct',
+            mask: decimals(2), validator: [shouldBeNumber],
+            $domAttri: {step: '0.01', type: 'number'},
+            brakeAt: breakInput(8),
+            required: false,
+          },
+          {
+            label: 'load fee roof',
+            name: 'loadFeeCap',
+            i18n: 'reseller.create.table_header.load_fee_cap',
+            mask: decimals(2), validator: [shouldBeNumber],
+            $domAttri: {step: '0.01', type: 'number'},
+            brakeAt: breakInput(8)
+          },
+          {
+            label: 'Charged To',
+            name: 'loadFeebillMethod',
+            i18n: 'reseller.create.table_header.load_fee_bill_method',
+            input: 'select',
+            selectKeys: [
+              {name: '', value: null},
+              {name: 'ACCOUNT', value: 'ACCOUNT'},
+              {name: 'FLOAT', value: 'FLOAT'},
+              {name: 'INVOICE', value: 'INVOICE'}]
+          },
+          /*application*/
+          {
+            label: 'application fee',
+            name: 'appFee',
+            i18n: 'reseller.create.table_header.app_fee',
+            mask: decimals(2),
+            validator: [shouldBeNumber],
+            $domAttri: {step: '0.01', type: 'number'},
+            brakeAt: breakInput(8)
 
-            },
-            //application fee bill method
-            {
-              label: 'Charged To',
-              name: 'appFeeBillMethod',
-              i18n: 'reseller.create.table_header.app_fee_bill_method',
-              input: 'select',
-              selectKeys: [
-                {name: '', value: null},
-                {name: 'FLOAT', value: 'FLOAT'},
-                {name: 'ACCOUNT', value: 'ACCOUNT'},
-                {name: 'INVOICE', value: 'INVOICE'}]
-            },
-            /*monthly fees*/
-          ],
-          third: [
-            {
-              label: 'monthly fee',
-              name: 'monthlyFee',
-              i18n: 'reseller.create.table_header.monthly_fee',
-              mask: decimals(2),
-              validator: [shouldBeNumber],
-              $domAttri: {step: '0.01', type: 'number'},
-              brakeAt: breakInput(8)
+          },
+          //application fee bill method
+          {
+            label: 'Charged To',
+            name: 'appFeeBillMethod',
+            i18n: 'reseller.create.table_header.app_fee_bill_method',
+            input: 'select',
+            selectKeys: [
+              {name: '', value: null},
+              {name: 'FLOAT', value: 'FLOAT'},
+              {name: 'ACCOUNT', value: 'ACCOUNT'},
+              {name: 'INVOICE', value: 'INVOICE'}]
+          },
+          /*monthly fees*/
+        ],
+        third: [
+          {
+            label: 'monthly fee',
+            name: 'monthlyFee',
+            i18n: 'reseller.create.table_header.monthly_fee',
+            mask: decimals(2),
+            validator: [shouldBeNumber],
+            $domAttri: {step: '0.01', type: 'number'},
+            brakeAt: breakInput(8)
 
-            },
-            //monthly fee bill method
-            {
-              label: 'Charged To',
-              name: 'monthlyFeeBillMethod',
-              i18n: 'reseller.create.table_header.monthly_fee_bill_method',
-              input: 'select',
-              selectKeys: [
-                {name: '', value: null},
-                {name: 'ACCOUNT', value: 'ACCOUNT'},
-                {name: 'FLOAT', value: 'FLOAT'},
-                {name: 'INVOICE', value: 'INVOICE'}]
-            },
-            /*api fees*/
-            {
-              label: 'api fee',
-              name: 'apiFee',
-              i18n: 'reseller.create.table_header.api_fee',
-              mask: decimals(2),
-              validator: [shouldBeNumber],
-              $domAttri: {step: '0.01', type: 'number'},
-              brakeAt: breakInput(8)
-            },
+          },
+          //monthly fee bill method
+          {
+            label: 'Charged To',
+            name: 'monthlyFeeBillMethod',
+            i18n: 'reseller.create.table_header.monthly_fee_bill_method',
+            input: 'select',
+            selectKeys: [
+              {name: '', value: null},
+              {name: 'ACCOUNT', value: 'ACCOUNT'},
+              {name: 'FLOAT', value: 'FLOAT'},
+              {name: 'INVOICE', value: 'INVOICE'}]
+          },
+          /*api fees*/
+          {
+            label: 'api fee',
+            name: 'apiFee',
+            i18n: 'reseller.create.table_header.api_fee',
+            mask: decimals(2),
+            validator: [shouldBeNumber],
+            $domAttri: {step: '0.01', type: 'number'},
+            brakeAt: breakInput(8)
+          },
 
-            {
-              label: 'Charged To',
-              name: 'apiFeeBillMethod',
-              i18n: 'reseller.create.table_header.api_fee_bill_method',
-              input: 'select',
-              selectKeys: [
-                {name: '', value: null},
-                {name: 'FLOAT', value: 'FLOAT'},
-                {name: 'INVOICE', value: 'INVOICE'}
-              ]
-            },
-          ]
-        },
-        editAll: false,
-        editId: '',
-        cardReseller: [],
-        resellerId: '',
-        //context: 'edit',
-        valid: {
-          main: false,
-          secondary: false,
-          third: false,
-        },
-        cpcValues: [
-          {name: '', value: 1}
-        ],
-        statusValues: [
-          {name: 'Active', value: 'ACTIVE'},
-          {name: 'Closed', value: 'CLOSED'},
-          {name: 'Pending Approval', value: 'PENDING'}
-        ],
-        chargedToValues: [
-          {name: 'ACCOUNT', value: 'ACCOUNT'},
-          {name: 'FLOAT', value: 'FLOAT'},
-          {name: 'INVOICE', value: 'INVOICE'}
-        ],
-        chargedToApiValues: [
-          {name: 'FLOAT', value: 'FLOAT'},
-          {name: 'INVOICE', value: 'INVOICE'}
-        ],
-        uniqueFloatValues: [
-          {name: 'Yes', value: 1},
-          {name: 'No', value: 0},
-        ],
-        dynamicRef1: [
-          {name: 'Ref 1', model: 'ref1'},
-          {name: 'Ref 2', model: 're2'},
-          {name: 'Ref 3', model: 're3'},
-          {name: 'Ref 4', model: 'ref4'},
-        ],
-        actionBtn: 'save',
-        validationList: [
-          'apiFee',
-          'apiFeeBillMethod',
-          'appFee',
-          'appFeeBillMethod',
-          'cardProgramID',
-          'loadFee',
-          'loadFeeCap',
-          'loadFeePct',
-          'loadFeebillMethod',
-          'monthlyFee',
-          'monthlyFeeBillMethod',
-          'status',
-        ],
-        validateArray: {
-          resellerName: true,
-          resellerCode: true,
-          alertContact: true,
-          uniqueFloat: true,
-        },
-      };
-    },
-    computed: {
-      ...mapState({
-        countries: state => state.countries.countries
-      }),
-      ...mapGetters({
-        cardData: GETTER_ALL_CARDS,
-        loadingState: GETTER_LOADINGSTATE_RESELLER,
-        cpcList: GETTER_ALL_CARD_PROGRAM_CODE,
-        resellerSubscription: GETTER_RESELLER_SUBSCRIPTIONS,
-        getCountryByCode: GETTER_GET_COUNTRY_BY_CODE
-      }),
-      resellerData() {
-        const resellerSub = this.$store.state.reseller.resellerSubscription;
-        if (!resellerSub) return void 0;
-        return !this.$route.params.id ? resellerSub : {
-          ...resellerSub,
-          ['cardProgCode']: (this.$store.state.cardProgram.allCardPrograms.find(cardProgram => cardProgram.id === resellerSub.cardProgramID) ||
-            {cardProgCode: null}).cardProgCode
-        }
+          {
+            label: 'Charged To',
+            name: 'apiFeeBillMethod',
+            i18n: 'reseller.create.table_header.api_fee_bill_method',
+            input: 'select',
+            selectKeys: [
+              {name: '', value: null},
+              {name: 'FLOAT', value: 'FLOAT'},
+              {name: 'INVOICE', value: 'INVOICE'}
+            ]
+          },
+        ]
       },
-      creationResponseState() {
-        return this.$store.state.UiModule.responseState[ADD_RESELLER_SUBSCRIPTION]
+      editAll: false,
+      editId: '',
+      cardReseller: [],
+      resellerId: '',
+      //context: 'edit',
+      valid: {
+        main: false,
+        secondary: false,
+        third: false,
       },
-      editionResponseState() {
-        return this.$store.state.UiModule.responseState[EDIT_RESELLER_SUBSCRTION_BY_ID]
+      cpcValues: [
+        {name: '', value: 1}
+      ],
+      statusValues: [
+        {name: 'Active', value: 'ACTIVE'},
+        {name: 'Closed', value: 'CLOSED'},
+        {name: 'Pending Approval', value: 'PENDING'}
+      ],
+      chargedToValues: [
+        {name: 'ACCOUNT', value: 'ACCOUNT'},
+        {name: 'FLOAT', value: 'FLOAT'},
+        {name: 'INVOICE', value: 'INVOICE'}
+      ],
+      chargedToApiValues: [
+        {name: 'FLOAT', value: 'FLOAT'},
+        {name: 'INVOICE', value: 'INVOICE'}
+      ],
+      uniqueFloatValues: [
+        {name: 'Yes', value: 1},
+        {name: 'No', value: 0},
+      ],
+      dynamicRef1: [
+        {name: 'Ref 1', model: 'ref1'},
+        {name: 'Ref 2', model: 're2'},
+        {name: 'Ref 3', model: 're3'},
+        {name: 'Ref 4', model: 'ref4'},
+      ],
+      actionBtn: 'save',
+      validationList: [
+        'apiFee',
+        'apiFeeBillMethod',
+        'appFee',
+        'appFeeBillMethod',
+        'cardProgramID',
+        'loadFee',
+        'loadFeeCap',
+        'loadFeePct',
+        'loadFeebillMethod',
+        'monthlyFee',
+        'monthlyFeeBillMethod',
+        'status',
+      ],
+      validateArray: {
+        resellerName: true,
+        resellerCode: true,
+        alertContact: true,
+        uniqueFloat: true,
       },
-      isValid() {
-        return Object.keys(this.valid).reduce((acc, i) => acc && this.valid[i], true)
-      },
-      dynamicPdf() {
-        return this.resellerCorporate.dynamic_pdf
-      },
-      isView() {
-        return this.context === 'view'
-      },
-      isCreate() {
-        return this.context === 'create'
-      },
-      isEdit() {
-        return this.context === 'edit'
-      },
-      isLoading() {
-        return this.loadingState !== LOADING_STATE.IDEAL
-      },
-      handleModalTitle() {
-        if (this.actionBtn === 'save') {
-          return 'Save Reseller Corporate Program'
-        }
-        return 'Discard changes?'
-      },
-      isShowCorporativeBlock() {
-        if (this.isView) {
-          return this.corporativeProgram
-        }
-        return true
-      },
-      validateClientForm() {
-        let isValid = true
-        if (!this.isViewMode && Object.keys(this.reseller).length !== 0) {
-          this.validationList.forEach(item => {
-            const field = this.reseller[`${item}`]
-            if (typeof (field) === 'undefined' || field === '' || field === 0) {
-              isValid = false
-            }
-            switch (item) {
-              case'alertContact':
-                this.validateArray.alertContact = this.isValidAlertContact
-                break
-              case'resellerName':
-                this.validateArray.resellerName = this.isValidResellerName
-                break
-              case'resellerCode':
-                this.validateArray.resellerCode = this.isValidResellerCode
-                break
-              case'uniqueFloat':
-                this.validateArray.uniqueFloat = this.isValidUniqueFloat
-                break
-            }
-          })
-
-          if (typeof this.validateArray !== 'undefined') {
-            Object.keys(this.validateArray).forEach(item => {
-              if (!this.validateArray[item]) {
-                return isValid = false
-              }
-            })
-          }
-        }
-
-        return isValid
-      },
-      isValidResellerName() {
-        return this.reseller.resellerName !== '' && this.verifyName(this.reseller.resellerName)
-      },
-      isValidResellerCode() {
-        return (typeof (this.reseller.resellerCode) === 'undefined' || this.verifyContactRef(this.reseller.resellerCode))
-      },
-      isValidUniqueFloat() {
-        return (typeof (this.reseller.uniqueFloat) === 'undefined')
-      },
-      isValidAlertContact() {
-        return (typeof (this.reseller.alertContact) === 'undefined' || this.reseller.alertContact !== '' && this.verifyEmail(this.reseller.alertContact))
-      },
-      isValidLoadFee() {
-        return validateNumber(this.reseller.loadFee)
-      },
-      isValidLoadFeeCap() {
-        return validateNumber(this.reseller.loadFeeCap)
-      },
-      isValidLoadFeePct() {
-        return validateNumber(this.reseller.loadFeePct)
-      },
-      isValidApiFee() {
-        return validateNumber(this.reseller.apiFee)
-      },
-      isValidAppFee() {
-        return validateNumber(this.reseller.appFee)
-      },
-      isValidMonthlyFee() {
-        return validateNumber(this.reseller.monthlyFee)
-      },
-    },
-    watch: {
-      reseller(newVal){
-        this.isStartEdit = true
-      },
-      cardData(newVal) {
-        this.chagneCardProgramOptions(newVal);
-      },
-      creationResponseState(newVal, oldVal) {
-        if (!oldVal) return this.sweetAlertHandler(newVal)
-        if (newVal.timeStamp === oldVal.timeStamp) return;
-        this.sweetAlertHandler(newVal)
-      },
-      editionResponseState(newVal, oldVal) {
-        if (newVal.timeStamp === oldVal.timeStamp) return;
-        this.sweetAlertHandler(newVal)
-      },
-      resellerData(newVal) {
-        if (!newVal) return;
-        this.cardReseller = [newVal]
-        this.reseller = this.modResellerModel(newVal)
-      },
-      editId(newVal, oldVal) {
-        if (this.context === 'view' && newVal) {
-          //this.context = 'edit'
-        }
-      },
-      context(newVal) {
-        if (newVal === 'create') {
-          this.reseller = {}
-        }
-        this.getAllResellerSubscription()
-      },
-      $route(newVal, oldVal) {
-        const {id} = newVal.params;
-        
-        if (!id) {        
-          this.cardReseller = [createNewRowFromHeadings([
-              ...this.tableHeadingsPack.main,
-              ...this.tableHeadingsPack.secondary, ...this.tableHeadingsPack.third],
-            'Reseller_new_row')];
-          this.editId = 'Reseller_new_row';
-        } else {
-          // Update data
-          this.loadData()
-        }
+    };
+  },
+  computed: {
+    ...mapState({
+      countries: state => state.countries.countries
+    }),
+    ...mapGetters({
+      cardData: GETTER_ALL_CARDS,
+      loadingState: GETTER_LOADINGSTATE_RESELLER,
+      cpcList: GETTER_ALL_CARD_PROGRAM_CODE,
+      resellerSubscription: GETTER_RESELLER_SUBSCRIPTIONS,
+      getCountryByCode: GETTER_GET_COUNTRY_BY_CODE
+    }),
+    resellerData() {
+      const resellerSub = this.$store.state.reseller.resellerSubscription;
+      if (!resellerSub) return void 0;
+      return !this.$route.params.id ? resellerSub : {
+        ...resellerSub,
+        ['cardProgCode']: (this.$store.state.cardProgram.allCardPrograms.find(cardProgram => cardProgram.id === resellerSub.cardProgramID) ||
+          {cardProgCode: null}).cardProgCode
       }
     },
-    methods: {
-      ...mapActions({
-        addReseller: ADD_RESELLER_SUBSCRIPTION,
-        getAllCardPrograms: GET_ALL_CARD_PROGRAM,
-        editReseller: EDIT_RESELLER_SUBSCRTION_BY_ID,
-        getResellerSubscripiton: GET_RESELLER_SUBSCRTION_BY_ID,
-        getAllResellerSubscription: GET_ALL_RESELLER_SUBSCRIPTIONS,
-        showModal: SET_MODAL_TYPE,
-        getCountries: ACTION_GET_COUNTRIES
-      }),
-      modResellerModel(reseller) {
-        reseller.uniqueFloat = Number(reseller.uniqueFloat)
-        return reseller
-      },
-      modResellerRequest(reseller) {
-        this.resellerRequestPropModify
-          .forEach(property => {
-            if (typeof reseller[property.name] !== 'undefined') {
-              reseller[property.name] = this.checkModResellerType(property.type, reseller[property.name])
-            }
-          })
-
-        return reseller
-      },
-      checkModResellerType(type, value) {
-        switch (type) {
-          case'number':
-            return Number(value)
-          case'boolean':
-            return !!value
-        }
-      },
-      chagneCardProgramOptions(cardPrograms = []) {
-        this.tableHeadingsPack.main = this.tableHeadingsPack.main.map(i => {
-          if (i.name === 'cardProgramID') {
-            return {
-              ...i,
-              selectKeys: cardPrograms.map(cardProgram => ({name: cardProgram.cardProgCode, value: cardProgram.id}))
-            }
-          } else {
-            return i;
+    creationResponseState() {
+      return this.$store.state.UiModule.responseState[ADD_RESELLER_SUBSCRIPTION]
+    },
+    editionResponseState() {
+      return this.$store.state.UiModule.responseState[EDIT_RESELLER_SUBSCRTION_BY_ID]
+    },
+    isValid() {
+      return Object.keys(this.valid).reduce((acc, i) => acc && this.valid[i], true)
+    },
+    dynamicPdf() {
+      return this.resellerCorporate.dynamic_pdf
+    },
+    isView() {
+      return this.context === 'view'
+    },
+    isCreate() {
+      return this.context === 'create'
+    },
+    isEdit() {
+      return this.context === 'edit'
+    },
+    isLoading() {
+      return this.loadingState !== LOADING_STATE.IDEAL
+    },
+    handleModalTitle() {
+      if (this.actionBtn === 'save') {
+        return 'Save Reseller Corporate Program'
+      }
+      return 'Discard changes?'
+    },
+    isShowCorporativeBlock() {
+      if (this.isView) {
+        return this.corporativeProgram
+      }
+      return true
+    },
+    validateClientForm() {
+      let isValid = true
+      if (!this.isViewMode && Object.keys(this.reseller).length !== 0) {
+        this.validationList.forEach(item => {
+          const field = this.reseller[`${item}`]
+          if (typeof (field) === 'undefined' || field === '' || field === 0) {
+            isValid = false
+          }
+          switch (item) {
+            case'alertContact':
+              this.validateArray.alertContact = this.isValidAlertContact
+              break
+            case'resellerName':
+              this.validateArray.resellerName = this.isValidResellerName
+              break
+            case'resellerCode':
+              this.validateArray.resellerCode = this.isValidResellerCode
+              break
+            case'uniqueFloat':
+              this.validateArray.uniqueFloat = this.isValidUniqueFloat
+              break
           }
         })
-      },
-      sweetAlertHandler(newVal) {
-        if (newVal.state === true) {
-          const key = this.context + 'handleSecondaryAction' + 'reseller';
 
-          this.showModal({
-            type: 'normal',
-            message: this.context === 'create' ? this.$t('reseller.create.result_modal.message.create') : this.$t('reseller.create.result_modal.message.edit'),
-            copy: this.$t('reseller.create.result_modal.copy'),
-            mainButton: this.$t('reseller.create.result_modal.main_button'),
-            key
-          })
-
-          AbaModalEvents.$on(key, response => {
-            if (response.ok) {
-              //this.$router.push('/reseller/view')
-            } else {
-              this.dirty = false;
-            }
-            AbaModalEvents.$off(key)
-          })
-        }
-      },
-      listenToInput({value, valid, dirty}, table) {
-        this.cardReseller = value;
-        //console.log('value', value);
-        this.dirty = this.dirty || !!dirty;
-        this.valid = {
-          ...this.valid,
-          [table]: valid
-        };
-      },
-      /*secondaryAction() {
-        console.log('secondary');
-        if (this.context === 'view' || (this.context !== 'view' && !this.dirty)) {
-          this.$router.push('/reseller/view')
-        } else {
-          const key = this.context + 'reseller';
-          this.showModal({
-            type: 'normal',
-            message: this.$t('reseller.create.discard_modal.message'),
-            copy: this.$t('reseller.create.discard_modal.copy'),
-            mainButton: this.$t('reseller.create.discard_modal.main_button'),
-            secondaryButton: this.$t('reseller.create.discard_modal.secondary_button'),
-            key
-          })
-          AbaModalEvents.$on(key, response => {
-            AbaModalEvents.$off(key)
-            if (response.ok) this.$router.push('/reseller/view')
-          })
-        }
-      },
-      handlePrimaryAction() {
-        if (this.context === 'view') {
-          this.editId = this.$route.params.id;
-          this.$router.push({
-            path: this.$route.path,
-            query: {
-              edit: true
+        if (typeof this.validateArray !== 'undefined') {
+          Object.keys(this.validateArray).forEach(item => {
+            if (!this.validateArray[item]) {
+              return isValid = false
             }
           })
-          this.edit = true;
-
-          return;
         }
-        if (!this.valid) return this.$store.dispatch(SHOW_TOAST_MESSAGE, {
-          message: this.$t('reseller.create.toast.error'),
-          status: 'danger'
+      }
+
+      return isValid
+    },
+    isValidResellerName() {
+      return this.reseller.resellerName !== '' && this.verifyName(this.reseller.resellerName)
+    },
+    isValidResellerCode() {
+      return (typeof (this.reseller.resellerCode) === 'undefined' || this.verifyContactRef(this.reseller.resellerCode))
+    },
+    isValidUniqueFloat() {
+      return (typeof (this.reseller.uniqueFloat) === 'undefined')
+    },
+    isValidAlertContact() {
+      return (typeof (this.reseller.alertContact) === 'undefined' || this.reseller.alertContact !== '' && this.verifyEmail(this.reseller.alertContact))
+    },
+    isValidLoadFee() {
+      return validateNumber(this.reseller.loadFee)
+    },
+    isValidLoadFeeCap() {
+      return validateNumber(this.reseller.loadFeeCap)
+    },
+    isValidLoadFeePct() {
+      return validateNumber(this.reseller.loadFeePct)
+    },
+    isValidApiFee() {
+      return validateNumber(this.reseller.apiFee)
+    },
+    isValidAppFee() {
+      return validateNumber(this.reseller.appFee)
+    },
+    isValidMonthlyFee() {
+      return validateNumber(this.reseller.monthlyFee)
+    },
+  },
+  watch: {
+    reseller(newVal){
+      this.isStartEdit = true
+    },
+    cardData(newVal) {
+      this.chagneCardProgramOptions(newVal);
+    },
+    creationResponseState(newVal, oldVal) {
+      if (!oldVal) return this.sweetAlertHandler(newVal)
+      if (newVal.timeStamp === oldVal.timeStamp) return;
+      this.sweetAlertHandler(newVal)
+    },
+    editionResponseState(newVal, oldVal) {
+      if (newVal.timeStamp === oldVal.timeStamp) return;
+      this.sweetAlertHandler(newVal)
+    },
+    resellerData(newVal) {
+      if (!newVal) return;
+
+      this.cardReseller = [newVal]
+      this.reseller = this.modResellerModel(newVal)
+      // Set corporate flag
+      this.corporativeProgram = this.reseller.resellerType === 'CORPORATE'
+      // extract corp data back
+
+      if (this.corporativeProgram) {
+        this.resellerCorporate.two_step_validation = this.reseller.twoStepValidateRequired
+        this.resellerCorporate.break_value = this.reseller.breakValue
+        // virtual presets
+        this.resellerCorporate.dynamic_pdf = []
+
+        this.reseller.virtualPresets.forEach(item => {
+          this.resellerCorporate.dynamic_pdf.push({
+            name: item.presetName,
+            preset: item.content
+          })    
         })
 
-        const key = this.context + 'handlePrimaryAction' + 'reseller';
+        // push empty one if none was returned
+        if (this.reseller.virtualPresets.length === 0) {
+          this.resellerCorporate.dynamic_pdf.push({
+            name: '',
+            preset: ''
+          })    
+        }
+
+        // virtual fields
+        this.resellerCorporate.dynamicReferences = {
+          ref1: '',
+          ref2: '',
+          ref3: '',
+          ref4: '',
+          ref5: '',
+          ref6: '',
+          ref7: '',
+          ref8: ''
+        }
+
+        this.reseller.virtualFields.forEach((item, index) => {
+          this.resellerCorporate.dynamicReferences['ref' + item.fieldNumber] = item.fieldName
+        })
+      }
+    },
+    editId(newVal, oldVal) {
+      if (this.context === 'view' && newVal) {
+        //this.context = 'edit'
+      }
+    },
+    context(newVal) {
+      if (newVal === 'create') {
+        // Clear all data for a new one
+        this.corporativeProgram = false
+        this.reseller = {}
+        this.resellerCorporate = JSON.parse(JSON.stringify(resellerCorporateTemplate))
+      }
+      this.getAllResellerSubscription()
+    },
+    $route(newVal, oldVal) {
+      const {id} = newVal.params;
+      
+      if (!id) {        
+        this.cardReseller = [createNewRowFromHeadings([
+            ...this.tableHeadingsPack.main,
+            ...this.tableHeadingsPack.secondary, ...this.tableHeadingsPack.third],
+          'Reseller_new_row')];
+        this.editId = 'Reseller_new_row';
+      } else {
+        // Update data
+        this.loadData()
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      addReseller: ADD_RESELLER_SUBSCRIPTION,
+      getAllCardPrograms: GET_ALL_CARD_PROGRAM,
+      editReseller: EDIT_RESELLER_SUBSCRTION_BY_ID,
+      getResellerSubscripiton: GET_RESELLER_SUBSCRTION_BY_ID,
+      getAllResellerSubscription: GET_ALL_RESELLER_SUBSCRIPTIONS,
+      showModal: SET_MODAL_TYPE,
+      getCountries: ACTION_GET_COUNTRIES
+    }),
+    modResellerModel(reseller) {
+      reseller.uniqueFloat = Number(reseller.uniqueFloat)
+      return reseller
+    },
+    modResellerRequest(reseller) {
+      this.resellerRequestPropModify
+        .forEach(property => {
+          if (typeof reseller[property.name] !== 'undefined') {
+            reseller[property.name] = this.checkModResellerType(property.type, reseller[property.name])
+          }
+        })
+
+      return reseller
+    },
+    checkModResellerType(type, value) {
+      switch (type) {
+        case'number':
+          return Number(value)
+        case'boolean':
+          return !!value
+      }
+    },
+    chagneCardProgramOptions(cardPrograms = []) {
+      this.tableHeadingsPack.main = this.tableHeadingsPack.main.map(i => {
+        if (i.name === 'cardProgramID') {
+          return {
+            ...i,
+            selectKeys: cardPrograms.map(cardProgram => ({name: cardProgram.cardProgCode, value: cardProgram.id}))
+          }
+        } else {
+          return i;
+        }
+      })
+    },
+    sweetAlertHandler(newVal) {
+      if (newVal.state === true) {
+        const key = this.context + 'handleSecondaryAction' + 'reseller';
+
         this.showModal({
           type: 'normal',
-          message: `  ${this.context === 'create' ? 'Do you want to create new reseller subscription ' : ' Do you want to save the changes  '} ?`,
-          copy: `${this.context === 'create' ? this.$t('reseller.create.confirm_modal.copy.create') : this.$t('reseller.create.confirm_modal.copy.edit')}`,
-          mainButton: this.$t('reseller.create.confirm_modal.main_button'),
-          secondaryButton: this.$t('reseller.create.confirm_modal.secondary_button'),
+          message: this.context === 'create' ? this.$t('reseller.create.result_modal.message.create') : this.$t('reseller.create.result_modal.message.edit'),
+          copy: this.$t('reseller.create.result_modal.copy'),
+          mainButton: this.$t('reseller.create.result_modal.main_button'),
           key
         })
+
         AbaModalEvents.$on(key, response => {
-          AbaModalEvents.$off(key)
-
           if (response.ok) {
-            // on edit ?
-
-            if (this.editId !== '' && this.loadingState === 'ideal') {
-              // on edit for faiure creating new card
-              //massage data -> remove edit prop
-              const {id, edit, cardProgCode, resellerId, ...body} = this.cardReseller.find(i => i.id === this.editId);
-              console.log(body, 'from dest');
-              if (this.editId === 'Reseller_new_row') {
-                // create
-                // todo fix redirect
-                this.addReseller({body})
-                return;
-              } else {
-                //massage data -> remove edit prop
-                // edit single card
-                this.editReseller({body, id})
-              }
-            }
-          }
-
-        })
-      },*/
-      handleAddPreset() {
-        console.log('add another preset')
-        this.resellerCorporate.dynamic_pdf.push({name: '', preset: ''})
-      },
-      handleCancelAction() {
-        this.isCancel = true
-        this.actionBtn = 'cancel'
-        this.modals.visible = true
-      },
-      handleAction() {
-        this.isCancel = false
-
-        if (this.isView) {
-          this.$router.push(this.editRoute)
-        } else {
-          this.isCancel = false
-          this.modals.visible = true
-          this.actionBtn = 'save'
-        }
-      },
-      async handleModalAction() {
-        this.modals.visible = false
-
-        if (this.isCancel) {
-          if (this.isView) {
-            // We need to do this next tick because otherwise we encounter page scrollbar disappear
-            // Looks like some conflict with modal
-            this.$nextTick(() => {
-              this.$router.push('/reseller/view')
-            })            
+            //this.$router.push('/reseller/view')
           } else {
-            if (this.resellerId) {
-              this.$router.push(`/reseller/view/${this.resellerId}`)
-            }
+            this.dirty = false;
           }
-          return
-        }
-
-        //console.log('Reseller:', this.reseller)
-        const body = this.handleResellerRequestBody(this.reseller)
-        //console.log('Body:', body)
-
-        if (this.isEdit) {
-          await this.editReseller({body, id: this.resellerId})
-            .then(data => {
-              if (data.status) {
-                this.$router.push(`/reseller/view/${this.resellerId}`)
-              }
-            })
-        }
-        if (this.isCreate) {
-          await this.addReseller(body)
-            .then(data => {
-              if (data && data.data && data.data.id) {
-                this.$router.push(`/reseller/view/${data.data.id}`)
-              }
-            })
-        }
-      },
-      handleResellerRequestBody(resellerData) {
-        let reseller = JSON.parse(JSON.stringify(resellerData))
-        this.resellerRequestPropDelete.forEach(name => {
-          delete reseller[name]
+          AbaModalEvents.$off(key)
         })
-        reseller = this.modResellerRequest(reseller)
-        return reseller
-      },
-      handleNumberInput(name) {
-        this.reseller[`${name}`] = toNumber(event.target.value)
-      },
-      verifyEmail(email) {
-        const emailCheck = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i;
-        return emailCheck.test(email);
-      },
-      verifyName(name) {
-        const nameCheck = /^[a-zA-Z ]{1,30}$/
-        return nameCheck.test(name)
-      },
-      verifyContactRef(ref) {
-        return ref !== '' && ref.length <= 6 && this.verifySpace(ref)
-      },
-      verifySpace(string) {
-        const refCheck = /\s/
-        return !refCheck.test(string)
-      },
-      loadData () {
-        this.getAllCardPrograms()
-
-        const { id } = this.$route.params
-
-        if (id) {
-          this.resellerId = id
-          this.editRoute = `/reseller/edit/${this.resellerId}`
-          // get the reseller subscription by id
-          if (!this.isCreate) {
-            this.getResellerSubscripiton(id)
-          }
-        }
-        if (this.isCreate) {
-          this.cardReseller = [createNewRowFromHeadings([...this.tableHeadingsPack.main,
-            ...this.tableHeadingsPack.secondary, ...this.tableHeadingsPack.third], 'Reseller_new_row')];
-          this.editId = 'Reseller_new_row';
-          this.chagneCardProgramOptions(this.cardData)
-        }
       }
     },
-    created () {
-      // Request countries if they not loaded yet
-      this.getCountries()
+    listenToInput({value, valid, dirty}, table) {
+      this.cardReseller = value;
+      //console.log('value', value);
+      this.dirty = this.dirty || !!dirty;
+      this.valid = {
+        ...this.valid,
+        [table]: valid
+      };
     },
-    mounted () {
-      this.loadData()
+    handleAddPreset() {
+      console.log('add another preset')
+      this.resellerCorporate.dynamic_pdf.push({name: '', preset: ''})
     },
-    filters: {
-      booleanToYesNoFormat: (value) => {
-        return value ? 'Yes' : 'No'
-      },
+    handleCancelAction() {
+      this.isCancel = true
+      this.actionBtn = 'cancel'
+      this.modals.visible = true
+    },
+    handleAction() {
+      this.isCancel = false
+
+      if (this.isView) {
+        this.$router.push(this.editRoute)
+      } else {
+        this.isCancel = false
+        this.modals.visible = true
+        this.actionBtn = 'save'
+      }
+    },
+    async handleModalAction() {
+      this.modals.visible = false
+
+      if (this.isCancel) {
+        if (this.isView) {
+          // We need to do this next tick because otherwise we encounter page scrollbar disappear
+          // Looks like some conflict with modal
+          this.$nextTick(() => {
+            this.$router.push('/reseller/view')
+          })            
+        } else {
+          if (this.resellerId) {
+            this.$router.push(`/reseller/view/${this.resellerId}`)
+          }
+        }
+        return
+      }
+
+      let reseller = this.reseller
+
+      reseller.resellerType = this.corporativeProgram ? 'CORPORATE' : 'STANDARD'
+
+      // Merge corporate data if needed
+      if (this.corporativeProgram) {
+        reseller.twoStepValidateRequired = this.resellerCorporate.two_step_validation
+        reseller.breakValue = this.resellerCorporate.break_value
+        // Presets
+        reseller.virtualPresets = []
+
+        this.resellerCorporate.dynamic_pdf.forEach(item => {
+          if (item.name) {
+            reseller.virtualPresets.push({
+              presetName: item.name,
+              content: item.preset,
+              format: 'TEXT'
+            })
+          }
+        })
+        // Fields
+        reseller.virtualFields = []
+
+        Object.keys(this.resellerCorporate.dynamicReferences).forEach((item, index) => {
+          if (this.resellerCorporate.dynamicReferences[item]) {
+            reseller.virtualFields.push({
+              fieldNumber: item.match(/\d+/g)[0], // extract number
+              fieldName: this.resellerCorporate.dynamicReferences[item]
+            })
+          }
+        })
+      }
+
+      const body = this.handleResellerRequestBody(reseller)
+      //console.log('Body:', body)
+
+      if (this.isEdit) {
+        await this.editReseller({body, id: this.resellerId})
+          .then(data => {
+            if (data.status) {
+              this.$router.push(`/reseller/view/${this.resellerId}`)
+            }
+          })
+      }
+      if (this.isCreate) {
+        await this.addReseller(body)
+          .then(data => {
+            if (data && data.data && data.data.id) {
+              this.$router.push(`/reseller/view/${data.data.id}`)
+            }
+          })
+      }
+    },
+    handleResellerRequestBody(resellerData) {
+      let reseller = JSON.parse(JSON.stringify(resellerData))
+      this.resellerRequestPropDelete.forEach(name => {
+        delete reseller[name]
+      })
+      reseller = this.modResellerRequest(reseller)
+      return reseller
+    },
+    handleNumberInput(name) {
+      this.reseller[`${name}`] = toNumber(event.target.value)
+    },
+    verifyEmail(email) {
+      const emailCheck = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i;
+      return emailCheck.test(email);
+    },
+    verifyName(name) {
+      const nameCheck = /^[a-zA-Z ]{1,30}$/
+      return nameCheck.test(name)
+    },
+    verifyContactRef(ref) {
+      return ref !== '' && ref.length <= 6 && this.verifySpace(ref)
+    },
+    verifySpace(string) {
+      const refCheck = /\s/
+      return !refCheck.test(string)
+    },
+    loadData () {
+      this.getAllCardPrograms()
+
+      const { id } = this.$route.params
+
+      if (id) {
+        this.resellerId = id
+        this.editRoute = `/reseller/edit/${this.resellerId}`
+        // get the reseller subscription by id
+        if (!this.isCreate) {
+          this.getResellerSubscripiton(id)
+
+        }
+      }
+      if (this.isCreate) {
+        this.cardReseller = [createNewRowFromHeadings([...this.tableHeadingsPack.main,
+          ...this.tableHeadingsPack.secondary, ...this.tableHeadingsPack.third], 'Reseller_new_row')];
+        this.editId = 'Reseller_new_row';
+        this.chagneCardProgramOptions(this.cardData)
+      }
     }
-  };
+  },
+  created () {
+    // Request countries if they not loaded yet
+    this.getCountries()
+  },
+  mounted () {
+    this.loadData()
+  },
+  filters: {
+    booleanToYesNoFormat: (value) => {
+      return value ? 'Yes' : 'No'
+    },
+  }
+};
 </script>
 
 <style scoped lang="scss">
