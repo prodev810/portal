@@ -11,6 +11,7 @@ import business from './modules/Business'
 import security from 'plugin-vuejs-keycloak/modules/security'
 import userInfo from './modules/UserInfo'
 import Clients from "./modules/Clients";
+import countries from "./modules/Countries"
 
 Vue.use(Vuex)
 
@@ -27,5 +28,6 @@ export const store = new Vuex.Store({
       issuing,
       business,
       userInfo,
+      countries
   }
 })

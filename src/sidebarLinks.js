@@ -38,7 +38,7 @@ export default [
       },
       {
         name: 'View Resellers',
-        path: '/resellers/view',
+        path: '/reseller/view',
         i18n: 'menu.view_reseller',
         permission: permission.RESELLER_SUBSCRIPTION_VIEW
       },

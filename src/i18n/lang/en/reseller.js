@@ -65,7 +65,8 @@ const create = {
     monthly_fee: 'Monthly Fee',
     monthly_fee_bill_method: 'Charged To',
     api_fee: 'API Fee',
-    api_fee_bill_method: 'Charged To'
+    api_fee_bill_method: 'Charged To',
+    country: 'Country'
   },
   result_modal: {
     message: {

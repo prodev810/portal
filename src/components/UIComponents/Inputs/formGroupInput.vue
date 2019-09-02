@@ -145,8 +145,7 @@
   }
 </script>
 <style lang="scss">
-  .input-group-text {
-    padding: 2px !important;
-  }
-
+.input-group-text {
+  padding: 2px !important;
+}
 </style>
