@@ -338,9 +338,15 @@ export default {
 </script>
 
 <style lang="scss">
+$labelMargin: 16px;
+
 .pg-edit-merchant {
 	& .pg-row-container {
 		margin-bottom: 0;		
+
+    & .pg-row-header-col {
+      margin-top: -$labelMargin;
+    }
 		
     & .form-control {
       padding: 10px !important;
@@ -355,8 +361,7 @@ export default {
 .validation-error {
   font-size: 10px;
   color: red;
-  //padding-top: 4px;
-  height: 16px;
+  height: $labelMargin;
 }
 
 .pg-merchant-modal-header {
