@@ -23,11 +23,12 @@ const listing = {
     url:'Url',
     merchant_account_stage:{
         id:'Merchant Account ID',
-        name:'Merchant Account Name',
+        name:'Stage',
         description:'Merchant Account Desc'
     },
 
     button: {
+				new_client: 'New client',
         edit_client: `Save`,
         view_client: `View Client`,
         cancel: `Cancel`,

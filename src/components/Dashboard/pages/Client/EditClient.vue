@@ -26,16 +26,35 @@
 
             <PGRow labeli18n="client.listing.country"  :headerColWidth="'13rem'" required :viewMode="viewMode">
               <span slot="view">{{ clientData.country }}</span>
-              <fg-input slot="edit" v-model="clientData.country"  :headerColWidth="'13rem'" required :maxLength="255"/>
+							<el-select slot="edit" v-model="clientData.country" class="mb-2">
+								<el-option v-for="item in countries"
+														:key="item.alpha2Code"
+														:label="item.name"
+														:value="item.alpha2Code">{{item.name}}
+								</el-option>
+							</el-select>
             </PGRow>
-            <PGRow labeli18n="client.listing.created_date"  :headerColWidth="'13rem'" required :viewMode="viewMode">
+
+            <PGRow v-if="editMode" 
+									 labeli18n="client.listing.created_date" 
+									 :headerColWidth="'13rem'" 
+									 required 
+									 :viewMode="viewMode">
               <span slot="view">{{ clientData.created_date }}</span>
               <fg-input slot="edit" v-model="clientData.created_date" required :maxLength="255"/>
             </PGRow>
+
             <PGRow labeli18n="client.listing.display_currency"  :headerColWidth="'13rem'" required :viewMode="viewMode">
               <span slot="view">{{ clientData.display_currency }}</span>
-              <fg-input slot="edit" v-model="clientData.display_currency" required :maxLength="255"/>
+							<el-select slot="edit" v-model="clientData.display_currency" class="mb-2">
+								<el-option v-for="item in currencies"
+														:key="item.currency_code"
+														:label="item.currency_name"
+														:value="item.currency_code">{{item.currency_name}}
+								</el-option>
+							</el-select>
             </PGRow>
+
             <PGRow labeli18n="client.listing.phone"  :headerColWidth="'13rem'" required :viewMode="viewMode">
               <span slot="view">{{ clientData.phone }}</span>
               <fg-input slot="edit" v-model="clientData.phone" required :maxLength="255"/>
@@ -66,8 +85,16 @@
           </PGRow>
           <PGRow labeli18n="client.listing.merchant_account_stage.name"  :headerColWidth="'13rem'" required :viewMode="viewMode">
             <span slot="view">{{ clientData.merchant_account_stage.name }}</span>
-            <fg-input slot="edit" v-model="clientData.merchant_account_stage.name" required :maxLength="255"/>
+
+						<el-select slot="edit" v-model="clientData.merchant_account_stage.name" class="mb-2">
+							<el-option v-for="item in stageValues"
+													:key="item"
+													:label="item"
+													:value="item">{{item}}
+							</el-option>
+						</el-select>
           </PGRow>
+					
           <PGRow labeli18n="client.listing.merchant_account_stage.description"  :headerColWidth="'13rem'" required :viewMode="viewMode">
             <span slot="view">{{ clientData.merchant_account_stage.description }}</span>
             <fg-input slot="edit" v-model="clientData.merchant_account_stage.description" required :maxLength="255"/>
@@ -88,8 +115,11 @@ import {mapActions, mapState} from 'vuex'
 import moment from 'moment'
 
 import {
-    SHOW_TOAST_MESSAGE,
-    ACTION_GET_CLIENT
+	SHOW_TOAST_MESSAGE,
+	ACTION_GET_CLIENT,
+	ACTION_GET_COUNTRIES,
+	GETTER_GET_COUNTRY_BY_CODE,
+	ACTION_PG_GET_CURRENCIES
 } from '@/store/types'
 
 
@@ -109,83 +139,83 @@ export default {
     return {
       loading: true,
       viewMode: false,
-      clientData:{
-          account_name: null,
-          active: null,
-          company_name: null,
-          country: null,
-          created_date: null,
-          crm_id: null,
-          display_currency: null,
-          email: null,
-          id: null,
-          last_update_date: null,
-          legal_business_name: null,
-          merchant_account_stage: {
-              version: 0,
-              created_date: null,
-              last_updated_date: null,
-              id: null,
-              name: null,
-              description:''
-          },
-      phone: null,
-      statement_descriptor: null,
-      support_contact: null,
-      support_url: null,
-      url: null
-      }
+			clientData: {},
+			stageValues: [
+				'TRIAL',
+				'ACTIVATED',
+				'VERIFIED',
+				'TERMINATED'
+			]
     }
   },
-    computed: {
-        ...mapState({
-
-        }),
-    },
-  created () {
-    this.getData();
-    this.loading = false
-  },
+	computed: {
+    ...mapState({
+			countries: state => state.countries.countries,
+			currencies: state => state.paymentGateway.currencies
+    }),
+		editMode () {
+			return this.$route.params.id !== 'new'
+		}
+	},
+	watch: {
+		'$route': function (newVal, oldVal) {
+			this.getData()
+		}
+	},
   methods: {
-      ...mapActions({
-          getClient: ACTION_GET_CLIENT,
-          // getCurrencyList:ACTION_PG_GET_CURRENCIES
-      }),
-      getData() {
-          if (!this.$route.params.id) return false;
+		...mapActions({
+			getCountries: ACTION_GET_COUNTRIES,
+			getCurrencyList:ACTION_PG_GET_CURRENCIES
+		}),			
+		async getData() {
+			this.loading = true
 
-          this.getClient(this.$route.params.id).then(data => {
-              // console.log('Client data from Component', data);
-                  this.clientData.account_name = data.account_name;
-                  this.clientData.active = data.active;
-                  this.clientData.company_name = data.company_name;
-                  this.clientData.country = data.country;
-                  this.clientData.created_date = moment(data.created_date).format('YYYY-MM-DD HH:MM:SS');
-                  this.clientData.crm_id = data.crm_id;
-                  this.clientData.display_currency = data.crm_id;
-                  this.clientData.email = data.email;
-                  this.clientData.id = data.id;
-                  this.clientData.last_update_date = data.last_update_date;
-                  this.clientData.legal_business_name = data.legal_business_name;
-                  this.clientData.merchant_account_stage.version = data.merchant_account_stage.version;
-                  this.clientData.merchant_account_stage.created_date = data.merchant_account_stage.version;
-                  this.clientData.merchant_account_stage.last_updated_date = data.merchant_account_stage.version;
-                  this.clientData.merchant_account_stage.name = data.merchant_account_stage.name;
-                  this.clientData.merchant_account_stage.description = data.merchant_account_stage.description;
-                  this.clientData.merchant_account_stage.id = data.merchant_account_stage.id;
-                  this.clientData.phone = data.phone;
-                  this.clientData.statement_descriptor = data.statement_descriptor;
-                  this.clientData.support_contact = data.support_contact;
-                  this.clientData.support_url = data.support_url;
-                  this.clientData.url = data.url;
-          });
-      },
-      onSave() {
-          this.onCancel();
-      },
-      onCancel() {
-          this.$router.push('/clients');
-      }
+			try {
+				if (this.editMode) {
+					let response = await this.$http.clhttp.get(`/client/${this.$route.params.id}`)
+					console.log(response)
+					this.clientData = response.data
+				} else {
+					// Set clean data for create
+					this.clientData = {
+						account_name: '',
+						email: '',
+						legal_business_name: '',
+						company_name: '',
+						country: '', // !!!
+						display_currency: '',
+						phone: '',
+						statement_descriptor: '',
+						support_contact: '',
+						support_url: '',
+						url: '',
+
+						merchant_account_stage: {
+							id: '',									
+							name: '',
+							description:''
+						},
+					}
+				}
+			} catch (error) {
+				console.log(error)
+				dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + e.message, status: 'danger' })
+			}
+
+			this.loading = false
+		},
+		onSave() {
+				this.onCancel();
+		},
+		onCancel() {
+				this.$router.push('/clients');
+		}
+	},
+	created () {
+    // Request countries if they not loaded yet
+		this.getCountries()
+		this.getCurrencyList()
+		this.getData()
   }
 }
 </script>
