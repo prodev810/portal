@@ -33,7 +33,7 @@
 
     import {
         ACTION_GET_ALL_CLIENTS_LIST,
-        GETTER_All_CLIENTS
+				GETTER_All_CLIENTS
     } from '@/store/types'
 
 import Spinner from "@/components/UIComponents/Spinner"
@@ -86,7 +86,7 @@ export default {
   },
   methods: {
       ...mapActions({
-          getClients: ACTION_GET_ALL_CLIENTS_LIST
+					getClients: ACTION_GET_ALL_CLIENTS_LIST
       }),
       viewClient(index) {
           let client_id = index.index.row.id

@@ -9,7 +9,17 @@
           <div class="form-contents">
             <PGRow labeli18n="client.listing.account_name" :headerColWidth="'13rem'" required :viewMode="viewMode">
               <span slot="view">{{clientData.account_name}}</span>
-              <fg-input slot="edit" v-model="clientData.account_name" required :maxLength="50"/>
+              <fg-input slot="edit" 
+												v-model="clientData.account_name" 
+												required 
+                      	name="account_name"
+												fieldName="account name"
+												:maxLength="50"/>
+
+							<input slot="edit" class="form-control" style="padding: 10px !important"
+										 v-model="clientData.account_name"
+										 name="account_name"/>
+
             </PGRow>
             <PGRow labeli18n="client.listing.email"  :headerColWidth="'13rem'" required :viewMode="viewMode">
               <span slot="view">{{clientData.email}}</span>
@@ -119,7 +129,8 @@ import {
 	ACTION_GET_CLIENT,
 	ACTION_GET_COUNTRIES,
 	GETTER_GET_COUNTRY_BY_CODE,
-	ACTION_PG_GET_CURRENCIES
+	ACTION_PG_GET_CURRENCIES,
+	ACTION_SAVE_CLIENT
 } from '@/store/types'
 
 
@@ -139,7 +150,10 @@ export default {
     return {
       loading: true,
       viewMode: false,
-			clientData: {},
+			clientData: {
+				merchant_account_stage: {					
+				}
+			},
 			stageValues: [
 				'TRIAL',
 				'ACTIVATED',
@@ -165,7 +179,8 @@ export default {
   methods: {
 		...mapActions({
 			getCountries: ACTION_GET_COUNTRIES,
-			getCurrencyList:ACTION_PG_GET_CURRENCIES
+			getCurrencyList:ACTION_PG_GET_CURRENCIES,
+			saveClient: ACTION_SAVE_CLIENT
 		}),			
 		async getData() {
 			this.loading = true
@@ -205,7 +220,7 @@ export default {
 			this.loading = false
 		},
 		onSave() {
-				this.onCancel();
+				this.saveClient({ id: this.$route.params.id, data: this.clientData })
 		},
 		onCancel() {
 				this.$router.push('/clients');
@@ -220,7 +235,16 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+.pg-edit-merchant {
+	& .pg-row-container {
+		margin-bottom: 0;		
+		
+		& .form-group {
+			margin-bottom: 4px;
+		}
+	}
+}
 .pg-merchant-modal-header {
   padding: 0.5rem !important;  
 }
