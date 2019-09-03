@@ -81,7 +81,7 @@
               <span slot="view">{{ clientData.created_date }}</span>
               <template slot="edit">
                 <input class="form-control"
-                       v-model="clientData.created_date"
+                       v-model="createdDate"
                        v-validate.initial="'required'"
                        name="created_date"
                        data-vv-as="created date"/>
@@ -241,6 +241,8 @@ import Spinner from '@/components/UIComponents/Spinner'
 import PButton from "@/components/UIComponents/Button"
 import PGRow from '@/components/Dashboard/pages/PaymentGateway/PGRow'
 
+const dateFormat = 'YYYY-MM-DD hh:mm:ss'
+
 export default {
   name: 'EditClient',
   components: {    
@@ -272,7 +274,15 @@ export default {
     }),
 		editMode () {
 			return this.$route.params.id !== 'new'
-		}
+    },
+    createdDate: {
+      get () {
+        return moment(this.clientData.created_date).format(dateFormat)
+      },
+      set (value) {
+        this.clientData.created_date = moment(value, dateFormat).toJSON()
+      }
+    }
 	},
 	watch: {
 		'$route': function (newVal, oldVal) {
