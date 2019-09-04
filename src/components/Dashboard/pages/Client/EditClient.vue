@@ -7,7 +7,7 @@
       <el-row :gutter="20">
         <el-col :xs="24" :lg="10" :xl="8">
           <div class="form-contents">
-            <PGRow labeli18n="client.listing.account_name" :headerColWidth="'13rem'" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.account_name" :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{clientData.account_name}}</span>
               <template slot="edit">
                 <input class="form-control"
@@ -19,7 +19,7 @@
               </template>
             </PGRow>
 
-            <PGRow labeli18n="client.listing.email"  :headerColWidth="'13rem'" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.email"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{clientData.email}}</span>
               <template slot="edit">
                 <input class="form-control"
@@ -31,7 +31,7 @@
               </template>
             </PGRow>
 
-            <PGRow labeli18n="client.listing.legal_business_name"  :headerColWidth="'13rem'" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.legal_business_name"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{clientData.legal_business_name}}</span>
               <template slot="edit">
                 <input class="form-control"
@@ -43,7 +43,7 @@
               </template>
             </PGRow>
 
-            <PGRow labeli18n="client.listing.company_name"  :headerColWidth="'13rem'" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.company_name"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{ clientData.company_name }}</span>
               <template slot="edit">
                 <input class="form-control"
@@ -55,7 +55,7 @@
               </template>
             </PGRow>  
 
-            <PGRow labeli18n="client.listing.country"  :headerColWidth="'13rem'" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.country"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{ clientData.country }}</span>
               <template slot="edit">
                 <el-select v-model="clientData.country" 
@@ -75,7 +75,7 @@
             <!-- Set a date format -->
             <PGRow v-if="editMode" 
 									 labeli18n="client.listing.created_date" 
-									 :headerColWidth="'13rem'" 
+									 :headerColWidth="headerColWidth" 
 									 required 
 									 :viewMode="viewMode">
               <span slot="view">{{ clientData.created_date }}</span>
@@ -89,7 +89,7 @@
               </template>
             </PGRow>
 
-            <PGRow labeli18n="client.listing.display_currency"  :headerColWidth="'13rem'" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.display_currency"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{ clientData.display_currency }}</span>
               <template slot="edit">
                 <el-select v-model="clientData.display_currency" 
@@ -106,7 +106,7 @@
               </template>                
             </PGRow>
 
-            <PGRow labeli18n="client.listing.phone"  :headerColWidth="'13rem'" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.phone"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{ clientData.phone }}</span>
               <template slot="edit">
                 <input class="form-control"
@@ -118,7 +118,7 @@
               </template>
             </PGRow>
 
-            <PGRow labeli18n="client.listing.statement_descriptor"  :headerColWidth="'13rem'" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.statement_descriptor"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{ clientData.statement_descriptor }}</span>
               <template slot="edit">
                 <input class="form-control"
@@ -130,7 +130,7 @@
               </template>              
             </PGRow>
 
-            <PGRow labeli18n="client.listing.support_contact"  :headerColWidth="'13rem'" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.support_contact"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{ clientData.support_contact }}</span>
               <template slot="edit">
                 <input class="form-control"
@@ -142,7 +142,7 @@
               </template>              
             </PGRow>
 
-            <PGRow labeli18n="client.listing.support_url"  :headerColWidth="'13rem'" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.support_url"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{ clientData.support_url }}</span>
               <template slot="edit">
                 <input class="form-control"
@@ -154,7 +154,7 @@
               </template>              
             </PGRow>
 
-            <PGRow labeli18n="client.listing.url"  :headerColWidth="'13rem'" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.url"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{ clientData.url }}</span>
               <template slot="edit">
                 <input class="form-control"
@@ -169,7 +169,7 @@
         </el-col>
 
         <el-col :xs="24" :lg="14" :xl="16">
-          <PGRow labeli18n="client.listing.merchant_account_stage.id"  :headerColWidth="'13rem'" required :viewMode="viewMode">
+          <PGRow labeli18n="client.listing.merchant_account_stage.id"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
             <span slot="view">{{ clientData.merchant_account_stage.id }}</span>
             <template slot="edit">
               <input class="form-control"
@@ -181,7 +181,7 @@
             </template>
           </PGRow>
 
-          <PGRow labeli18n="client.listing.merchant_account_stage.name"  :headerColWidth="'13rem'" required :viewMode="viewMode">
+          <PGRow labeli18n="client.listing.merchant_account_stage.name"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
             <span slot="view">{{ clientData.merchant_account_stage.name }}</span>
             <template slot="edit">
               <el-select v-model="clientData.merchant_account_stage.name"
@@ -198,7 +198,7 @@
             </template>
           </PGRow>
 					
-          <PGRow labeli18n="client.listing.merchant_account_stage.description"  :headerColWidth="'13rem'" required :viewMode="viewMode">
+          <PGRow labeli18n="client.listing.merchant_account_stage.description"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
             <span slot="view">{{ clientData.merchant_account_stage.description }}</span>
             <template slot="edit">
               <input class="form-control"
@@ -264,7 +264,8 @@ export default {
 				'ACTIVATED',
 				'VERIFIED',
 				'TERMINATED'
-			]
+			],
+			headerColWidth: '12rem'
     }
   },
 	computed: {
@@ -354,12 +355,15 @@ $labelMargin: 16px;
 	& .pg-row-container {
 		margin-bottom: 0;		
 
-    & .pg-row-header-col {
-      margin-top: -$labelMargin;
-    }
-		
+		@media screen and (min-width: 540px) {
+			& .pg-row-header-col {
+				margin-top: -$labelMargin;
+			}
+		}
+
     & .form-control {
       padding: 10px !important;
+			width: 100%;
     }
 
 		& .form-group {
