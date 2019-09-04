@@ -246,7 +246,6 @@ const dateFormat = 'YYYY-MM-DD hh:mm:ss'
 export default {
   name: 'EditClient',
   components: {    
-
     Spinner,
     PButton,
     PGRow,
@@ -255,8 +254,22 @@ export default {
     return {
       loading: true,
       viewMode: false,
-			clientData: {
-				merchant_account_stage: {					
+			clientData: {						
+				account_name: '',
+				email: '',
+				legal_business_name: '',
+				company_name: '',
+				country: '', // !!!
+				display_currency: '',
+				phone: '',
+				statement_descriptor: '',
+				support_contact: '',
+				support_url: '',
+				url: '',
+				merchant_account_stage: {
+					id: '',									
+					name: '',
+					description:''
 				}
 			},
 			stageValues: [
@@ -304,6 +317,8 @@ export default {
 					let response = await this.$http.clhttp.get(`/client/${this.$route.params.id}`)
 					console.log(response)
 					this.clientData = response.data
+
+					this.$validator.validateAll()
 				} else {
 					// Set clean data for create
 					this.clientData = {
