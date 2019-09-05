@@ -49,9 +49,10 @@ const actions = {
 		},
 		*/
 		[ACTION_SAVE_CLIENT]:  async ({commit, dispatch}, {id, data}) => {
+      let urlID = id !== 'new' ? id : ''
 
 			return new Promise ( (resolve, reject) => {
-					Vue.prototype.$http.clhttp.post(`/client/${id}`, data).then(response => {
+					Vue.prototype.$http.clhttp.post(`/client/${urlID}`, data).then(response => {
 							resolve(response);
 					}).catch( error => {
 							dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + e.message, status: 'danger' });

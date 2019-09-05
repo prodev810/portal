@@ -7,12 +7,11 @@
       <el-row :gutter="20">
         <el-col :xs="24" :lg="10" :xl="8">
           <div class="form-contents">
-            <PGRow labeli18n="client.listing.account_name" :headerColWidth="headerColWidth" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.account_name" :headerColWidth="headerColWidth" :viewMode="viewMode">
               <span slot="view">{{clientData.account_name}}</span>
               <template slot="edit">
                 <input class="form-control"
                        v-model="clientData.account_name"
-                       v-validate.initial="'required'"
                        name="account_name"
                        data-vv-as="account name"/>
                 <div class="validation-error">{{ errors.first('account_name') }}</div>                     
@@ -31,12 +30,11 @@
               </template>
             </PGRow>
 
-            <PGRow labeli18n="client.listing.legal_business_name"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.legal_business_name"  :headerColWidth="headerColWidth" :viewMode="viewMode">
               <span slot="view">{{clientData.legal_business_name}}</span>
               <template slot="edit">
                 <input class="form-control"
                        v-model="clientData.legal_business_name"
-                       v-validate.initial="'required'"
                        name="legal_business_name" maxlength="50"
                        data-vv-as="legal business name"/>
                 <div class="validation-error">{{ errors.first('legal_business_name') }}</div>                     
@@ -55,11 +53,10 @@
               </template>
             </PGRow>  
 
-            <PGRow labeli18n="client.listing.country"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.country"  :headerColWidth="headerColWidth" :viewMode="viewMode">
               <span slot="view">{{ clientData.country }}</span>
               <template slot="edit">
                 <el-select v-model="clientData.country" 
-                           v-validate.initial="'required'"
                            name="country"
                            data-vv-as="country">
                   <el-option v-for="item in countries"
@@ -76,24 +73,21 @@
             <PGRow v-if="editMode" 
 									 labeli18n="client.listing.created_date" 
 									 :headerColWidth="headerColWidth" 
-									 required 
 									 :viewMode="viewMode">
               <span slot="view">{{ clientData.created_date }}</span>
               <template slot="edit">
                 <input class="form-control"
                        v-model="createdDate"
-                       v-validate.initial="'required'"
                        name="created_date"
                        data-vv-as="created date"/>
                 <div class="validation-error">{{ errors.first('created_date') }}</div>                     
               </template>
             </PGRow>
 
-            <PGRow labeli18n="client.listing.display_currency"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.display_currency"  :headerColWidth="headerColWidth" :viewMode="viewMode">
               <span slot="view">{{ clientData.display_currency }}</span>
               <template slot="edit">
                 <el-select v-model="clientData.display_currency" 
-                           v-validate.initial="'required'"
                            name="display_currency"
                            data-vv-as="display currency">
                   <el-option v-for="item in currencies"
@@ -118,36 +112,33 @@
               </template>
             </PGRow>
 
-            <PGRow labeli18n="client.listing.statement_descriptor"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.statement_descriptor"  :headerColWidth="headerColWidth" :viewMode="viewMode">
               <span slot="view">{{ clientData.statement_descriptor }}</span>
               <template slot="edit">
                 <input class="form-control"
                        v-model="clientData.statement_descriptor"
-                       v-validate.initial="'required'"
                        name="statement_descriptor"
                        data-vv-as="statement descriptor"/>
                 <div class="validation-error">{{ errors.first('statement_descriptor') }}</div>                     
               </template>              
             </PGRow>
 
-            <PGRow labeli18n="client.listing.support_contact"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.support_contact"  :headerColWidth="headerColWidth" :viewMode="viewMode">
               <span slot="view">{{ clientData.support_contact }}</span>
               <template slot="edit">
                 <input class="form-control"
                        v-model="clientData.support_contact"
-                       v-validate.initial="'required'"
                        name="support_contact" maxlength="255"
                        data-vv-as="support contact"/>
                 <div class="validation-error">{{ errors.first('support_contact') }}</div>                     
               </template>              
             </PGRow>
 
-            <PGRow labeli18n="client.listing.support_url"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
+            <PGRow labeli18n="client.listing.support_url"  :headerColWidth="headerColWidth" :viewMode="viewMode">
               <span slot="view">{{ clientData.support_url }}</span>
               <template slot="edit">
                 <input class="form-control"
                        v-model="clientData.support_url"
-                       v-validate.initial="'required'"
                        name="support_url" maxlength="255"
                        data-vv-as="support url"/>
                 <div class="validation-error">{{ errors.first('support_url') }}</div>                     
@@ -169,12 +160,11 @@
         </el-col>
 
         <el-col :xs="24" :lg="14" :xl="16">
-          <PGRow labeli18n="client.listing.merchant_account_stage.id"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
+          <PGRow labeli18n="client.listing.merchant_account_stage.id"  :headerColWidth="headerColWidth" :viewMode="viewMode">
             <span slot="view">{{ clientData.merchant_account_stage.id }}</span>
             <template slot="edit">
               <input class="form-control"
                       v-model="clientData.merchant_account_stage.id"
-                      v-validate.initial="'required'"
                       name="merchant_account_stage.id" maxlength="255"
                       data-vv-as="merchant account ID"/>
               <div class="validation-error">{{ errors.first('merchant_account_stage.id') }}</div>                     
@@ -198,12 +188,10 @@
             </template>
           </PGRow>
 					
-          <PGRow labeli18n="client.listing.merchant_account_stage.description"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
+          <PGRow labeli18n="client.listing.merchant_account_stage.description"  :headerColWidth="headerColWidth" :viewMode="viewMode">
             <span slot="view">{{ clientData.merchant_account_stage.description }}</span>
             <template slot="edit">
               <input class="form-control"
-                      v-model="clientData.merchant_account_stage.description"
-                      v-validate.initial="'required'"
                       name="merchant_account_stage.description" maxlength="255"
                       data-vv-as="merchant account description"/>
               <div class="validation-error">{{ errors.first('merchant_account_stage.description') }}</div>                     
@@ -278,7 +266,7 @@ export default {
 				'VERIFIED',
 				'TERMINATED'
 			],
-			headerColWidth: '12rem'
+      headerColWidth: '12rem'
     }
   },
 	computed: {
@@ -315,7 +303,7 @@ export default {
 			try {
 				if (this.editMode) {
 					let response = await this.$http.clhttp.get(`/client/${this.$route.params.id}`)
-					console.log(response)
+					
 					this.clientData = response.data
 
 					this.$validator.validateAll()
@@ -341,14 +329,14 @@ export default {
 					}
 				}
 			} catch (error) {
-				console.log(error)
 				dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + e.message, status: 'danger' })
 			}
 
 			this.loading = false
 		},
 		onSave() {
-				this.saveClient({ id: this.$route.params.id, data: this.clientData })
+      delete this.clientData.active
+			this.saveClient({ id: this.$route.params.id, data: this.clientData })
 		},
 		onCancel() {
 				this.$router.push('/clients');
