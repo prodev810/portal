@@ -21,7 +21,7 @@ export default {
       top: 'Payment gateway',
       settings: 'Settings',
       merchant: 'Merchant',
-      processor: 'Processor',
+      processor: 'Acquirer',
       transaction: 'Transaction'
     },
     kyc_kyc_mainpage: `KYC Main Page`,

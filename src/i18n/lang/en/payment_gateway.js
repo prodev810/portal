@@ -81,10 +81,27 @@ export default {
       add_settlement_profile: 'Add Settlement Profile'
     }
   },
+  acquirer: {
+    is_active: 'Active',    
+    full_name: 'Full name',    
+    short_name: 'Short name',
+    institution_id: 'Institution ID',    
+    amex_id: 'AMEX ID',
+    visa_id: 'VISA ID',
+    mastercard_id: 'MasterCard ID',
+
+    error_get_aquirers: 'Error while getting aquirer(s): ',
+    error_duplicate_key: 'Aquirer with id {id} already exists',
+    error_saving_client: 'Error while saving aquirer: ',
+
+    button_new: 'New aquirer',
+    button_view: 'View aquirer'
+  },
   button_view: 'View',
   button_add: 'Add',
   button_history: 'History',
   button_save: 'Save',
   button_add_fee: 'Add Fee',
-  button_close: 'Close'
+  button_close: 'Close',
+  button_cancel: 'Cancel'
 }
