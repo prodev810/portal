@@ -176,7 +176,7 @@ export default {
 					}
 				}
 			} catch (error) {
-				dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('payment_gateway.acquirer.error_get_aquirers') + e.message, status: 'danger' })
+				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('payment_gateway.acquirer.error_get_aquirers') + error.message, status: 'danger' })
 			}
 
 			this.loading = false

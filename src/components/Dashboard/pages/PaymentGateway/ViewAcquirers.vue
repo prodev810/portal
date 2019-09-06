@@ -9,6 +9,7 @@
     <regular-table striped responsive condensed bordered
                    :headings="headers"
                    :value="aquirersPaged">
+
       <template slot-scope="row">   
         <td>
           <p-button type="primary" @click="viewAquirer(row)" size="sm" outline round>{{ $i18n.t('payment_gateway.acquirer.button_view') }}</p-button>
@@ -76,17 +77,27 @@ export default {
       
       try {
         let response = await this.$http.acchttp.get('/acquirer')
-        this.aquirers = response.data
+        this.aquirers = response.data.map(a => {
+          let res = a
+          res.amex_id = this.getCardID(a.amex_id),
+          res.visa_id = this.getCardID(a.visa_id),
+          res.mastercard_id = this.getCardID(a.mastercard_id)
+          return res
+        })
 
       } catch (error) {
-        dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('payment_gateway.acquirer.error_get_aquirers') + e.message, status: 'danger' })
+        this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('payment_gateway.acquirer.error_get_aquirers') + error.message, status: 'danger' })
       }   
 
       this.loading = false
     },
     viewAquirer (aquirer) {
-      console.log(aquirer)
       this.$router.push(`/payment-gateway/acquirer/${aquirer.index.row.id}`)
+    },
+    getCardID (value) {
+      return !value || value === '000000'
+        ? '-'
+        : value
     }
   }
 }
