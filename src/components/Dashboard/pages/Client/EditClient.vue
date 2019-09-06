@@ -343,7 +343,7 @@ export default {
         this.onCancel()
       } catch (error) {
 				this.$store.dispatch(SHOW_TOAST_MESSAGE, 
-														 { message: error.data && error.data.status === 409
+														 { message: error.response && error.response.status === 409
 																 ? this.$t('client.errors.error_duplicate_key', { email: this.clientData.email })
 																 : this.$t('client.errors.error_saving_client') + error.message, 
 														 	 status: 'danger' })
