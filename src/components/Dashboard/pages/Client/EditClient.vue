@@ -334,9 +334,46 @@ export default {
 
 			this.loading = false
 		},
-		onSave() {
-      delete this.clientData.active
-			this.saveClient({ id: this.$route.params.id, data: this.clientData })
+		async onSave() {
+      try {
+        if (!this.editMode) {
+          delete this.clientData.merchant_account_stage.description
+          delete this.clientData.merchant_account_stage.id
+        }
+
+        /*
+        this.clientData = {
+    "company_name": "Merchant Europe Ltd",
+    "url": "http://www.merchant.com",
+    "support_url": "http://www.merchant.com",
+    "phone": "555303433434",
+    "email": "12345johnd@merchantsss.com",
+    "statement_descriptor": "Merchant Europe Ltd",
+    "legal_business_name": null,
+    "support_contact": "555303433434",
+    "display_currency": null,
+    "account_name": null,
+    "merchant_account_stage": {
+      "name": "TRIAL"
+    }
+  }
+*/
+/*
+        Object.keys(this.clientData).forEach(key => {
+          if (!this.clientData[key]) {
+            this.clientData[key] = null
+          }
+        })
+        */
+
+        let response = this.$route.params.id === 'new'
+          ? await this.$http.clhttp.post(`/client`, this.clientData)          
+          : await this.$http.clhttp.put(`/client/${this.$route.params.id}`, this.clientData)
+
+        this.onCancel()
+      } catch (error) {
+        this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('store.paymentGateway.error_get_merchants') + error.message, status: 'danger' });
+      }
 		},
 		onCancel() {
 				this.$router.push('/clients');
