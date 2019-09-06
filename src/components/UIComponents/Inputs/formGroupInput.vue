@@ -48,7 +48,6 @@
 </template>
 <script>
   import CollapseTransition from "vue2-transitions/src/Collapse/CollapseTransition";
-
   export default {
     components: {CollapseTransition},
     inheritAttrs: false,
@@ -127,7 +126,6 @@
       onFocus(value) {
         this.focused = true;
         this.dirty = true;
-
         this.$emit('focus', value);
       },
       onBlur(value) {

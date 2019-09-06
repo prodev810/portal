@@ -1,7 +1,10 @@
 <template>
   <div class="card pg-merchant p-2">
     <Spinner v-if="loading"/>
-    <fg-input class="search-company text-right" label="Search by Company Name" v-model="search_company"></fg-input>
+		<div class="d-flex flex-row justify-content-between align-items-center">
+			<p-button type="primary" @click="$router.push('/client/new')" size="md" round>{{ $i18n.t('client.listing.button.new_client') }}</p-button>
+  		<fg-input class="search-company text-right" label="Search by Company Name" v-model="search_company"></fg-input>
+		</div>
     <regular-table
       striped responsive condensed bordered
       :headings="clientHeader"
@@ -30,7 +33,7 @@
 
     import {
         ACTION_GET_ALL_CLIENTS_LIST,
-        GETTER_All_CLIENTS
+				GETTER_All_CLIENTS
     } from '@/store/types'
 
 import Spinner from "@/components/UIComponents/Spinner"
@@ -83,7 +86,7 @@ export default {
   },
   methods: {
       ...mapActions({
-          getClients: ACTION_GET_ALL_CLIENTS_LIST
+					getClients: ACTION_GET_ALL_CLIENTS_LIST
       }),
       viewClient(index) {
           let client_id = index.index.row.id

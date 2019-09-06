@@ -4,8 +4,7 @@ import {
     SHOW_TOAST_MESSAGE,
     MUTATE_GET_ALL_CLIENTS_LIST,
     GETTER_CLIENTS_LIST,
-    ACTION_GET_ALL_CLIENTS_LIST,
-    ACTION_GET_CLIENT
+    ACTION_GET_ALL_CLIENTS_LIST
 } from '../types';
 
 const state = {
@@ -33,18 +32,7 @@ const actions = {
         } catch (e) {
             dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.clients.error_load_clients') + e.message, status: 'danger' })
         }
-    },
-    [ACTION_GET_CLIENT]: async ({commit, dispatch}, id) => {
-
-        return new Promise ( (resolve, reject) => {
-            Vue.prototype.$http.clhttp.get(`/client/${id}`).then( data => {
-                resolve(data.data);
-            }).catch( error => {
-                dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + e.message, status: 'danger' });
-                reject(error)
-            });
-        });
-    }
+		},
 };
 
 
