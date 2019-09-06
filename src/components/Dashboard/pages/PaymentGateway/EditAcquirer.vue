@@ -32,22 +32,24 @@
               </template>
             </PGRow>
 
-            <PGRow labeli18n="payment_gateway.acquirer.short_name" :headerColWidth="headerColWidth" :viewMode="viewMode">
+            <PGRow labeli18n="payment_gateway.acquirer.short_name" :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{acquirerData.short_name}}</span>
               <template slot="edit">
                 <input class="form-control"
                        v-model="acquirerData.short_name"
+                       v-validate.initial="'required'"                       
                        name="short_name"
                        data-vv-as="short name"/>
                 <div class="validation-error">{{ errors.first('short_name') }}</div>                     
               </template>
             </PGRow>
 
-            <PGRow labeli18n="payment_gateway.acquirer.institution_id" :headerColWidth="headerColWidth" :viewMode="viewMode">
+            <PGRow labeli18n="payment_gateway.acquirer.institution_id" :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{ acquirerData.institution_id }}</span>
               <template slot="edit">
                 <input class="form-control"
                        v-model="acquirerData.institution_id"
+                       v-validate.initial="'required'"                       
                        name="institution_id" maxlength="255"
                        data-vv-as="institution ID"/>
                 <div class="validation-error">{{ errors.first('institution_id') }}</div>                     

@@ -94,8 +94,8 @@ export default {
     error_duplicate_key: 'Aquirer with id {id} already exists',
     error_saving_client: 'Error while saving aquirer: ',
 
-    button_new: 'New aquirer',
-    button_view: 'View aquirer'
+    button_new: 'New acquirer',
+    button_view: 'View acquirer'
   },
   button_view: 'View',
   button_add: 'Add',

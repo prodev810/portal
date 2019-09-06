@@ -8,7 +8,7 @@
 
     <regular-table striped responsive condensed bordered
                    :headings="headers"
-                   :value="aquirersFiltered">
+                   :value="aquirersPaged">
       <template slot-scope="row">   
         <td>
           <p-button type="primary" @click="viewAquirer(row)" size="sm" outline round>{{ $i18n.t('payment_gateway.acquirer.button_view') }}</p-button>
@@ -62,6 +62,9 @@ export default {
   computed: {
     aquirersFiltered () {
       return this.aquirers
+    },
+    aquirersPaged () {
+      return this.aquirersFiltered.slice((this.currentPage - 1) * this.perPage, this.currentPage * this.perPage)
     }
   },
   async mounted () {
