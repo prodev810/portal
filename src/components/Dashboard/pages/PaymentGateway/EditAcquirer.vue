@@ -7,18 +7,13 @@
       <el-row :gutter="20">
         <el-col :xs="24" :lg="10" :xl="8">
           <div class="form-contents">
-            <!--
             <PGRow labeli18n="payment_gateway.acquirer.is_active" :headerColWidth="headerColWidth" :viewMode="viewMode">
-              <span slot="view">{{acquirerData.account_name}}</span>
+              <span slot="view">{{acquirerData.is_active}}</span>
               <template slot="edit">
-                <input class="form-control"
-                       v-model="acquirerData.account_name"
-                       name="account_name"
-                       data-vv-as="account name"/>
-                <div class="validation-error">{{ errors.first('account_name') }}</div>                     
+								<el-checkbox v-model="acquirerData.is_active" name="active"/>
+								<div class="validation-error">{{ errors.first('active') }}</div>
               </template>
             </PGRow>
-            -->
 
             <PGRow labeli18n="payment_gateway.acquirer.full_name" :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{acquirerData.full_name}}</span>
