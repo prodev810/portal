@@ -161,12 +161,9 @@
   </div>
 </template>
 <script>
-import {
-    mapActions,
-} from 'vuex';
-import {
-    KYC_GET_LIST_SUPPORT_DOCUMENTS_ID,
-} from "@/store/types";
+import { mapActions } from 'vuex'
+import { KYC_GET_LIST_SUPPORT_DOCUMENTS_ID } from "@/store/types"
+import getNested from '@/utils/nestedObjects.js'
 
   import {Input, Option, Select} from 'element-ui'
   import FadeTransition from "vue2-transitions/src/Fade/FadeTransition";
@@ -324,11 +321,13 @@ import {
         //             heading.mask(row[heading.name].value)
         //             :(row[heading.name].value  === '' ||row[heading.name].value === null) ?
         //             '---' :row[heading.name].value
-        //             : '---'
+				//             : '---'
+				// For nested values
+				let r = getNested(row, heading.name)
 
-        if (row[heading.name]) {
+        if (r) {
           if (heading.mask) {
-            let temp = heading.mask(row[heading.name].value)
+            let temp = heading.mask(r.value)
             // console.log(heading.name)
             // if (temp !== '---' && this.inArray(heading.name, this.amonutAlignRightFormat)) {
             //   console.log('algin right', heading.name, temp)
@@ -336,15 +335,16 @@ import {
             // }
             return temp
           } else {
-            if (row[heading.name].value  === '' ||row[heading.name].value === null) {
+            if (r.value  === '' || r.value === null) {
               return '---'
             } else {
-              return row[heading.name].value
+							// return r for nested values
+              return r.value ? r.value : r
             }
           }
         } else {
           return '---'
-        }
+				}
       },
       idCheckStatusClass(row) {
           if(!row || !row.idCheckStatus || !row.idCheckStatus.value) return 'bg-white';
