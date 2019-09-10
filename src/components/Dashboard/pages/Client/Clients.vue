@@ -46,12 +46,15 @@ export default {
     return {
       loading: true,
       clientHeader: [
-				{ name: 'email', i18n: 'client.listing.table_header.email' },
+				{ name: 'email', i18n: 'client.listing.table_header.signupEmail' },
 				{ name: 'createdDate', i18n: 'client.listing.table_header.date' },
 				{ name: 'merchant_account_stage.name', i18n: 'client.listing.table_header.stage' },
 				{ name: 'company_name', i18n: 'client.listing.table_header.company' },
 				{ name: 'country', i18n: 'client.listing.table_header.country' },				
-        { name: 'url', i18n: 'client.listing.url' }
+				{ name: 'url', i18n: 'client.listing.url' },
+				{ name: 'email_verified', i18n: 'client.listing.table_header.email' },
+				{ name: 'biz_verified', i18n: 'client.listing.table_header.kyb', check: true },
+				{ name: 'owner_verified', i18n: 'client.listing.table_header.kyc', check: true },
       ],
       search_company:'',
       //totalPages: 25,

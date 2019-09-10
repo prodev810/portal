@@ -2,12 +2,14 @@ const listing = {
 	title: `view resellers`,
 
 	table_header: {
-		name: 'Name',
+		signupEmail: 'Signup Email',
+		date: 'Signup Date',
 		stage: 'Stage',
 		company: 'Company Name',
 		country:'Country',
-		email:'Signup Email',
-		date:'Signup Date',
+		email: 'Email',		
+		kyb: 'KYB',
+		kyc: 'KYC'
 	},
 
 	account_name:'Account Name',
