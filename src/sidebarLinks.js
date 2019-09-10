@@ -1,95 +1,40 @@
 import permission from '@/constants/permission'
+
 export default [
-  {
-    name: 'Card Program',
-    i18n: 'menu.card_program',
-    permission: permission.NAV_CARD_PROGRAM,
-    image: 'ic_card.svg',
-    icon: 'ti-panel',
-    collapsed: true,
-    children: [
-      {
-        name: 'Create card program',
-        path: '/card-program/create',
-        i18n: 'menu.create_card_program',
-        permission: permission.CARD_PROGRAM_EDIT
-      },
-      {
-        name: 'View Card Programs',
-        path: '/card-program/view',
-        i18n: 'menu.view_card_programs',
-        permission: permission.CARD_PROGRAM_VIEW
-      }
-    ]
-  },
-  {
-    name: 'Reseller',
-    i18n: 'menu.reseller',
-    permission: permission.NAV_RESELLER,
-    icon: 'ti-panel',
-    image: 'ic_reseller.svg',
-    collapsed: true,
-    children: [
-      {
-        name: 'Create Reseller',
-        path: '/reseller/create',
-        i18n: 'menu.create_reseller',
-        permission: permission.RESELLER_SUBSCRIPTION_EDIT
-      },
-      {
-        name: 'View Resellers',
-        path: '/reseller/view',
-        i18n: 'menu.view_reseller',
-        permission: permission.RESELLER_SUBSCRIPTION_VIEW
-      },
-      {
-        name: 'View Reseller',
-        path: '/reseller/view/:id',
-        permission: permission.RESELLER_SUBSCRIPTION_VIEW,
-        hidden: true,
-      },
-      {
-        name: 'Edit Reseller',
-        path: '/reseller/edit/:id',
-        permission: permission.RESELLER_SUBSCRIPTION_VIEW,
-        hidden: true,
-      },
-    ]
-  },
-    {
-        name: 'Client',
-        i18n: 'menu.client',
-        permission: permission.NAV_CLIENT,
-        icon: 'ti-panel',
-        image: 'ic_reseller.svg',
-        collapsed: true,
-        children: [
-            // {
-            //     name: 'Create Client',
-            //     path: '/client/create',
-            //     i18n: 'menu.create_client',
-            //     permission: permission.CLIENT_EDIT
-            // },
-            {
-                name: 'View Clients',
-                path: '/clients/view',
-                i18n: 'menu.view_client',
-                permission: permission.CLIENT_VIEW
-            },
-            // {
-            //     name: 'View Client',
-            //     path: '/client/view/:id',
-            //     permission: permission.CLIENT_VIEW,
-            //     hidden: true,
-            // },
-            // {
-            //     name: 'Edit Client',
-            //     path: '/client/edit/:id',
-            //     permission: permission.CLIENT_EDIT,
-            //     hidden: true,
-            // },
-        ]
-    },
+	{
+		name: 'Client',
+		i18n: 'menu.client',
+		permission: permission.NAV_CLIENT,
+		icon: 'ti-panel',
+		image: 'ic_reseller.svg',
+		collapsed: true,
+		children: [
+				// {
+				//     name: 'Create Client',
+				//     path: '/client/create',
+				//     i18n: 'menu.create_client',
+				//     permission: permission.CLIENT_EDIT
+				// },
+				{
+						name: 'View Clients',
+						path: '/clients/view',
+						i18n: 'menu.view_client',
+						permission: permission.CLIENT_VIEW
+				},
+				// {
+				//     name: 'View Client',
+				//     path: '/client/view/:id',
+				//     permission: permission.CLIENT_VIEW,
+				//     hidden: true,
+				// },
+				// {
+				//     name: 'Edit Client',
+				//     path: '/client/edit/:id',
+				//     permission: permission.CLIENT_EDIT,
+				//     hidden: true,
+				// },
+		]
+	},
   {
     name: 'Payment gateway',
     i18n: 'menu.payment_gateway.top',
@@ -123,7 +68,41 @@ export default [
         permission: permission.RESELLER_SUBSCRIPTION_VIEW
       }
     ]
-  },
+	},
+  {
+    name: 'Reseller',
+    i18n: 'menu.reseller',
+    permission: permission.NAV_RESELLER,
+    icon: 'ti-panel',
+    image: 'ic_reseller.svg',
+    collapsed: true,
+    children: [
+      {
+        name: 'Create Reseller',
+        path: '/reseller/create',
+        i18n: 'menu.create_reseller',
+        permission: permission.RESELLER_SUBSCRIPTION_EDIT
+      },
+      {
+        name: 'View Resellers',
+        path: '/reseller/view',
+        i18n: 'menu.view_reseller',
+        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+      },
+      {
+        name: 'View Reseller',
+        path: '/reseller/view/:id',
+        permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+        hidden: true,
+      },
+      {
+        name: 'Edit Reseller',
+        path: '/reseller/edit/:id',
+        permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+        hidden: true,
+      },
+    ]
+	},	
   {
     name: 'Float Balance',
     i18n: 'menu.float_balance',
@@ -164,7 +143,7 @@ export default [
         permission: permission.UNALLOCATED_FLOAT_VIEW
       }
     ]
-  }, 
+	},
   {
     name: 'KYC Module',
     i18n: 'menu.kyc_module',
@@ -248,6 +227,28 @@ export default [
         permission: '',
         hidden: true,
       },
+    ]
+  },	
+  {
+    name: 'Card Program',
+    i18n: 'menu.card_program',
+    permission: permission.NAV_CARD_PROGRAM,
+    image: 'ic_card.svg',
+    icon: 'ti-panel',
+    collapsed: true,
+    children: [
+      {
+        name: 'Create card program',
+        path: '/card-program/create',
+        i18n: 'menu.create_card_program',
+        permission: permission.CARD_PROGRAM_EDIT
+      },
+      {
+        name: 'View Card Programs',
+        path: '/card-program/view',
+        i18n: 'menu.view_card_programs',
+        permission: permission.CARD_PROGRAM_VIEW
+      }
     ]
   },
 ];
