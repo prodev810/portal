@@ -111,8 +111,8 @@ export default [
         permission: permission.RESELLER_SUBSCRIPTION_EDIT
       },
       {
-        name: 'Processor',
-        path: '/payment-gateway/processor',
+        name: 'Acquirer',
+        path: '/payment-gateway/acquirer',
         i18n: 'menu.payment_gateway.processor',
         permission: permission.RESELLER_SUBSCRIPTION_EDIT
       },
