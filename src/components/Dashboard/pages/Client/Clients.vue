@@ -28,23 +28,20 @@
 </template>
 
 <script>
-
-    import {mapActions, mapState} from 'vuex';
-
-    import {
-        ACTION_GET_ALL_CLIENTS_LIST,
-				GETTER_All_CLIENTS
-    } from '@/store/types'
-
+import moment from 'moment'
+import { mapActions, mapState } from 'vuex'
+import { SHOW_TOAST_MESSAGE } from '@/store/types'
 import Spinner from "@/components/UIComponents/Spinner"
 import RegularTable from '@/components/UIComponents/CeevoTables/RegularTable/RegularTable'
-    import PPagination from "../../../UIComponents/Pagination";
+import PPagination from "../../../UIComponents/Pagination"
+
 export default {
   name: 'Clients',
-  components: { Spinner, RegularTable,PPagination },
+  components: { Spinner, RegularTable, PPagination },
   data () {
     return {
-      loading: true,
+			loading: true,
+			clientsRaw: [],
       clientHeader: [
 				{ name: 'email', i18n: 'client.listing.table_header.signupEmail' },
 				{ name: 'created_date', i18n: 'client.listing.table_header.date' },
@@ -65,13 +62,8 @@ export default {
   },
   mounted () {
     this.getClients();
-
-    this.loading = false
   },
   computed: {
-    ...mapState({
-      clientsRaw: state => state.Clients.clients  
-    }),
     clientFiltered () {      
       return this.search_company
         ? this.clientsRaw.filter(item => item.company_name.toLowerCase().includes(this.search_company.toLowerCase()))
@@ -80,47 +72,56 @@ export default {
     clientsPaged () {
       return this.clientFiltered.slice((this.currentPage - 1) * this.perPage, this.currentPage * this.perPage)
     }
-        // totalPages:(state) => {
-        //     return state.Clients.clients.totalPages
-        // },
-      // currentPage: (state)  =>{
-      //     return state.Clients.clients.number
-      // }
   },
   methods: {
-      ...mapActions({
-					getClients: ACTION_GET_ALL_CLIENTS_LIST
-      }),
-      viewClient(index) {
-          let client_id = index.index.row.id
-          this.$router.push(`/client/${client_id}`)
-      },
-      handleInput(ev) {
-          console.log( ev );
-          this.currentPage = ev;
-          this.isPagination = true;
-          this.getClients({
-              pageNum:ev,
-              pageSize:this.perPage,
-              paged:this.isPagination,
-              offset:ev*this.perPage
-          })
-      },
-      search() {
-          let filters = null;
+		async getClients () {
+			this.loading = true
 
-          // if (this.search_company.length > 0 ) {
-          //     filters = {
-          //         isPagination: this.isPagination,
-          //         currentPage: this.currentPage,
-          //         perPage: this.perPage,
-          //         search:this.search_company
-          //     }
-          // } else {
-          //
-          //     // localStorage.setItem('search-filters', JSON.stringify(filters))
-          // }
-      }
+			try {
+				let response = await this.$http.clhttp.get('/client')
+				this.clientsRaw = response.data
+				// convert dates
+				this.clientsRaw.forEach(client => {
+					if (client.created_date) {
+						client.created_date = moment(client.created_date).format('YYYY-MM-DD hh:mm:ss')
+					}
+				})
+			} catch (error) {
+				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('store.clients.error_load_clients') + error.message, status: 'danger' })
+			}
+
+			this.loading = false
+		},
+		viewClient(index) {
+			let client_id = index.index.row.id
+			this.$router.push(`/client/${client_id}`)
+		},
+		handleInput(ev) {
+				console.log( ev );
+				this.currentPage = ev;
+				this.isPagination = true;
+				this.getClients({
+						pageNum:ev,
+						pageSize:this.perPage,
+						paged:this.isPagination,
+						offset:ev*this.perPage
+				})
+		},
+		search() {
+				let filters = null;
+
+				// if (this.search_company.length > 0 ) {
+				//     filters = {
+				//         isPagination: this.isPagination,
+				//         currentPage: this.currentPage,
+				//         perPage: this.perPage,
+				//         search:this.search_company
+				//     }
+				// } else {
+				//
+				//     // localStorage.setItem('search-filters', JSON.stringify(filters))
+				// }
+		}
   }
 }
 </script>
