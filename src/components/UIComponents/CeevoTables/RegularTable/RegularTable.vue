@@ -79,6 +79,7 @@
                     @focus="dirtifyInput(row.id,heading.name,$event.target.value)"
                   >
                   </decimals-input>
+
                   <template v-if="heading.input === 'select'">
                     <el-select class="select-default"
                               size="small"
@@ -95,6 +96,7 @@
                       </el-option>
                     </el-select>
                   </template>
+
                   <el-select v-if="heading.input === 'multiple'" class="select-default"
                             size="small"
                             :placeholder="hanldePlaceholder(heading)"
@@ -111,19 +113,27 @@
                     </el-option>
                   </el-select>
                 </template>
+
+								<template v-else-if="heading.check">
+									<i class="fa" :class="{ 'fa-check': row[heading.name].value, 'fa-times': !row[heading.name].value }"/>
+								</template>
+
                 <template v-else-if="heading.name === 'view'">
                   <router-link class="action-button" v-if="row.appReferenceId" :to="{ name: 'KYC Main Page', query: {appRef: row.appReferenceId.value }}">
                         View
                   </router-link>
                 </template>
+
                 <template v-else-if="heading.name === 'action'" >
                     <router-link  class="action-button" v-if="row.appReferenceId" :to="{ name: 'KYC Main Page', query: {appRef: row.appReferenceId.value }}">
                         Action
                     </router-link>
                 </template>
+
                 <template v-else-if="heading.name === 'download'">
                   <button class="action-button" type="button" @click.stop.prevent="getSupportList(row)" :disabled="sendingGetDocListReq">Download</button>
                 </template>
+
                 <template v-else>
                   <template v-if="heading.mapViewData">
                     <span>  {{row[heading.mapViewData]? row[heading.mapViewData].value : '---' }}</span>
