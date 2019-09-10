@@ -99,13 +99,13 @@ export default {
 		handleInput(ev) {
 				console.log( ev );
 				this.currentPage = ev;
-				this.isPagination = true;
+				/*this.isPagination = true;
 				this.getClients({
 						pageNum:ev,
 						pageSize:this.perPage,
 						paged:this.isPagination,
 						offset:ev*this.perPage
-				})
+				})*/
 		},
 		search() {
 				let filters = null;
