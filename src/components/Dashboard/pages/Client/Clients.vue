@@ -46,12 +46,12 @@ export default {
     return {
       loading: true,
       clientHeader: [
-        { name: 'account_name', i18n: 'client.listing.table_header.name' },
-        { name: 'merchant_account_stage.name', i18n: 'client.listing.table_header.stage' },
-        { name: 'company_name', i18n: 'client.listing.table_header.company' },
-        { name: 'country', i18n: 'client.listing.table_header.country' },
-        { name: 'email', i18n: 'client.listing.table_header.email' },
-        { name: 'createdDate', i18n: 'client.listing.table_header.date' }
+				{ name: 'email', i18n: 'client.listing.table_header.email' },
+				{ name: 'createdDate', i18n: 'client.listing.table_header.date' },
+				{ name: 'merchant_account_stage.name', i18n: 'client.listing.table_header.stage' },
+				{ name: 'company_name', i18n: 'client.listing.table_header.company' },
+				{ name: 'country', i18n: 'client.listing.table_header.country' },				
+        { name: 'url', i18n: 'client.listing.url' }
       ],
       search_company:'',
       //totalPages: 25,
