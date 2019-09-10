@@ -1,5 +1,74 @@
 import permission from '@/constants/permission'
+
 export default [
+	{
+		name: 'Client',
+		i18n: 'menu.client',
+		permission: permission.NAV_CLIENT,
+		icon: 'ti-panel',
+		image: 'ic_reseller.svg',
+		collapsed: true,
+		children: [
+				// {
+				//     name: 'Create Client',
+				//     path: '/client/create',
+				//     i18n: 'menu.create_client',
+				//     permission: permission.CLIENT_EDIT
+				// },
+				{
+						name: 'View Clients',
+						path: '/clients/view',
+						i18n: 'menu.view_client',
+						permission: permission.CLIENT_VIEW
+				},
+				// {
+				//     name: 'View Client',
+				//     path: '/client/view/:id',
+				//     permission: permission.CLIENT_VIEW,
+				//     hidden: true,
+				// },
+				// {
+				//     name: 'Edit Client',
+				//     path: '/client/edit/:id',
+				//     permission: permission.CLIENT_EDIT,
+				//     hidden: true,
+				// },
+		]
+	},
+  {
+    name: 'Payment gateway',
+    i18n: 'menu.payment_gateway.top',
+    permission: permission.NAV_RESELLER,
+    icon: 'ti-panel',
+    image: 'ic_reseller.svg',
+    collapsed: true,
+    children: [
+      {
+        name: 'Settings',
+        path: '/payment-gateway/settings',
+        i18n: 'menu.payment_gateway.settings',
+        permission: permission.RESELLER_SUBSCRIPTION_EDIT
+      },
+      {
+        name: 'Merchant',
+        path: '/payment-gateway/merchant',
+        i18n: 'menu.payment_gateway.merchant',
+        permission: permission.RESELLER_SUBSCRIPTION_EDIT
+      },
+      {
+        name: 'Acquirer',
+        path: '/payment-gateway/acquirer',
+        i18n: 'menu.payment_gateway.processor',
+        permission: permission.RESELLER_SUBSCRIPTION_EDIT
+      },
+      {
+        name: 'Transaction',
+        path: '/payment-gateway/transaction',
+        i18n: 'menu.payment_gateway.transaction',
+        permission: permission.RESELLER_SUBSCRIPTION_VIEW
+      }
+    ]
+	},
   {
     name: 'Card Program',
     i18n: 'menu.card_program',
@@ -55,75 +124,7 @@ export default [
         hidden: true,
       },
     ]
-  },
-    {
-        name: 'Client',
-        i18n: 'menu.client',
-        permission: permission.NAV_CLIENT,
-        icon: 'ti-panel',
-        image: 'ic_reseller.svg',
-        collapsed: true,
-        children: [
-            // {
-            //     name: 'Create Client',
-            //     path: '/client/create',
-            //     i18n: 'menu.create_client',
-            //     permission: permission.CLIENT_EDIT
-            // },
-            {
-                name: 'View Clients',
-                path: '/clients/view',
-                i18n: 'menu.view_client',
-                permission: permission.CLIENT_VIEW
-            },
-            // {
-            //     name: 'View Client',
-            //     path: '/client/view/:id',
-            //     permission: permission.CLIENT_VIEW,
-            //     hidden: true,
-            // },
-            // {
-            //     name: 'Edit Client',
-            //     path: '/client/edit/:id',
-            //     permission: permission.CLIENT_EDIT,
-            //     hidden: true,
-            // },
-        ]
-    },
-  {
-    name: 'Payment gateway',
-    i18n: 'menu.payment_gateway.top',
-    permission: permission.NAV_RESELLER,
-    icon: 'ti-panel',
-    image: 'ic_reseller.svg',
-    collapsed: true,
-    children: [
-      {
-        name: 'Settings',
-        path: '/payment-gateway/settings',
-        i18n: 'menu.payment_gateway.settings',
-        permission: permission.RESELLER_SUBSCRIPTION_EDIT
-      },
-      {
-        name: 'Merchant',
-        path: '/payment-gateway/merchant',
-        i18n: 'menu.payment_gateway.merchant',
-        permission: permission.RESELLER_SUBSCRIPTION_EDIT
-      },
-      {
-        name: 'Acquirer',
-        path: '/payment-gateway/acquirer',
-        i18n: 'menu.payment_gateway.processor',
-        permission: permission.RESELLER_SUBSCRIPTION_EDIT
-      },
-      {
-        name: 'Transaction',
-        path: '/payment-gateway/transaction',
-        i18n: 'menu.payment_gateway.transaction',
-        permission: permission.RESELLER_SUBSCRIPTION_VIEW
-      }
-    ]
-  },
+	},	
   {
     name: 'Float Balance',
     i18n: 'menu.float_balance',
@@ -164,7 +165,7 @@ export default [
         permission: permission.UNALLOCATED_FLOAT_VIEW
       }
     ]
-  }, 
+	},
   {
     name: 'KYC Module',
     i18n: 'menu.kyc_module',
@@ -249,5 +250,5 @@ export default [
         hidden: true,
       },
     ]
-  },
+  },	
 ];

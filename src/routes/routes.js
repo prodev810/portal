@@ -684,7 +684,7 @@ const routes = [
   {
     path: '/',
     component: DashboardLayout,
-    redirect: '/card-program',
+    redirect: '/clients/view',
     meta: {
       requiresAuth: true,
       roles: ['*'],
