@@ -15,8 +15,9 @@ import security from 'plugin-vuejs-keycloak/security'
 
 // Plugins
 // Element-UI
-import {Select, Option, Row, Col, Input, Tooltip, Table, TableColumn, DatePicker} from 'element-ui'
+import {Select, Checkbox, Option, Row, Col, Input, Tooltip, Table, TableColumn, DatePicker} from 'element-ui'
 
+Vue.use(Checkbox)
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(Row)

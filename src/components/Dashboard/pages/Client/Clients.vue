@@ -38,7 +38,8 @@
 
 import Spinner from "@/components/UIComponents/Spinner"
 import RegularTable from '@/components/UIComponents/CeevoTables/RegularTable/RegularTable'
-    import PPagination from "../../../UIComponents/Pagination";
+import PPagination from "../../../UIComponents/Pagination";
+
 export default {
   name: 'Clients',
   components: { Spinner, RegularTable,PPagination },
@@ -62,7 +63,6 @@ export default {
   },
   mounted () {
     this.getClients();
-
     this.loading = false
   },
   computed: {
