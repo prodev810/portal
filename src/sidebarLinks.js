@@ -70,6 +70,28 @@ export default [
     ]
 	},
   {
+    name: 'Card Program',
+    i18n: 'menu.card_program',
+    permission: permission.NAV_CARD_PROGRAM,
+    image: 'ic_card.svg',
+    icon: 'ti-panel',
+    collapsed: true,
+    children: [
+      {
+        name: 'Create card program',
+        path: '/card-program/create',
+        i18n: 'menu.create_card_program',
+        permission: permission.CARD_PROGRAM_EDIT
+      },
+      {
+        name: 'View Card Programs',
+        path: '/card-program/view',
+        i18n: 'menu.view_card_programs',
+        permission: permission.CARD_PROGRAM_VIEW
+      }
+    ]
+  },
+  {
     name: 'Reseller',
     i18n: 'menu.reseller',
     permission: permission.NAV_RESELLER,
@@ -229,26 +251,4 @@ export default [
       },
     ]
   },	
-  {
-    name: 'Card Program',
-    i18n: 'menu.card_program',
-    permission: permission.NAV_CARD_PROGRAM,
-    image: 'ic_card.svg',
-    icon: 'ti-panel',
-    collapsed: true,
-    children: [
-      {
-        name: 'Create card program',
-        path: '/card-program/create',
-        i18n: 'menu.create_card_program',
-        permission: permission.CARD_PROGRAM_EDIT
-      },
-      {
-        name: 'View Card Programs',
-        path: '/card-program/view',
-        i18n: 'menu.view_card_programs',
-        permission: permission.CARD_PROGRAM_VIEW
-      }
-    ]
-  },
 ];
