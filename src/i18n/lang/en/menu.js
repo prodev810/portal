@@ -8,6 +8,7 @@ export default {
     client: `Client`,
     create_client: `Create Client`,
     view_client: `View Clients`,
+    view_business_types: 'Business type',
     float_balance: `Float Balance`,
     view_float_account: `View Float Account`,
     review_debit_credit: `Review Debit/Credit`,
