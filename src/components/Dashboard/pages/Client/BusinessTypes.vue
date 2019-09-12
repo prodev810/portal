@@ -2,7 +2,7 @@
   <div class="card pg-merchant p-2">
     <Spinner v-if="loading"/>
 		<div class="d-flex flex-row justify-content-between align-items-center">
-			<p-button type="primary" @click="$router.push('/client/business-type/new')" size="md" round>{{ $i18n.t('client.listing.button.new_client') }}</p-button>
+			<p-button type="primary" @click="$router.push('/clients/business-type/new')" size="md" round>{{ $i18n.t('business_type.listing.button_new') }}</p-button>
   		<fg-input class="search-company text-right" label="Search by Company Name" v-model="search_company"></fg-input>
 		</div>
     <regular-table
@@ -11,7 +11,7 @@
       :value="businessTypePaged">
       <template slot-scope="index">              
         <td>
-          <p-button type="primary" @click="viewBusinessType(index)" size="sm" outline round>{{ $i18n.t('client.listing.button.view_client') }}</p-button>
+          <p-button type="primary" @click="viewBusinessType(index)" size="sm" outline round>{{ $i18n.t('business_type.listing.button_view') }}</p-button>
         </td>
       </template>
     </regular-table>
@@ -43,15 +43,15 @@ export default {
 			loading: true,
 			businessTypeRaw: [],
       businessTypeHeader: [
-				{ name: 'email', i18n: 'client.listing.table_header.signupEmail' },
-				{ name: 'created_date', i18n: 'client.listing.table_header.date' },
-				{ name: 'merchant_account_stage.name', i18n: 'client.listing.table_header.stage' },
-				{ name: 'company_name', i18n: 'client.listing.table_header.company' },
-				{ name: 'country', i18n: 'client.listing.table_header.country' },				
-				{ name: 'url', i18n: 'client.listing.url' },
-				{ name: 'email_verified', i18n: 'client.listing.table_header.email', check: true },
-				{ name: 'biz_verified', i18n: 'client.listing.table_header.kyb', check: true },
-				{ name: 'owner_verified', i18n: 'client.listing.table_header.kyc', check: true },
+				{ name: 'business_type', i18n: 'business_type.listing.table_header.business_type' },
+				{ name: 'business_description', i18n: 'business_type.listing.table_header.business_description' },
+				{ name: 'mcc', i18n: 'business_type.listing.table_header.mcc' },
+				{ name: 'business_risk', i18n: 'business_type.listing.table_header.business_risk', iconByValue: {
+          LOW: 'fa-signal-1',
+				  MODERATE: 'fa-signal-4',
+				  HIGH: 'fa-signal-alt',
+				  PROHIBITED: 'fa-signal-alt-slash'
+        }}
       ],
       search_company:'',
       //totalPages: 25,
@@ -94,8 +94,8 @@ export default {
 
 			this.loading = false
 		},
-		viewClient(index) {
-			this.$router.push(`/client/business-type/${index.index.row.id}`)
+		viewBusinessType(index) {
+			this.$router.push(`/clients/business-type/${index.index.row.id}`)
 		},
 		handleInput(ev) {
 				console.log( ev );

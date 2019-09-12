@@ -38,6 +38,7 @@ import ResellerView from '../components/Dashboard/pages/Resller/View';
 import Clients from '../components/Dashboard/pages/Client/Clients';
 import EditClient from '../components/Dashboard/pages/Client/EditClient';
 import BusinessTypes from '../components/Dashboard/pages/Client/BusinessTypes'
+import EditBusinessType from '../components/Dashboard/pages/Client/EditBusinessType'
 // GeneralViews
 import NotFound from '../components/GeneralViews/NotFoundPage.vue';
 import NoPermission from '../components/Dashboard/pages/Dashboard/NoPermission.vue';
@@ -305,6 +306,16 @@ let client = {
           path: '/clients/business-type',
           name: 'Business types',
           component: BusinessTypes,
+          meta: {
+              //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+              requiresAuth: true,
+              roles: ['*'],
+          }
+        },
+        {
+          path: '/clients/business-type/:id',
+          name: 'Business types',
+          component: EditBusinessType,
           meta: {
               //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
               requiresAuth: true,

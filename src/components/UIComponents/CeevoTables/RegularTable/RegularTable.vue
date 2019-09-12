@@ -118,6 +118,10 @@
 									<i class="fa" :class="{ 'fa-check': row[heading.name].value, 'fa-times': !row[heading.name].value }"/>
 								</template>
 
+								<template v-else-if="heading.iconByValue">
+									<i class="fa" :class="{ [heading.iconByValue[row[heading.name].value]]: true }"/>
+								</template>
+
                 <template v-else-if="heading.name === 'view'">
                   <router-link class="action-button" v-if="row.appReferenceId" :to="{ name: 'KYC Main Page', query: {appRef: row.appReferenceId.value }}">
                         View
