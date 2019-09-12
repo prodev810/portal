@@ -7,7 +7,7 @@
       <el-row :gutter="20">
         <el-col :xs="24">
           <div class="form-contents">
-            <PGRow labeli18n="business_type.listing.table_header.business_type" :headerColWidth="headerColWidth" :viewMode="viewMode">
+            <PGRow labeli18n="business_type.listing.table_header.business_type" :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{ businessTypeData.business_type }}</span>
               <template slot="edit">
                 <input class="form-control"
@@ -31,7 +31,7 @@
               </template>
             </PGRow>
 
-            <PGRow labeli18n="business_type.listing.table_header.mcc"  :headerColWidth="headerColWidth" :viewMode="viewMode">
+            <PGRow labeli18n="business_type.listing.table_header.mcc"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{businessTypeData.mcc}}</span>
               <template slot="edit">
                 <input class="form-control"
@@ -43,7 +43,7 @@
               </template>
             </PGRow>
 
-            <PGRow labeli18n="business_type.listing.table_header.business_risk"  :headerColWidth="headerColWidth" :viewMode="viewMode">
+            <PGRow labeli18n="business_type.listing.table_header.business_risk"  :headerColWidth="headerColWidth" required :viewMode="viewMode">
               <span slot="view">{{ businessTypeData.business_risk }}</span>
               <template slot="edit">
                 <el-select v-model="businessTypeData.business_risk" 
