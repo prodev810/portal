@@ -73,6 +73,7 @@ export default {
   },
   methods: {
     async getData () {
+      console.log('get data')
       this.loading = true
       
       try {

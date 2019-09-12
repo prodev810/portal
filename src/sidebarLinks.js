@@ -20,7 +20,14 @@ export default [
 						path: '/clients/view',
 						i18n: 'menu.view_client',
 						permission: permission.CLIENT_VIEW
-				},
+        },
+				{
+          name: 'Business type',
+          path: '/clients/business-type',
+          i18n: 'menu.view_business_types',
+          permission: permission.CLIENT_VIEW
+        },
+      
 				// {
 				//     name: 'View Client',
 				//     path: '/client/view/:id',
