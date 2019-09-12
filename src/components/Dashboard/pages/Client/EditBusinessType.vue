@@ -143,7 +143,7 @@ export default {
 					}
 				}
 			} catch (error) {
-				dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + e.message, status: 'danger' })
+				dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('business_type.errors.error_get_business_types') + e.message, status: 'danger' })
 			}
 
 			this.loading = false
@@ -158,8 +158,8 @@ export default {
       } catch (error) {
 				this.$store.dispatch(SHOW_TOAST_MESSAGE, 
 														 { message: error.response && error.response.status === 409
-																 ? this.$t('client.errors.error_duplicate_key', { email: this.businessTypeData.email })
-																 : this.$t('client.errors.error_saving_client') + error.message, 
+																 ? this.$t('business_type.errors.error_duplicate_key', { email: this.businessTypeData.email })
+																 : this.$t('business_type.errors.error_saving_client') + error.message, 
 														 	 status: 'danger' })
       }
 		},

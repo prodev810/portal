@@ -11,7 +11,9 @@ const listing = {
 }
 
 const errors = {
-
+  error_get_business_types: 'Error while getting list of business types',
+	error_saving_business_type: 'Error while saving client: ',
+	error_duplicate_key: 'Business type with MCC {mcc} already exists'
 }
 
 export default {
