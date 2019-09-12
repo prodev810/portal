@@ -46,12 +46,12 @@ export default {
 				{ name: 'business_type', i18n: 'business_type.listing.table_header.business_type' },
 				{ name: 'business_description', i18n: 'business_type.listing.table_header.business_description' },
 				{ name: 'mcc', i18n: 'business_type.listing.table_header.mcc' },
-				{ name: 'business_risk', i18n: 'business_type.listing.table_header.business_risk'/*, iconByValue: {
-          LOW: 'fa-signal-1',
-				  MODERATE: 'fa-signal-4',
-				  HIGH: 'fa-signal-alt',
-				  PROHIBITED: 'fa-signal-alt-slash'
-        }*/
+				{ name: 'business_risk', i18n: 'business_type.listing.table_header.business_risk', iconByValue: {
+          LOW: 'fa-thermometer-quarter',
+				  MODERATE: 'fa-thermometer-half',
+				  HIGH: 'fa-thermometer-three-quarters',
+				  PROHIBITED: 'fa-thermometer-full'
+        }
         }
       ],
       search_company:'',
