@@ -119,7 +119,7 @@
 								</template>
 
 								<template v-else-if="heading.iconByValue">
-									<i class="fa" :class="{ [heading.iconByValue[row[heading.name].value]]: true }"/>
+									<i class="fa fa-2x" :class="{ [heading.iconByValue[row[heading.name].value]]: true }"/>
 								</template>
 
                 <template v-else-if="heading.name === 'view'">
