@@ -35,7 +35,7 @@
               <el-col :md="17">
                 <div v-if="isView"
                      class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.cardProgCode}}</strong>
+                  <strong>{{reseller.cardProgramCode}}</strong>
                 </div>
                 <div v-else
                      class="w-100 d-flex align-items-center">
@@ -69,8 +69,9 @@
                             :placeholder="$t('reseller.create.table_header.reseller_code')"></fg-input>
                 </div>
                 <p v-if="!isValidResellerCode" class="invalid-feedback">
-                  <span v-if="!reseller.resellerCode">{{$t('common.form_validations.required_field')}}</span>
+                  <!-- <span v-if="!reseller.resellerCode">{{$t('common.form_validations.required_field')}}</span> -->
                   <span v-if="!verifySpace(reseller.resellerCode)">{{$t('common.form_validations.no_space')}}</span>
+                  <span v-if="!(reseller.resellerCode.length <= 6)">{{$t('common.form_validations.max_chars', {max: 6})}}</span>
                 </p>
               </el-col>
             </el-row>
@@ -93,8 +94,8 @@
                             :placeholder="$t('reseller.create.table_header.reseller_name')"></fg-input>
                 </div>
                 <p v-if="!isValidResellerName" class="invalid-feedback">
-                  <span v-if="!reseller.resellerName">{{$t('common.form_validations.required_field')}}</span>
-                  <span v-if="!verifyName(reseller.resellerName)">{{$t('common.form_validations.letters_only')}}</span>
+                 <span v-if="!(reseller.resellerName.length <= 30)">{{$t('common.form_validations.max_chars', {max: 30})}}</span>
+                  <span v-if="!verifyName(reseller.resellerName)&&(reseller.resellerName!=='')">{{$t('common.form_validations.letters_only')}}</span>
                 </p>
               </el-col>
             </el-row>
@@ -142,8 +143,8 @@
                             :placeholder="$t('reseller.create.table_header.alert_contact')"></fg-input>
                 </div>
                 <p v-if="!isValidAlertContact" class="invalid-feedback">
-                  <span v-if="!reseller.alertContact">{{$t('common.form_validations.required_field')}}</span>
-                  <span v-if="!verifyEmail(reseller.alertContact)">{{$t('common.form_validations.valid_email')}}</span>
+                  <!-- <span v-if="!reseller.alertContact">{{$t('common.form_validations.required_field')}}</span> -->
+                  <span v-if="!verifyEmail(reseller.alertContact)&&(reseller.alertContact!=='')">{{$t('common.form_validations.valid_email')}}</span>
                 </p>
               </el-col>
             </el-row>
@@ -222,8 +223,8 @@
                             :placeholder="$t('reseller.create.table_header.load_fee')"></fg-input>
                 </div>
                 <p v-if="!isValidLoadFee" class="invalid-feedback">
-                  <span v-if="!reseller.loadFee"> {{$t('common.form_validations.required_field')}}</span>
-                  <span v-if="!reseller.loadFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                  <!-- <span v-if="!reseller.loadFee"> {{$t('common.form_validations.required_field')}}</span> -->
+                  <span v-if="reseller.loadFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
                 </p>
               </el-col>
             </el-row>
@@ -248,8 +249,8 @@
                             :placeholder="$t('reseller.create.table_header.load_fee_pct')"></fg-input>
                 </div>
                 <p v-if="!isValidLoadFeePct" class="invalid-feedback">
-                  <span v-if="!reseller.loadFeePct"> {{$t('common.form_validations.required_field')}}</span>
-                  <span v-if="!reseller.loadFeePct"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                  <!-- <span v-if="!reseller.loadFeePct"> {{$t('common.form_validations.required_field')}}</span> -->
+                  <span v-if="reseller.loadFeePct"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
                 </p>
               </el-col>
             </el-row>
@@ -274,8 +275,8 @@
                             :placeholder="$t('reseller.create.table_header.load_fee_cap')"></fg-input>
                 </div>
                 <p v-if="!isValidLoadFeeCap" class="invalid-feedback">
-                  <span v-if="!reseller.loadFeeCap"> {{$t('common.form_validations.required_field')}}</span>
-                  <span v-if="!reseller.loadFeeCap"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                  <!-- <span v-if="!reseller.loadFeeCap"> {{$t('common.form_validations.required_field')}}</span> -->
+                  <span v-if="reseller.loadFeeCap"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
                 </p>
               </el-col>
             </el-row>
@@ -323,8 +324,8 @@
                             :placeholder="$t('reseller.create.table_header.app_fee')"></fg-input>
                 </div>
                 <p v-if="!isValidAppFee" class="invalid-feedback">
-                  <span v-if="!reseller.appFee"> {{$t('common.form_validations.required_field')}}</span>
-                  <span v-if="!reseller.appFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                  <!-- <span v-if="!reseller.appFee"> {{$t('common.form_validations.required_field')}}</span> -->
+                  <span v-if="reseller.appFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
                 </p>
               </el-col>
             </el-row>
@@ -372,8 +373,8 @@
                             :placeholder="$t('reseller.create.table_header.monthly_fee')"></fg-input>
                 </div>
                 <p v-if="!isValidMonthlyFee" class="invalid-feedback">
-                  <span v-if="!reseller.monthlyFee"> {{$t('common.form_validations.required_field')}}</span>
-                  <span v-if="!reseller.monthlyFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                  <!-- <span v-if="!reseller.monthlyFee"> {{$t('common.form_validations.required_field')}}</span> -->
+                  <span v-if="reseller.monthlyFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
                 </p>
               </el-col>
             </el-row>
@@ -421,8 +422,8 @@
                             :placeholder="$t('reseller.create.table_header.api_fee')"></fg-input>
                 </div>
                 <p v-if="!isValidApiFee" class="invalid-feedback">
-                  <span v-if="!reseller.apiFee"> {{$t('common.form_validations.required_field')}}</span>
-                  <span v-if="!reseller.apiFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                  <!-- <span v-if="!reseller.apiFee"> {{$t('common.form_validations.required_field')}}</span> -->
+                  <span v-if="reseller.apiFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
                 </p>
               </el-col>
             </el-row>
@@ -582,6 +583,8 @@
               <fg-input v-else
                         v-model="resellerCorporate.break_value"
                         :placeholder="'Break value 1'"
+                        type="number"
+                        min="0"
                         id="break-value"></fg-input>
             </el-col>
           </el-row>
@@ -770,10 +773,19 @@ export default {
       isCancel: false,
       //editRoute: `/reseller/edit/`,
       corporativeProgram: 0,
-      reseller: {},
+      reseller: {
+        resellerName: '',
+        resellerCode: '',
+        alertContact: '',
+        uniqueFloat: '',
+        cardProgramCode: '',
+        status:'',
+        countryCode: '',
+        cardProgramID:''
+      },
       resellerCorporate: JSON.parse(JSON.stringify(resellerCorporateTemplate)),
       resellerRequestPropDelete: [
-        'cardProgCode',
+        'cardProgramCode',
         'defCurrency',
         'resellerId',
         'id',
@@ -801,7 +813,7 @@ export default {
             name: 'cardProgramID',
             i18n: 'reseller.create.table_header.card_program_id',
             input: 'select',
-            mapViewData: 'cardProgCode',
+            mapViewData: 'cardProgramCode',
             required: true,
             selectKeys: [
               {name: '', value: null}
@@ -1009,24 +1021,34 @@ export default {
       ],
       actionBtn: 'save',
       validationList: [
-        'apiFee',
-        'apiFeeBillMethod',
-        'appFee',
-        'appFeeBillMethod',
+        // 'apiFee',
+        // 'apiFeeBillMethod',
+        // 'appFee',
+        // 'appFeeBillMethod',
         'cardProgramID',
-        'loadFee',
-        'loadFeeCap',
-        'loadFeePct',
-        'loadFeebillMethod',
-        'monthlyFee',
-        'monthlyFeeBillMethod',
+        'cardProgramCode',
+        'resellerCode',
+        'resellerName',
+        'uniqueFloat',
+        'alertContact',
         'status',
+        'countryCode'
+        // 'loadFee',
+        // 'loadFeeCap',
+        // 'loadFeePct',
+        // 'loadFeebillMethod',
+        // 'monthlyFee',
+        // 'monthlyFeeBillMethod',
+    
       ],
       validateArray: {
         resellerName: true,
         resellerCode: true,
         alertContact: true,
         uniqueFloat: true,
+        cardProgramCode: true,
+        status:true,
+        countryCode: true
       },
     };
   },
@@ -1046,8 +1068,8 @@ export default {
       if (!resellerSub) return void 0;
       return !this.$route.params.id ? resellerSub : {
         ...resellerSub,
-        ['cardProgCode']: (this.$store.state.cardProgram.allCardPrograms.find(cardProgram => cardProgram.id === resellerSub.cardProgramID) ||
-          {cardProgCode: null}).cardProgCode
+        ['cardProgramCode']: (this.$store.state.cardProgram.allCardPrograms.find(cardProgram => cardProgram.id === resellerSub.cardProgramID) ||
+          {cardProgramCode: null}).cardProgramCode
       }
     },
     creationResponseState() {
@@ -1087,7 +1109,7 @@ export default {
       return true
     },
     validateClientForm() {
-      let isValid = true
+      let isValid = false
       if (!this.isViewMode && Object.keys(this.reseller).length !== 0) {
         this.validationList.forEach(item => {
           const field = this.reseller[`${item}`]
@@ -1107,10 +1129,20 @@ export default {
             case'uniqueFloat':
               this.validateArray.uniqueFloat = this.isValidUniqueFloat
               break
+            case'status':
+              this.validateArray.status = this.isValidStatus
+              break
+            case'countryCode':
+              this.validateArray.countryCode = this.isValidCountryCode
+              break
+            case'cardProgramCode':
+              this.validateArray.cardProgramCode = this.isValidCardProgramCode
+              break
           }
         })
 
         if (typeof this.validateArray !== 'undefined') {
+          isValid = true
           Object.keys(this.validateArray).forEach(item => {
             if (!this.validateArray[item]) {
               return isValid = false
@@ -1121,17 +1153,27 @@ export default {
 
       return isValid
     },
+    isValidStatus(){
+return this.reseller.status !== ''
+    },
+    isValidCountryCode(){
+return this.reseller.countryCode !== ''
+    },
+    isValidCardProgramCode(){
+
+    return this.reseller.cardProgramID !== ''
+    },
     isValidResellerName() {
       return this.reseller.resellerName !== '' && this.verifyName(this.reseller.resellerName)
     },
     isValidResellerCode() {
-      return (typeof (this.reseller.resellerCode) === 'undefined' || this.verifyContactRef(this.reseller.resellerCode))
+      return (this.verifyContactRef(this.reseller.resellerCode))
     },
     isValidUniqueFloat() {
-      return (typeof (this.reseller.uniqueFloat) === 'undefined')
+      return (this.reseller.uniqueFloat !== '')
     },
     isValidAlertContact() {
-      return (typeof (this.reseller.alertContact) === 'undefined' || this.reseller.alertContact !== '' && this.verifyEmail(this.reseller.alertContact))
+      return (this.reseller.alertContact !== '' && this.verifyEmail(this.reseller.alertContact))
     },
     isValidLoadFee() {
       return validateNumber(this.reseller.loadFee)
@@ -1281,7 +1323,7 @@ export default {
         if (i.name === 'cardProgramID') {
           return {
             ...i,
-            selectKeys: cardPrograms.map(cardProgram => ({name: cardProgram.cardProgCode, value: cardProgram.id}))
+            selectKeys: cardPrograms.map(cardProgram => ({name: cardProgram.cardProgramCode, value: cardProgram.id}))
           }
         } else {
           return i;
@@ -1430,7 +1472,7 @@ export default {
       return nameCheck.test(name)
     },
     verifyContactRef(ref) {
-      return ref !== '' && ref.length <= 6 && this.verifySpace(ref)
+      return ref.length <= 6 && this.verifySpace(ref)
     },
     verifySpace(string) {
       const refCheck = /\s/
