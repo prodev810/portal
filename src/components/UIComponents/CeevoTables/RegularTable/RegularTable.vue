@@ -115,7 +115,7 @@
                 </template>
 
 								<template v-else-if="heading.check">
-									<i class="fa" :class="{ 'fa-check': row[heading.name].value, 'fa-times': !row[heading.name].value }"/>
+									<i class="fa fa-2x" :class="{ 'fa-check': row[heading.name].value, 'fa-times': !row[heading.name].value }"/>
 								</template>
 
 								<template v-else-if="heading.iconByValue">
