@@ -79,7 +79,7 @@ export default [
     children: [
       {
         name: 'Create card program',
-        path: '/card-program/create',
+        path: '/card-program/card/new',
         i18n: 'menu.create_card_program',
         permission: permission.CARD_PROGRAM_EDIT
       },

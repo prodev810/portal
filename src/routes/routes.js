@@ -58,8 +58,9 @@ let cardProgram = {
     roles: ['*'],
   },
   children: [
+		/*
     {
-      path: 'Create',
+      path: 'new',
       name: 'Create card program',
       component: Create,
       meta: {
@@ -67,7 +68,8 @@ let cardProgram = {
         requiresAuth: true,
         roles: ['*'],
       }
-    },
+		},
+		*/
     {
       path: 'card/:id',
       name: 'Edit card program',
