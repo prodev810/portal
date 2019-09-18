@@ -316,3 +316,44 @@ $table-border-color:$gray-input-outline;
   overflow: auto;
   overflow: auto;
 }
+
+.ceevo__table-flat{
+
+  table.table{
+    tbody > tr:nth-of-type(2n){
+      background:rgba(#2ED684,.05);
+    }
+    tbody > tr:nth-of-type(2n+1){
+      background:#FFFFFF;
+    }
+  }
+  tbody tr th{
+    border:1px solid #7039DA !important;
+    padding:0 !important;
+
+    &:first-of-type{
+      border:0 !important;
+    }
+    &:last-child{
+      border-right:2px solid #7039DA !important;
+    }
+    &:last-child[class="btn-group-border"]{
+      border-right: 0 !important;
+    }
+  }
+  tbody tr td[scope="row"]{
+    border-right:1px solid #dee2e6 !important;
+  }
+  .cell{
+    padding:0 10px;
+  }
+
+  .bg-danger,
+  .bg-success,
+  .bg-green{
+    height:40px;
+  }
+  .bg-danger{
+    background-color:#FF6A6A !important;
+  }
+}

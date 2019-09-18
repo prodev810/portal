@@ -55,7 +55,72 @@
       >
       </sof-uploader>
     </div>
-    <div class="pull-right ">
+
+
+<!-- New style mock start-->
+<div class="row">
+    <div class="col-12  col-xl-9">
+      <div class="card ceevo__card-group">
+        <div class="row card-content p-4">
+          <!-- left content-->
+          <div class="w-50 w-sm-100 pl-4 pr-4 pl-md-4 pr-md-5">
+             <div class="row mb-3">
+               <div class="col-12 col-lg-5 d-flex align-items-center">CARD PROGRAM CODE</div>
+               <div class="col-12 col-lg-7"><input disabled="disabled" type="text" placeholder="LEDGE" class="form-control  form-control-danger"></div>
+             </div>
+             <div class="row mb-3">
+               <div class="col-12 col-lg-5 d-flex align-items-center">RESELLER CODE</div>
+               <div class="col-12 col-lg-7"><input disabled="disabled" type="text" placeholder="RC001" class="form-control  form-control-danger"></div>
+             </div>
+             <div class="row mb-3">
+               <div class="col-12 col-lg-5 d-flex align-items-center">RESELLER NAME</div>
+               <div class="col-12 col-lg-7"><input disabled="disabled" type="text" placeholder="ResellerDemo1" class="form-control  form-control-danger"></div>
+             </div>
+             <div class="row mb-3">
+               <div class="col-12 col-lg-5 d-flex align-items-center">USER</div>
+               <div class="col-12 col-lg-7"><input disabled="disabled" type="text" placeholder="Abaadmin" class="form-control  form-control-danger"></div>
+             </div>
+          </div>
+
+          <!-- right content-->
+          <div class="w-50 w-sm-100 pr-4 pl-4 pl-md-5 pr-md-4">
+             <div class="row mb-3">
+               <div class="col-12 col-lg-5 d-flex align-items-center">CHARGE TYPE <span class="required-field-sympol">＊</span></div>
+               <div class="col-12 col-lg-7"><input type="text" placeholder="CHARGE TYPE" class="form-control  form-control-danger"></div>
+             </div>
+             <div class="row mb-3">
+               <div class="col-12 col-lg-5 d-flex align-items-center">CURRENCY</div>
+               <div class="col-12 col-lg-7"><input disabled="disabled" type="text" placeholder="CURRENCY" class="form-control  form-control-danger"></div>
+             </div>
+             <div class="row mb-3">
+               <div class="col-12 col-lg-5 d-flex align-items-center">DESCRIPTION <span class="required-field-sympol">＊</span></div>
+               <div class="col-12 col-lg-7"><input type="text" placeholder="DESCRIPTION" class="form-control  form-control-danger"></div>
+             </div>
+             <div class="row mb-3">
+               <div class="col-12 col-lg-5 d-flex align-items-center">AMOUNT <span class="required-field-sympol">＊</span></div>
+               <div class="col-12 col-lg-7"><input type="text" placeholder="AMOUNT" class="form-control  form-control-danger"></div>
+             </div>
+          </div>
+
+          <div class="ml-auto w-50 w-sm-100 pr-4 pl-4 pl-md-5 pr-md-4">
+            <div class="row">
+              <div class="ml-auto col-12 col-lg-7">
+               <p-button round
+                 class="w-100"
+                 @click="showSoftDocs(index)">
+                 {{ $t('setup_debit.create.button.sof') }}
+               </p-button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+</div>
+<!-- New style mock End-->
+
+    <div class="col-12 col-lg-9 mt-5 text-center ceevo__btn-group">
       <p-button round type="primary" @click="handleSettingDebit"
                 :disabled="!valid"
       >
@@ -104,34 +169,34 @@
       return {
         tableHeadings: [
           {
-            label: 'CPC', 
-            name: 'cardProgCode', 
-            i18n: 'setup_debit.create.table_header.card_prog_code', 
+            label: 'CPC',
+            name: 'cardProgCode',
+            i18n: 'setup_debit.create.table_header.card_prog_code',
             read: true,
           },
           {
-            label: 'RC', 
-            name: 'resellerCode', 
-            i18n: 'setup_debit.create.table_header.reseller_code', 
+            label: 'RC',
+            name: 'resellerCode',
+            i18n: 'setup_debit.create.table_header.reseller_code',
             read: true,
           },
           {
-            label: 'reseller name', 
-            name: 'resellerName', 
-            i18n: 'setup_debit.create.table_header.reseller_name', 
+            label: 'reseller name',
+            name: 'resellerName',
+            i18n: 'setup_debit.create.table_header.reseller_name',
             read: true,
           },
           // unknown fields name
           {
-            label: 'user', 
-            name: 'user', 
+            label: 'user',
+            name: 'user',
             i18n: 'setup_debit.create.table_header.user',
             read: true,
 
           },
           {
-            label: 'Charge Type', 
-            name: 'entryType', 
+            label: 'Charge Type',
+            name: 'entryType',
             i18n: 'setup_debit.create.table_header.entry_type',
             input: 'select',
             selectKeys: [
@@ -141,7 +206,7 @@
             required: true,
           },
           {
-            label: 'currency', 
+            label: 'currency',
             name: 'currency',
             i18n: 'setup_debit.create.table_header.currency',
             read: true,
@@ -149,14 +214,14 @@
             brakeAt: breakInput(3),
           },
           {
-            label: 'description', 
+            label: 'description',
             name: 'entryDesc',
             i18n: 'setup_debit.create.table_header.entry_desc',
             required: true,
             brakeAt:breakInput(40)
           },
           {
-            label: 'amount', 
+            label: 'amount',
             name: 'amount',
             i18n: 'setup_debit.create.table_header.amount',
             validator: shouldBeNumber,

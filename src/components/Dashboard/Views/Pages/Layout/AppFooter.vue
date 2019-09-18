@@ -2,7 +2,7 @@
   <footer class="footer footer-black footer-white">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-5">
+        <div class="col-5 ">
           &copy; Ceevo
         </div>
       </div>
@@ -15,4 +15,5 @@
   }
 </script>
 <style>
+
 </style>

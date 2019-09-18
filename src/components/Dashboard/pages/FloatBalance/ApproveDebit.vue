@@ -11,10 +11,10 @@
       </div>
     </div>
     <div class="w-100 d-flex">
-      <div class="ml-auto">
+      <div class="ml-auto mb-3">
         <div class="d-flex align-items-center align-content-center">
           <span class="px-2">{{ $t('approve_debit.listing.search_filter.card_program') }}</span>
-          <el-select class="select-default"
+          <el-select class="select-default ceevo__select-default"
                      size="small"
                      placeholder="selected a card program"
                      v-model="cardProgramId"
@@ -34,23 +34,25 @@
         <div class="col-sm-12">
           <div class="p-3">
             <regular-table
-              striped
+              class="ceevo__table-flat"
               :headings="tableHeadings"
               :value="tableData"
               :extraHeadings="1"
             >
               <template slot-scope="index">
-                <th :key="index.index.id">
+                <th :key="index.index.id" class="btn-group-border">
                   <div class="cell">
                     <p-button type="success" link @click="handleApprove(index.index.row.id)">
-                      {{ $t('approve_debit.listing.button.approve') }}
+                       <img src="../../../../../public/static/img/dashboard_icons/ic_tick_green.svg" height="17"/>
+                       {{ $t('approve_debit.listing.button.approve') }}
                     </p-button>
-                    <span class="p-1"></span>
+
                     <p-button type="primary" link @click="handleDecline(index.index.row.id)">
+                      <img src="../../../../../public/static/img/dashboard_icons/ic_close.svg" height="17"/>
                       {{ $t('approve_debit.listing.button.decline') }}
                     </p-button>
-                    <span class="p-1"></span>
-                    <p-button @click="showSoftDocs(index)">
+
+                    <p-button @click="showSoftDocs(index)" class="sofBtn">
                       {{ $t('approve_debit.listing.button.sof') }}
                     </p-button>
                   </div>
@@ -379,5 +381,17 @@
       border: 1px solid #000 !important;
 
     }
+  }
+  .sofBtn {
+    border-radius: 30px;
+    box-shadow: 0px 10px 40px #29292926;
+  }
+  regular-table{
+    border: 1px solid;
+  border-collapse: collapse;
+  }
+
+  th{
+    text-align: center;
   }
 </style>

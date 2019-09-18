@@ -34,20 +34,24 @@
                            :uneditableFields="uneditableFields">
               <template slot-scope="index">
                 <th>
-                  <div class="cell">
+                  <div class="tableBtns">
                     <p-button @click="editCardProgram(index)"
                               :key="index.index.index+index.index.id+'edit'"
                               type="primary"
                               link=""
                               v-if="hasPermission(permission.CARD_PROGRAM_EDIT)">
-                      {{ $t('card_program.listing.button.edit') }}
+                    <img class="" width= "17px" :src="changeIcon" alt=""> 
+                    {{ $t('card_program.listing.button.edit') }}
                     </p-button>
-                    <span class="px-1"></span>
+                  <!-- </div> -->
+                                    <!-- <div class="tableBtns"> -->
+                    <!-- <span class="px-1"></span> -->
                     <p-button @click="viewDetailedCardProgram(index)"
                               :key="index.index.index+index.index.id+'view'"
                               type="primary"
                               link=""
                               v-if="hasPermission(permission.CARD_PROGRAM_VIEW)">
+                      <img class="" width= "17px" :src="viewIcon" alt=""> 
                       {{ $t('card_program.listing.button.view') }}
                     </p-button>
                   </div>
@@ -99,6 +103,10 @@
   import Loader from "../../../UIComponents/Loader";
   import PPagination from "../../../UIComponents/Pagination";
   import Spinner from "../../../UIComponents/Spinner";
+  import changeIcon from '../../../../../public/static/img/dashboard_icons/ic_edit.svg';
+  import viewIcon from '../../../../../public/static/img/dashboard_icons/icon_glass_purple.svg';
+
+
 
   export default {
     name: 'CardPrograms',
@@ -110,10 +118,13 @@
       Loader,
       Spinner,
       PButton, RegularTable,
-      [Button.name]: Button
+      [Button.name]: Button,
+     
     },
     data() {
       return {
+         viewIcon, 
+         changeIcon,
         tableHeadings: [
           //main
           {label: 'psf Ref', name: 'psfRef', i18n: 'card_program.listing.table_header.psf_ref'},
@@ -295,5 +306,10 @@
 
   .card-header {
     border: none !important;
+  }
+  .tableBtns{
+    border: 1px solid #7039DA;
+    background-color: #FFFFFF;
+    padding: 0;
   }
 </style>

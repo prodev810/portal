@@ -398,3 +398,48 @@ textarea.form-control{
         margin-top: 6px;
     }
 }
+.ceevo__select-default{
+    .el-input{
+      input,
+      input.el-input__inner{
+        border:1px solid #8D8D8D !important;
+        border-radius:10px;
+        background:#ffffff !important;
+        color:#292929 !important;
+
+        &:hover{
+
+        }
+      }
+      i.el-select__caret{
+        position: relative;
+         background:transparent !important;
+         color:#292929 !important;
+         &:before{
+           position: absolute;
+           content:"\e78f";
+           right: 10px;
+           bottom: 4px;
+           width:auto;
+           height:auto;
+         }
+         &:after{
+           position: absolute;
+           content:"\e790";
+           right: 10px;
+           top: 1px;
+           width: auto;
+           height: auto;
+         }
+         &.is-reverse{
+           transform: rotateZ(180deg);
+         }
+
+           &:hover{
+           color:#292929;
+           background:transparent !important;
+         }
+
+      }
+    }
+}

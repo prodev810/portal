@@ -250,3 +250,96 @@
     display: none;
   }
 }
+.btn-round{
+  min-width: 200px;
+}
+.ceevo__btn-group{
+  btn,.btn{
+    min-width: 230px;
+    margin-right: 30px;
+    text-align:center;
+    > div{
+      justify-content: center;
+    }
+    &:last-child{
+      margin-right: 0;
+    }
+  }
+  @media (max-width:576px) {
+    btn,.btn{
+      margin-left:10px !important;
+      margin-right:10px !important;
+      width:45%;
+      min-width: auto;
+      }
+  }
+}
+
+button[class*=" btn-icon-"], button[class^=btn-icon-]{
+  background:transparent !important;
+  color:#7039DA !important;
+  padding-left:35px;
+  position:relative;
+  &:hover,
+  &:focus,
+  &:active,
+  &:active:focus{
+    background:transparent !important;
+    color:rgba(#7039DA,0.7) !important;
+  }
+
+  img{
+    position: absolute;
+    height: 23px;
+    left: 0;
+    top: 5px;
+  }
+}
+
+.btn-group-border{
+  .cell{
+    padding:0;
+    display: contents;
+  }
+  .btn{
+    min-width:110px;
+  }
+  .btn-success,
+  .btn-danger,
+  .btn-primary{
+    background:transparent !important;
+    border-radius:0;
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus{
+      background:transparent !important;
+    }
+  }
+  .btn-success{
+    color:#2ED684;
+    border:1px solid #2ED684;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus{
+      color:rgba(#2ED684,0.7) !important;
+    }
+  }
+  .btn-primary{
+    color:#5823bd;
+    border:1px solid #5823bd;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus{
+      color:rgba(#5823bd,0.7) !important;
+    }
+  }
+  .sofBtn{
+    margin-left: 2px !important;
+    padding:9px;
+  }
+}

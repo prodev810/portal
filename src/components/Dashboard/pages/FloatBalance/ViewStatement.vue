@@ -4,15 +4,26 @@
       <h4 class="card-title">
         {{ $t('view_statement.listing.title') }}
       </h4>
-      <div class="pl-2">
-        <p>
-          {{ $t('view_statement.listing.tips.line1') }}
-          <br>
-          {{ $t('view_statement.listing.tips.line2') }}
-        </p>
+      <div class="row pl-2">
+        <div class="col-12">
+         <p>
+           {{ $t('view_statement.listing.tips.line1') }}
+           <br>
+           {{ $t('view_statement.listing.tips.line2') }}
+         </p>
+        </div>
       </div>
-      <div class="row align-items-center">
-        <div class="col-xs-12 col-md-8">
+
+      <div class="row">
+
+        <div class="pr-0 mb-3 col-12 text-lg-right text-left order-3 order-xl-1">
+          <span class="px-2"></span>
+          <p-button round @click="viewStatment" type="primary" :disabled="!ready">
+          {{ $t('view_statement.listing.button.view_statement') }}
+          </p-button>
+        </div>
+
+        <div class="col-12 col-xl-6 order-1 order-xl-2">
           <div class="d-flex align-items-center flex-wrap">
             <div class="py-2">
               <div>
@@ -34,6 +45,69 @@
             </div>
           </div>
         </div>
+
+
+        <div class="pr-0 col-12 col-xl-6 order-2 order-xl-3">
+
+          <div class="d-flex align-items-center flex-wrap float-left float-xl-right">
+            <div class="py-2">
+              <div class="d-flex align-items-center">
+              <span class="px-2 text-nowrap">{{ $t('view_statement.listing.search_filter.currency') }}</span>
+              <el-select class="select-default ceevo__select-default"
+                         size="small"
+                         placeholder="selected a currency"
+                         v-model="currencyCode"
+              >
+                <el-option v-for="currency in supportedCurrencies"
+                           class="select-success"
+                           :value="currency.code"
+                           :label="currency.code"
+                           :key="currency.id">
+                </el-option>
+              </el-select>
+              </div>
+            </div>
+
+            <div v-if="showInfo()" class="py-2">
+              <div class="d-flex align-items-center">
+              <span class="px-2 text-nowrap">{{ $t('view_statement.listing.search_filter.card_program') }}</span>
+              <el-select class="select-default ceevo__select-default"
+                         size="small"
+                         placeholder="Selected A Card Program Code"
+                         v-model="cardProgramCode"
+              >
+                <el-option v-for="card in cardPrograms"
+                           class="select-success"
+                           :value="card.cardProgramCode"
+                           :label="card.cardProgramCode"
+                           :key="card.id">
+                </el-option>
+              </el-select>
+              </div>
+            </div>
+            <div v-if="showInfo()" class="py-2">
+              <div class="d-flex align-items-center">
+              <span class="px-2 text-nowrap">{{ $t('view_statement.listing.search_filter.reseller') }}</span>
+              <el-select class="select-default ceevo__select-default"
+                         size="small"
+                         placeholder="Select A Reseller Code"
+                         v-model="resellerCode"
+              >
+                <el-option v-for="reseller in resellers"
+                           class="select-success"
+                           :value="reseller.resellerCode"
+                           :label="reseller.resellerCode"
+                           :key="reseller.id">
+                </el-option>
+              </el-select>
+            </div>
+            </div>
+
+          </div>
+        </div>
+
+
+
         <div class="col-xs-12 col-md-4 button-wrapper " v-if="hasPermission(permission.STATEMENT_DOWNLOAD)">
           <p-button
             type="success"
@@ -44,61 +118,6 @@
           {{ $t('view_statement.listing.button.download') }}
           </p-button>
           <a ref="downloadEr" style="display: none;"></a>
-        </div>
-      </div>
-      <div class=" w-100 pt-2 ">
-        <div class="d-flex align-items-center align-content-center justify-content-end">
-          <div class="d-flex align-items-center align-content-center">
-            <span class="px-2">{{ $t('view_statement.listing.search_filter.currency') }}</span>
-            <el-select class="select-default"
-                       size="small"
-                       placeholder="selected a currency"
-                       v-model="currencyCode"
-            >
-              <el-option v-for="currency in supportedCurrencies"
-                         class="select-success"
-                         :value="currency.code"
-                         :label="currency.code"
-                         :key="currency.id">
-              </el-option>
-            </el-select>
-          </div>
-          <div v-if="showInfo()" class="d-flex align-items-center align-content-center">
-            <span class="px-2">{{ $t('view_statement.listing.search_filter.card_program') }}</span>
-            <el-select class="select-default"
-                       size="small"
-                       placeholder="Selected A Card Program Code"
-                       v-model="cardProgramCode"
-            >
-              <el-option v-for="card in cardPrograms"
-                         class="select-success"
-                         :value="card.cardProgramCode"
-                         :label="card.cardProgramCode"
-                         :key="card.id">
-              </el-option>
-            </el-select>
-          </div>
-          <div v-if="showInfo()" class="d-flex align-items-center align-content-center">
-            <span class="px-2">{{ $t('view_statement.listing.search_filter.reseller') }}</span>
-            <el-select class="select-default"
-                       size="small"
-                       placeholder="Select A Reseller Code"
-                       v-model="resellerCode"
-            >
-              <el-option v-for="reseller in resellers"
-                         class="select-success"
-                         :value="reseller.resellerCode"
-                         :label="reseller.resellerCode"
-                         :key="reseller.id">
-              </el-option>
-            </el-select>
-          </div>
-          <div class="d-flex align-items-center align-content-center">
-              <span class="px-2"></span>
-            <p-button @click="viewStatment" type="primary" :disabled="!ready">
-              {{ $t('view_statement.listing.button.view_statement') }}
-              </p-button>
-          </div>
         </div>
       </div>
     </div>
@@ -352,7 +371,7 @@
           currency_code: currencyCode || this.currencyCode,
           page: page || this.page,
         }
-      }, 
+      },
       onPerpageChange(perPage) {
         const newPage = (this.page * this.perPage) / perPage
         const page = Math.floor(isFinite(newPage) ? newPage : 0);

@@ -3,13 +3,14 @@
     <div class="card-header bg-white border-0">
       <h4 class="card-title">
         {{ $t('unallocated_float.listing.title') }}</h4>
-      <div class="pl-2">
+      <div>
         <p>
           {{ $t('unallocated_float.listing.tips.line1') }}
         </p>
       </div>
-      <div class="row align-items-center">
-        <div class="col-xs-12 col-md-8">
+      <div class="row align-items-center px-2">
+
+        <div class="mr-auto">
           <div class="d-flex align-items-center flex-wrap">
             <div class="py-2">
               <div>
@@ -21,62 +22,79 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class=" w-100 pt-2 ">
-        <div class="d-flex align-items-center align-content-center justify-content-end">
-          <div class="d-flex align-items-center align-content-center">
-            <span class="px-2">{{ $t('unallocated_float.listing.search_filter.currency') }}</span>
-            <el-select class="select-default"
-                       size="small"
-                       placeholder="selected a currency"
-                       v-model="currencyCode"
-            >
-              <el-option v-for="currency in supportedCurrencies"
-                         class="select-success"
-                         :value="currency.code"
-                         :label="currency.code"
-                         :key="currency.id">
-              </el-option>
-            </el-select>
-          </div>
-          <div class="d-flex align-items-center align-content-center">
-            <span class="px-2">{{ $t('unallocated_float.listing.search_filter.card_program') }}</span>
-            <el-select class="select-default"
-                       size="small"
-                       placeholder="selected a card program"
-                       v-model="cardProgramCode"
-            >
-              <el-option v-for="card in cardPrograms"
-                         class="select-success"
-                         :value="card.cardProgramCode"
-                         :label="card.cardProgramCode"
-                         :key="card.id">
-              </el-option>
-            </el-select>
-          </div>
-          <div class="d-flex align-items-center align-content-center" v-if="!$oAuth.isReseller()">
-            <span class="px-2">{{ $t('unallocated_float.listing.search_filter.reseller') }}</span>
-            <el-select class="select-default"
-                       size="small"
-                       placeholder="selected a card program"
-                       v-model="resellerCode"
-            >
-              <el-option v-for="reseller in resellers"
-                         class="select-success"
-                         :value="reseller.resellerCode"
-                         :label="reseller.resellerCode"
-                         :key="reseller.id">
-              </el-option>
-            </el-select>
-          </div>
-          <div class="d-flex align-items-center align-content-center">
-            <p-button @click="viewUnallocatedFloat" type="primary"
-                      v-if="hasPermission(permission.UNALLOCATED_FLOAT_VIEW)"
-                      :disabled="!ready">
-              {{ $t('unallocated_float.listing.button.view') }}
-            </p-button>
+
+        <div class="pr-0 ml-auto">
+
+          <div class="d-flex align-items-center flex-wrap float-left float-xl-right">
+
+            <div class="py-2">
+              <div class="d-flex align-items-center">
+                <span class="px-2 text-nowrap">{{ $t('unallocated_float.listing.search_filter.currency') }}</span>
+                <el-select class="select-default ceevo__select-default"
+                           size="small"
+                           placeholder="selected a currency"
+                           v-model="currencyCode"
+                >
+                  <el-option v-for="currency in supportedCurrencies"
+                             class="select-success"
+                             :value="currency.code"
+                             :label="currency.code"
+                             :key="currency.id">
+                  </el-option>
+                </el-select>
+              </div>
+            </div>
+
+            <div class="py-2">
+              <div class="d-flex align-items-center">
+                <span class="px-2 text-nowrap">{{ $t('unallocated_float.listing.search_filter.card_program') }}</span>
+                <el-select class="select-default ceevo__select-default"
+                           size="small"
+                           placeholder="selected a card program"
+                           v-model="cardProgramCode"
+                >
+                  <el-option v-for="card in cardPrograms"
+                             class="select-success"
+                             :value="card.cardProgramCode"
+                             :label="card.cardProgramCode"
+                             :key="card.id">
+                  </el-option>
+                </el-select>
+              </div>
+            </div>
+
+            <div class="py-2">
+              <div class="d-flex align-items-center" v-if="!$oAuth.isReseller()">
+                <span class="px-2 text-nowrap">{{ $t('unallocated_float.listing.search_filter.reseller') }}</span>
+                <el-select class="select-default ceevo__select-default"
+                           size="small"
+                           placeholder="selected a card program"
+                           v-model="resellerCode"
+                >
+                  <el-option v-for="reseller in resellers"
+                             class="select-success"
+                             :value="reseller.resellerCode"
+                             :label="reseller.resellerCode"
+                             :key="reseller.id">
+                  </el-option>
+                </el-select>
+              </div>
+            </div>
+
+            <div class="py-2 ml-0 ml-md-2">
+              <div class="d-flex align-items-center align-content-center">
+                <p-button round @click="viewUnallocatedFloat" type="primary"
+                          v-if="hasPermission(permission.UNALLOCATED_FLOAT_VIEW)"
+                          :disabled="!ready">
+                  {{ $t('unallocated_float.listing.button.view') }}
+                </p-button>
+              </div>
+            </div>
+
           </div>
         </div>
+
+
       </div>
     </div>
     <div class="card p-2">

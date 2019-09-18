@@ -146,16 +146,153 @@
             <p v-if="edit || context ==='create'">
               <span class="required-field-sympol">
                 <b>*</b>
-              </span> 
+              </span>
               {{ $t('card_program.create.common.required_fields') }}
             </p>
           </slide-y-down-transition>
         </div>
       </div>
     </div>
+
+
+<!-- New style mock start-->
+<div class="row">
+
+  <!-- col-1 -->
+  <div class="col-12 col-md-6 col-xl-4">
+    <div class="card ceevo__card-group">
+      <div class="card-content p-4">
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">PSF REF <span class="required-field-sympol">＊</span></div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="psf Ref" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">ISSUER INST <span class="required-field-sympol">＊</span></div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="Issuer inst" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">PM INST <span class="required-field-sympol">＊</span></div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="PM inst" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">PO INST <span class="required-field-sympol">＊</span></div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="PO inst" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">Card Program Code <span class="required-field-sympol">＊</span></div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="CPC" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 d-flex align-items-center">CARD PROGRAM DESCRIPTION <span class="required-field-sympol">＊</span></div>
+          <div class="col-12">
+            <textarea placeholder="Card Program Description"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- col-2 -->
+  <div class="col-12 col-md-6 col-xl-5">
+    <div class="card ceevo__card-group">
+      <div class="card-content p-4">
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">BUREAU INST CODE <span class="required-field-sympol">＊</span></div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="BUREAU INST CODE" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">DEFAULT CURRENCY <span class="required-field-sympol">＊</span></div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="DEFAULT CURRENCY" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">ALERT CONTACT E-MAIL <span class="required-field-sympol">＊</span></div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="ALERT CONTACT E-MAIL" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">LOAD FEE</div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="LOAD FEE" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">LOAD FEE %</div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="LOAD FEE %" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">CHARGED TO</div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="CHARGED TO" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">APPLICATION FEE</div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="APPLICATION FEE" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">CHARGED TO</div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="CHARGED TO" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">MONTHLY FEE</div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="MONTHLY FEE" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">CHARGED TO</div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="CPC" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">API FEE</div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="API FEE" class="form-control  form-control-danger"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">CHARGED TO</div>
+          <div class="col-12 col-lg-12 col-xl-7"><input type="text" placeholder="CHARGED TO" class="form-control  form-control-danger"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- col-3 -->
+  <div class="col-12 col-md-6 col-xl-3">
+    <div class="card ceevo__card-group">
+      <div class="card-content p-4">
+
+        <div class="row mb-3">
+          <!--adding line 1-->
+          <div class="kyc-adding w-75">
+            <div class="col-12 d-flex align-items-center">KYC CLASS 1 <span class="required-field-sympol">＊</span></div>
+            <div class="col-12 mb-3"><input type="text" placeholder="KYC Class 1" class="form-control  form-control-danger"></div>
+          </div>
+          <!--adding line 2-->
+          <div class="kyc-adding w-75">
+            <div class="col-12 d-flex align-items-center">KYC CLASS 2 <span class="required-field-sympol">＊</span></div>
+            <div class="col-12 mb-3"><input type="text" placeholder="KYC Class 2" class="form-control  form-control-danger"></div>
+          </div>
+
+          <button class="el-tooltip aba__button btn-primary"  tabindex="0">
+             <i class="el-icon-plus"></i>
+          </button>
+        </div>
+
+        <hr>
+        <div class="row mb-3">
+          <div class="pid-adding w-75">
+            <div class="col-12 d-flex align-items-center">MARTIX PID 1 <span class="required-field-sympol">＊</span></div>
+            <div class="col-12 mb-3"><input type="text" placeholder="Matrix PID 1" class="form-control  form-control-danger"></div>
+          </div>
+          <button class="el-tooltip aba__button btn-primary"  tabindex="0">
+             <i class="el-icon-plus"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- New style mock end-->
+
+
+
+
+
     <div class="row">
-      <div class="col-md-12  ">
-        <div class="pull-right ">
+      <div class="col-md-12 mt-5">
+        <div class="text-center ceevo__btn-group">
           <p-button round type="primary" @click="handlePrimaryAction"
                     :disabled="!(context ==='view' || (isValid && context!== 'view' && dirty ))"
                     v-if="hasPermission(permission.CARD_PROGRAM_EDIT)"
@@ -223,8 +360,8 @@
         tableHeadingsPack: {
           main: [
             {
-              label: 'psf Ref', 
-              name: 'psfRef', 
+              label: 'psf Ref',
+              name: 'psfRef',
               i18n: 'card_program.create.table_header.psf_ref',
               required: true,
               validator: [
@@ -235,8 +372,8 @@
 
             },
             {
-              label: 'issuer Inst', 
-              name: 'issuerInst', 
+              label: 'issuer Inst',
+              name: 'issuerInst',
               i18n: 'card_program.create.table_header.issuer_inst',
               required: true,
               validator: [
@@ -246,8 +383,8 @@
               brakeAt: breakInput(5)
             },
             {
-              label: 'PM Inst', 
-              name: 'pmInst', 
+              label: 'PM Inst',
+              name: 'pmInst',
               i18n: 'card_program.create.table_header.pm_inst',
               required: true,
               validator: [
@@ -257,8 +394,8 @@
               brakeAt: breakInput(5)
             },
             {
-              label: 'PO Inst', 
-              name: 'poInst', 
+              label: 'PO Inst',
+              name: 'poInst',
               i18n: 'card_program.create.table_header.po_inst',
               required: true,
               validator: [
@@ -268,8 +405,8 @@
               brakeAt: breakInput(5)
             },
             {
-              label: 'CPC', 
-              name: 'cardProgCode', 
+              label: 'CPC',
+              name: 'cardProgCode',
               i18n: 'card_program.create.table_header.card_prog_code',
               required: true,
               validator: [
@@ -279,8 +416,8 @@
               brakeAt: breakInput(5)
             },
             {
-              label: 'card program description', 
-              name: 'cardProgDesc', 
+              label: 'card program description',
+              name: 'cardProgDesc',
               i18n: 'card_program.create.table_header.card_prog_desc',
               required: true,
               validator: limitedCharNumber(0, 40),
@@ -289,8 +426,8 @@
           ],
           middle: [
             {
-              label: 'Bureau inst code', 
-              name: 'cardPrinterCode', 
+              label: 'Bureau inst code',
+              name: 'cardPrinterCode',
               i18n: 'card_program.create.table_header.card_printer_code',
               required: true,
               validator: [
@@ -300,34 +437,34 @@
               brakeAt: breakInput(5)
             },
             {
-              label: 'default currency', 
-              name: 'defaultCurrencyCode', 
+              label: 'default currency',
+              name: 'defaultCurrencyCode',
               i18n: 'card_program.create.table_header.def_currency',
               required: true,
               validator: [mustBeAValidISOcurrency],
               brakeAt: breakInput(3)
             },
             {
-              label: 'alert contact e-mail', 
-              name: 'alertContact', 
+              label: 'alert contact e-mail',
+              name: 'alertContact',
               i18n: 'card_program.create.table_header.alert_contact',
               required: true,
               validator: [mustBeAnEmail], $domAttri: {type: 'email'},
               brakeAt: breakInput(64)
             },
             {
-              label: 'load fee', 
-              name: 'loadFee', 
-              i18n: 'card_program.create.table_header.load_fee', 
+              label: 'load fee',
+              name: 'loadFee',
+              i18n: 'card_program.create.table_header.load_fee',
               validator: shouldBeNumber,
               mask: decimals(2),
               $domAttri: {step: '0.01', type: 'number'},
               brakeAt: breakInput(8)
             },
             {
-              label: 'load fee %', 
-              name: 'loadFeePct', 
-              i18n: 'card_program.create.table_header.load_fee_pct', 
+              label: 'load fee %',
+              name: 'loadFeePct',
+              i18n: 'card_program.create.table_header.load_fee_pct',
               addonRightIcon: 'fa-percent fa',
               validator: shouldBeNumber,
               mask: decimals(2),
@@ -336,8 +473,8 @@
               i18n_placeholder: 'card_program.create.table_input_placeholder.load_fee_pct'
             },
             {
-              label: 'load fee roof', 
-              name: 'loadFeeCap', 
+              label: 'load fee roof',
+              name: 'loadFeeCap',
               i18n: 'card_program.create.table_header.load_fee_cap',
               validator: [shouldBeNumber],
               mask: decimals(2),
@@ -345,8 +482,8 @@
               brakeAt: breakInput(8)
             },
             {
-              label: 'Charged To', 
-              name: 'loadFeebillMethod', 
+              label: 'Charged To',
+              name: 'loadFeebillMethod',
               i18n: 'card_program.create.table_header.load_fee_bill_method',
               input: 'select',
               selectKeys: [
@@ -358,9 +495,9 @@
             },
           ],
           fees: [{
-            label: 'application fee', 
-            name: 'appFee', 
-            i18n: 'card_program.create.table_header.app_fee', 
+            label: 'application fee',
+            name: 'appFee',
+            i18n: 'card_program.create.table_header.app_fee',
             validator: shouldBeNumber,
             mask: decimals(2),
             $domAttri: {step: '0.01', type: 'number'},
@@ -368,9 +505,9 @@
           },
             //application fee bill method
             {
-              label: 'Charged To', 
-              name: 'appFeeBillMethod', 
-              i18n: 'card_program.create.table_header.app_fee_bill_method', 
+              label: 'Charged To',
+              name: 'appFeeBillMethod',
+              i18n: 'card_program.create.table_header.app_fee_bill_method',
               input: 'select',
               selectKeys: [
                 {name: '', value: null},
@@ -380,9 +517,9 @@
                 {name: 'INVOICE', value: 'INVOICE'}]
             },
             {
-              label: 'monthly fee', 
-              name: 'monthlyFee', 
-              i18n: 'card_program.create.table_header.monthly_fee', 
+              label: 'monthly fee',
+              name: 'monthlyFee',
+              i18n: 'card_program.create.table_header.monthly_fee',
               validator: shouldBeNumber,
               mask: decimals(2),
               $domAttri: {step: '0.01', type: 'number'},
@@ -390,9 +527,9 @@
             },
             //monthly fee bill method
             {
-              label: 'Charged To', 
-              name: 'monthlyFeeBillMethod', 
-              i18n: 'card_program.create.table_header.monthly_fee_bill_method', 
+              label: 'Charged To',
+              name: 'monthlyFeeBillMethod',
+              i18n: 'card_program.create.table_header.monthly_fee_bill_method',
               input: 'select',
               selectKeys: [
                 {name: '', value: null},
@@ -401,18 +538,18 @@
                 {name: 'INVOICE', value: 'INVOICE'}]
             },
             {
-              label: 'api fee', 
-              name: 'apiFee', 
-              i18n: 'card_program.create.table_header.api_fee', 
+              label: 'api fee',
+              name: 'apiFee',
+              i18n: 'card_program.create.table_header.api_fee',
               validator: shouldBeNumber,
               mask: decimals(2),
               $domAttri: {step: '0.01', type: 'number'},
               brakeAt: breakInput(8)
             },
             {
-              label: 'Charged To', 
-              name: 'apiFeeBillMethod', 
-              i18n: 'card_program.create.table_header.api_fee_bill_method', 
+              label: 'Charged To',
+              name: 'apiFeeBillMethod',
+              i18n: 'card_program.create.table_header.api_fee_bill_method',
               input: 'select',
               selectKeys: [
                 {name: '', value: null},
@@ -423,16 +560,16 @@
           ],
           kycClassifier: [
             {
-              label: 'kyc classifier', 
-              name: 'kycClassifier', 
+              label: 'kyc classifier',
+              name: 'kycClassifier',
               multiVal: true,
               validator: exactNumber(3),
               brakeAt: breakInput(3),
               required: true,
             },],
           matrixPID: [{
-            label: 'matrix PID', 
-            name: 'matrixPID', 
+            label: 'matrix PID',
+            name: 'matrixPID',
             multiVal: true,
             validator: exactNumber(6),
             brakeAt: breakInput(6),
@@ -665,7 +802,7 @@
     }
   };
 </script>
-<style scoped>
+<style lang="scss" scoped>
   .section-header {
     padding-bottom: .5rem;
   }
@@ -705,6 +842,25 @@
   }
 
   .required-field-sympol {
-    color: #ff4d57;
+    color: #5823bd;
+    font-size: 24px;
+    font-weight: 500;
+    height: 26px;
   }
+  .ceevo__card-group{
+    .aba__button,
+    .aba__button:hover{
+      background:transparent !important;
+      border:none;
+      cursor: pointer;
+
+      i{
+        color: #7039DA;
+        font-size: 28px;
+        font-weight: bold;
+        margin-top: 6px;
+      }
+    }
+  }
+
 </style>
