@@ -347,25 +347,39 @@
 			<div class="col-12 col-md-6 col-xl-3">
 				<div class="card ceevo__card-group">
 					<div class="card-content p-4">
-
-						<div class="row mb-3">
-							<!--adding line 1-->
+						<!-- KYC Classes -->
+						<div v-for="(kyc, index) in cardProgramData.kycClassifier" 
+								 :key="index"
+								 class="row mb-0">
 							<div class="kyc-adding w-75">
-								<div class="col-12 d-flex align-items-center">KYC CLASS 1 <span class="required-field-sympol">＊</span></div>
-								<div class="col-12 mb-3"><input type="text" placeholder="KYC Class 1" class="form-control  form-control-danger"></div>
-							</div>
-							<!--adding line 2-->
-							<div class="kyc-adding w-75">
-								<div class="col-12 d-flex align-items-center">KYC CLASS 2 <span class="required-field-sympol">＊</span></div>
-								<div class="col-12 mb-3"><input type="text" placeholder="KYC Class 2" class="form-control  form-control-danger"></div>
+								<div class="col-12 d-flex align-items-center">KYC CLASS {{ index + 1 }}<span class="required-field-sympol">＊</span></div>
+								<div class="col-12 mb-0">
+									<input v-model="cardProgramData.kycClassifier[index]"
+												 v-validate.initial="'required'"
+												 :name="`kyc${index}`"
+												 :data-vv-as="`kyc class ${index + 1}`"
+												 type="text" 
+												 placeholder="KYC Class 1" 
+												 class="form-control  form-control-danger"/>
+									<div class="validation-error">{{ errors.first(`kyc${index}`) }}</div>
+								</div>
 							</div>
 
-							<button class="el-tooltip aba__button btn-primary"  tabindex="0">
+							<button v-if="index > 0" 
+											class="el-tooltip aba__button" 
+											@click="cardProgramData.kycClassifier.splice(index, 1)">
+								<i class="el-icon-delete"></i>
+							</button>
+
+							<button v-else 
+										  class="el-tooltip aba__button" 
+											@click="cardProgramData.kycClassifier.push('')">
 								<i class="el-icon-plus"></i>
 							</button>
 						</div>
 
 						<hr>
+						
 						<div class="row mb-3">
 							<div class="pid-adding w-75">
 								<div class="col-12 d-flex align-items-center">MARTIX PID 1 <span class="required-field-sympol">＊</span></div>
@@ -478,8 +492,8 @@ const emptyCardProgramData = {
 	apiFee: '',
 	apiFeeBillMethod: '',
 	//
-	kycClassifier: [],
-	matrixPID: []
+	kycClassifier: [''],
+	matrixPID: ['']
 }
 
 export default {
@@ -745,7 +759,7 @@ export default {
 	computed: {
 		editMode () {
 			return this.$route.params.id !== 'new'
-    }
+		}
 
 		/*
 		...mapGetters({
@@ -811,28 +825,39 @@ export default {
 					let response = await this.$http.aba1.get(`/cardprograms/${this.$route.params.id}`)
 					
 					this.cardProgramData = response.data
+					// After load checks and modifications
+					delete this.cardProgramData.id
+					// Add at least one free item to each of lists
+					if (this.cardProgramData.kycClassifier.length === 0) {
+						this.cardProgramData.kycClassifier.push('')
+					}
+					
+					if (this.cardProgramData.matrixPID.length === 0) {
+						this.cardProgramData.matrixPID.push('')
+					}
 				} else {
 					// Set clean data for create
 					// no nested props
 					this.cardProgramData = Object.assign({}, emptyCardProgramData)
 				}
 			} catch (error) {
-				dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + e.message, status: 'danger' })
+				dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + error.message, status: 'danger' })
 			}
 
 			this.loading = false
 		},
 		async onSave () {
-			console.log('onSave')
-
 			try {
 				let data = Object.assign({}, this.cardProgramData)
-				delete data.id
+
+				// Filter lists
+				data.kycClassifier = data.kycClassifier.filter(item => item)
+				data.cardProgramData.matrixPID = data.matrixPID.filter(item => item) 
 
 				await this.$http.aba1.put(`/cardprograms/${this.$route.params.id}`, data)
 				this.onCancel()
 			} catch (error) {
-
+				dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + error.message, status: 'danger' })
 			}
 		},
 		onCancel () {
