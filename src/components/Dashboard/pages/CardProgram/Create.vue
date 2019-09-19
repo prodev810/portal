@@ -710,6 +710,8 @@ export default {
 			this.loading = false
 		},
 		async onSave () {
+			this.loading = true
+
 			try {
 				let data = Object.assign({}, this.cardProgramData)
 
@@ -728,6 +730,8 @@ export default {
 			} catch (error) {
 				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('card_program.errors.save_card_program') + error.message, status: 'danger' })
 			}
+
+			this.loading = false
 		},
 		onCancel () {
 			this.$router.push('/card-program/view')
