@@ -56,71 +56,80 @@
       </sof-uploader>
     </div>
 
-
-<!-- New style mock start-->
-<div class="row">
-    <div class="col-12  col-xl-9">
-      <div class="card ceevo__card-group">
-        <div class="row card-content p-4">
-          <!-- left content-->
-          <div class="w-50 w-sm-100 pl-4 pr-4 pl-md-4 pr-md-5">
-             <div class="row mb-3">
-               <div class="col-12 col-lg-5 d-flex align-items-center">CARD PROGRAM CODE</div>
-               <div class="col-12 col-lg-7"><input disabled="disabled" type="text" placeholder="LEDGE" class="form-control  form-control-danger"></div>
-             </div>
-             <div class="row mb-3">
-               <div class="col-12 col-lg-5 d-flex align-items-center">RESELLER CODE</div>
-               <div class="col-12 col-lg-7"><input disabled="disabled" type="text" placeholder="RC001" class="form-control  form-control-danger"></div>
-             </div>
-             <div class="row mb-3">
-               <div class="col-12 col-lg-5 d-flex align-items-center">RESELLER NAME</div>
-               <div class="col-12 col-lg-7"><input disabled="disabled" type="text" placeholder="ResellerDemo1" class="form-control  form-control-danger"></div>
-             </div>
-             <div class="row mb-3">
-               <div class="col-12 col-lg-5 d-flex align-items-center">USER</div>
-               <div class="col-12 col-lg-7"><input disabled="disabled" type="text" placeholder="Abaadmin" class="form-control  form-control-danger"></div>
-             </div>
-          </div>
-
-          <!-- right content-->
-          <div class="w-50 w-sm-100 pr-4 pl-4 pl-md-5 pr-md-4">
-             <div class="row mb-3">
-               <div class="col-12 col-lg-5 d-flex align-items-center">CHARGE TYPE <span class="required-field-sympol">＊</span></div>
-               <div class="col-12 col-lg-7"><input type="text" placeholder="CHARGE TYPE" class="form-control  form-control-danger"></div>
-             </div>
-             <div class="row mb-3">
-               <div class="col-12 col-lg-5 d-flex align-items-center">CURRENCY</div>
-               <div class="col-12 col-lg-7"><input disabled="disabled" type="text" placeholder="CURRENCY" class="form-control  form-control-danger"></div>
-             </div>
-             <div class="row mb-3">
-               <div class="col-12 col-lg-5 d-flex align-items-center">DESCRIPTION <span class="required-field-sympol">＊</span></div>
-               <div class="col-12 col-lg-7"><input type="text" placeholder="DESCRIPTION" class="form-control  form-control-danger"></div>
-             </div>
-             <div class="row mb-3">
-               <div class="col-12 col-lg-5 d-flex align-items-center">AMOUNT <span class="required-field-sympol">＊</span></div>
-               <div class="col-12 col-lg-7"><input type="text" placeholder="AMOUNT" class="form-control  form-control-danger"></div>
-             </div>
-          </div>
-
-          <div class="ml-auto w-50 w-sm-100 pr-4 pl-4 pl-md-5 pr-md-4">
-            <div class="row">
-              <div class="ml-auto col-12 col-lg-7">
-               <p-button round
-                 class="w-100"
-                 @click="showSoftDocs(index)">
-                 {{ $t('setup_debit.create.button.sof') }}
-               </p-button>
+    <!-- New style mock start-->
+    <div class="row">
+      <div class="col-12">
+        <div class="card ceevo__card-group">
+          <div class="row card-content p-4">
+            <!-- left content-->
+            <div class="w-50 w-sm-100 pl-4 pr-4 pr-md-3">
+              <div class="row mb-3">
+                <div class="col-12 col-lg-6 d-flex align-items-center control-label">{{ $t('setup_debit.create.labels.card_prog_code') }}</div>
+                <div class="col-12 col-lg-6"><input disabled="disabled" type="text" :placeholder="$t('setup_debit.create.labels.card_prog_code')" class="form-control"></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-12 col-lg-6 d-flex align-items-center control-label">{{ $t('setup_debit.create.labels.reseller_code') }}</div>
+                <div class="col-12 col-lg-6"><input disabled="disabled" type="text" :placeholder="$t('setup_debit.create.labels.reseller_code')" class="form-control  form-control-danger"></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-12 col-lg-6 d-flex align-items-center control-label">{{ $t('setup_debit.create.labels.reseller_name') }}</div>
+                <div class="col-12 col-lg-6"><input disabled="disabled" type="text" :placeholder="$t('setup_debit.create.labels.reseller_name')" class="form-control  form-control-danger"></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-12 col-lg-6 d-flex align-items-center control-label">{{ $t('setup_debit.create.labels.user') }}</div>
+                <div class="col-12 col-lg-6"><input disabled="disabled" type="text" :placeholder="$t('setup_debit.create.labels.user')" class="form-control  form-control-danger"></div>
               </div>
             </div>
-          </div>
 
+            <!-- right content-->
+            <div class="w-50 w-sm-100 pr-4 pl-4 pl-md-3">
+              <div class="row mb-3">
+                <div class="col-12 col-lg-6 d-flex align-items-center control-label">{{ $t('setup_debit.create.labels.entry_type') }} <span class="required-field-sympol">＊</span></div>
+                <div class="col-12 col-lg-6">
+                  <el-select v-model="selected" :placeholder="$t('setup_debit.create.labels.entry_type')"
+                             class="w-100">
+                    <el-option v-for="(item, index) in entryTypeValues"
+                                :key="index"
+                                :label="item.name"
+                                :value="item.value">{{ item.name }}
+                    </el-option>
+                  </el-select>	
+
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-12 col-lg-6 d-flex align-items-center control-label">{{ $t('setup_debit.create.labels.currency') }}</div>
+                <div class="col-12 col-lg-6"><input disabled="disabled" type="text" :placeholder="$t('setup_debit.create.labels.currency')" class="form-control  form-control-danger"></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-12 col-lg-6 d-flex align-items-center control-label">{{ $t('setup_debit.create.labels.entry_desc') }} <span class="required-field-sympol">＊</span></div>
+                <div class="col-12 col-lg-6"><input type="text" :placeholder="$t('setup_debit.create.labels.entry_desc')" class="form-control  form-control-danger"></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-12 col-lg-6 d-flex align-items-center control-label">{{ $t('setup_debit.create.labels.amount') }} <span class="required-field-sympol">＊</span></div>
+                <div class="col-12 col-lg-6"><input type="text" :placeholder="$t('setup_debit.create.labels.amount')" class="form-control  form-control-danger"></div>
+              </div>
+            </div>
+
+            <div class="ml-auto w-50 w-sm-100 pr-4 pl-4 pl-md-5 pr-md-4">
+              <div class="row">
+                <div class="ml-auto col-12 col-lg-7">
+                <p-button round
+                  class="w-100"
+                  @click="showSoftDocs(index)">
+                  {{ $t('setup_debit.create.button.sof') }}
+                </p-button>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
-</div>
-<!-- New style mock End-->
+    <!-- New style mock End-->
 
-    <div class="col-12 col-lg-9 mt-5 text-center ceevo__btn-group">
+    <div class="col-12 mt-5 text-center ceevo__btn-group">
       <p-button round type="primary" @click="handleSettingDebit"
                 :disabled="!valid"
       >
@@ -135,6 +144,7 @@
     </div>
   </div>
 </template>
+
 <script>
   import {Table, TableColumn} from 'element-ui'
   import Vue from 'vue'
@@ -245,7 +255,12 @@
         softDocs: [],
         dataToSend: {
           resellerId: ''
-        }
+        },
+        // 
+        entryTypeValues: [
+          { name: 'Credit', value: 'Credit' },
+          { name: 'Debit', value: 'Debit' }
+        ]
       }
     },
     computed: {
@@ -443,19 +458,25 @@
     }
   }
 </script>
-<style scoped>
-  .bg-denger {
-    background-color: #05980e;
-    display: block;
-    color: #fff;
-  }
 
-  .ceevo__table__cell--nopadding {
-    display: none !important;
-  }
+<style lang="scss" scoped>
+.control-label {
+  font-weight: bold;
+  text-transform: uppercase;
+}
 
-  .hiddenInput {
-    opacity: 0;
-    width: 1px;
-  }
+.bg-denger {
+  background-color: #05980e;
+  display: block;
+  color: #fff;
+}
+
+.ceevo__table__cell--nopadding {
+  display: none !important;
+}
+
+.hiddenInput {
+  opacity: 0;
+  width: 1px;
+}
 </style>

@@ -20,6 +20,16 @@ const create = {
     currency: `Currency`,
     entry_desc: `Description`,
     amount: `Amount`
+  },
+  labels: {
+    card_prog_code: `Card program code`,
+    reseller_code: `Reseller code`,
+    reseller_name: `Reseller name`,
+    user: `User`,
+    entry_type: `Charge Type`,
+    currency: `Currency`,
+    entry_desc: `Description`,
+    amount: `Amount`
   }
 }
 export default {
