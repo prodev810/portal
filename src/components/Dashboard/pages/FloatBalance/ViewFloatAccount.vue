@@ -123,9 +123,19 @@
               striped
               :headings="tableHeadings"
               :value="tableData"
-              :addToHeaders="[{name:'hasPendingDebitOrCredit' ,label:'Pending', i18n: 'view_float_account.listing.table_header.has_pending_debit_or_credit'}]"
+              :addToHeaders="[{label: 'status', name: 'resellerStatus', i18n: 'view_float_account.listing.table_header.reseller_status'},
+                {name:'hasPendingDebitOrCredit' ,label:'Pending', i18n: 'view_float_account.listing.table_header.has_pending_debit_or_credit'}]"
             >
               <template slot-scope="index">
+                <td>
+                  <div class="cell" :class="{
+                  'bg-active':getResellerStatus(index) === 'Active',
+                  'bg-closed':getResellerStatus(index) === 'Closed',
+                  'bg-pending':getResellerStatus(index) === 'Pending Approval',
+                  }">
+                    {{getResellerStatus(index)}}
+                  </div>
+                </td>
                 <th>
                   <div class="cell" :class="{
                   'bg-success':getBendingDebitStat(index) === 'yes',
@@ -238,7 +248,7 @@
           {
             label: 'float amount', name: 'amount', i18n: 'view_float_account.listing.table_header.amount'
           },
-          {label: 'status', name: 'resellerStatus', i18n: 'view_float_account.listing.table_header.reseller_status'},
+          //{label: 'status', name: 'resellerStatus', i18n: 'view_float_account.listing.table_header.reseller_status'},
         ],
         tableData: [],
         cardProgramCode: '',
@@ -450,6 +460,19 @@
           const recoredIndex = index !== void 0 && index.index !== void 0 ? index.index.index : false;
           if (recoredIndex === false) return 'false'
           return this.tableData[recoredIndex].hasPendingDebitOrCredit ? 'yes' : 'no'
+        }
+      }, getResellerStatus(index) {
+        if (this.tableData.length !== 0) {
+          const recoredIndex = index !== void 0 && index.index !== void 0 ? index.index.index : false;
+          if (recoredIndex === false) return 'false'
+          //console.log('pending status', this.tableData[recoredIndex].resellerStatus)
+          if( this.tableData[recoredIndex].resellerStatus === 'ACTIVE') {
+            return 'Active'
+          } else if(this.tableData[recoredIndex].resellerStatus === 'CLOSED') {
+            return 'Closed'
+          } else {
+            return 'Pending Approval'
+          }
         }
       },
       getAllFloats() {

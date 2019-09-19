@@ -29,7 +29,7 @@
         </div>
       </div>
     </div>
-    <div class="card">
+    <div class="card flat">
       <div class="card-content row">
         <div class="col-sm-12">
           <div class="p-3">
@@ -38,8 +38,17 @@
               :headings="tableHeadings"
               :value="tableData"
               :extraHeadings="1"
+              :addToHeaders="[{label: 'Has sof docs', name: 'withSof', i18n: 'approve_debit.listing.table_header.with_sof'}]"
             >
               <template slot-scope="index">
+                <td>
+                  <div class="cell" :class="{
+                  'bg-success':getHasSofDocs(index) === 'yes',
+                  'bg-danger':getHasSofDocs(index) === 'no',
+                  }">
+                  {{getHasSofDocs(index)}}
+                  </div>
+                </td>
                 <th :key="index.index.id" class="btn-group-border">
                   <div class="cell">
                     <p-button type="success" link @click="handleApprove(index.index.row.id)">
@@ -123,7 +132,7 @@
 
           // {label: 'Currency', name: 'currency'},
           {label: 'float amount', name: 'amount', i18n: 'approve_debit.listing.table_header.amount'},
-          {label: 'Has sof docs', name: 'withSof', i18n: 'approve_debit.listing.table_header.with_sof'},
+          //{label: 'Has sof docs', name: 'withSof', i18n: 'approve_debit.listing.table_header.with_sof'},
           // {label: 'status', name: 'status'},
 
         ],
@@ -193,10 +202,18 @@
             resellerName: this.resellerName,
             resellerCode: this.resellerCode,
             cardProgCode,
-            withSof: (float.sofDocs && float.sofDocs.length > 0) ? 'yes' : 'no',
+            //withSof: (float.sofDocs && float.sofDocs.length > 0) ? 'yes' : 'no',
+            withSof: (float.sofDocs && float.sofDocs.length > 0),
             amount: moneyFormatAppendCurrency(float.amount, float.currency || 'EUR')
           }
         })
+      },getHasSofDocs(index) {
+        if (this.tableData.length !== 0) {
+          const recoredIndex = index !== void 0 && index.index !== void 0 ? index.index.index : false;
+          if (recoredIndex === false) return 'false'
+          //console.log(this.tableData[recoredIndex].withSof)
+          return this.tableData[recoredIndex].withSof ? 'yes' : 'no'
+        }
       },
       handleUpdatePendingFloats() {
         if (this.cardProgramId) {

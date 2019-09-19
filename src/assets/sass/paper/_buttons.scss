@@ -303,6 +303,7 @@ button[class*=" btn-icon-"], button[class^=btn-icon-]{
   }
   .btn{
     min-width:110px;
+    min-height: 40px;
   }
   .btn-success,
   .btn-danger,
@@ -341,5 +342,6 @@ button[class*=" btn-icon-"], button[class^=btn-icon-]{
   .sofBtn{
     margin-left: 2px !important;
     padding:9px;
+    min-height: 38px;
   }
 }

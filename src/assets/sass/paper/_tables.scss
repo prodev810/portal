@@ -346,14 +346,27 @@ $table-border-color:$gray-input-outline;
   }
   .cell{
     padding:0 10px;
-  }
 
-  .bg-danger,
-  .bg-success,
-  .bg-green{
-    height:40px;
-  }
-  .bg-danger{
-    background-color:#FF6A6A !important;
+
+    &.bg-danger,
+    &.bg-success,
+    &.bg-green,
+    &.bg-active,
+    &.bg-closed,
+    &.bg-pending{
+      height:40px;
+    }
+    &.bg-danger{
+      background-color:#FF6A6A !important;
+    }
+    &.bg-active{
+      background-color:rgba(#2ED684,0.25) !important;
+    }
+    &.bg-closed{
+      background-color:#8d8d8d !important;
+    }
+    &.bg-pending{
+      background-color:#ffc107 !important;
+    }
   }
 }
