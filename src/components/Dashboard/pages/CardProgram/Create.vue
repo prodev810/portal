@@ -1,161 +1,5 @@
 <template>
   <div>
-		<!--
-    <div class=" d-flex justify-content-between"
-         :class="{
-    ['section-header']:context ==='create',
-    ['pb-3']:context !=='create',
-    }"
-    >
-      <h4 class="card-title display-inline  text-capitalize">
-        {{ $t('card_program.create.title', {action: context}) }}
-      </h4>
-    </div>
-    <div class="pl-2" v-if="context ==='create'">
-      <p>
-        {{ $t('card_program.create.tips.create.line1') }}
-        <br/>
-        {{ $t('card_program.create.tips.create.line2') }}
-      </p>
-      <ul>
-        <li>{{ $t('card_program.create.tips.create.li1') }}</li>
-        <li>{{ $t('card_program.create.tips.create.li2') }}</li>
-      </ul>
-    </div>
-    <div class="pl-2" v-if="context ==='view'">
-      <p>
-        {{ $t('card_program.create.tips.view.line1') }}
-      </p>
-      <ul>
-        <li>{{ $t('card_program.create.tips.view.li1') }}</li>
-        <li>{{ $t('card_program.create.tips.view.li2') }}</li>
-      </ul>
-    </div>
-    <div class="pl-2" v-if="context ==='edit'">
-      <p>
-        {{ $t('card_program.create.tips.edit.line1') }}
-      </p>
-      <ul>
-        <li>{{ $t('card_program.create.tips.edit.li1') }}</li>
-      </ul>
-    </div>
-    <div class="card">
-      <div class="card-content">
-        <div class="col-sm-12 tabel-wrapper mb-1">
-          <div class="py-1">1
-            <regular-table striped
-                           :showValidFeedBack="showValidFeedBack"
-                           :context="context"
-                           :headings="tableHeadingsPack.main"
-                           @input="listenToInput($event,'main')"
-                           :editId="editId"
-                           :value="tableViewData">
-            </regular-table>
-          </div>
-        </div>
-        <hr>
-        <div class="col-sm-12 tabel-wrapper mb-1">
-          <div class="py-1">2
-            <regular-table striped
-                           :showValidFeedBack="showValidFeedBack"
-                           :context="context"
-                           :headings="tableHeadingsPack.middle"
-                           @input="listenToInput($event,'middle')"
-                           :editId="editId"
-                           :value="tableViewData"
-                           :amonutAlignRightFormat="secondLine">
-            </regular-table>
-          </div>
-        </div>
-        <hr>
-        <div class="col-sm-12 tabel-wrapper mb-1">
-          <div class="py-1">3
-            <regular-table striped
-                           :showValidFeedBack="showValidFeedBack"
-                           :context="context"
-                           @input="listenToInput($event,'fees')"
-                           :headings="tableHeadingsPack.fees"
-                           :editId="editId"
-                           :value="tableViewData"
-                           :amonutAlignRightFormat="thirdLine">
-            </regular-table>
-          </div>
-        </div>
-        <hr>
-        <div class="col-sm-12 tabel-wrapper mb-1">
-          <div class="py-1">4
-            <SingleFieldTable
-              :tableData="tableViewData"
-              filedName="kycClassifier"
-              @input="listenToInput($event,'kycClassifier')"
-              striped bordered
-              label="card_program.create.table_header.kyc_classifier"
-              :showValidFeedBack="showValidFeedBack"
-              :context="context"
-              :extraHeadings="1"
-              :editId="editId"
-              :headingObj="tableHeadingsPack.kycClassifier[0]"
-            >
-              <template v-if="this.context !== 'view'">
-                <td>
-                  <div class="cell">
-                    <AbaButton
-                      context="primary"
-                      @click="createNewField('kycClassifier')"
-                      tooltip="add new kyc"
-                    >
-                      <i class="fa  fa-plus"></i>
-                    </AbaButton>
-                  </div>
-                </td>
-              </template>
-            </SingleFieldTable>
-          </div>
-        </div>
-        <hr>
-        <div class="col-sm-12 tabel-wrapper">
-          <div class="py-1">5
-            <SingleFieldTable
-              :tableData="tableViewData"
-              filedName="matrixPID"
-              :context="context"
-              label="card_program.create.table_header.matrix_pid"
-              @input="listenToInput($event,'matrixPID')"
-              striped bordered
-              :showValidFeedBack="showValidFeedBack"
-              :extraHeadings="1"
-              :editId="editId"
-              :headingObj="tableHeadingsPack.matrixPID[0]"
-            >
-              <template v-if="this.context !== 'view'">
-                <td>
-                  <div class="cell">
-                    <AbaButton
-                      context="primary"
-                      @click="createNewField('matrixPID')"
-                      tooltip="create new matrixPID"
-                    >
-                      <i class="fa  fa-plus"></i>
-                    </AbaButton>
-                  </div>
-                </td>
-              </template>
-            </SingleFieldTable>
-          </div>
-          <br>
-          <slide-y-down-transition>
-            <p v-if="edit || context ==='create'">
-              <span class="required-field-sympol">
-                <b>*</b>
-              </span>
-              {{ $t('card_program.create.common.required_fields') }}
-            </p>
-          </slide-y-down-transition>
-        </div>
-      </div>
-    </div>
-	-->
-
 		<!-- New style mock start-->
 		<div class="row">
 
@@ -772,8 +616,6 @@ export default {
 					let response = await this.$http.aba1.get(`/cardprograms/${this.$route.params.id}`)
 					
 					this.cardProgramData = response.data
-					// After load checks and modifications
-					delete this.cardProgramData.id
 					// Add at least one free item to each of lists
 					if (this.cardProgramData.kycClassifier.length === 0) {
 						this.cardProgramData.kycClassifier.push('')
@@ -806,10 +648,15 @@ export default {
 				data.kycClassifier = data.kycClassifier.filter(item => item)
 				data.matrixPID = data.matrixPID.filter(item => item) 
 
-				await this.$http.aba1.put(`/cardprograms/${this.$route.params.id}`, data)
+				if (this.cardProgramData.id) {
+					delete this.cardProgramData.id
+					await this.$http.aba1.put(`/cardprograms/${this.$route.params.id}`, data)
+				} else {
+					await this.$http.aba1.post(`/cardprograms/${this.$route.params.id}`, data)
+				}
+				
 				this.onCancel()
 			} catch (error) {
-				console.log(error)
 				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('card_program.errors.save_card_program') + error.message, status: 'danger' })
 			}
 		},
