@@ -76,7 +76,13 @@ const create = {
   }
 }
 
+const errors = {
+	get_card_program: 'Error while loading card program: ',
+	save_card_program: 'Error while saving card program: '
+}
+
 export default {
   listing,
-  create
+	create,
+	errors
 }

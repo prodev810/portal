@@ -355,7 +355,7 @@
 								<div class="col-12 d-flex align-items-center">KYC CLASS {{ index + 1 }}<span class="required-field-sympol">＊</span></div>
 								<div class="col-12 mb-0">
 									<input v-model="cardProgramData.kycClassifier[index]"
-												 v-validate="'required'"
+												 v-validate="'required|max:5'" maxlength="5"
 												 :name="`kyc${index}`"
 												 :data-vv-as="`kyc class ${index + 1}`"
 												 type="text" 
@@ -432,32 +432,6 @@
     </div>
 
     <Spinner v-if="loading"/>
-
-
-		<!--
-    <div class="row">
-      <div class="col-md-12 mt-5">
-        <div class="text-center ceevo__btn-group">
-          <p-button round type="primary" @click="handlePrimaryAction"
-                    :disabled="!(context ==='view' || (isValid && context!== 'view' && dirty ))"
-                    v-if="hasPermission(permission.CARD_PROGRAM_EDIT)"
-          >
-            <div class="d-flex align-items-center">
-              <loader v-if="loadingState ==='sending'"></loader>
-              {{ $t(this.context === 'view' ? 'card_program.create.button.edit' : 'card_program.create.button.save') }}
-            </div>
-          </p-button>
-          <p-button round @click="secondaryAction"> {{ $t(context === 'view' ? 'card_program.create.button.back' : 'card_program.create.button.cancel') }} </p-button>
-        </div>
-      </div>
-    </div>
-    <template
-      v-if="loadingState ==='getting'"
-    >
-      <Spinner
-      ></Spinner>
-    </template>
-		-->
   </div>
 </template>
 
@@ -780,18 +754,6 @@ export default {
 		editMode () {
 			return this.$route.params.id !== 'new'
 		}
-
-		/*
-		...mapGetters({
-			loadingState: GETTER_LOADINGSTATE_CARD_PROGRAM,
-			activeCard: GETTER_ACTIVE_CARD,
-		}),
-		creationResponseState() { return this.$store.state.UiModule.responseState[ADD_CARD_PROGRAM]},
-		editionResponseState() { return this.$store.state.UiModule.responseState[EDIT_CARD_PROGRAM]},
-		isValid() {
-			return Object.keys(this.valid).reduce((acc, i) => acc && this.valid[i], true)
-		},
-		*/
 	}, 
 	watch: {		
 		'$route': {
@@ -800,41 +762,6 @@ export default {
 				this.getData()
 			}
 		}
-
-		/*
-		activeCard(newVal) {
-			this.tableViewData = [newVal];
-		},
-		creationResponseState(newVal, oldVal) {
-			if (!oldVal) return this.sweetAlertHandler(newVal)
-			if (newVal.timeStamp === oldVal.timeStamp) return;
-			this.sweetAlertHandler(newVal)
-		},
-		editionResponseState(newVal, oldVal) {
-			if (!oldVal) return this.sweetAlertHandler(newVal)
-			if (newVal.timeStamp === oldVal.timeStamp) return;
-			this.sweetAlertHandler(newVal)
-		}, 
-		editId(newVal, oldVal) {
-			if (this.context === 'view' && newVal) {
-				this.context = 'edit'
-			}
-		}, 
-		$route(newVal, oldVal) {
-			const {id, read_only} = newVal.params;
-			if (!id) {
-				this.context = 'create';
-				this.tableViewData = [createNewRowFromHeadings([
-					...this.tableHeadingsPack.main,
-					...this.tableHeadingsPack.fees,
-					...this.tableHeadingsPack.middle,
-					...this.tableHeadingsPack.matrixPID,
-					...this.tableHeadingsPack.kycClassifier,
-				], 'card_program_new_row')]
-				this.editId = 'card_program_new_row';
-			}
-		}
-		*/
 	},
 	methods: {
 		async getData () {
@@ -866,7 +793,7 @@ export default {
 					this.$validator.validateAll()
 				})
 			} catch (error) {
-				dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + error.message, status: 'danger' })
+				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('card_program.errors.get_card_program') + error.message, status: 'danger' })
 			}
 
 			this.loading = false
@@ -877,12 +804,13 @@ export default {
 
 				// Filter lists
 				data.kycClassifier = data.kycClassifier.filter(item => item)
-				data.cardProgramData.matrixPID = data.matrixPID.filter(item => item) 
+				data.matrixPID = data.matrixPID.filter(item => item) 
 
 				await this.$http.aba1.put(`/cardprograms/${this.$route.params.id}`, data)
 				this.onCancel()
 			} catch (error) {
-				dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + error.message, status: 'danger' })
+				console.log(error)
+				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('card_program.errors.save_card_program') + error.message, status: 'danger' })
 			}
 		},
 		onCancel () {
