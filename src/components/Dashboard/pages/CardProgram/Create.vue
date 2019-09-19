@@ -167,7 +167,7 @@
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">PSF REF <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<input v-model="cardProgramData.psfRef"
-											 v-validate.initial="'required|length:7'" maxlength="7"
+											 v-validate="'required|max:7'" maxlength="7"
 											 name="psfRef"
 											 type="text" 
 											 placeholder="psf Ref" 
@@ -179,7 +179,7 @@
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">ISSUER INST <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<input v-model="cardProgramData.issuerInst" 
-											 v-validate.initial="'required|length:5'" maxlength="5"
+											 v-validate="'required|length:5'" maxlength="5"
 											 name="issuerInst"
 											 data-vv-as="issuer inst"											 
 											 type="text" 
@@ -192,7 +192,7 @@
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">PM INST <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<input v-model="cardProgramData.pmInst" 
-											 v-validate.initial="'required|length:5'" maxlength="5"
+											 v-validate="'required|length:5'" maxlength="5"
 											 name="pmInst"
 											 data-vv-as="PM inst"
 											 type="text" 
@@ -205,7 +205,7 @@
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">PO INST <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<input v-model="cardProgramData.poInst"
-											 v-validate.initial="'required|length:5'" maxlength="5"
+											 v-validate="'required|length:5'" maxlength="5"
 											 name="poInst"
 											 data-vv-as="PO inst"
 											 type="text" 
@@ -218,7 +218,7 @@
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">Card Program Code <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<input v-model="cardProgramData.cardProgCode" 
-											 v-validate.initial="'required|length:5'" maxlength="5"
+											 v-validate="'required|length:5'" maxlength="5"
 											 name="cardProgCode"
 											 data-vv-as="card program code"
 											 type="text" 
@@ -231,7 +231,7 @@
 							<div class="col-12 d-flex align-items-center">CARD PROGRAM DESCRIPTION <span class="required-field-sympol">＊</span></div>
 							<div class="col-12">
 								<textarea v-model="cardProgramData.cardProgDesc"
-													v-validate.initial="'required|max:40'" maxlength="40" rows="2"
+													v-validate="'required|max:40'" maxlength="40" rows="2"
 													name="cardProgDesc"
 													data-vv-as="card program description"
 													placeholder="Card Program Description"/>
@@ -250,7 +250,7 @@
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">BUREAU INST CODE <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<input v-model="cardProgramData.cardPrinterCode" 
-										   v-validate.initial="'required|length:5'" maxlength="5"
+										   v-validate="'required|length:5'" maxlength="5"
   										 name="cardPrinterCode"
 											 data-vv-as="bureau inst code"
 											 type="text" 
@@ -263,7 +263,7 @@
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">DEFAULT CURRENCY <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<input v-model="cardProgramData.defaultCurrencyCode" 
-										   v-validate.initial="'required'"
+										   v-validate="'required'"
   										 name="defaultCurrencyCode"
 											 data-vv-as="default currency"
 											 type="text" 
@@ -276,7 +276,7 @@
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">ALERT CONTACT E-MAIL <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<input v-model="cardProgramData.alertContact" 
-										   v-validate.initial="'required|email'"
+										   v-validate="'required|email'"
   										 name="alertContact"
 											 data-vv-as="alert contact email"
 											 type="text" 
@@ -349,17 +349,17 @@
 					<div class="card-content p-4">
 						<!-- KYC Classes -->
 						<div v-for="(kyc, index) in cardProgramData.kycClassifier" 
-								 :key="index"
+								 :key="`kyc${index}`"
 								 class="row mb-0">
 							<div class="kyc-adding w-75">
 								<div class="col-12 d-flex align-items-center">KYC CLASS {{ index + 1 }}<span class="required-field-sympol">＊</span></div>
 								<div class="col-12 mb-0">
 									<input v-model="cardProgramData.kycClassifier[index]"
-												 v-validate.initial="'required'"
+												 v-validate="'required'"
 												 :name="`kyc${index}`"
 												 :data-vv-as="`kyc class ${index + 1}`"
 												 type="text" 
-												 placeholder="KYC Class 1" 
+												 :placeholder="`KYC Class ${index + 1}`" 
 												 class="form-control  form-control-danger"/>
 									<div class="validation-error">{{ errors.first(`kyc${index}`) }}</div>
 								</div>
@@ -373,19 +373,39 @@
 
 							<button v-else 
 										  class="el-tooltip aba__button" 
-											@click="cardProgramData.kycClassifier.push('')">
+											@click="addElement(cardProgramData.kycClassifier)">
 								<i class="el-icon-plus"></i>
 							</button>
 						</div>
 
 						<hr>
 						
-						<div class="row mb-3">
-							<div class="pid-adding w-75">
-								<div class="col-12 d-flex align-items-center">MARTIX PID 1 <span class="required-field-sympol">＊</span></div>
-								<div class="col-12 mb-3"><input type="text" placeholder="Matrix PID 1" class="form-control  form-control-danger"></div>
+						<div v-for="(matrix, index) in cardProgramData.matrixPID" 
+								 :key="`matrix${index}`"
+								 class="row mb-0">
+							<div class="kyc-adding w-75">
+								<div class="col-12 d-flex align-items-center">MARTIX PID {{ index + 1 }}<span class="required-field-sympol">＊</span></div>
+								<div class="col-12 mb-0">
+									<input v-model="cardProgramData.matrixPID[index]"
+												 v-validate="'required'"
+												 :name="`matrix${index}`"
+												 :data-vv-as="`matrix PID ${index + 1}`"
+												 type="text" 
+												 :placeholder="`Matrix PID ${index + 1}`" 
+												 class="form-control  form-control-danger"/>
+									<div class="validation-error">{{ errors.first(`matrix${index}`) }}</div>
+								</div>
 							</div>
-							<button class="el-tooltip aba__button btn-primary"  tabindex="0">
+
+							<button v-if="index > 0" 
+											class="el-tooltip aba__button" 
+											@click="cardProgramData.matrixPID.splice(index, 1)">
+								<i class="el-icon-delete"></i>
+							</button>
+
+							<button v-else 
+										  class="el-tooltip aba__button" 
+											@click="addElement(cardProgramData.matrixPID)">
 								<i class="el-icon-plus"></i>
 							</button>
 						</div>
@@ -835,11 +855,16 @@ export default {
 					if (this.cardProgramData.matrixPID.length === 0) {
 						this.cardProgramData.matrixPID.push('')
 					}
+
 				} else {
 					// Set clean data for create
-					// no nested props
+					// no nested props so we can use Object.assign
 					this.cardProgramData = Object.assign({}, emptyCardProgramData)
 				}
+
+				this.$nextTick(() => {
+					this.$validator.validateAll()
+				})
 			} catch (error) {
 				dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_merchants') + error.message, status: 'danger' })
 			}
@@ -862,7 +887,14 @@ export default {
 		},
 		onCancel () {
 			this.$router.push('/card-program/view')
-		}
+		},
+		addElement (arr) {
+			arr.push('')
+			// revalidate on nextTick because we need DOM update after inserting item into array
+			this.$nextTick(() => {
+				this.$validator.validateAll()
+			})
+		},
 
 		/*
 		...mapActions({
@@ -998,38 +1030,6 @@ export default {
 				AbaModalEvents.$off(key)
 			})
 
-		}
-		*/
-	},
-	mounted () {
-		/*
-		try {
-			const {id} = this.$route.params;
-			const {edit} = this.$route.query
-			this.edit = !!edit;
-			console.log(id)
-			if (id) {
-				if (!edit) {
-					this.context = 'view';
-				} else {
-					this.context = 'edit';
-					this.editId = id;
-				}
-				// get the card Program by id
-				this.getActiveCard(id);
-			}
-			if (this.context === 'create') {
-				this.tableViewData.push(createNewRowFromHeadings([
-					...this.tableHeadingsPack.main,
-					...this.tableHeadingsPack.fees,
-					...this.tableHeadingsPack.middle,
-					...this.tableHeadingsPack.matrixPID,
-					...this.tableHeadingsPack.kycClassifier,
-				], 'card_program_new_row'));
-				this.editId = 'card_program_new_row';
-			}
-		} catch (e) {
-			console.log(e);
 		}
 		*/
 	}
