@@ -96,7 +96,19 @@ export default {
 
     button_new: 'New acquirer',
     button_view: 'View acquirer'
-  },
+	},
+	transactions: {
+		header: {
+			merchant_id: 'Merchant',
+			method_code: 'Method',
+			payer_id: 'Client',
+			proc_processor: 'Processor',
+			status: 'Status',
+			sub_type: 'Type',
+			transaction_date: 'Date'
+		},
+		error_get_transactions: 'Error while getting transactions: '
+	},
   button_view: 'View',
   button_add: 'Add',
   button_history: 'History',
