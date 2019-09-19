@@ -192,17 +192,11 @@
       },
       editCardProgram(index) {
         this.$router.history.push({
-          path: `/card-program/card/${index.index.row.id}`,
-          query: {
-            edit: true
-          }
+          path: `/card-program/card/${index.index.row.id}`
         })
       }, viewDetailedCardProgram(index) {
         this.$router.history.push({
-          path: `/card-program/card/${index.index.row.id}`,
-          query: {
-            edit: false
-          }
+          path: `/card-program/card/${index.index.row.id}/view`
         })
       },
       handleEditAction() {

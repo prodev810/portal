@@ -10,76 +10,94 @@
 						<div class="row mb-0">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">PSF REF <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<input v-model="cardProgramData.psfRef"
-											 v-validate="'required|max:7'" maxlength="7"
-											 name="psfRef"
-											 type="text" 
-											 placeholder="psf Ref" 
-											 class="form-control form-control-danger">
-								<div class="validation-error">{{ errors.first('psfRef') }}</div>
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.psfRef }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.psfRef"
+												v-validate="'required|max:7'" maxlength="7"
+												name="psfRef"
+												type="text" 
+												placeholder="psf Ref" 
+												class="form-control form-control-danger">
+									<div class="validation-error">{{ errors.first('psfRef') }}</div>
+								</template>
 							</div>
 						</div>
 						<div class="row mb-0">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">ISSUER INST <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<input v-model="cardProgramData.issuerInst" 
-											 v-validate="'required|length:5'" maxlength="5"
-											 name="issuerInst"
-											 data-vv-as="issuer inst"											 
-											 type="text" 
-											 placeholder="Issuer inst" 
-											 class="form-control form-control-danger">
-								<div class="validation-error">{{ errors.first('issuerInst') }}</div>
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.issuerInst }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.issuerInst" 
+												v-validate="'required|length:5'" maxlength="5"
+												name="issuerInst"
+												data-vv-as="issuer inst"											 
+												type="text" 
+												placeholder="Issuer inst" 
+												class="form-control form-control-danger">
+									<div class="validation-error">{{ errors.first('issuerInst') }}</div>
+								</template>
 							</div>
 						</div>
 						<div class="row mb-0">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">PM INST <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<input v-model="cardProgramData.pmInst" 
-											 v-validate="'required|length:5'" maxlength="5"
-											 name="pmInst"
-											 data-vv-as="PM inst"
-											 type="text" 
-											 placeholder="PM inst" 
-											 class="form-control form-control-danger">
-								<div class="validation-error">{{ errors.first('pmInst') }}</div>
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.pmInst }}</div>
+								<template v-else>								
+									<input v-model="cardProgramData.pmInst" 
+												v-validate="'required|length:5'" maxlength="5"
+												name="pmInst"
+												data-vv-as="PM inst"
+												type="text" 
+												placeholder="PM inst" 
+												class="form-control form-control-danger">
+									<div class="validation-error">{{ errors.first('pmInst') }}</div>
+								</template>
 							</div>
 						</div>
 						<div class="row mb-0">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">PO INST <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<input v-model="cardProgramData.poInst"
-											 v-validate="'required|length:5'" maxlength="5"
-											 name="poInst"
-											 data-vv-as="PO inst"
-											 type="text" 
-											 placeholder="PO inst" 
-											 class="form-control form-control-danger">
-								<div class="validation-error">{{ errors.first('poInst') }}</div>
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.poInst }}</div>
+								<template v-else>								
+									<input v-model="cardProgramData.poInst"
+												v-validate="'required|length:5'" maxlength="5"
+												name="poInst"
+												data-vv-as="PO inst"
+												type="text" 
+												placeholder="PO inst" 
+												class="form-control form-control-danger">
+									<div class="validation-error">{{ errors.first('poInst') }}</div>
+								</template>
 							</div>
 						</div>
 						<div class="row mb-0">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">Card Program Code <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<input v-model="cardProgramData.cardProgCode" 
-											 v-validate="'required|length:5'" maxlength="5"
-											 name="cardProgCode"
-											 data-vv-as="card program code"
-											 type="text" 
-											 placeholder="CPC" 
-											 class="form-control form-control-danger">
-								<div class="validation-error">{{ errors.first('cardProgCode') }}</div>
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardProgCode }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.cardProgCode" 
+												v-validate="'required|length:5'" maxlength="5"
+												name="cardProgCode"
+												data-vv-as="card program code"
+												type="text" 
+												placeholder="CPC" 
+												class="form-control form-control-danger">
+									<div class="validation-error">{{ errors.first('cardProgCode') }}</div>
+								</template>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-12 d-flex align-items-center">CARD PROGRAM DESCRIPTION <span class="required-field-sympol">＊</span></div>
 							<div class="col-12">
-								<textarea v-model="cardProgramData.cardProgDesc"
-													v-validate="'required|max:40'" maxlength="40" rows="2"
-													name="cardProgDesc"
-													data-vv-as="card program description"
-													placeholder="Card Program Description"/>
-								<div class="validation-error">{{ errors.first('cardProgDesc') }}</div>
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardProgDesc }}</div>
+								<template v-else>
+									<textarea v-model="cardProgramData.cardProgDesc"
+														v-validate="'required|max:40'" maxlength="40" rows="2"
+														name="cardProgDesc"
+														data-vv-as="card program description"
+														placeholder="Card Program Description"/>
+									<div class="validation-error">{{ errors.first('cardProgDesc') }}</div>
+								</template>
 							</div>
 						</div>
 					</div>
@@ -93,94 +111,130 @@
 						<div class="row mb-0">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">BUREAU INST CODE <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<input v-model="cardProgramData.cardPrinterCode" 
-										   v-validate="'required|length:5'" maxlength="5"
-  										 name="cardPrinterCode"
-											 data-vv-as="bureau inst code"
-											 type="text" 
-											 placeholder="BUREAU INST CODE" 
-											 class="form-control form-control-danger">
-								<div class="validation-error">{{ errors.first('cardPrinterCode') }}</div>
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardPrinterCode }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.cardPrinterCode" 
+												v-validate="'required|length:5'" maxlength="5"
+												name="cardPrinterCode"
+												data-vv-as="bureau inst code"
+												type="text" 
+												placeholder="BUREAU INST CODE" 
+												class="form-control form-control-danger">
+									<div class="validation-error">{{ errors.first('cardPrinterCode') }}</div>
+								</template>
 							</div>
 						</div>
 						<div class="row mb-0">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">DEFAULT CURRENCY <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<input v-model="cardProgramData.defaultCurrencyCode" 
-										   v-validate="'required'"
-  										 name="defaultCurrencyCode"
-											 data-vv-as="default currency"
-											 type="text" 
-											 placeholder="DEFAULT CURRENCY" 
-											 class="form-control form-control-danger">
-								<div class="validation-error">{{ errors.first('defaultCurrencyCode') }}</div>
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.defaultCurrencyCode }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.defaultCurrencyCode" 
+												v-validate="'required'"
+												name="defaultCurrencyCode"
+												data-vv-as="default currency"
+												type="text" 
+												placeholder="DEFAULT CURRENCY" 
+												class="form-control form-control-danger">
+									<div class="validation-error">{{ errors.first('defaultCurrencyCode') }}</div>
+								</template>
 							</div>
 						</div>
 						<div class="row mb-0">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">ALERT CONTACT E-MAIL <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<input v-model="cardProgramData.alertContact" 
-										   v-validate="'required|email'"
-  										 name="alertContact"
-											 data-vv-as="alert contact email"
-											 type="text" 
-											 placeholder="ALERT CONTACT E-MAIL" 
-											 class="form-control form-control-danger">
-								<div class="validation-error">{{ errors.first('alertContact') }}</div>
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.alertContact }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.alertContact" 
+												v-validate="'required|email'"
+												name="alertContact"
+												data-vv-as="alert contact email"
+												type="text" 
+												placeholder="ALERT CONTACT E-MAIL" 
+												class="form-control form-control-danger">
+									<div class="validation-error">{{ errors.first('alertContact') }}</div>
+								</template>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">LOAD FEE</div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<input v-model="cardProgramData.loadFee" type="text" placeholder="LOAD FEE" class="form-control  form-control-danger">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFee }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.loadFee" type="text" placeholder="LOAD FEE" class="form-control  form-control-danger">
+								</template>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">LOAD FEE %</div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<input v-model="cardProgramData.loadFeePct" type="text" placeholder="LOAD FEE %" class="form-control  form-control-danger">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFeePct }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.loadFeePct" type="text" placeholder="LOAD FEE %" class="form-control  form-control-danger">
+								</template>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">CHARGED TO</div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<ChargedTo v-model="cardProgramData.loadFeebillMethod"/>
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFeebillMethod }}</div>
+								<template v-else>
+									<ChargedTo v-model="cardProgramData.loadFeebillMethod"/>
+								</template>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">APPLICATION FEE</div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<input v-model="cardProgramData.appFee" type="text" placeholder="APPLICATION FEE" class="form-control  form-control-danger">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.appFee }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.appFee" type="text" placeholder="APPLICATION FEE" class="form-control  form-control-danger">
+								</template>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">CHARGED TO</div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<ChargedTo v-model="cardProgramData.appFeeBillMethod"/>
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.appFeeBillMethod }}</div>
+								<template v-else>
+									<ChargedTo v-model="cardProgramData.appFeeBillMethod"/>
+								</template>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">MONTHLY FEE</div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<input v-model="cardProgramData.monthlyFee" type="text" placeholder="MONTHLY FEE" class="form-control  form-control-danger">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.monthlyFee }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.monthlyFee" type="text" placeholder="MONTHLY FEE" class="form-control  form-control-danger">
+								</template>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">CHARGED TO</div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<ChargedTo v-model="cardProgramData.monthlyFeeBillMethod"/>
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.monthlyFeeBillMethod }}</div>
+								<template v-else>
+									<ChargedTo v-model="cardProgramData.monthlyFeeBillMethod"/>
+								</template>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">API FEE</div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<input v-model="cardProgramData.apiFee" type="text" placeholder="API FEE" class="form-control  form-control-danger">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.apiFee }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.apiFee" type="text" placeholder="API FEE" class="form-control  form-control-danger">
+								</template>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">CHARGED TO</div>
 							<div class="col-12 col-lg-12 col-xl-7">
-								<ChargedTo v-model="cardProgramData.apiFeeBillMethod"/>
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.apiFeeBillMethod }}</div>
+								<template v-else>
+									<ChargedTo v-model="cardProgramData.apiFeeBillMethod"/>
+								</template>
 							</div>
 						</div>
 					</div>
@@ -198,28 +252,33 @@
 							<div class="kyc-adding w-75">
 								<div class="col-12 d-flex align-items-center">KYC CLASS {{ index + 1 }}<span class="required-field-sympol">＊</span></div>
 								<div class="col-12 mb-0">
-									<input v-model="cardProgramData.kycClassifier[index]"
-												 v-validate="'required|max:5'" maxlength="5"
-												 :name="`kyc${index}`"
-												 :data-vv-as="`kyc class ${index + 1}`"
-												 type="text" 
-												 :placeholder="`KYC Class ${index + 1}`" 
-												 class="form-control  form-control-danger"/>
-									<div class="validation-error">{{ errors.first(`kyc${index}`) }}</div>
+									<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.kycClassifier[index] }}</div>
+									<template v-else>									
+										<input v-model="cardProgramData.kycClassifier[index]"
+													v-validate="'required|max:5'" maxlength="5"
+													:name="`kyc${index}`"
+													:data-vv-as="`kyc class ${index + 1}`"
+													type="text" 
+													:placeholder="`KYC Class ${index + 1}`" 
+													class="form-control  form-control-danger"/>
+										<div class="validation-error">{{ errors.first(`kyc${index}`) }}</div>
+									</template>
 								</div>
 							</div>
 
-							<button v-if="index > 0" 
-											class="el-tooltip aba__button" 
-											@click="cardProgramData.kycClassifier.splice(index, 1)">
-								<i class="el-icon-delete"></i>
-							</button>
+							<template v-if="!viewMode">
+								<button v-if="index > 0" 
+												class="el-tooltip aba__button" 
+												@click="cardProgramData.kycClassifier.splice(index, 1)">
+									<i class="el-icon-delete"></i>
+								</button>
 
-							<button v-else 
-										  class="el-tooltip aba__button" 
-											@click="addElement(cardProgramData.kycClassifier)">
-								<i class="el-icon-plus"></i>
-							</button>
+								<button v-else 
+												class="el-tooltip aba__button" 
+												@click="addElement(cardProgramData.kycClassifier)">
+									<i class="el-icon-plus"></i>
+								</button>
+							</template>
 						</div>
 
 						<hr>
@@ -230,28 +289,33 @@
 							<div class="kyc-adding w-75">
 								<div class="col-12 d-flex align-items-center">MARTIX PID {{ index + 1 }}<span class="required-field-sympol">＊</span></div>
 								<div class="col-12 mb-0">
-									<input v-model="cardProgramData.matrixPID[index]"
-												 v-validate="'required'"
-												 :name="`matrix${index}`"
-												 :data-vv-as="`matrix PID ${index + 1}`"
-												 type="text" 
-												 :placeholder="`Matrix PID ${index + 1}`" 
-												 class="form-control  form-control-danger"/>
-									<div class="validation-error">{{ errors.first(`matrix${index}`) }}</div>
+									<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.matrixPID[index] }}</div>
+									<template v-else>									
+										<input v-model="cardProgramData.matrixPID[index]"
+													v-validate="'required'"
+													:name="`matrix${index}`"
+													:data-vv-as="`matrix PID ${index + 1}`"
+													type="text" 
+													:placeholder="`Matrix PID ${index + 1}`" 
+													class="form-control  form-control-danger"/>
+										<div class="validation-error">{{ errors.first(`matrix${index}`) }}</div>
+									</template>
 								</div>
 							</div>
 
-							<button v-if="index > 0" 
-											class="el-tooltip aba__button" 
-											@click="cardProgramData.matrixPID.splice(index, 1)">
-								<i class="el-icon-delete"></i>
-							</button>
+							<template v-if="!viewMode">
+								<button v-if="index > 0" 
+												class="el-tooltip aba__button" 
+												@click="cardProgramData.matrixPID.splice(index, 1)">
+									<i class="el-icon-delete"></i>
+								</button>
 
-							<button v-else 
-										  class="el-tooltip aba__button" 
-											@click="addElement(cardProgramData.matrixPID)">
-								<i class="el-icon-plus"></i>
-							</button>
+								<button v-else 
+												class="el-tooltip aba__button" 
+												@click="addElement(cardProgramData.matrixPID)">
+									<i class="el-icon-plus"></i>
+								</button>
+							</template>
 						</div>
 					</div>
 				</div>
@@ -348,10 +412,15 @@ export default {
 
 		ChargedTo
 	},
+	props: {
+		viewMode: {
+			type: Boolean,
+			default: false
+		}
+	},
 	data() {
 		return {
 			loading: true,
-			viewMode: false,
 			cardProgramData: Object.assign({}, emptyCardProgramData)
 
 			/*
@@ -870,5 +939,11 @@ export default {
 			margin-top: 6px;
 		}
 	}
+}
+.view-mode-value {
+	height: 39px;
+	margin-bottom: 16px;
+	display: flex;
+	align-items: center;
 }
 </style>

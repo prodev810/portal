@@ -58,28 +58,32 @@ let cardProgram = {
     roles: ['*'],
   },
   children: [
-		/*
     {
-      path: 'new',
-      name: 'Create card program',
-      component: Create,
+      path: 'card/:id',
+      name: 'Edit card program',
+			component: Create,
+			props: {
+				viewMode: false
+			},
       meta: {
         //permission: permission.CARD_PROGRAM_EDIT,
         requiresAuth: true,
         roles: ['*'],
       }
 		},
-		*/
     {
-      path: 'card/:id',
-      name: 'Edit card program',
-      component: Create,
+      path: 'card/:id/view',
+      name: 'View card program',
+			component: Create,			
+			props: {
+				viewMode: true
+			},		
       meta: {
         //permission: permission.CARD_PROGRAM_EDIT,
         requiresAuth: true,
         roles: ['*'],
       }
-    },
+    },		
     {
       path: 'view',
       name: 'View Card Programs',
