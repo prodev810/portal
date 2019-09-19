@@ -327,7 +327,7 @@
       <div class="col-md-12 mt-5">
         <div class="text-center ceevo__btn-group">
           <p-button round type="primary" @click="onSave"
-                    :disabled="errors.all().length > 0"
+                    :disabled="!viewMode && errors.all().length > 0"
                     v-if="hasPermission(permission.CARD_PROGRAM_EDIT)">
             <div class="d-flex align-items-center">
               <!--<loader v-if="loadingState ==='sending'"></loader>-->
@@ -710,28 +710,32 @@ export default {
 			this.loading = false
 		},
 		async onSave () {
-			this.loading = true
+			if (this.viewMode) {
+				this.$router.push(`/card-program/card/${this.$route.params.id}`)
+			} else {
+				this.loading = true
 
-			try {
-				let data = Object.assign({}, this.cardProgramData)
+				try {
+					let data = Object.assign({}, this.cardProgramData)
 
-				// Filter lists
-				data.kycClassifier = data.kycClassifier.filter(item => item)
-				data.matrixPID = data.matrixPID.filter(item => item) 
+					// Filter lists
+					data.kycClassifier = data.kycClassifier.filter(item => item)
+					data.matrixPID = data.matrixPID.filter(item => item) 
 
-				if (this.cardProgramData.id) {
-					delete this.cardProgramData.id
-					await this.$http.aba1.put(`/cardprograms/${this.$route.params.id}`, data)
-				} else {
-					await this.$http.aba1.post(`/cardprograms/`, data)
+					if (this.cardProgramData.id) {
+						delete this.cardProgramData.id
+						await this.$http.aba1.put(`/cardprograms/${this.$route.params.id}`, data)
+					} else {
+						await this.$http.aba1.post(`/cardprograms/`, data)
+					}
+					
+					this.onCancel()
+				} catch (error) {
+					this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('card_program.errors.save_card_program') + error.message, status: 'danger' })
 				}
-				
-				this.onCancel()
-			} catch (error) {
-				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('card_program.errors.save_card_program') + error.message, status: 'danger' })
-			}
 
-			this.loading = false
+				this.loading = false
+			}
 		},
 		onCancel () {
 			this.$router.push('/card-program/view')
