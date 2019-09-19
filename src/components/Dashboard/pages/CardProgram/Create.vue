@@ -652,7 +652,7 @@ export default {
 					delete this.cardProgramData.id
 					await this.$http.aba1.put(`/cardprograms/${this.$route.params.id}`, data)
 				} else {
-					await this.$http.aba1.post(`/cardprograms/${this.$route.params.id}`, data)
+					await this.$http.aba1.post(`/cardprograms/`, data)
 				}
 				
 				this.onCancel()
