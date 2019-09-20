@@ -8,7 +8,7 @@
 				<div class="card ceevo__card-group">
 					<div class="card-content p-4">
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">PSF REF <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">PSF REF <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.psfRef }}</div>
 								<template v-else>
@@ -23,7 +23,7 @@
 							</div>
 						</div>
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">ISSUER INST <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">ISSUER INST <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.issuerInst }}</div>
 								<template v-else>
@@ -39,7 +39,7 @@
 							</div>
 						</div>
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">PM INST <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">PM INST <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.pmInst }}</div>
 								<template v-else>								
@@ -55,7 +55,7 @@
 							</div>
 						</div>
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">PO INST <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">PO INST <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.poInst }}</div>
 								<template v-else>								
@@ -71,7 +71,7 @@
 							</div>
 						</div>
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">Card Program Code <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">Card Program Code <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardProgCode }}</div>
 								<template v-else>
@@ -109,7 +109,7 @@
 				<div class="card ceevo__card-group">
 					<div class="card-content p-4">
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">BUREAU INST CODE <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">BUREAU INST CODE <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardPrinterCode }}</div>
 								<template v-else>
@@ -125,7 +125,7 @@
 							</div>
 						</div>
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">DEFAULT CURRENCY <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">DEFAULT CURRENCY <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.defaultCurrencyCode }}</div>
 								<template v-else>
@@ -141,7 +141,7 @@
 							</div>
 						</div>
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">ALERT CONTACT E-MAIL <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">ALERT CONTACT E-MAIL <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.alertContact }}</div>
 								<template v-else>
