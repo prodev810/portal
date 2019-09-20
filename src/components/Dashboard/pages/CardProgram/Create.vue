@@ -130,7 +130,7 @@
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.defaultCurrencyCode }}</div>
 								<template v-else>
 									<input v-model="cardProgramData.defaultCurrencyCode" 
-												v-validate="'required'"
+												v-validate="'required|currencyISO'"
 												name="defaultCurrencyCode"
 												data-vv-as="default currency"
 												type="text" 
