@@ -182,7 +182,11 @@
           this.resellers.length > 0 &&
           this.pendingFloats
         )) return;
-        const {cardProgCode} = this.cardPrograms.find(({id}) => id === this.cardProgramId);
+
+        const cardProgCode = this.cardPrograms.find(({ id }) => id === this.cardProgramId).cardProgramCode
+        console.log('id', this.cardProgramId)
+        console.log('card programs', this.cardPrograms)
+
         this.tableData = (this.pendingFloats['floatAccountEntryResultList'] || []).map(float => {
           // console.log(this.resellers)
           // const {name, resellerCode} = this.resellers.find(({cardProgramID}) => float.cardProgId === cardProgramID);
@@ -195,6 +199,8 @@
             amount: moneyFormatAppendCurrency(float.amount, float.currency || 'EUR')
           }
         })
+
+        console.log(this.tableData)
       },
       handleUpdatePendingFloats() {
         if (this.cardProgramId) {
