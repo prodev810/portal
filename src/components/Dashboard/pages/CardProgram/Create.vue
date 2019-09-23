@@ -1,5 +1,46 @@
 <template>
-  <div>
+  <div>    
+		<div class=" d-flex justify-content-between"
+         :class="{ ['section-header']: !editMode,
+    							 ['pb-3']: editMode }">
+      <h4 class="card-title display-inline  text-capitalize">
+        {{ $t('card_program.create.title', { action: actionName }) }}
+      </h4>
+    </div>
+
+    <div v-if="!editMode">
+      <p>
+        {{ $t('card_program.create.tips.create.line1') }}
+        <br/>
+        {{ $t('card_program.create.tips.create.line2') }}
+      </p>
+      <ul>
+        <li>{{ $t('card_program.create.tips.create.li1') }}</li>
+        <li>{{ $t('card_program.create.tips.create.li2') }}</li>
+      </ul>
+    </div>
+
+		<template v-else>
+			<div v-if="viewMode">
+				<p>
+					{{ $t('card_program.create.tips.view.line1') }}
+				</p>
+				<ul>
+					<li>{{ $t('card_program.create.tips.view.li1') }}</li>
+					<li>{{ $t('card_program.create.tips.view.li2') }}</li>
+				</ul>
+			</div>
+
+			<div v-else>
+				<p>
+					{{ $t('card_program.create.tips.edit.line1') }}
+				</p>
+				<ul>
+					<li>{{ $t('card_program.create.tips.edit.li1') }}</li>
+				</ul>
+			</div>
+		</template>
+
 		<!-- New style mock start-->
 		<div class="row">
 
@@ -8,7 +49,7 @@
 				<div class="card ceevo__card-group">
 					<div class="card-content p-4">
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">PSF REF <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label mb-xl-3">PSF REF <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.psfRef }}</div>
 								<template v-else>
@@ -23,7 +64,7 @@
 							</div>
 						</div>
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">ISSUER INST <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label mb-xl-3">ISSUER INST <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.issuerInst }}</div>
 								<template v-else>
@@ -39,7 +80,7 @@
 							</div>
 						</div>
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">PM INST <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label mb-xl-3">PM INST <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.pmInst }}</div>
 								<template v-else>								
@@ -55,7 +96,7 @@
 							</div>
 						</div>
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">PO INST <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label mb-xl-3">PO INST <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.poInst }}</div>
 								<template v-else>								
@@ -71,7 +112,7 @@
 							</div>
 						</div>
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">Card Program Code <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label mb-xl-3">Card Program Code <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardProgCode }}</div>
 								<template v-else>
@@ -87,7 +128,7 @@
 							</div>
 						</div>
 						<div class="row mb-3">
-							<div class="col-12 d-flex align-items-center">CARD PROGRAM DESCRIPTION <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 d-flex align-items-center control-label">CARD PROGRAM DESCRIPTION <span class="required-field-sympol">＊</span></div>
 							<div class="col-12">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardProgDesc }}</div>
 								<template v-else>
@@ -109,7 +150,7 @@
 				<div class="card ceevo__card-group">
 					<div class="card-content p-4">
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">BUREAU INST CODE <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label mb-xl-3">BUREAU INST CODE <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardPrinterCode }}</div>
 								<template v-else>
@@ -125,7 +166,7 @@
 							</div>
 						</div>
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">DEFAULT CURRENCY <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label mb-xl-3">DEFAULT CURRENCY <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.defaultCurrencyCode }}</div>
 								<template v-else>
@@ -141,7 +182,7 @@
 							</div>
 						</div>
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center mb-lg-3">ALERT CONTACT E-MAIL <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label mb-xl-3">ALERT CONTACT E-MAIL <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.alertContact }}</div>
 								<template v-else>
@@ -157,7 +198,7 @@
 							</div>
 						</div>
 						<div class="row mb-3">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">LOAD FEE</div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">LOAD FEE</div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFee }}</div>
 								<template v-else>
@@ -166,7 +207,7 @@
 							</div>
 						</div>
 						<div class="row mb-3">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">LOAD FEE %</div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">LOAD FEE %</div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFeePct }}</div>
 								<template v-else>
@@ -175,7 +216,7 @@
 							</div>
 						</div>
 						<div class="row mb-3">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">CHARGED TO</div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFeebillMethod }}</div>
 								<template v-else>
@@ -184,7 +225,7 @@
 							</div>
 						</div>
 						<div class="row mb-3">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">APPLICATION FEE</div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">APPLICATION FEE</div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.appFee }}</div>
 								<template v-else>
@@ -193,7 +234,7 @@
 							</div>
 						</div>
 						<div class="row mb-3">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">CHARGED TO</div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.appFeeBillMethod }}</div>
 								<template v-else>
@@ -202,7 +243,7 @@
 							</div>
 						</div>
 						<div class="row mb-3">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">MONTHLY FEE</div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">MONTHLY FEE</div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.monthlyFee }}</div>
 								<template v-else>
@@ -211,7 +252,7 @@
 							</div>
 						</div>
 						<div class="row mb-3">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">CHARGED TO</div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.monthlyFeeBillMethod }}</div>
 								<template v-else>
@@ -220,7 +261,7 @@
 							</div>
 						</div>
 						<div class="row mb-3">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">API FEE</div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">API FEE</div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.apiFee }}</div>
 								<template v-else>
@@ -229,7 +270,7 @@
 							</div>
 						</div>
 						<div class="row mb-3">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center">CHARGED TO</div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.apiFeeBillMethod }}</div>
 								<template v-else>
@@ -250,7 +291,7 @@
 								 :key="`kyc${index}`"
 								 class="row mb-0">
 							<div class="kyc-adding w-75">
-								<div class="col-12 d-flex align-items-center">KYC CLASS {{ index + 1 }}<span class="required-field-sympol">＊</span></div>
+								<div class="col-12 d-flex align-items-center control-label">KYC CLASS {{ index + 1 }}<span class="required-field-sympol">＊</span></div>
 								<div class="col-12 mb-0">
 									<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.kycClassifier[index] }}</div>
 									<template v-else>									
@@ -287,7 +328,7 @@
 								 :key="`matrix${index}`"
 								 class="row mb-0">
 							<div class="kyc-adding w-75">
-								<div class="col-12 d-flex align-items-center">MARTIX PID {{ index + 1 }}<span class="required-field-sympol">＊</span></div>
+								<div class="col-12 d-flex align-items-center control-label">MARTIX PID {{ index + 1 }}<span class="required-field-sympol">＊</span></div>
 								<div class="col-12 mb-0">
 									<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.matrixPID[index] }}</div>
 									<template v-else>									
@@ -422,250 +463,18 @@ export default {
 		return {
 			loading: true,
 			cardProgramData: Object.assign({}, emptyCardProgramData)
-
-			/*
-			secondLine: ['loadFee', 'loadFeePct', 'loadFeeCap'],
-			thirdLine: ['appFee', 'monthlyFee', 'apiFee'],
-			edit: false,
-			dirty: false,
-			tableHeadingsPack: {
-				main: [
-					{
-						label: 'psf Ref',
-						name: 'psfRef',
-						i18n: 'card_program.create.table_header.psf_ref',
-						required: true,
-						validator: [
-							verifySpecialCharacter,
-							exactNumber(7)
-						],
-						brakeAt: breakInput(7)
-
-					},
-					{
-						label: 'issuer Inst',
-						name: 'issuerInst',
-						i18n: 'card_program.create.table_header.issuer_inst',
-						required: true,
-						validator: [
-							verifySpecialCharacter,
-							exactNumber(5)
-						],
-						brakeAt: breakInput(5)
-					},
-					{
-						label: 'PM Inst',
-						name: 'pmInst',
-						i18n: 'card_program.create.table_header.pm_inst',
-						required: true,
-						validator: [
-							verifySpecialCharacter,
-							exactNumber(5)
-						],
-						brakeAt: breakInput(5)
-					},
-					{
-						label: 'PO Inst',
-						name: 'poInst',
-						i18n: 'card_program.create.table_header.po_inst',
-						required: true,
-						validator: [
-							verifySpecialCharacter,
-							exactNumber(5)
-						],
-						brakeAt: breakInput(5)
-					},
-					{
-						label: 'CPC',
-						name: 'cardProgCode',
-						i18n: 'card_program.create.table_header.card_prog_code',
-						required: true,
-						validator: [
-							verifySpecialCharacter,
-							exactNumber(5)
-						],
-						brakeAt: breakInput(5)
-					},
-					{
-						label: 'card program description',
-						name: 'cardProgDesc',
-						i18n: 'card_program.create.table_header.card_prog_desc',
-						required: true,
-						validator: limitedCharNumber(0, 40),
-						brakeAt: breakInput(40)
-					},
-				],
-				middle: [
-					{
-						label: 'Bureau inst code',
-						name: 'cardPrinterCode',
-						i18n: 'card_program.create.table_header.card_printer_code',
-						required: true,
-						validator: [
-							verifySpecialCharacter,
-							exactNumber(5)
-						],
-						brakeAt: breakInput(5)
-					},
-					{
-						label: 'default currency',
-						name: 'defaultCurrencyCode',
-						i18n: 'card_program.create.table_header.def_currency',
-						required: true,
-						validator: [mustBeAValidISOcurrency],
-						brakeAt: breakInput(3)
-					},
-					{
-						label: 'alert contact e-mail',
-						name: 'alertContact',
-						i18n: 'card_program.create.table_header.alert_contact',
-						required: true,
-						validator: [mustBeAnEmail], $domAttri: {type: 'email'},
-						brakeAt: breakInput(64)
-					},
-					{
-						label: 'load fee',
-						name: 'loadFee',
-						i18n: 'card_program.create.table_header.load_fee',
-						validator: shouldBeNumber,
-						mask: decimals(2),
-						$domAttri: {step: '0.01', type: 'number'},
-						brakeAt: breakInput(8)
-					},
-					{
-						label: 'load fee %',
-						name: 'loadFeePct',
-						i18n: 'card_program.create.table_header.load_fee_pct',
-						addonRightIcon: 'fa-percent fa',
-						validator: shouldBeNumber,
-						mask: decimals(2),
-						$domAttri: {step: '0.01', type: 'number'},
-						brakeAt: breakInput(8),
-						i18n_placeholder: 'card_program.create.table_input_placeholder.load_fee_pct'
-					},
-					{
-						label: 'load fee roof',
-						name: 'loadFeeCap',
-						i18n: 'card_program.create.table_header.load_fee_cap',
-						validator: [shouldBeNumber],
-						mask: decimals(2),
-						$domAttri: {step: '0.01', type: 'number'},
-						brakeAt: breakInput(8)
-					},
-					{
-						label: 'Charged To',
-						name: 'loadFeebillMethod',
-						i18n: 'card_program.create.table_header.load_fee_bill_method',
-						input: 'select',
-						selectKeys: [
-							{name: '', value: null},
-							{name: 'ACCOUNT', value: 'ACCOUNT'},
-							{name: 'FLOAT', value: 'FLOAT'},
-							{name: 'INVOICE', value: 'INVOICE'},
-						]
-					},
-				],
-				fees: [{
-					label: 'application fee',
-					name: 'appFee',
-					i18n: 'card_program.create.table_header.app_fee',
-					validator: shouldBeNumber,
-					mask: decimals(2),
-					$domAttri: {step: '0.01', type: 'number'},
-					brakeAt: breakInput(8)
-				},
-					//application fee bill method
-					{
-						label: 'Charged To',
-						name: 'appFeeBillMethod',
-						i18n: 'card_program.create.table_header.app_fee_bill_method',
-						input: 'select',
-						selectKeys: [
-							{name: '', value: null},
-							{name: 'FLOAT', value: 'FLOAT'},
-							{name: 'ACCOUNT', value: 'ACCOUNT'},
-
-							{name: 'INVOICE', value: 'INVOICE'}]
-					},
-					{
-						label: 'monthly fee',
-						name: 'monthlyFee',
-						i18n: 'card_program.create.table_header.monthly_fee',
-						validator: shouldBeNumber,
-						mask: decimals(2),
-						$domAttri: {step: '0.01', type: 'number'},
-						brakeAt: breakInput(8)
-					},
-					//monthly fee bill method
-					{
-						label: 'Charged To',
-						name: 'monthlyFeeBillMethod',
-						i18n: 'card_program.create.table_header.monthly_fee_bill_method',
-						input: 'select',
-						selectKeys: [
-							{name: '', value: null},
-							{name: 'ACCOUNT', value: 'ACCOUNT'},
-							{name: 'FLOAT', value: 'FLOAT'},
-							{name: 'INVOICE', value: 'INVOICE'}]
-					},
-					{
-						label: 'api fee',
-						name: 'apiFee',
-						i18n: 'card_program.create.table_header.api_fee',
-						validator: shouldBeNumber,
-						mask: decimals(2),
-						$domAttri: {step: '0.01', type: 'number'},
-						brakeAt: breakInput(8)
-					},
-					{
-						label: 'Charged To',
-						name: 'apiFeeBillMethod',
-						i18n: 'card_program.create.table_header.api_fee_bill_method',
-						input: 'select',
-						selectKeys: [
-							{name: '', value: null},
-							{name: 'FLOAT', value: 'FLOAT'},
-							{name: 'INVOICE', value: 'INVOICE'}
-						]
-					},
-				],
-				kycClassifier: [
-					{
-						label: 'kyc classifier',
-						name: 'kycClassifier',
-						multiVal: true,
-						validator: exactNumber(3),
-						brakeAt: breakInput(3),
-						required: true,
-					},],
-				matrixPID: [{
-					label: 'matrix PID',
-					name: 'matrixPID',
-					multiVal: true,
-					validator: exactNumber(6),
-					brakeAt: breakInput(6),
-					required: true,
-
-				},]
-
-			},
-			tableViewData: [],
-			showValidFeedBack: false,
-			editId: '',
-			valid: {
-				main: false,
-				middle: false,
-				fees: false,
-				matrixPID: false,
-				kycClassifier: false,
-			},
-			context: 'create' // create view edit
-			*/
 		}
 	}, 
 	computed: {
 		editMode () {
 			return this.$route.params.id !== 'new'
+		},
+		actionName () {
+			return this.editMode
+				? this.viewMode
+					? 'View'
+					: 'Edit'
+				: 'Create'
 		}
 	}, 
 	watch: {		
@@ -889,6 +698,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.control-label {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
 .section-header {
 	padding-bottom: .5rem;
 }

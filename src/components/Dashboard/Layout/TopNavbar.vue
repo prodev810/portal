@@ -69,9 +69,11 @@
           return "Review and Edit Account Creation";
         } else if (this.$route.path.split('/')[2] === 'review-edit-card') {
           return "Review and Edit Card Creation";
+        } else if (this.$route.path === '/card-program/card/new') {
+          return 'Card program'
         } else {
-          return this.$route.path.split('/')[2].replace(/-/g, ' ');
-        }
+					return this.$route.path.split('/')[2].replace(/-/g, ' ');
+				}
       }
     },
     methods: {

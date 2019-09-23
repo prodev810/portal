@@ -31,7 +31,7 @@ const create = {
     },
     edit: {
       line1: `Before editing a card program please ensure you have the card programs owners consent to perform changes`,
-      li1: `All fields with a Red Asterisk are mandatory`
+      li1: `All fields with a Purple Asterisk are mandatory`
     },
     view: {
       line1: `Please ensure all choices are correct for you program`,
