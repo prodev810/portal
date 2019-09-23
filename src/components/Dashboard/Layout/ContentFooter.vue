@@ -15,7 +15,7 @@
 .ceevo__copywrite {
   font-size: 14px;
   padding: 2rem 0 0 0;
-  font-weight: 200;
+  font-weight: bold;
   margin: 0;
 }
 </style>

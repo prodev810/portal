@@ -2,14 +2,14 @@ const create = {
   title: `Setup Debit/Credit`,
   tips: {
     line1: `This is where you can setup a Debit or Credit to the Float Account`,
-    li1: `Ensure all fields are correct (fields with * are Mandatory)`,
+    li1: `Ensure all fields are correct (fields with <span class="required-field-sympol">＊</span> are Mandatory)`,
     li2: `Choose Debit or Credit, Description and Amount`,
     li3: `SOF = Source of Funds and requires a screenshot or copy of where the funds are from`
   },
   button: {
     sof: `SOF`,
-    save: `Save`,
-    cancel: `Cancel`
+    save: `SAVE`,
+    cancel: `CANCEL`
   },
   table_header: {
     card_prog_code: `CPC`,

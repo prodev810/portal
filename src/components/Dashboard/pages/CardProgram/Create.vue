@@ -741,12 +741,6 @@ export default {
 	background-color: #d3d3d3 !important;
 }
 
-.required-field-sympol {
-	color: #5823bd;
-	font-size: 24px;
-	font-weight: 500;
-	height: 26px;
-}
 .ceevo__card-group{
 	.aba__button,
 	.aba__button:hover{

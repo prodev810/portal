@@ -39,7 +39,8 @@
       link: Boolean,
       icon: Boolean,
       wide: Boolean,
-      size: String
+			size: String,
+			//disabled: Boolean
     },
     computed: {
       classes() {
@@ -66,5 +67,13 @@
     }
   }
 </script>
-<style>
+
+<style lang="scss">
+.btn {
+	font-weight: bold !important;
+
+	&:disabled {
+		color: rgb(189, 154, 234) !important;
+	}
+}
 </style>

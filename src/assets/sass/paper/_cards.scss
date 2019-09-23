@@ -172,16 +172,14 @@
     border-style: dashed;
     border-color: #7039DA;
   }
-  .required-field-sympol {
-    color: #5823bd;
-    font-size: 24px;
-    font-weight: 500;
-    height: 20px;
-    line-height: 28px;
-  }
   @media (max-width:576px) {
     .w-sm-100{
       width:100% !important;
     }
   }
 }
+.required-field-sympol {
+	color: #5823bd !important;
+	font-weight: 500;
+}
+
