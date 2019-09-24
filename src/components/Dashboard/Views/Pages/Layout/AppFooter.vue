@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-5 ">
-          &copy; Ceevo
+          &copy; CEEVO
         </div>
       </div>
     </div>

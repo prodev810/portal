@@ -1,18 +1,25 @@
 <template>
   <div>
-    <div class="card-header bg-white border-0">
-      <h4 class="card-title">
-        {{ $t('unallocated_float.listing.title') }}</h4>
-      <div>
-        <p>
-          {{ $t('unallocated_float.listing.tips.line1') }}
-        </p>
+    <div>
+
+      <div  class="bg-white">
+        <div class="row">
+          <div class="col-12">
+            <h4 class="card-title">
+              {{ $t('unallocated_float.listing.title') }}</h4>
+
+            <p class="card-info">
+              {{ $t('unallocated_float.listing.tips.line1') }}
+            </p>
+          </div>
+        </div>
       </div>
+
       <div class="row align-items-center px-2">
 
         <div class="mr-auto">
           <div class="d-flex align-items-center flex-wrap">
-            <div class="py-2">
+            <div class="py-2 from-date">
               <div>
                 <span class="px-2">{{ $t('unallocated_float.listing.search_filter.target_date') }}</span>
                 <el-date-picker v-model="unallocatedFloatDate" type="date"
@@ -27,7 +34,7 @@
 
           <div class="d-flex align-items-center flex-wrap float-left float-xl-right">
 
-            <div class="py-2">
+            <div class="py-2 ceevo__select-group">
               <div class="d-flex align-items-center">
                 <span class="px-2 text-nowrap">{{ $t('unallocated_float.listing.search_filter.currency') }}</span>
                 <el-select class="select-default ceevo__select-default"
@@ -45,7 +52,7 @@
               </div>
             </div>
 
-            <div class="py-2">
+            <div class="py-2 ceevo__select-group">
               <div class="d-flex align-items-center">
                 <span class="px-2 text-nowrap">{{ $t('unallocated_float.listing.search_filter.card_program') }}</span>
                 <el-select class="select-default ceevo__select-default"
@@ -63,7 +70,7 @@
               </div>
             </div>
 
-            <div class="py-2">
+            <div class="py-2 ceevo__select-group">
               <div class="d-flex align-items-center" v-if="!$oAuth.isReseller()">
                 <span class="px-2 text-nowrap">{{ $t('unallocated_float.listing.search_filter.reseller') }}</span>
                 <el-select class="select-default ceevo__select-default"

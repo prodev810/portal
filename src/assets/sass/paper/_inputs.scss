@@ -398,7 +398,51 @@ textarea.form-control{
         margin-top: 6px;
     }
 }
+
+.el-input--small .el-input__inner{
+  padding-top:4px;
+  font-weight: 600;
+}
+
+.from-date,
+.to-date{
+  font-weight: 600;
+  margin-right:1.5rem;
+
+  > span{
+    padding-left:0;
+    padding-right:1.5rem;
+  }
+
+  input{
+    border-color:#8D8D8D;
+    font-weight:500;
+    &::-webkit-input-placeholder{
+    color:#8D8D8D;
+    font-weight:500;
+  }
+  }
+}
+.to-date{
+  margin-right:0;
+}
+.ceevo__select-group{
+  .required-field-sympol{
+    font-size: 22px;
+    margin-top: 8px;
+    font-weight: 600;
+  }
+  span{
+    font-weight: 600;
+  }
+  margin-right: 1rem;
+  &:last-of-type,
+  &:last-child{
+    margin-right: 0;
+  }
+}
 .ceevo__select-default{
+   width:120px !important;
     .el-input{
       input,
       input.el-input__inner{
@@ -442,4 +486,50 @@ textarea.form-control{
 
       }
     }
+}
+.ceevo__select-auto{
+  @extend .ceevo__select-default;
+  width:100% !important;
+
+  .el-input{
+    input,
+    input.el-input__inner{
+      color:#8D8D8D !important;
+    }
+    i.el-select__caret{
+      color:#8D8D8D !important;
+      font-size: 18px;
+      &:before{
+        right: 5px;
+        bottom: 6px;
+      }
+      &:after{
+        right: 5px;
+        top: 4px;
+      }
+    }
+  }
+}
+
+.kyc-group{
+  position: relative;
+
+  button,
+  .add,
+  .delete{
+    position: absolute;
+  }
+  .add{
+    right:-50px;
+    top:0;
+  }
+  .delete{
+    right:0;
+    top:0;
+
+    i{
+     color:#292929 !important;
+     transform: scale(.8);
+    }
+  }
 }

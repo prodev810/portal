@@ -166,7 +166,7 @@
                 <path d="M25.6,45.8h-1c-0.3,0-0.6-0.3-0.6-0.6v-3.8c0-0.3,0.3-0.6,0.6-0.6h1c0.3,0,0.6,0.3,0.6,0.6v3.8  C26.2,45.6,25.9,45.8,25.6,45.8z"/>
               </svg>
             </p>
-            <p>{{ $t('common.regular_table.no_data') }}</p>
+            <p class="no-data">{{ $t('common.regular_table.no_data') }}</p>
 
         </h4>
         <br>
@@ -810,4 +810,9 @@ import getNested from '@/utils/nestedObjects.js'
   .bg-orange {
       background-color: #FF6A6A !important;
   }
+  
+ .no-data{
+   font-weight: 500;
+   font-size: 20px;
+ }
 </style>

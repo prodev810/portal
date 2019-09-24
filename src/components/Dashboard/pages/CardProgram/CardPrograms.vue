@@ -1,29 +1,28 @@
 <template>
   <div>
-    <div class="card-header bg-white">
+
+    <div  class="bg-white">
       <div class="row">
-        <div class="col-sm-12 col-md-6">
-          <h4 class="card-title display-inline">
+        <div class="col-12 mb-4">
+          <h4 class="card-title">
             {{ $t('card_program.listing.title') }}
           </h4>
-          <div class="pl-2">
-            <p>
+            <p class="card-info">
               {{ $t('card_program.listing.tips.line1') }}
               <br/>
               {{ $t('card_program.listing.tips.line2') }}
             </p>
-            <ul>
+            <ul class="card-info">
               <li>{{ $t('card_program.listing.tips.li1') }}</li>
               <li>{{ $t('card_program.listing.tips.li2') }}</li>
             </ul>
-          </div>
         </div>
       </div>
     </div>
 
-    <div class="card" v-if="hasPermission(permission.CARD_PROGRAM_LISTING)">
+    <div class="card flat" v-if="hasPermission(permission.CARD_PROGRAM_LISTING)">
       <div class="card-content row">
-        <div class="col-sm-12  tabel-wrapper">
+        <div class="col-sm-12  tabel-wrapper ceevo__table-flat">
           <div class="p-1">
             <regular-table striped
                            :headings="tableHeadings"
@@ -34,13 +33,13 @@
                            :uneditableFields="uneditableFields">
               <template slot-scope="index">
                 <th>
-                  <div class="tableBtns">
+                  <div class="btn-group-border">
                     <p-button @click="editCardProgram(index)"
                               :key="index.index.index+index.index.id+'edit'"
                               type="primary"
                               link=""
                               v-if="hasPermission(permission.CARD_PROGRAM_EDIT)">
-                    <img class="" width= "17px" :src="changeIcon" alt=""> 
+                    <img class="" width= "17px" :src="changeIcon" alt="">
                     {{ $t('card_program.listing.button.edit') }}
                     </p-button>
                   <!-- </div> -->
@@ -51,7 +50,7 @@
                               type="primary"
                               link=""
                               v-if="hasPermission(permission.CARD_PROGRAM_VIEW)">
-                      <img class="" width= "17px" :src="viewIcon" alt=""> 
+                      <img class="" width= "17px" :src="viewIcon" alt="">
                       {{ $t('card_program.listing.button.view') }}
                     </p-button>
                   </div>
@@ -119,11 +118,11 @@
       Spinner,
       PButton, RegularTable,
       [Button.name]: Button,
-     
+
     },
     data() {
       return {
-         viewIcon, 
+         viewIcon,
          changeIcon,
         tableHeadings: [
           //main

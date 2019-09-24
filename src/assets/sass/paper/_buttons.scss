@@ -3,9 +3,9 @@
 .navbar .navbar-nav > a.btn{
     border-width: $border-thick;
     font-weight: $font-weight-semi;
-    font-size: $font-size-small;
+    font-size: $font-size-medium;
     line-height: $line-height;
-    text-transform: uppercase;
+    //text-transform: uppercase;
     border: none;
     margin: 10px 1px;
     border-radius: $border-radius-small;
@@ -111,7 +111,14 @@
 
 // Apply the mixin to the buttons
 // .btn-default { @include btn-styles($default-color, $default-states-color); }
-.btn-primary { @include btn-styles($primary-color, $primary-states-color); }
+.btn-primary {
+  @include btn-styles($primary-color, $primary-states-color);
+  &.disabled,
+  &[disabled]{
+    color:#7039DA - 60%;
+  }
+
+}
 .btn-default { @include btn-styles($default-color, $default-states-color); }
 .btn-success { @include btn-styles($success-color, $success-states-color); }
 .btn-info    { @include btn-styles($info-color, $info-states-color); }
@@ -275,26 +282,7 @@
   }
 }
 
-button[class*=" btn-icon-"], button[class^=btn-icon-]{
-  background:transparent !important;
-  color:#7039DA !important;
-  padding-left:35px;
-  position:relative;
-  &:hover,
-  &:focus,
-  &:active,
-  &:active:focus{
-    background:transparent !important;
-    color:rgba(#7039DA,0.7) !important;
-  }
 
-  img{
-    position: absolute;
-    height: 23px;
-    left: 0;
-    top: 5px;
-  }
-}
 
 .btn-group-border{
   .cell{
@@ -304,17 +292,21 @@ button[class*=" btn-icon-"], button[class^=btn-icon-]{
   .btn{
     min-width:110px;
     min-height: 40px;
+    img{
+          height: 23px;
+          width: auto;
+    }
   }
   .btn-success,
   .btn-danger,
   .btn-primary{
-    background:transparent !important;
+    background:#FFFFFF !important;
     border-radius:0;
     &:hover,
     &:focus,
     &:active,
     &:active:focus{
-      background:transparent !important;
+      background:#FFFFFF !important;
     }
   }
   .btn-success{

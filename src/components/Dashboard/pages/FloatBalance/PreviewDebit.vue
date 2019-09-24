@@ -1,16 +1,20 @@
 <template>
   <div>
-    <div class="card-header border-0 bg-white">
-      <h4 class="card-title">
-        {{ $t('preview_debit.listing.title') }}
-      </h4>
-      <div class="pl-2">
-        <p>
-          {{ $t('preview_debit.listing.tips.line1') }}
-        </p>
-        <ul>
-          <li>{{ $t('preview_debit.listing.tips.li1') }}</li>
-        </ul>
+
+    <div  class="bg-white">
+      <div class="row">
+        <div class="col-12">
+          <h4 class="card-title">
+            {{ $t('preview_debit.listing.title') }}
+          </h4>
+          <p>
+            {{ $t('preview_debit.listing.tips.line1') }}
+          </p>
+          <ul>
+            <!-- <li>{{ $t('preview_debit.listing.tips.li1') }}</li> -->
+            <li>Enter the correct dates and Card program (fields marked with <span class="required-field-sympol" style="">*</span> are Mandatory)</li>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -18,7 +22,7 @@
 
       <div class="mr-auto">
         <div class="d-flex align-items-center flex-wrap">
-          <div class="py-2">
+          <div class="py-2 from-date">
             <div>
               <span class="px-2">{{ $t('preview_debit.listing.search_filter.from') }}</span>
               <el-date-picker v-model="fromDate" type="date"
@@ -27,7 +31,7 @@
               </el-date-picker>
             </div>
           </div>
-          <div class="py-2">
+          <div class="py-2 to-date">
             <div>
               <span class="px-2">{{ $t('preview_debit.listing.search_filter.to') }}</span>
               <el-date-picker
@@ -42,13 +46,13 @@
       <div class="ml-0 ml-xl-auto">
         <div class="d-flex align-items-center flex-wrap float-left float-xl-right">
 
-          <div class="py-2">
+          <div class="py-2 ceevo__select-group">
             <div class="d-flex align-items-center">
               <span class="px-2">
-                <span class="required-field-sympol" style="">*</span>
                 {{ $t('preview_debit.listing.search_filter.card_program') }}
+                <span class="required-field-sympol" style="">*</span>
               </span>
-              <el-select class="select-default ceevo__select-default"
+              <el-select class="select-default ceevo__select-default w-220"
                          size="small"
                          placeholder="selected a card program"
                          v-model="cardProgramId"
@@ -64,7 +68,7 @@
           </div>
 
 
-          <div class="py-2">
+          <div class="py-2 ceevo__select-group">
             <div class="d-flex align-items-center" v-if="!$oAuth.isReseller()">
               <span class="px-2">
                 {{ $t('preview_debit.listing.search_filter.reseller') }}
@@ -427,6 +431,13 @@
   }
 </script>
 <style scoped lang="scss">
+  span.required-field-sympol{
+    vertical-align: sub;
+        font-size: 18px;
+  }
+  .w-220{
+    width:220px !important;
+  }
   .p-2 {
     padding: 1rem .5rem 2rem;
   }

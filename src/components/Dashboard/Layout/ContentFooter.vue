@@ -2,7 +2,7 @@
   <footer class="footer">
   <div class="container">
     <div class="">
-      <p class="text-center text-capitalize ceevo__copywrite">&copy; Ceevo</p>
+      <p class="text-center text-uppercase ceevo__copywrite">&copy; Ceevo</p>
     </div>
   </div>
   </footer>

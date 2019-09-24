@@ -70,10 +70,8 @@
 
 <style lang="scss">
 .btn {
-	font-weight: bold !important;
-
 	&:disabled {
-		color: rgb(189, 154, 234) !important;
+		cursor: not-allowed !important;
 	}
 }
 </style>

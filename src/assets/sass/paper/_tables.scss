@@ -179,7 +179,7 @@ $gray-input-bg: #F3FCF8;
 $table-border-color:$gray-input-outline;
 .ceevo__table {
 
-    width: auto !important;
+   width: 99.99% !important;
 
   @extend .table;
   thead,
@@ -326,6 +326,24 @@ $table-border-color:$gray-input-outline;
     tbody > tr:nth-of-type(2n+1){
       background:#FFFFFF;
     }
+    thead{
+      .ceevo__heading-label{
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+    }
+    tbody{
+      td,th{
+        .cell{
+          font-weight: 500;
+        }
+      }
+      th{
+        .bg-danger,.bg-success{
+          color:#FFFFFF;
+        }
+      }
+    }
   }
   tbody tr th{
     border:1px solid #7039DA !important;
@@ -334,18 +352,20 @@ $table-border-color:$gray-input-outline;
     &:first-of-type{
       border:0 !important;
     }
-    &:last-child{
-      border-right:2px solid #7039DA !important;
-    }
+
     &:last-child[class="btn-group-border"]{
       border-right: 0 !important;
     }
   }
   tbody tr td[scope="row"]{
     border-right:1px solid #dee2e6 !important;
+    .cell{
+      padding-left:10px;
+      padding-right:10px;
+    }
   }
   .cell{
-    padding:0 10px;
+    padding:0;
 
 
     &.bg-danger,
@@ -367,6 +387,28 @@ $table-border-color:$gray-input-outline;
     }
     &.bg-pending{
       background-color:#ffc107 !important;
+    }
+  }
+
+  button[class*=" btn-icon-"], button[class^=btn-icon-]{
+    background:#FFFFFF !important;
+    color:#7039DA !important;
+    padding:6px 12px;
+    width:-webkit-max-content;
+    width:max-content;
+    border-radius:0;
+    font-size:14px;
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus{
+      background:#FFFFFF !important;
+      color:rgba(#7039DA,0.7) !important;
+    }
+
+    img{
+      height: 23px;
+      margin-right:5px;
     }
   }
 }

@@ -1,45 +1,48 @@
 <template>
-  <div>    
-		<div class=" d-flex justify-content-between"
-         :class="{ ['section-header']: !editMode,
-    							 ['pb-3']: editMode }">
-      <h4 class="card-title display-inline  text-capitalize">
-        {{ $t('card_program.create.title', { action: actionName }) }}
-      </h4>
+  <div>
+
+		<div  class="bg-white">
+		  <div class="row mb-4">
+		    <div class="col-12">
+          <h4 class="card-title display-inline  text-capitalize">
+            {{ $t('card_program.create.title', { action: actionName }) }}
+          </h4>
+
+          <div v-if="!editMode">
+            <p class="card-info">
+              {{ $t('card_program.create.tips.create.line1') }}{{ $t('card_program.create.tips.create.line2') }}
+              <span class="pull-right"><span class="required-field-sympol pr-1">*</span>required</span>
+            </p>
+            <ul class="card-info">
+              <li>{{ $t('card_program.create.tips.create.li1') }}</li>
+              <li>{{ $t('card_program.create.tips.create.li2') }}</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
     </div>
 
-    <div v-if="!editMode">
-      <p>
-        {{ $t('card_program.create.tips.create.line1') }}
-        <br/>
-        {{ $t('card_program.create.tips.create.line2') }}
-      </p>
-      <ul>
-        <li>{{ $t('card_program.create.tips.create.li1') }}</li>
-        <li>{{ $t('card_program.create.tips.create.li2') }}</li>
-      </ul>
-    </div>
-
-		<template v-else>
+		<!-- <template>
 			<div v-if="viewMode">
-				<p>
+				<p class="card-info">
 					{{ $t('card_program.create.tips.view.line1') }}
 				</p>
-				<ul>
+				<ul class="card-info">
 					<li>{{ $t('card_program.create.tips.view.li1') }}</li>
 					<li>{{ $t('card_program.create.tips.view.li2') }}</li>
 				</ul>
 			</div>
 
 			<div v-else>
-				<p>
+				<p class="card-info">
 					{{ $t('card_program.create.tips.edit.line1') }}
 				</p>
-				<ul>
+				<ul class="card-info">
 					<li>{{ $t('card_program.create.tips.edit.li1') }}</li>
 				</ul>
 			</div>
-		</template>
+		</template> -->
 
 		<!-- New style mock start-->
 		<div class="row">
@@ -56,8 +59,8 @@
 									<input v-model="cardProgramData.psfRef"
 												v-validate="'required|max:7'" maxlength="7"
 												name="psfRef"
-												type="text" 
-												placeholder="psf Ref" 
+												type="text"
+												placeholder="psf Ref"
 												class="form-control form-control-danger">
 									<div class="validation-error">{{ errors.first('psfRef') }}</div>
 								</template>
@@ -68,12 +71,12 @@
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.issuerInst }}</div>
 								<template v-else>
-									<input v-model="cardProgramData.issuerInst" 
+									<input v-model="cardProgramData.issuerInst"
 												v-validate="'required|length:5'" maxlength="5"
 												name="issuerInst"
-												data-vv-as="issuer inst"											 
-												type="text" 
-												placeholder="Issuer inst" 
+												data-vv-as="issuer inst"
+												type="text"
+												placeholder="Issuer inst"
 												class="form-control form-control-danger">
 									<div class="validation-error">{{ errors.first('issuerInst') }}</div>
 								</template>
@@ -83,13 +86,13 @@
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label mb-xl-3">PM INST <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.pmInst }}</div>
-								<template v-else>								
-									<input v-model="cardProgramData.pmInst" 
+								<template v-else>
+									<input v-model="cardProgramData.pmInst"
 												v-validate="'required|length:5'" maxlength="5"
 												name="pmInst"
 												data-vv-as="PM inst"
-												type="text" 
-												placeholder="PM inst" 
+												type="text"
+												placeholder="PM inst"
 												class="form-control form-control-danger">
 									<div class="validation-error">{{ errors.first('pmInst') }}</div>
 								</template>
@@ -99,29 +102,29 @@
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label mb-xl-3">PO INST <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.poInst }}</div>
-								<template v-else>								
+								<template v-else>
 									<input v-model="cardProgramData.poInst"
 												v-validate="'required|length:5'" maxlength="5"
 												name="poInst"
 												data-vv-as="PO inst"
-												type="text" 
-												placeholder="PO inst" 
+												type="text"
+												placeholder="PO inst"
 												class="form-control form-control-danger">
 									<div class="validation-error">{{ errors.first('poInst') }}</div>
 								</template>
 							</div>
 						</div>
 						<div class="row mb-0">
-							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label mb-xl-3">Card Program Code <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label mb-xl-3 text-capitalize">Card Program Code <span class="required-field-sympol">＊</span></div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardProgCode }}</div>
 								<template v-else>
-									<input v-model="cardProgramData.cardProgCode" 
+									<input v-model="cardProgramData.cardProgCode"
 												v-validate="'required|length:5'" maxlength="5"
 												name="cardProgCode"
 												data-vv-as="card program code"
-												type="text" 
-												placeholder="CPC" 
+												type="text"
+												placeholder="CPC"
 												class="form-control form-control-danger">
 									<div class="validation-error">{{ errors.first('cardProgCode') }}</div>
 								</template>
@@ -154,12 +157,12 @@
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardPrinterCode }}</div>
 								<template v-else>
-									<input v-model="cardProgramData.cardPrinterCode" 
+									<input v-model="cardProgramData.cardPrinterCode"
 												v-validate="'required|length:5'" maxlength="5"
 												name="cardPrinterCode"
 												data-vv-as="bureau inst code"
-												type="text" 
-												placeholder="BUREAU INST CODE" 
+												type="text"
+												placeholder="bureau inst code"
 												class="form-control form-control-danger">
 									<div class="validation-error">{{ errors.first('cardPrinterCode') }}</div>
 								</template>
@@ -170,12 +173,12 @@
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.defaultCurrencyCode }}</div>
 								<template v-else>
-									<input v-model="cardProgramData.defaultCurrencyCode" 
+									<input v-model="cardProgramData.defaultCurrencyCode"
 												v-validate="'required|currencyISO'"
 												name="defaultCurrencyCode"
 												data-vv-as="default currency"
-												type="text" 
-												placeholder="DEFAULT CURRENCY" 
+												type="text"
+												placeholder="default currency"
 												class="form-control form-control-danger">
 									<div class="validation-error">{{ errors.first('defaultCurrencyCode') }}</div>
 								</template>
@@ -186,12 +189,12 @@
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.alertContact }}</div>
 								<template v-else>
-									<input v-model="cardProgramData.alertContact" 
+									<input v-model="cardProgramData.alertContact"
 												v-validate="'required|email'"
 												name="alertContact"
 												data-vv-as="alert contact email"
-												type="text" 
-												placeholder="ALERT CONTACT E-MAIL" 
+												type="text"
+												placeholder="alert contact email"
 												class="form-control form-control-danger">
 									<div class="validation-error">{{ errors.first('alertContact') }}</div>
 								</template>
@@ -211,13 +214,15 @@
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFeePct }}</div>
 								<template v-else>
-									<input v-model="cardProgramData.loadFeePct" type="text" placeholder="LOAD FEE %" class="form-control  form-control-danger">
+                  <div class="icon-fee">
+									  <input v-model="cardProgramData.loadFeePct" type="text" placeholder="LOAD FEE %" class="form-control  form-control-danger">
+                  </div>
 								</template>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
-							<div class="col-12 col-lg-12 col-xl-7">
+							<div class="col-12 col-lg-12 col-xl-7 ceevo__select-auto">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFeebillMethod }}</div>
 								<template v-else>
 									<ChargedTo v-model="cardProgramData.loadFeebillMethod"/>
@@ -229,13 +234,13 @@
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.appFee }}</div>
 								<template v-else>
-									<input v-model="cardProgramData.appFee" type="text" placeholder="APPLICATION FEE" class="form-control  form-control-danger">
+									<input v-model="cardProgramData.appFee" type="text" placeholder="Application Fee" class="form-control  form-control-danger">
 								</template>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
-							<div class="col-12 col-lg-12 col-xl-7">
+							<div class="col-12 col-lg-12 col-xl-7 ceevo__select-auto">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.appFeeBillMethod }}</div>
 								<template v-else>
 									<ChargedTo v-model="cardProgramData.appFeeBillMethod"/>
@@ -247,13 +252,13 @@
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.monthlyFee }}</div>
 								<template v-else>
-									<input v-model="cardProgramData.monthlyFee" type="text" placeholder="MONTHLY FEE" class="form-control  form-control-danger">
+									<input v-model="cardProgramData.monthlyFee" type="text" placeholder="monthly Fee" class="form-control  form-control-danger">
 								</template>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
-							<div class="col-12 col-lg-12 col-xl-7">
+							<div class="col-12 col-lg-12 col-xl-7 ceevo__select-auto">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.monthlyFeeBillMethod }}</div>
 								<template v-else>
 									<ChargedTo v-model="cardProgramData.monthlyFeeBillMethod"/>
@@ -265,13 +270,13 @@
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.apiFee }}</div>
 								<template v-else>
-									<input v-model="cardProgramData.apiFee" type="text" placeholder="API FEE" class="form-control  form-control-danger">
+									<input v-model="cardProgramData.apiFee" type="text" placeholder="Api Fee" class="form-control  form-control-danger">
 								</template>
 							</div>
 						</div>
 						<div class="row mb-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
-							<div class="col-12 col-lg-12 col-xl-7">
+							<div class="col-12 col-lg-12 col-xl-7 ceevo__select-auto">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.apiFeeBillMethod }}</div>
 								<template v-else>
 									<ChargedTo v-model="cardProgramData.apiFeeBillMethod"/>
@@ -287,77 +292,85 @@
 				<div class="card ceevo__card-group">
 					<div class="card-content p-4">
 						<!-- KYC Classes -->
-						<div v-for="(kyc, index) in cardProgramData.kycClassifier" 
+						<div v-for="(kyc, index) in cardProgramData.kycClassifier"
 								 :key="`kyc${index}`"
 								 class="row mb-0">
 							<div class="kyc-adding w-75">
 								<div class="col-12 d-flex align-items-center control-label">KYC CLASS {{ index + 1 }}<span class="required-field-sympol">＊</span></div>
 								<div class="col-12 mb-0">
 									<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.kycClassifier[index] }}</div>
-									<template v-else>									
-										<input v-model="cardProgramData.kycClassifier[index]"
-													v-validate="'required|max:5'" maxlength="5"
-													:name="`kyc${index}`"
-													:data-vv-as="`kyc class ${index + 1}`"
-													type="text" 
-													:placeholder="`KYC Class ${index + 1}`" 
-													class="form-control  form-control-danger"/>
-										<div class="validation-error">{{ errors.first(`kyc${index}`) }}</div>
+									<template v-else>
+                    <div class="kyc-group">
+                      <input v-model="cardProgramData.kycClassifier[index]"
+                            v-validate="'required|max:5'" maxlength="5"
+                            :name="`kyc${index}`"
+                            :data-vv-as="`kyc class ${index + 1}`"
+                            type="text"
+                            :placeholder="`KYC Class ${index + 1}`"
+                            class="form-control  form-control-danger"/>
+                      <template v-if="!viewMode">
+                        <button v-if="index > 0"
+                                class="el-tooltip aba__button delete"
+                                @click="cardProgramData.kycClassifier.splice(index, 1)">
+                          <i class="el-icon-error"></i>
+                        </button>
+
+                        <button v-else
+                                class="el-tooltip aba__button add"
+                                @click="addElement(cardProgramData.kycClassifier)">
+                          <i class="el-icon-plus"></i>
+                        </button>
+                      </template>
+                    </div>
+
+                    <div class="validation-error">{{ errors.first(`kyc${index}`) }}</div>
 									</template>
 								</div>
 							</div>
 
-							<template v-if="!viewMode">
-								<button v-if="index > 0" 
-												class="el-tooltip aba__button" 
-												@click="cardProgramData.kycClassifier.splice(index, 1)">
-									<i class="el-icon-delete"></i>
-								</button>
 
-								<button v-else 
-												class="el-tooltip aba__button" 
-												@click="addElement(cardProgramData.kycClassifier)">
-									<i class="el-icon-plus"></i>
-								</button>
-							</template>
 						</div>
 
 						<hr>
-						
-						<div v-for="(matrix, index) in cardProgramData.matrixPID" 
+
+						<div v-for="(matrix, index) in cardProgramData.matrixPID"
 								 :key="`matrix${index}`"
 								 class="row mb-0">
 							<div class="kyc-adding w-75">
 								<div class="col-12 d-flex align-items-center control-label">MARTIX PID {{ index + 1 }}<span class="required-field-sympol">＊</span></div>
 								<div class="col-12 mb-0">
 									<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.matrixPID[index] }}</div>
-									<template v-else>									
-										<input v-model="cardProgramData.matrixPID[index]"
-													v-validate="'required'"
-													:name="`matrix${index}`"
-													:data-vv-as="`matrix PID ${index + 1}`"
-													type="text" 
-													:placeholder="`Matrix PID ${index + 1}`" 
-													class="form-control  form-control-danger"/>
-										<div class="validation-error">{{ errors.first(`matrix${index}`) }}</div>
+									<template v-else>
+                    <div class="kyc-group">
+                      <input v-model="cardProgramData.matrixPID[index]"
+                            v-validate="'required'"
+                            :name="`matrix${index}`"
+                            :data-vv-as="`matrix PID ${index + 1}`"
+                            type="text"
+                            :placeholder="`Matrix PID ${index + 1}`"
+                            class="form-control  form-control-danger"/>
+                      <template v-if="!viewMode">
+                        <button v-if="index > 0"
+                                class="el-tooltip aba__button delete"
+                                @click="cardProgramData.matrixPID.splice(index, 1)">
+                          <i class="el-icon-error"></i>
+                        </button>
+
+                        <button v-else
+                                class="el-tooltip aba__button add"
+                                @click="addElement(cardProgramData.matrixPID)">
+                          <i class="el-icon-plus"></i>
+                        </button>
+                      </template>
+                      </div>
+                      <div class="validation-error">{{ errors.first(`matrix${index}`) }}</div>
 									</template>
+
+                  </div>
 								</div>
 							</div>
 
-							<template v-if="!viewMode">
-								<button v-if="index > 0" 
-												class="el-tooltip aba__button" 
-												@click="cardProgramData.matrixPID.splice(index, 1)">
-									<i class="el-icon-delete"></i>
-								</button>
 
-								<button v-else 
-												class="el-tooltip aba__button" 
-												@click="addElement(cardProgramData.matrixPID)">
-									<i class="el-icon-plus"></i>
-								</button>
-							</template>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -412,7 +425,7 @@ import { permissionMixin } from '@/mixins/permission'
 import ChargedTo from './ChargedTo'
 
 const emptyCardProgramData = {
-	// 
+	//
 	psfRef: '',
 	issuerInst: '',
 	pmInst: '',
@@ -464,7 +477,7 @@ export default {
 			loading: true,
 			cardProgramData: Object.assign({}, emptyCardProgramData)
 		}
-	}, 
+	},
 	computed: {
 		editMode () {
 			return this.$route.params.id !== 'new'
@@ -476,8 +489,8 @@ export default {
 					: 'Edit'
 				: 'Create'
 		}
-	}, 
-	watch: {		
+	},
+	watch: {
 		'$route': {
 			immediate: true,
 			handler () {
@@ -492,13 +505,13 @@ export default {
 			try {
 				if (this.editMode) {
 					let response = await this.$http.aba1.get(`/cardprograms/${this.$route.params.id}`)
-					
+
 					this.cardProgramData = response.data
 					// Add at least one free item to each of lists
 					if (this.cardProgramData.kycClassifier.length === 0) {
 						this.cardProgramData.kycClassifier.push('')
 					}
-					
+
 					if (this.cardProgramData.matrixPID.length === 0) {
 						this.cardProgramData.matrixPID.push('')
 					}
@@ -529,7 +542,7 @@ export default {
 
 					// Filter lists
 					data.kycClassifier = data.kycClassifier.filter(item => item)
-					data.matrixPID = data.matrixPID.filter(item => item) 
+					data.matrixPID = data.matrixPID.filter(item => item)
 
 					if (this.cardProgramData.id) {
 						delete this.cardProgramData.id
@@ -537,7 +550,7 @@ export default {
 					} else {
 						await this.$http.aba1.post(`/cardprograms/`, data)
 					}
-					
+
 					this.onCancel()
 				} catch (error) {
 					this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('card_program.errors.save_card_program') + error.message, status: 'danger' })
@@ -698,6 +711,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+span.required-field-sympol{
+  vertical-align: sub;
+  font-size: 18px;
+}
 .control-label {
   font-weight: bold;
   text-transform: uppercase;
@@ -761,5 +778,8 @@ export default {
 	margin-bottom: 16px;
 	display: flex;
 	align-items: center;
+}
+.validation-error{
+  display: none;
 }
 </style>

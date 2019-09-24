@@ -22,7 +22,7 @@
 
     <div class="mt-2 mb-2 d-flex mr-auto align-items-center">
       <div class="from-date">
-          <span class="px-2">{{ $t('invoice.search_filter.label.from') }}</span>
+          <span>{{ $t('invoice.search_filter.label.from') }}</span>
           <el-date-picker
             @input="handleFromDate"
             :value="fromDate"
@@ -32,7 +32,7 @@
           </el-date-picker>
       </div>
       <div class="to-date">
-        <span class="px-2">{{ $t('invoice.search_filter.label.to') }}</span>
+        <span>{{ $t('invoice.search_filter.label.to') }}</span>
         <el-date-picker
           @input="handleToDate"
           :value="toDate"
@@ -128,7 +128,8 @@
     border-radius: 4px;
     background-color:rgba(#7039DA,.05);
     color:#7039DA;
-    padding:5px 10px;
+    font-weight: 600;
+    padding:8px 12px;
     margin-bottom:10px;
     span{
       padding-right:5px;
