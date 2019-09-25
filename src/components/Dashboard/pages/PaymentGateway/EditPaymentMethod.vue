@@ -52,7 +52,12 @@
 </template>
 
 <script>
-import { SHOW_TOAST_MESSAGE, ACTION_PG_GET_PAYMENT_METHODS, ACTION_PG_SET_PAYMENT_METHOD } from '@/store/types'
+import {
+  SHOW_TOAST_MESSAGE,
+  ACTION_PG_GET_PAYMENT_METHODS,
+  ACTION_PG_SET_PAYMENT_METHOD,
+  MUTATE_PG_ENV
+} from '@/store/types'
 import PButton from "@/components/UIComponents/Button"
 import Spinner from "@/components/UIComponents/Spinner"
 import CheckBox from "@/components/UIComponents/Inputs/Checkbox"
@@ -78,6 +83,11 @@ export default {
     await this.$store.dispatch(ACTION_PG_GET_PAYMENT_METHODS)
     this.getData()
     this.loading = false
+  },
+  mounted() {
+    if (this.$route.query && this.$route.query.env) {
+      this.$store.commit(MUTATE_PG_ENV, this.$route.query.env)
+    }
   },
   methods: {
     getData () {
