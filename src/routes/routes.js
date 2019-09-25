@@ -33,7 +33,7 @@ import PGEditPaymentMethod from '@/components/Dashboard/pages/PaymentGateway/Edi
 import PGMerchantWithTab from '@/components/Dashboard/pages/PaymentGateway/MerchantWithTab'
 
 import PGEditMerchant from '@/components/Dashboard/pages/PaymentGateway/EditMerchant'
-import ViewAcquirers from '@/components/Dashboard/pages/PaymentGateway/ViewAcquirers'
+import PGAquirerWithTab from '@/components/Dashboard/pages/PaymentGateway/AquirerWithTab'
 import EditAcquirer from '@/components/Dashboard/pages/PaymentGateway/EditAcquirer'
 
 // Reseller
@@ -233,7 +233,7 @@ let payment_gateway = {
     {
       path: '/payment-gateway/acquirer',
       name: 'Payment gateway - Acquirers',
-      component: ViewAcquirers,
+      component: PGAquirerWithTab,
       meta: {
         //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
         requiresAuth: true,

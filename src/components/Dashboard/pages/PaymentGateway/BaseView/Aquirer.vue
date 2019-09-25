@@ -25,7 +25,6 @@
               displayPerPage
       ></p-pagination> <!-- @input="handleInput" -->
     </div>
-
   </div>
 </template>
 
@@ -35,10 +34,10 @@ import {
 } from '@/store/types'
 import Spinner from "@/components/UIComponents/Spinner"
 import RegularTable from '@/components/UIComponents/CeevoTables/RegularTable/RegularTable'
-import PPagination from "../../../UIComponents/Pagination";
+import PPagination from '@/components/UIComponents/Pagination'
 
 export default {
-  name: 'ViewAcquirer',
+  name: 'Aquirer',
   components: { 
     Spinner, 
     RegularTable,
@@ -69,11 +68,10 @@ export default {
     }
   },
   async mounted () {
-    this.getData()
+    this.loadData()
   },
   methods: {
-    async getData () {
-      console.log('get data')
+    async loadData (env) {
       this.loading = true
       
       try {
