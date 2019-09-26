@@ -29,8 +29,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import {
-	SHOW_TOAST_MESSAGE
+  SHOW_TOAST_MESSAGE,
+  GETTER_PG_ENV
 } from '@/store/types'
 import Spinner from "@/components/UIComponents/Spinner"
 import RegularTable from '@/components/UIComponents/CeevoTables/RegularTable/RegularTable'
@@ -60,6 +62,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      env: GETTER_PG_ENV
+    }),
     aquirersFiltered () {
       return this.aquirers
     },
@@ -91,7 +96,10 @@ export default {
       this.loading = false
     },
     viewAquirer (aquirer) {
-      this.$router.push(`/payment-gateway/acquirer/${aquirer.index.row.id}`)
+      this.$router.push({ 
+        path: `/payment-gateway/acquirer/${aquirer.index.row.id}`,
+        query: { env: this.env }
+      })
     },
     getCardID (value) {
       return !value || value === '000000'
