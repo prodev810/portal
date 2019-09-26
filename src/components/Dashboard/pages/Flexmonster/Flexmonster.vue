@@ -44,7 +44,7 @@ import 'flexmonster/flexmonster.min.css';
 
                         }
                     },
-                    licenseKey: "Z78W-XBCA6H-0Y6O5Z-4C4P1K"
+                    licenseKey: "Z7R8-XBDC1S-0O154A-3Y0L0J"
                 });
                 console.log( 'pivot', pivot );
             }
