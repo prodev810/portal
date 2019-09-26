@@ -29,10 +29,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import {
   SHOW_TOAST_MESSAGE,
-  GETTER_PG_ENV
+  GETTER_PG_ENV,
+  ACTION_PG_GET_ACQUIRERS
 } from '@/store/types'
 import Spinner from "@/components/UIComponents/Spinner"
 import RegularTable from '@/components/UIComponents/CeevoTables/RegularTable/RegularTable'
@@ -48,7 +49,7 @@ export default {
   data () {
     return {
       loading: false,
-      aquirers: [],
+      //aquirers: [],
       headers: [
         { name: 'full_name', i18n: 'payment_gateway.acquirer.full_name' },
         { name: 'short_name', i18n: 'payment_gateway.acquirer.short_name' },
@@ -65,8 +66,17 @@ export default {
     ...mapGetters({
       env: GETTER_PG_ENV
     }),
+    ...mapState({
+      acquirers: (state) => state.paymentGateway.acquirers
+    }),
     aquirersFiltered () {
-      return this.aquirers
+      return this.acquirers.map(a => {
+        let res = a
+        res.amex_id = this.getCardID(a.amex_id),
+        res.visa_id = this.getCardID(a.visa_id),
+        res.mastercard_id = this.getCardID(a.mastercard_id)
+        return res
+      })
     },
     aquirersPaged () {
       return this.aquirersFiltered.slice((this.currentPage - 1) * this.perPage, this.currentPage * this.perPage)
@@ -76,23 +86,12 @@ export default {
     this.loadData()
   },
   methods: {
+    ...mapActions({
+        getAcquirers: ACTION_PG_GET_ACQUIRERS
+    }),
     async loadData (env) {
-      this.loading = true
-      
-      try {
-        let response = await this.$http.acchttp.get('/acquirer')
-        this.aquirers = response.data.map(a => {
-          let res = a
-          res.amex_id = this.getCardID(a.amex_id),
-          res.visa_id = this.getCardID(a.visa_id),
-          res.mastercard_id = this.getCardID(a.mastercard_id)
-          return res
-        })
-
-      } catch (error) {
-        this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('payment_gateway.acquirer.error_get_aquirers') + error.message, status: 'danger' })
-      }   
-
+      this.loading = true     
+      await this.getAcquirers()
       this.loading = false
     },
     viewAquirer (aquirer) {

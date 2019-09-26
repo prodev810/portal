@@ -21,6 +21,8 @@ import {
     ACTION_PG_CREATE_FLOAT_ACCOUNT,
     MUTATE_PG_ENV,
     GETTER_PG_ENV,
+    ACTION_PG_GET_ACQUIRERS,
+    MUTATE_PG_ACQUIRERS
 } from '../types';
 
 const PORTAL_PG_ENV = 'PORTAL_PG_ENV'
@@ -35,6 +37,7 @@ const state = {
   paymentMethod: [],
   merchants: [],
   floatAccounts: [],
+  acquirers: [],
   env: window.sessionStorage.getItem(PORTAL_PG_ENV) || 'sandbox',
 }
 
@@ -60,6 +63,9 @@ const mutations = {
   },
   [MUTATE_PG_FLOAT_ACCOUNTS]: (state, data) => {
     state.floatAccounts = data.content || []
+  },
+  [MUTATE_PG_ACQUIRERS]: (state, data) => {
+    state.acquirers = data.data || []
   }
 }
 
@@ -139,6 +145,14 @@ const actions = {
       dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_set_float_account') + e.message, status: 'danger' })
     }
   },
+  [ACTION_PG_GET_ACQUIRERS]:  async ({commit, dispatch}, id) => {
+    try {
+      const { data } = await getHttpInstance(state.env).get(`/acquirer`);
+      commit(MUTATE_PG_ACQUIRERS, { data })
+    } catch (e) {
+      dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_load_aquirers') + e.message, status: 'danger' })
+    }
+  }
 }
 
 const getters = {
