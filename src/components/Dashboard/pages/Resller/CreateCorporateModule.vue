@@ -50,6 +50,26 @@
               </el-col>
             </el-row>
 
+            <!-- kycClassifier -->
+            <el-row class="w-100 d-flex align-items-center mb-3">
+              <el-col :md="7">
+                <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.kycClassifier')}}
+                  <span v-if="!isView" class="required-field-symbol">*</span>
+                </strong>
+              </el-col>
+              <el-col :md="17">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
+                  <strong>{{ reseller.kycClassifier }}</strong>
+                </div>
+                <div v-else class="w-100 d-flex align-items-center">
+                  <el-select v-model="reseller.kycClassifier">
+                    <el-option v-for="data in getKycClassifier" :key="data.key" :label="data.key" :value="data.value">{{data.value}}
+                    </el-option>
+                  </el-select>
+                </div>
+              </el-col>
+            </el-row>
+
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative  text-uppercase">{{$t('reseller.create.table_header.reseller_code')}}
@@ -71,7 +91,7 @@
                 <p v-if="!isValidResellerCode" class="invalid-feedback">
                   <!-- <span v-if="!reseller.resellerCode">{{$t('common.form_validations.required_field')}}</span> -->
                   <span v-if="!verifySpace(reseller.resellerCode)">{{$t('common.form_validations.no_space')}}</span>
-                  <span v-if="!(reseller.resellerCode.length <= 6)">{{$t('common.form_validations.max_chars', {max: 6})}}</span>
+                  <span v-if="!(reseller.resellerCode && reseller.resellerCode.length <= 6)">{{$t('common.form_validations.max_chars', {max: 6})}}</span>
                 </p>
               </el-col>
             </el-row>
@@ -198,8 +218,6 @@
                 </div>
               </el-col>
             </el-row>
-
-
           </el-col>
           <el-col :md="13">
 
@@ -343,7 +361,7 @@
                 <div v-else
                      class="w-100 d-flex align-items-center">
                   <el-select v-model="reseller.appFeeBillMethod">
-                    <el-option v-for="item in chargedToValues"
+                    <el-option v-for="item in chargedToAppFee"
                                :key="item.name"
                                :label="item.value"
                                :value="item.value">{{item.value}}
@@ -451,6 +469,55 @@
               </el-col>
             </el-row>
 
+            <!--Add Virtual Creation Fee field by will-->
+            <el-row class="w-100 d-flex align-items-center mb-3">
+              <el-col :md="7">
+                <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.virtual_card_fee')}}
+                </strong>
+              </el-col>
+              <el-col :md="17">
+                <div v-if="isView"
+                     class="w-100 d-flex align-items-center">
+                  <strong>{{reseller.virtualCardFee}}</strong>
+                </div>
+                <div v-else
+                     class="w-100 d-flex align-items-center">
+                  <fg-input v-model="reseller.virtualCardFee"
+                            @blur="handleNumberInput('virtualCardFee')"
+                            :class="{'is-invalid': !isValidVirtualCardFee}"
+                            type="number"
+                            min="0"
+                            :placeholder="$t('reseller.create.table_header.virtual_card_fee')"></fg-input>
+                </div>
+                <p v-if="!isValidVirtualCardFee" class="invalid-feedback">
+                  <!-- <span v-if="!reseller.apiFee"> {{$t('common.form_validations.required_field')}}</span> -->
+                  <span v-if="reseller.virtualCardFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                </p>
+              </el-col>
+            </el-row>
+
+            <el-row class="w-100 d-flex align-items-center mb-3">
+              <el-col :md="7">
+                <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.virtual_card_bill_method')}}
+                </strong>
+              </el-col>
+              <el-col :md="17">
+                <div v-if="isView"
+                     class="w-100 d-flex align-items-center">
+                  <strong>{{reseller.virtualCardBillMethod}}</strong>
+                </div>
+                <div v-else
+                     class="w-100 d-flex align-items-center">
+                  <el-select v-model="reseller.virtualCardBillMethod">
+                    <el-option v-for="item in chargedTovirtualCard"
+                               :key="item.name"
+                               :label="item.value"
+                               :value="item.value">{{item.value}}
+                    </el-option>
+                  </el-select>
+                </div>
+              </el-col>
+            </el-row>
           </el-col>
         </el-row>
       </div>
@@ -724,7 +791,9 @@ import {
   GET_ALL_RESELLER_SUBSCRIPTIONS,
   GETTER_RESELLER_SUBSCRIPTIONS,
   ACTION_GET_COUNTRIES,
-  GETTER_GET_COUNTRY_BY_CODE
+  GETTER_GET_COUNTRY_BY_CODE,
+  GETTER_GET_KYC_CLASSIFIER,
+  ACTION_GET_KYC_CLASSIFIER
 } from "@/store/types"
 import i18n from '@/i18n'
 import LOADING_STATE from '../../../../utils/loadingState'
@@ -752,6 +821,7 @@ import PRadio from "../../../UIComponents/Inputs/Radio";
 import {Modal} from 'src/components/UIComponents'
 import addIcon from '../../../../../public/static/img/dashboard_icons/ic_add.svg'
 import NAMED_ROUTES from '../../../../routes/nameRoutes'
+import cardProgram from '../../../../store/modules/CardProgram';
 
 export default {
   name: "CreateCorparateModule",
@@ -781,7 +851,8 @@ export default {
         cardProgramCode: '',
         status:'',
         countryCode: '',
-        cardProgramID:''
+        cardProgramID:'',
+        kycClassifier: ''
       },
       resellerCorporate: JSON.parse(JSON.stringify(resellerCorporateTemplate)),
       resellerRequestPropDelete: [
@@ -798,6 +869,7 @@ export default {
         {name: 'loadFeePct', type: 'number'},
         {name: 'monthlyFee', type: 'number'},
         {name: 'uniqueFloat', type: 'boolean'},
+        {name: 'virtualCardFee', type: 'number'},
       ],
       modals: {
         visible: false,
@@ -933,6 +1005,28 @@ export default {
               {name: 'ACCOUNT', value: 'ACCOUNT'},
               {name: 'INVOICE', value: 'INVOICE'}]
           },
+        {
+            label: 'Virtual Card Fee',
+            name: 'virtualCardFee',
+            i18n: 'reseller.create.table_header.virtual_card_fee',
+            mask: decimals(2),
+            validator: [shouldBeNumber],
+            $domAttri: {step: '0.01', type: 'number'},
+            brakeAt: breakInput(8)
+
+          },
+          //application fee bill method
+          {
+            label: 'Charged To',
+            name: 'virtualCardBillMethod',
+            i18n: 'reseller.create.table_header.virtual_card_bill_method',
+            input: 'select',
+            selectKeys: [
+              {name: '', value: null},
+              {name: 'FLOAT', value: 'FLOAT'},
+              {name: 'CARD', value: 'CARD'},
+              {name: 'INVOICE', value: 'INVOICE'}]
+          },
           /*monthly fees*/
         ],
         third: [
@@ -1005,7 +1099,15 @@ export default {
         {name: 'FLOAT', value: 'FLOAT'},
         {name: 'INVOICE', value: 'INVOICE'}
       ],
+      chargedToAppFee:[
+        {name: 'FLOAT', value: 'FLOAT'},
+        {name: 'INVOICE', value: 'INVOICE'}
+      ],
       chargedToApiValues: [
+        {name: 'FLOAT', value: 'FLOAT'},
+        {name: 'INVOICE', value: 'INVOICE'}
+      ],
+      chargedTovirtualCard: [
         {name: 'FLOAT', value: 'FLOAT'},
         {name: 'INVOICE', value: 'INVOICE'}
       ],
@@ -1032,7 +1134,9 @@ export default {
         'uniqueFloat',
         'alertContact',
         'status',
-        'countryCode'
+        'countryCode',
+        'kycClassifier',
+        ''
         // 'loadFee',
         // 'loadFeeCap',
         // 'loadFeePct',
@@ -1048,7 +1152,8 @@ export default {
         uniqueFloat: true,
         cardProgramCode: true,
         status:true,
-        countryCode: true
+        countryCode: true,
+        kycClassifier: true
       },
     };
   },
@@ -1061,7 +1166,9 @@ export default {
       loadingState: GETTER_LOADINGSTATE_RESELLER,
       cpcList: GETTER_ALL_CARD_PROGRAM_CODE,
       resellerSubscription: GETTER_RESELLER_SUBSCRIPTIONS,
-      getCountryByCode: GETTER_GET_COUNTRY_BY_CODE
+      getCountryByCode: GETTER_GET_COUNTRY_BY_CODE,
+      getKycClassifier: GETTER_GET_KYC_CLASSIFIER
+
     }),
     resellerData() {
       const resellerSub = this.$store.state.reseller.resellerSubscription;
@@ -1138,6 +1245,8 @@ export default {
             case'cardProgramCode':
               this.validateArray.cardProgramCode = this.isValidCardProgramCode
               break
+            case 'kycClassifier':
+              this.validateArray.kycClassifier = this.isValidKycClassifier
           }
         })
 
@@ -1154,10 +1263,13 @@ export default {
       return isValid
     },
     isValidStatus(){
-return this.reseller.status !== ''
+      return this.reseller.status !== ''
     },
     isValidCountryCode(){
-return this.reseller.countryCode !== ''
+      return this.reseller.countryCode !== ''
+    },
+    isValidKycClassifier() {
+      return this.reseller.kycClassifier !== ''
     },
     isValidCardProgramCode(){
 
@@ -1193,8 +1305,22 @@ return this.reseller.countryCode !== ''
     isValidMonthlyFee() {
       return validateNumber(this.reseller.monthlyFee)
     },
+    isValidVirtualCardFee() {
+      return validateNumber(this.reseller.virtualCardFee)
+    },
   },
   watch: {
+    'reseller.cardProgramID': function(val) {
+      if (val && val !== '') {
+        this.reseller.kycClassifier = ''
+        this.loadKycClassifierByCardProgramId(val)
+      }
+    },
+    getKycClassifier: function (data) {
+      if (data && data.length === 1) {
+        this.reseller.kycClassifier = data[0].key
+      }
+    },
     reseller(newVal){
       this.isStartEdit = true
     },
@@ -1294,7 +1420,8 @@ return this.reseller.countryCode !== ''
       getResellerSubscripiton: GET_RESELLER_SUBSCRTION_BY_ID,
       getAllResellerSubscription: GET_ALL_RESELLER_SUBSCRIPTIONS,
       showModal: SET_MODAL_TYPE,
-      getCountries: ACTION_GET_COUNTRIES
+      getCountries: ACTION_GET_COUNTRIES,
+      loadKycClassifierByCardProgramId: ACTION_GET_KYC_CLASSIFIER
     }),
     modResellerModel(reseller) {
       reseller.uniqueFloat = Number(reseller.uniqueFloat)
@@ -1304,15 +1431,20 @@ return this.reseller.countryCode !== ''
       this.resellerRequestPropModify
         .forEach(property => {
           if (typeof reseller[property.name] !== 'undefined') {
-            reseller[property.name] = this.checkModResellerType(property.type, reseller[property.name])
+            reseller[property.name] = this.checkModResellerType(property.type, reseller[property.name], property.name)
           }
         })
 
       return reseller
     },
-    checkModResellerType(type, value) {
+    checkModResellerType(type, value, propertyName) {
+      // console.log(propertyName, value)
+      const fieldList = ['apiFee', 'appFee', 'loadFee', 'loadFeeCap', 'loadFeePct', 'monthlyFee', 'uniqueFloat', 'virtualCardFee']
       switch (type) {
         case'number':
+          if (fieldList.indexOf(propertyName) !== -1 && (!value || value.toString().trim() === '')) {
+            return null
+          }
           return Number(value)
         case'boolean':
           return !!value
@@ -1362,7 +1494,7 @@ return this.reseller.countryCode !== ''
       };
     },
     handleAddPreset() {
-      console.log('add another preset')
+      // console.log('add another preset')
       this.resellerCorporate.dynamic_pdf.push({name: '', preset: ''})
     },
     handleCancelAction() {
@@ -1436,6 +1568,7 @@ return this.reseller.countryCode !== ''
       //console.log('Body:', body)
 
       if (this.isEdit) {
+        // console.log(body)
         await this.editReseller({body, id: this.resellerId})
           .then(data => {
             if (data.status) {
@@ -1461,7 +1594,8 @@ return this.reseller.countryCode !== ''
       return reseller
     },
     handleNumberInput(name) {
-      this.reseller[`${name}`] = toNumber(event.target.value)
+      // this.reseller[`${name}`] = toNumber(event.target.value)
+      this.$set(this.reseller, name, event.target.value)
     },
     verifyEmail(email) {
       const emailCheck = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i;
@@ -1472,7 +1606,7 @@ return this.reseller.countryCode !== ''
       return nameCheck.test(name)
     },
     verifyContactRef(ref) {
-      return ref.length <= 6 && this.verifySpace(ref)
+      return ref && ref.length <= 6 && this.verifySpace(ref)
     },
     verifySpace(string) {
       const refCheck = /\s/

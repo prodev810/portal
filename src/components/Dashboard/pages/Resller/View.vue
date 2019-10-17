@@ -1,10 +1,12 @@
 <template>
   <div>
-    <div class="card-header bg-white border-0">
-      <div class="row">
-        <div class="col-sm-12 col-md-6">
-          <h4 class="card-title display-inline text-capitalize">{{ $t('reseller.listing.title') }}</h4>
-          <div class="pl-2">
+
+      <div  class="bg-white">
+        <div class="row mb-3">
+          <div class="col-12">
+            <h4 class="card-title">
+              {{ $t('reseller.listing.title') }}
+            </h4>
             <p>
               {{ $t('reseller.listing.tips.line1') }}
               <br><br>
@@ -18,12 +20,12 @@
           </div>
         </div>
       </div>
-    </div>
+
 
     <div v-if="true">
-      <div class="card" v-if="hasPermission(permission.RESELLER_SUBSCRIPTION_LISTING)">
+      <div class="card flat" v-if="hasPermission(permission.RESELLER_SUBSCRIPTION_LISTING)">
         <div class="card-content row">
-          <div class="col-sm-12 tabel-wrapper">
+          <div class="col-sm-12 tabel-wrapper ceevo__table-flat ceevo__table-full-line">
             <div class="p-1">
               <regular-table
                 striped
@@ -40,11 +42,12 @@
                     <div class="cell">
                       <p-button
                         link
-                        type="primary"
+                        type="icon-invoice"
                         :key="index.index.index+index.index.id"
                         @click="goToInvoice(index)"
                         v-if="hasPermission(permission.RESELLER_INVOICE_VIEW)"
                       >
+                         <img src="../../../../../public/static/icons/ic_view_invoice.svg" alt="collapse-icon"/>
                         {{ $t('reseller.listing.button.view_invoice') }}
                       </p-button>
                     </div>
@@ -53,11 +56,12 @@
                     <div class="cell">
                       <p-button
                         link
-                        type="primary"
+                        type="icon-view"
                         :key="index.index.index+index.index.id"
                         @click="viewDetails(index)"
                         v-if="hasPermission(permission.RESELLER_SUBSCRIPTION_VIEW)"
                       >
+                      <img src="../../../../../public/static/icons/ic_view_statement.svg" alt="collapse-icon"/>
                         {{ $t('reseller.listing.button.view_reseller') }}
                       </p-button>
                     </div>
@@ -66,11 +70,12 @@
                     <div class="cell">
                       <p-button
                         link
-                        type="primary"
+                        type="icon-edit"
                         :key="index.index.index+index.index.id"
                         @click="edit(index)"
                         v-if="hasPermission(permission.RESELLER_SUBSCRIPTION_EDIT)"
                       >
+                      <img  src="../../../../../static/dashboard_icons/ic_edit.svg" alt="">
                         {{ $t('reseller.listing.button.edit_reseller') }}
                       </p-button>
                     </div>

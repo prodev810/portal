@@ -127,9 +127,6 @@ export default {
 </script>
 
 <style>
-div.pg-merchant table {
-  width: 100% !important;
-}
   .search-company .form-control{max-width:200px;margin-left: calc( 100% - 200px );}
 </style>
 

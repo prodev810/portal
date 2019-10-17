@@ -1,5 +1,5 @@
 export const moneyFormat = (val) => {
-  if (!val || parseInt(val) === 0) {
+  if (!val || parseFloat(val) === parseFloat(0)) {
     return '0.00'
   }
   val = val.toFixed(2)

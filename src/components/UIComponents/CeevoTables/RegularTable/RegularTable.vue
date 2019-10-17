@@ -159,8 +159,23 @@
         </tbody>
       </table>
       <div v-else>
-        <h4 class="text-center">{{ $t('common.regular_table.no_data') }}
-          <br>
+        <h4 class="text-center mt-5">
+            <p>
+              <svg viewBox="0 0 50 53" class="mt-5 ceevo__icon-alert" width="50px">
+                <g>
+                  <path d="M25,51.9c-5.2,0-10.4,0-15.6,0c-0.8,0-1.5,0-2.3-0.1c-5.2-0.6-7.3-4.2-5.1-9c2.7-5.9,5.4-11.7,8.1-17.5
+                           c3.1-6.7,6.2-13.4,9.3-20c1-2.1,2.3-3.8,4.8-4.1C27,0.8,29,1.9,30.4,4.8c4.1,8.7,8.2,17.5,12.3,26.2c1.8,3.7,3.5,7.5,5.3,11.2
+                           c2.6,5.5,0.2,9.5-5.9,9.6C36.4,52,30.7,51.9,25,51.9C25,51.9,25,51.9,25,51.9z M24.9,49.4c5.9,0,11.8,0,17.7,0c3.4,0,5-2.3,3.6-5.3
+                           c-5.9-12.9-12-25.7-18-38.5c-0.6-1.3-1.5-2-3-2.1c-1.4,0-2.5,0.5-3.2,1.8c-0.3,0.6-0.6,1.2-0.9,1.8C15.4,19.3,9.8,31.5,4.2,43.7
+                           c-1.6,3.5-0.2,5.7,3.7,5.7C13.5,49.4,19.2,49.4,24.9,49.4z"/>
+                  <path d="M26.2,29.3c0,2.8,0,5.5,0,8.3c0,0.8,0,1.6-1.1,1.6c-1,0-1-0.8-1-1.5c0-5.6,0-11.2,0-16.8c0-0.7-0.1-1.7,1-1.7
+                           c1.2,0,1.1,0.9,1.1,1.6C26.2,23.6,26.2,26.5,26.2,29.3z"/>
+                </g>
+                <path d="M25.6,45.8h-1c-0.3,0-0.6-0.3-0.6-0.6v-3.8c0-0.3,0.3-0.6,0.6-0.6h1c0.3,0,0.6,0.3,0.6,0.6v3.8  C26.2,45.6,25.9,45.8,25.6,45.8z"/>
+              </svg>
+            </p>
+            <p class="no-data">{{ $t('common.regular_table.no_data') }}</p>
+
         </h4>
         <br>
         <br>
@@ -347,7 +362,7 @@ import getNested from '@/utils/nestedObjects.js'
               return '---'
             } else {
 							// return r for nested values
-              return r.value ? r.value : r
+              return typeof r.value !== 'undefined' && r.value !== null ? r.value : r
             }
           }
         } else {
@@ -544,7 +559,7 @@ import getNested from '@/utils/nestedObjects.js'
         return valid;
       },
       async getSupportList(row) {
-          
+
           try {
             this.sendingGetDocListReq = true;
             await this.getListSupportDocs({ id: row.checkId.value, fromHistoryTable: true})
@@ -683,7 +698,6 @@ import getNested from '@/utils/nestedObjects.js'
 
   .ceevo__table .cell {
     font-weight: normal;
-    min-width: 120px;
     padding: .5rem .6rem;
 
     .ceevo__table-edit & {
@@ -803,4 +817,9 @@ import getNested from '@/utils/nestedObjects.js'
   .bg-orange {
       background-color: #FF6A6A !important;
   }
+  
+ .no-data{
+   font-weight: 500;
+   font-size: 20px;
+ }
 </style>

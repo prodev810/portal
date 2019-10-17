@@ -20,7 +20,7 @@
 }
 .spinner-wrapper span {
   position: absolute;
-  top: 50%;
+  top: 50vh;
   left: 50%;
   width: 50px;
   height: 50px;

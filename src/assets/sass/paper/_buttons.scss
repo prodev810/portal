@@ -3,9 +3,9 @@
 .navbar .navbar-nav > a.btn{
     border-width: $border-thick;
     font-weight: $font-weight-semi;
-    font-size: $font-size-small;
+    font-size: $font-size-medium;
     line-height: $line-height;
-    text-transform: uppercase;
+    //text-transform: uppercase;
     border: none;
     margin: 10px 1px;
     border-radius: $border-radius-small;
@@ -111,7 +111,14 @@
 
 // Apply the mixin to the buttons
 // .btn-default { @include btn-styles($default-color, $default-states-color); }
-.btn-primary { @include btn-styles($primary-color, $primary-states-color); }
+.btn-primary {
+  @include btn-styles($primary-color, $primary-states-color);
+  &.disabled,
+  &[disabled]{
+    color:#7039DA - 60%;
+  }
+
+}
 .btn-default { @include btn-styles($default-color, $default-states-color); }
 .btn-success { @include btn-styles($success-color, $success-states-color); }
 .btn-info    { @include btn-styles($info-color, $info-states-color); }
@@ -248,5 +255,90 @@
 .no-caret {
   &.dropdown-toggle::after {
     display: none;
+  }
+}
+.btn-round{
+  min-width: 200px;
+}
+.ceevo__btn-group{
+  btn,.btn{
+    min-width: 230px;
+    margin-right: 30px;
+    text-align:center;
+    > div{
+      justify-content: center;
+    }
+    &:last-child{
+      margin-right: 0;
+    }
+  }
+  @media (max-width:576px) {
+    btn,.btn{
+      margin-left:10px !important;
+      margin-right:10px !important;
+      width:45%;
+      min-width: auto;
+      }
+  }
+}
+
+
+.ceevo__table-flat{
+  .btn-group-border{
+    .cell{
+      padding:0;
+      display: contents;
+    }
+    .btn{
+      min-width:110px;
+      min-height: 40px;
+      width: max-content;
+      img{
+            height: 23px;
+            width: auto;
+      }
+      &:last-child{
+        border-right:0;
+      }
+    }
+    .btn-success,
+    .btn-danger,
+    .btn-primary{
+      background:#FFFFFF !important;
+      border-radius:0;
+      &:hover,
+      &:focus,
+      &:active,
+      &:active:focus{
+        background:#FFFFFF !important;
+      }
+    }
+    .btn-success{
+      color:#2ED684;
+      border-right:1px solid #2ED684 !important;
+
+      &:hover,
+      &:focus,
+      &:active,
+      &:active:focus{
+        color:rgba(#2ED684,0.7) !important;
+      }
+    }
+    .btn-primary{
+      color:#5823bd;
+      border-right:1px solid #5823bd !important;
+
+      &:hover,
+      &:focus,
+      &:active,
+      &:active:focus{
+        color:rgba(#5823bd,0.7) !important;
+      }
+    }
+    .sofBtn{
+      margin-left: 2px !important;
+      padding:9px;
+      min-height: 38px;
+    }
   }
 }

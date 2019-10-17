@@ -86,7 +86,7 @@ export default [
     children: [
       {
         name: 'Create card program',
-        path: '/card-program/create',
+        path: '/card-program/card/new',
         i18n: 'menu.create_card_program',
         permission: permission.CARD_PROGRAM_EDIT
       },
@@ -172,7 +172,23 @@ export default [
         permission: permission.UNALLOCATED_FLOAT_VIEW
       }
     ]
-	},
+  },
+  {
+        name: 'Flexmonster',
+        i18n: 'menu.flexmonster',
+        permission: permission.ALL_PERMISSION,
+        icon: 'ti-panel',
+        image: 'ic_reseller.svg',
+        path:'/ipg',
+      collapsed: true,
+      children: [
+          {
+              path: '/ipg',
+              name: 'Reporting',
+              i18n: 'menu.flexmonster',
+              permission: permission.ALL_PERMISSION,
+          }]
+  },
   {
     name: 'KYC Module',
     i18n: 'menu.kyc_module',

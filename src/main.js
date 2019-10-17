@@ -64,6 +64,8 @@ Vue.use(VueNotify)
 Vue.use(SideBar, {sidebarLinks: sidebarLinks})
 Vue.use(VeeValidate)
 
+import '@/utils/VeeCustomValidators.js'
+
 // Vue.use(oAuthKycWrapper, oAuthConfig)
 Vue.use(oAuthWrapper, oAuthConfig)
 Vue.use(axiosWrapper, axiosConfig)

@@ -13,6 +13,10 @@
   -ms-transition: transform 300ms cubic-bezier(0.34, 2, 0.6, 1), box-shadow 200ms ease;
   transition: transform 300ms cubic-bezier(0.34, 2, 0.6, 1), box-shadow 200ms ease;
 
+  &.flat{
+    border-radius: 2px;
+  }
+
   .card-body{
     padding: 15px 15px 10px 15px;
 
@@ -137,4 +141,92 @@
       border-radius: $border-radius-extreme;
     }
   }
+}
+
+.icon-fee{
+  position:relative;
+
+  &:after{
+    content: "%";
+    position: absolute;
+    top: 8px;
+    color: #8d8d8d;
+    font-weight: 500;
+    font-size: 16px;
+    right: 10px;
+  }
+
+}
+
+.ceevo__card-group{
+  span.required-field-sympol{
+    font-size: 24px;
+    margin-top: 8px;
+    font-weight: 500;
+  }
+  .control-label{
+    font-weight: 600;
+    min-height: 44px;
+  }
+  input[type="text"],
+  input[type="number"],
+  input[type="password"],
+  input[type="tel"],
+  input.form-control,
+  textarea{
+    border-radius: 10px;
+    border:1px solid #8D8D8D;
+    padding:7px 18px;
+    width:100%;
+    font-weight:500;
+
+    &::-webkit-input-placeholder{
+      text-transform: capitalize;
+      color:#8D8D8D;
+    }
+
+    &:disabled,
+    &.disabled{
+      background:#2929290D;
+      cursor: not-allowed;
+    }
+  }
+  textarea{
+    outline: none;
+    min-height: 200px;
+    max-height: 500px;
+    min-width: 100%;
+    max-width: 100%;
+  }
+  hr{
+    border-style: dashed;
+    border-color: #7039DA;
+  }
+  .el-input{
+    border:0;
+    padding:0;
+  }
+  @media (max-width:576px) {
+    .w-sm-100{
+      width:100% !important;
+    }
+  }
+}
+.required-field-sympol {
+	color: #5823bd !important;
+	font-weight: 500;
+}
+
+.card-header{
+  padding:0 0 1rem 0;
+}
+
+.card-header h4,
+h4.card-title{
+  margin-top:1rem;
+  font-weight: 700;
+  font-size: 28px;
+}
+.card-info{
+  font-weight: 500;
 }

@@ -4,15 +4,24 @@
     padding: 0;
 
     &.navbar-absolute {
-      padding-top: 0;
+      padding-top: 30px;
     }
 
     .navbar-brand {
       font-size: 16px;
-      margin-right: 0;
+    }
+    .search-field{
+      width:250px;
+      margin-left:auto;
+
+      .input-group{
+        height:48px;
+      }
     }
   }
-
+.logo__container .logo{
+	  height:110px;
+  }
     .profile-photo .profile-photo-small{
         margin-left: -2px;
     }

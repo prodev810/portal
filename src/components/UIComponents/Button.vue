@@ -39,7 +39,8 @@
       link: Boolean,
       icon: Boolean,
       wide: Boolean,
-      size: String
+			size: String,
+			//disabled: Boolean
     },
     computed: {
       classes() {
@@ -66,5 +67,11 @@
     }
   }
 </script>
-<style>
+
+<style lang="scss">
+.btn {
+	&:disabled {
+		cursor: not-allowed !important;
+	}
+}
 </style>

@@ -2,9 +2,10 @@
   <div>
     <div class="bg-white">
       <div class="row">
-        <div class="col-sm-12 col-md-6">
+        <div class="col-12 col-md-7">
+
           <h4 class="card-title display-inline">{{ $t('invoice.listing.title') }}</h4>
-          <div class="pl-2">
+          <div class="card-info">
             <p>
               {{ $t('invoice.listing.tips.line1') }}
             </p>

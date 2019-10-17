@@ -179,7 +179,7 @@ $gray-input-bg: #F3FCF8;
 $table-border-color:$gray-input-outline;
 .ceevo__table {
 
-    width: auto !important;
+   width: 99.99% !important;
 
   @extend .table;
   thead,
@@ -312,7 +312,123 @@ $table-border-color:$gray-input-outline;
   }
 }
 .ceevo__table--condensed{
-  width: 100%;
   overflow: auto;
   overflow: auto;
+}
+
+.ceevo__table-flat{
+
+  table.table{
+    tbody > tr:nth-of-type(2n){
+      background:rgba(#2ED684,.05);
+    }
+    tbody > tr:nth-of-type(2n+1){
+      background:#FFFFFF;
+    }
+    thead{
+      .ceevo__heading-label{
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      th,td{
+        height:40px;
+      }
+    }
+    tbody tr{
+      td,th{
+        .cell{
+          font-weight: 500;
+        }
+        &.bg-danger,
+        &.bg-success,
+        &.bg-green,
+        &.bg-active,
+        &.bg-closed,
+        &.bg-pending{
+          height:40px;
+        }
+        &.bg-danger{
+          background-color:#FF6A6A !important;
+        }
+        &.bg-active{
+          background-color:rgba(#2ED684,0.25) !important;
+        }
+        &.bg-closed{
+          background-color:#8d8d8d !important;
+        }
+        &.bg-pending{
+          background-color:#ffc107 !important;
+        }
+      }
+      th{
+        .bg-danger,.bg-success{
+          color:#FFFFFF;
+        }
+      }
+    }
+  }
+  tbody tr th{
+    border:1px solid #7039DA !important;
+    padding:0 !important;
+    background:#FFFFFF;
+    height: 38px;
+
+    &:first-of-type{
+      border:0 !important;
+    }
+
+    &:last-child[class="btn-group-border"]{
+      border-right: 0 !important;
+    }
+  }
+  tbody tr td[scope="row"]{
+    border-right:1px solid #dee2e6 !important;
+    height: 38px;
+    .cell{
+      padding-left:10px;
+      padding-right:10px;
+    }
+  }
+
+  .cell{
+    padding:0;
+  }
+
+  button[class*=" btn-icon-"], button[class^=btn-icon-]{
+    background:#FFFFFF !important;
+    color:#7039DA !important;
+    padding:6px 12px;
+    width:-webkit-max-content;
+    width:max-content;
+    border-radius:0;
+    border:0 !important;
+    font-size:14px;
+    min-height:38px;
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus{
+      background:#FFFFFF !important;
+      color:rgba(#7039DA,0.7) !important;
+    }
+
+    img{
+      height: 23px;
+      margin-right:5px;
+    }
+  }
+
+  &.ceevo__table-full-line{
+    tbody tr td[scope="row"]{
+      &:last-of-type{
+        border-right:1px solid #7039DA !important;
+        border-bottom: transparent !important;
+      }
+    }
+    tbody tr th{
+      &:first-of-type{
+        border:1px solid #7039DA !important;
+      }
+    }
+  }
 }

@@ -90,7 +90,6 @@ export default {
     visa_id: 'VISA ID',
     mastercard_id: 'MasterCard ID',
 
-    error_get_aquirers: 'Error while getting aquirer(s): ',
     error_duplicate_key: 'Aquirer with id {id} already exists',
     error_saving_client: 'Error while saving aquirer: ',
 

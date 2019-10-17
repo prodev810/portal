@@ -2,7 +2,7 @@
   <div class="card pg-merchant p-2">
     <Spinner v-if="loading"/>
 		<div class="d-flex flex-row justify-content-between align-items-center">
-			<p-button type="primary" @click="$router.push('/payment-gateway/acquirer/new')" size="md" round>{{ $i18n.t('payment_gateway.acquirer.button_new') }}</p-button>
+			<p-button type="primary" @click="$router.push({path: '/payment-gateway/acquirer/new', query: { env }})" size="md" round>{{ $i18n.t('payment_gateway.acquirer.button_new') }}</p-button>
   		<!--<fg-input class="search-company text-right" label="Search by Company Name" v-model="search_company"></fg-input>-->
 		</div>
 
@@ -25,20 +25,22 @@
               displayPerPage
       ></p-pagination> <!-- @input="handleInput" -->
     </div>
-
   </div>
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from 'vuex'
 import {
-	SHOW_TOAST_MESSAGE
+  SHOW_TOAST_MESSAGE,
+  GETTER_PG_ENV,
+  ACTION_PG_GET_ACQUIRERS
 } from '@/store/types'
 import Spinner from "@/components/UIComponents/Spinner"
 import RegularTable from '@/components/UIComponents/CeevoTables/RegularTable/RegularTable'
-import PPagination from "../../../UIComponents/Pagination";
+import PPagination from '@/components/UIComponents/Pagination'
 
 export default {
-  name: 'ViewAcquirer',
+  name: 'Aquirer',
   components: { 
     Spinner, 
     RegularTable,
@@ -47,7 +49,7 @@ export default {
   data () {
     return {
       loading: false,
-      aquirers: [],
+      //aquirers: [],
       headers: [
         { name: 'full_name', i18n: 'payment_gateway.acquirer.full_name' },
         { name: 'short_name', i18n: 'payment_gateway.acquirer.short_name' },
@@ -61,38 +63,42 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      env: GETTER_PG_ENV
+    }),
+    ...mapState({
+      acquirers: (state) => state.paymentGateway.acquirers
+    }),
     aquirersFiltered () {
-      return this.aquirers
+      return this.acquirers.map(a => {
+        let res = a
+        res.amex_id = this.getCardID(a.amex_id),
+        res.visa_id = this.getCardID(a.visa_id),
+        res.mastercard_id = this.getCardID(a.mastercard_id)
+        return res
+      })
     },
     aquirersPaged () {
       return this.aquirersFiltered.slice((this.currentPage - 1) * this.perPage, this.currentPage * this.perPage)
     }
   },
-  async mounted () {
-    this.getData()
-  },
+  // async mounted () {
+  //   this.loadData()
+  // },
   methods: {
-    async getData () {
+    ...mapActions({
+        getAcquirers: ACTION_PG_GET_ACQUIRERS
+    }),
+    async loadData (env) {
       this.loading = true
-      
-      try {
-        let response = await this.$http.acchttp.get('/acquirer')
-        this.aquirers = response.data.map(a => {
-          let res = a
-          res.amex_id = this.getCardID(a.amex_id),
-          res.visa_id = this.getCardID(a.visa_id),
-          res.mastercard_id = this.getCardID(a.mastercard_id)
-          return res
-        })
-
-      } catch (error) {
-        this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('payment_gateway.acquirer.error_get_aquirers') + error.message, status: 'danger' })
-      }   
-
+      await this.getAcquirers()
       this.loading = false
     },
     viewAquirer (aquirer) {
-      this.$router.push(`/payment-gateway/acquirer/${aquirer.index.row.id}`)
+      this.$router.push({
+        path: `/payment-gateway/acquirer/${aquirer.index.row.id}`,
+        query: { env: this.env }
+      })
     },
     getCardID (value) {
       return !value || value === '000000'

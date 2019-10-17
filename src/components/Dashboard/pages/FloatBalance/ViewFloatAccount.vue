@@ -1,126 +1,161 @@
 <template>
   <div>
-    <div class="card-header bg-white border-0">
-      <div class="d-flex w-100 align-items-center flex-wrap">
-        <div class="w-100 ">
-          <h4>
-            {{ $t('view_float_account.listing.title') }}
-          </h4>
-        </div>
-        <div class="pl-2">
-          <p>
-            {{ $t('view_float_account.listing.tips.line1') }}
-          </p>
-          <ul>
-            <li>{{ $t('view_float_account.listing.tips.li1') }}</li>
-            <li>{{ $t('view_float_account.listing.tips.li2') }}</li>
-            <li v-if="showInfo()">{{ $t('view_float_account.listing.tips.li3') }}</li>
-            <li v-if="showInfo()">{{ $t('view_float_account.listing.tips.li4') }}</li>
-            <li>{{ $t('view_float_account.listing.tips.li5') }}</li>
-          </ul>
-        </div>
-        <div class=" w-100 pt-2"
-             v-if="hasPermission(permission.FLOAT_ACCOUNT_LISTING)">
-          <div class="d-flex align-items-center align-content-center justify-content-end">
-            <div class="d-flex align-items-center align-content-center">
-              <span class="px-2">{{ $t('view_float_account.listing.search_filter.currency') }}</span>
-              <el-select class="select-default"
-                         size="small"
-                         placeholder="selected a currency"
-                         v-model="currencyCode"
-              >
-                <el-option v-for="currency in supportedCurrencies"
-                           class="select-success"
-                           :value="currency.code"
-                           :label="currency.code"
-                           :key="currency.id +'currency'">
-                </el-option>
-              </el-select>
-            </div>
-            <div v-if="showInfo()" class="d-flex align-items-center align-content-center">
-              <span class="px-2">{{ $t('view_float_account.listing.search_filter.reseller_status') }}</span>
-              <el-select class="select-default"
-                         size="small"
-                         placeholder="selected a currency"
-                         v-model="resellerStatus"
-              >
-                <el-option v-for="resellerState in resellerStatusEnum"
-                           class="select-success"
-                           :value="resellerState.value"
-                           :label="resellerState.name"
-                           :key="resellerState.value +'resellerState'">
-                </el-option>
-              </el-select>
-            </div>
-            <div v-if="showInfo()" class="d-flex align-items-center align-content-center">
-              <span class="px-2">{{ $t('view_float_account.listing.search_filter.card_program') }}</span>
-              <el-select class="select-default"
-                         size="small"
-                         placeholder="Selected A Card Program"
-                         v-model="cardProgramCode"
-              >
-                <el-option v-for="cardprogram in cardPrograms"
-                           class="select-success"
-                           :value="cardprogram.cardProgramCode"
-                           :label="cardprogram.cardProgramCode"
-                           :key="cardprogram.id">
-                </el-option>
-              </el-select>
-            </div>
-            <div v-if="showInfo()" class="d-flex align-items-center align-content-center">
-              <span class="px-2">{{ $t('view_float_account.listing.search_filter.reseller') }}</span>
-              <el-select class="select-default"
-                         size="small"
-                         placeholder="Selected A Reseller code"
-                         v-model="resellerCode"
-              >
-                <el-option v-for="reseller in resellers"
-                           class="select-success"
-                           :value="reseller.resellerCode"
-                           :label="reseller.value || reseller.resellerCode "
-                           :key="reseller.id">
-                </el-option>
-              </el-select>
-            </div>
-            <div class="d-flex align-items-center align-content-center">
-              <span class="px-2"></span>
-              <p-button @click="getAllFloats" type="primary"
-                        v-if="hasPermission(permission.FLOAT_ACCOUNT_SEARCH)"
-                        :disabled="!ready">
-              {{ $t('view_float_account.listing.button.view') }}
-              </p-button>
+    <div>
+
+        <div class="bg-white">
+          <div class="row">
+            <div class="col-12">
+              <h4 class="card-title display-inline">
+                {{ $t('view_float_account.listing.title') }}
+              </h4>
+              <p class="card-info">
+                {{ $t('view_float_account.listing.tips.line1') }}
+              </p>
+              <ul class="card-info">
+                <li>{{ $t('view_float_account.listing.tips.li1') }}</li>
+                <li>{{ $t('view_float_account.listing.tips.li2') }}</li>
+                <li v-if="showInfo()">{{ $t('view_float_account.listing.tips.li3') }}</li>
+                <li v-if="showInfo()">{{ $t('view_float_account.listing.tips.li4') }}</li>
+                <li>{{ $t('view_float_account.listing.tips.li5') }}</li>
+              </ul>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div>
-      <div class="card"
+
+        <div class="row align-items-center px-2">
+          <div class="pr-0 ml-auto" v-if="hasPermission(permission.FLOAT_ACCOUNT_LISTING)">
+            <div class="d-flex align-items-center flex-wrap float-left float-xl-right">
+
+              <div class="py-2 ceevo__select-group">
+                <div class="d-flex align-items-center">
+                  <span class="px-2 text-nowrap">{{ $t('view_float_account.listing.search_filter.currency') }}</span>
+                  <el-select class="select-default ceevo__select-default"
+                             size="small"
+                             placeholder="selected a currency"
+                             v-model="currencyCode"
+                  >
+                    <el-option v-for="currency in supportedCurrencies"
+                               class="select-success"
+                               :value="currency.code"
+                               :label="currency.code"
+                               :key="currency.id +'currency'">
+                    </el-option>
+                  </el-select>
+                </div>
+              </div>
+
+              <div class="py-2 ceevo__select-group">
+                <div v-if="showInfo()" class="d-flex align-items-center">
+                  <span class="px-2 text-nowrap">{{ $t('view_float_account.listing.search_filter.reseller_status') }}</span>
+                  <el-select class="select-default ceevo__select-default"
+                             size="small"
+                             placeholder="selected a currency"
+                             v-model="resellerStatus"
+                  >
+                    <el-option v-for="resellerState in resellerStatusEnum"
+                               class="select-success"
+                               :value="resellerState.value"
+                               :label="resellerState.name"
+                               :key="resellerState.value +'resellerState'">
+                    </el-option>
+                  </el-select>
+                </div>
+              </div>
+
+              <div class="py-2 ceevo__select-group">
+                <div v-if="showInfo()" class="d-flex align-items-center">
+                  <span class="px-2 text-nowrap">{{ $t('view_float_account.listing.search_filter.card_program') }}</span>
+                  <el-select class="select-default ceevo__select-default"
+                             size="small"
+                             placeholder="Selected A Card Program"
+                             v-model="cardProgramCode"
+                  >
+                    <el-option v-for="cardprogram in cardPrograms"
+                               class="select-success"
+                               :value="cardprogram.cardProgramCode"
+                               :label="cardprogram.cardProgramCode"
+                               :key="cardprogram.id">
+                    </el-option>
+                  </el-select>
+                </div>
+              </div>
+
+              <div class="py-2 ceevo__select-group">
+                <div v-if="showInfo()" class="d-flex align-items-center">
+                  <span class="px-2 text-nowrap">{{ $t('view_float_account.listing.search_filter.reseller') }}</span>
+                  <el-select class="select-default ceevo__select-default"
+                             size="small"
+                             placeholder="Selected A Reseller code"
+                             v-model="resellerCode"
+                  >
+                    <el-option v-for="reseller in resellers"
+                               class="select-success"
+                               :value="reseller.resellerCode"
+                               :label="reseller.value || reseller.resellerCode "
+                               :key="reseller.id">
+                    </el-option>
+                  </el-select>
+                </div>
+              </div>
+
+              <div class="py-2 mr-1">
+                <div class="d-flex align-items-center">
+                  <span class="px-2 text-nowrap"></span>
+                  <p-button round @click="getAllFloats" type="primary"
+                            v-if="hasPermission(permission.FLOAT_ACCOUNT_SEARCH)"
+                            :disabled="!ready">
+                  {{ $t('view_float_account.listing.button.view') }}
+                  </p-button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+     </div>
+
+
+
+      <div class="card flat"
            v-if="hasPermission(permission.FLOAT_ACCOUNT_LISTING)">
         <div class="card-content row">
           <div class="col-sm-12">
             <regular-table
+              class="ceevo__table-flat"
               striped
               :headings="tableHeadings"
               :value="tableData"
-              :addToHeaders="[{name:'hasPendingDebitOrCredit' ,label:'Pending', i18n: 'view_float_account.listing.table_header.has_pending_debit_or_credit'}]"
+              :addToHeaders="[{label: 'status', name: 'resellerStatus', i18n: 'view_float_account.listing.table_header.reseller_status'},
+                {name:'hasPendingDebitOrCredit' ,label:'Pending', i18n: 'view_float_account.listing.table_header.has_pending_debit_or_credit'}]"
             >
               <template slot-scope="index">
-                <th>
-                  <div class="cell" :class="{
+                <td :class="{
+                  'bg-active':getResellerStatus(index) === 'Active',
+                  'bg-closed':getResellerStatus(index) === 'Closed',
+                  'bg-pending':getResellerStatus(index) === 'Pending Approval',
+                  }">
+                  <div class="cell" >
+                    {{getResellerStatus(index)}}
+                  </div>
+                </td>
+                <th :class="{
                   'bg-success':getBendingDebitStat(index) === 'yes',
                   'bg-danger':getBendingDebitStat(index) === 'no',
                   }">
+                  <div class="cell">
                     {{getBendingDebitStat(index)}}
                   </div>
                 </th>
                 <th v-if="hasPermission(permission.STATEMENT_VIEW)">
                   <div class="cell">
+
                     <p-button
-                      type="primary"
+                      type="icon-statement"
                       link
                       @click="viewStatement(index)"
                     >
+                    <img src="../../../../../public/static/icons/ic_view_statement.svg" alt="collapse-icon"/>
                     {{ $t('view_float_account.listing.button.view_statement') }}
                     </p-button>
                   </div>
@@ -128,10 +163,11 @@
                 <th v-if="hasPermission(permission.DEBIT_CREDIT_INSTRUCT_EDIT) && showInfo()">
                   <div class="cell">
                     <p-button
-                      type="primary"
+                      type="icon-setup"
                       link
                       @click="setupDebit(index)"
                     >
+                    <img src="../../../../../public/static/icons/ic_setup.svg" alt="collapse-icon"/>
                     {{ $t('view_float_account.listing.button.setup') }}
                     </p-button>
                   </div>
@@ -139,10 +175,11 @@
                 <th v-if="hasPermission(permission.DEBIT_CREDIT_INSTRUCT_APPROVE) && showInfo()">
                   <div class="cell">
                     <p-button
-                      type="primary"
+                      type="icon-approve"
                       link
                       @click="approveDebit(index)"
                     >
+                    <img src="../../../../../public/static/icons/ic_tick.svg" alt="collapse-icon"/>
                     {{ $t('view_float_account.listing.button.approve') }}
                     </p-button>
                   </div>
@@ -150,10 +187,11 @@
                 <th v-if="hasPermission(permission.RESELLER_INVOICE_VIEW)">
                   <div class="cell">
                     <p-button
-                      type="primary"
+                      type="icon-invoice"
                       link
                       @click="viewInvoices(index)"
                     >
+                    <img src="../../../../../public/static/icons/ic_view_invoice.svg" alt="collapse-icon"/>
                     {{ $t('view_float_account.listing.button.view_invoice') }}
                     </p-button>
                   </div>
@@ -162,12 +200,12 @@
             </regular-table>
             <Pagination :page-count="totalPages"
                         v-model="page"
+                        class="mb-3"
                         @perpagechange="onPerpageChange"
                         :perPage="perPage" displayPerPage></Pagination>
           </div>
         </div>
       </div>
-    </div>
     <Spinner v-if="loadingState ==='getting'">
     </Spinner>
   </div>
@@ -212,7 +250,7 @@
           {
             label: 'float amount', name: 'amount', i18n: 'view_float_account.listing.table_header.amount'
           },
-          {label: 'status', name: 'resellerStatus', i18n: 'view_float_account.listing.table_header.reseller_status'},
+          //{label: 'status', name: 'resellerStatus', i18n: 'view_float_account.listing.table_header.reseller_status'},
         ],
         tableData: [],
         cardProgramCode: '',
@@ -237,7 +275,7 @@
         allCardPrograms: GETTER_ALL_CARDS,
         loadingState: GETTER_LOADINGSTATE_FLOAT_BALANCE,
         allResellers: GETTER_RESELLER_SUBSCRIPTIONS
-      }), 
+      }),
       ready() {
         return (
           this.cardProgramCode !== '' &&
@@ -295,7 +333,7 @@
       },
       cardProgramCode(cardProgramCode) {
         this.handleQuery({cardProgramCode})
-      }, 
+      },
       resellerStatus(resellerStatus) {
         this.handleQuery({resellerStatus})
       },
@@ -339,7 +377,7 @@
             reseller_code: resellerCode
           }
         })
-      }, 
+      },
       setupDebit({index: {index}}) {
         //Card Program Code, Reseller Code, Reseller Name, Username, Currency
         const floatAccount = this.tableData[index];
@@ -424,6 +462,19 @@
           const recoredIndex = index !== void 0 && index.index !== void 0 ? index.index.index : false;
           if (recoredIndex === false) return 'false'
           return this.tableData[recoredIndex].hasPendingDebitOrCredit ? 'yes' : 'no'
+        }
+      }, getResellerStatus(index) {
+        if (this.tableData.length !== 0) {
+          const recoredIndex = index !== void 0 && index.index !== void 0 ? index.index.index : false;
+          if (recoredIndex === false) return 'false'
+          //console.log('pending status', this.tableData[recoredIndex].resellerStatus)
+          if( this.tableData[recoredIndex].resellerStatus === 'ACTIVE') {
+            return 'Active'
+          } else if(this.tableData[recoredIndex].resellerStatus === 'CLOSED') {
+            return 'Closed'
+          } else {
+            return 'Pending Approval'
+          }
         }
       },
       getAllFloats() {

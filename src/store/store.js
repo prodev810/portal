@@ -11,6 +11,8 @@ import business from './modules/Business'
 import security from 'plugin-vuejs-keycloak/modules/security'
 import userInfo from './modules/UserInfo'
 import countries from "./modules/Countries"
+import kycClassifier from "./modules/KycClassifier"
+
 
 Vue.use(Vuex)
 
@@ -26,6 +28,7 @@ export const store = new Vuex.Store({
       issuing,
       business,
       userInfo,
-      countries
+      countries,
+      kycClassifier
   }
 })

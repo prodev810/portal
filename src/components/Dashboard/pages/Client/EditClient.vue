@@ -60,9 +60,9 @@
                            name="country"
                            data-vv-as="country">
                   <el-option v-for="item in countries"
-                              :key="item.alpha2Code"
-                              :label="item.name"
-                              :value="item.alpha2Code">{{item.name}}
+                              :key="item.country_code"
+                              :label="item.country_name"
+                              :value="item.country_code">{{item.country_name}}
                   </el-option>
                 </el-select>
                 <div class="validation-error">{{ errors.first('country') }}</div>                     
@@ -218,9 +218,10 @@ import moment from 'moment'
 import {
 	SHOW_TOAST_MESSAGE,
 	ACTION_GET_CLIENT,
-	ACTION_GET_COUNTRIES,
+	// ACTION_GET_COUNTRIES,
 	GETTER_GET_COUNTRY_BY_CODE,
-	ACTION_PG_GET_CURRENCIES,
+  ACTION_PG_GET_CURRENCIES,
+  ACTION_PG_GET_COUNTRIES,
 	ACTION_SAVE_CLIENT
 } from '@/store/types'
 
@@ -271,8 +272,9 @@ export default {
   },
 	computed: {
     ...mapState({
-			countries: state => state.countries.countries,
-			currencies: state => state.paymentGateway.currencies
+			// countries: state => state.countries.countries,
+      currencies: state => state.paymentGateway.currencies,
+      countries: state => state.paymentGateway.countries,
     }),
 		editMode () {
 			return this.$route.params.id !== 'new'
@@ -293,7 +295,7 @@ export default {
 	},
   methods: {
 		...mapActions({
-			getCountries: ACTION_GET_COUNTRIES,
+      getCountries: ACTION_PG_GET_COUNTRIES,
 			getCurrencyList:ACTION_PG_GET_CURRENCIES,
 			saveClient: ACTION_SAVE_CLIENT
 		}),			
@@ -355,8 +357,8 @@ export default {
 	},
 	created () {
     // Request countries if they not loaded yet
-		this.getCountries()
-		this.getCurrencyList()
+		this.getCountries('sandbox')
+		this.getCurrencyList('sandbox')
 		this.getData()
   }
 }

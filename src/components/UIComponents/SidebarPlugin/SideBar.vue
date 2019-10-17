@@ -113,6 +113,9 @@
   };
 </script>
 <style>
+  .logo__container .logo{
+	  height:130px;
+  }
   .logo {
     display: flex !important;
     align-items: center;
