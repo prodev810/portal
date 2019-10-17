@@ -27,9 +27,7 @@ import {
 
 const PORTAL_PG_ENV = 'PORTAL_PG_ENV'
 
-const getHttpInstance = (env) => {
-  return env === 'sandbox' ? Vue.prototype.$http.acchttp : Vue.prototype.$http.acchttpLive
-}
+import getHttpInstance from './PGInstance.js' 
 
 const state = {
   currencies: [],

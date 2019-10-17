@@ -23,30 +23,26 @@
       ></p-pagination>
     </div>
 
-		<modal :show="modalDetailsVisible"
-           footerClasses="justify-content-center"
-           type="notice">
-			<h5 slot="header" class="modal-title">Payment details</h5>
-
-			XXX
-
-      <div slot="footer" class="w-100 d-flex justify-content-center">
-        <p-button type="default" 
-									@click.native="modalDetailsVisible = false" 
-									class="btn btn-round btn-default">
-					{{ $t('payment_gateway.button_close') }}
-				</p-button>
-      </div>
-		</modal>
+		<DetailsModal v-model="modalDetailsVisible"
+									header="Payment details"
+									:data="modalDetailsData"
+									:description="modalDetailsDescription"/>
 
 		<DetailsModal v-model="modalCustomerVisible"
 									header="Customer details"
 									:data="modalCustomerData"
 									:description="modalCustomerDescription"/>
+
+		<DetailsModal v-model="modalShippingAddressVisible"
+									header="Shipping address"
+									:data="modalShippingAddressData"
+									:description="modalShippingAddressDescription"/>
   </div>
 </template>
 
 <script>
+import getHttpInstance from '@/store/modules/PGInstance.js' 
+
 import { mapActions, mapState } from 'vuex'
 import {
 	SHOW_TOAST_MESSAGE,
@@ -89,10 +85,24 @@ export default {
 			modalCustomerData: {},
 			modalShippingAddressData: {},
 			modalDetailsDescription: [
-				{ key: '', label: '' }
+				{ key: 'account_token', label: 'Account token' },
+				{ key: 'amount', label: 'Amount' },
+				{ key: 'currency', label: 'Currency' },
+				{ key: 'is3_d', label: 'Is 3D', filter: 'boolean' },
+				{ key: 'merch_reference', label: 'Merchant reference' },
+				{ key: 'merchant_id', label: 'Merchant ID' },
+				{ key: 'method_code', label: 'Method code' },
+				{ key: 'modified_date', label: 'Modified ID', filter: 'dateTime' },
+				{ key: 'payer_id', label: 'Payer ID' },
+				{ key: 'session_id', label: 'Session ID' },
+				{ key: 'sett_amount', label: 'Sett amount' },
+				{ key: 'sett_currency', label: 'Sett currency' },
+				{ key: 'status', label: 'Status' },
+				{ key: 'sub_type', label: 'Sub type' },
+				{ key: 'transaction_date', label: 'Transaction date', filter: 'dateTime' },
+				{ key: 'value_date', label: 'Value date', filter: 'dateTime' }
 			],
 			modalOperationsDescription: [
-
 			],
 			modalCustomerDescription: [
 				{ key: 'active', label: 'Active', filter: 'boolean' },
@@ -107,12 +117,17 @@ export default {
 				{ key: 'update_date', label: 'Update date', filter: 'dateTime' },
 			],
 			modalShippingAddressDescription: [
-				{ key: '', label: '' }
+				{ key: 'city', label: 'City' },
+				{ key: 'country', label: 'Country' },
+				{ key: 'state', label: 'State' },
+				{ key: 'street', label: 'Street' },
+				{ key: 'zip', label: 'ZIP' }
 			]
 		}
 	},
 	computed: {
 		...mapState({
+			env: state => state.paymentGateway.env,
 			transactions: state => state.paymentGateway.transactions
 		})
 	},
@@ -137,7 +152,7 @@ export default {
 			this.loading = true
 
 			try {
-				let response = await this.$http.acchttp.get(row._links.payment.href)
+				let response = await getHttpInstance(this.env).get(this.processModalURL(row._links.payment.href))
 				// assign data and make modal visible
 				this.modalDetailsData = response.data
 				this.modalDetailsVisible = true
@@ -167,11 +182,10 @@ export default {
 			this.loading = true
 
 			try {
-				let response = await this.$http.acchttp.get(row._links.customer.href)
+				let response = await getHttpInstance(this.env).get(this.processModalURL(row._links.customer.href))
 				// assign data and make modal visible
 				this.modalCustomerData = response.data
 				this.modalCustomerVisible = true
-				console.log('this.modalCustomerData', this.modalCustomerData)
 			} catch (error) {
 				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: error.message, status: 'danger' })
 			}
@@ -182,16 +196,23 @@ export default {
 			this.loading = true
 
 			try {
-				let response = await this.$http.acchttp.get(row._links.shippingAddress.href)
+				let response = await getHttpInstance(this.env).get(this.processModalURL(row._links.shippingAddress.href))
 				// assign data and make modal visible
 				this.modalShippingAddressData = response.data
 				this.modalShippingAddressVisible = true
-				console.log('this.modalShippingAddressData', this.modalShippingAddressData)
 			} catch (error) {
 				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: error.message, status: 'danger' })
 			}
 
 			this.loading = false
+		},
+		processModalURL(value) {
+			let url = value.split('/')
+			let idx = url.findIndex(s => s === 'payment-mgmt')
+
+			return idx >= 0 
+				? '/' + url.slice(idx + 1).join('/') 
+				: value			
 		}
 	},
 	mounted () {
