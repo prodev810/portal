@@ -14,6 +14,11 @@
         </div>
       </CollapseTransition>
     </div>
+    <div class="row">
+      <div class="col-12 pt-3 px-4">
+        <hr />
+      </div>
+   </div>
   </nav>
 </template>
 <script>
@@ -67,5 +72,11 @@
 <style scoped>
   .navbar-relative {
     position: relative;
+  }
+  .navbar{
+    display: block;
+  }
+  hr{
+    border-width: 2px;
   }
 </style>

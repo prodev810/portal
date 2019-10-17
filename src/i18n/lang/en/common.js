@@ -1,10 +1,10 @@
 const pagenation = {
   page_size: `Page Size`,
-  page_result: `results form {start} to {end} entries`
+  page_result: `results from {start} to {end} entries`
 }
 
 const regular_table = {
-  no_data: `NO DATA PRESENT YET !`
+  no_data: `No data present yet.`
 }
 
 const user_menu = {

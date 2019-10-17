@@ -41,12 +41,12 @@
         type: Number,
         default: 0
       },
-      value: {
-        type: [Number, String],
-        default: 0
-      },
+      // value: {
+      //   type: [Number, String],
+      //   default: 0
+      // },
       perPage: {
-        type: Number,
+        type: [Number, String],
         default: 10
       },
       displayPerPage: {

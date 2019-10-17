@@ -1,710 +1,807 @@
 <template>
   <div>
-    <div class=" d-flex justify-content-between"
-         :class="{
-    ['section-header']:context ==='create',
-    ['pb-3']:context !=='create',
-    }"
-    >
-      <h4 class="card-title display-inline  text-capitalize">
-        {{ $t('card_program.create.title', {action: context}) }}
-      </h4>
-    </div>
-    <div class="pl-2" v-if="context ==='create'">
-      <p>
-        {{ $t('card_program.create.tips.create.line1') }}
-        <br/>
-        {{ $t('card_program.create.tips.create.line2') }}
-      </p>
-      <ul>
-        <li>{{ $t('card_program.create.tips.create.li1') }}</li>
-        <li>{{ $t('card_program.create.tips.create.li2') }}</li>
-      </ul>
-    </div>
-    <div class="pl-2" v-if="context ==='view'">
-      <p>
-        {{ $t('card_program.create.tips.view.line1') }}
-      </p>
-      <ul>
-        <li>{{ $t('card_program.create.tips.view.li1') }}</li>
-        <li>{{ $t('card_program.create.tips.view.li2') }}</li>
-      </ul>
-    </div>
-    <div class="pl-2" v-if="context ==='edit'">
-      <p>
-        {{ $t('card_program.create.tips.edit.line1') }}
-      </p>
-      <ul>
-        <li>{{ $t('card_program.create.tips.edit.li1') }}</li>
-      </ul>
-    </div>
-    <div class="card">
-      <div class="card-content">
-        <div class="col-sm-12 tabel-wrapper mb-1">
-          <div class="py-1">
-            <regular-table striped
-                           :showValidFeedBack="showValidFeedBack"
-                           :context="context"
-                           :headings="tableHeadingsPack.main"
-                           @input="listenToInput($event,'main')"
-                           :editId="editId"
-                           :value="tableViewData">
-            </regular-table>
-          </div>
-        </div>
-        <hr>
-        <div class="col-sm-12 tabel-wrapper mb-1">
-          <div class="py-1">
-            <regular-table striped
-                           :showValidFeedBack="showValidFeedBack"
-                           :context="context"
-                           :headings="tableHeadingsPack.middle"
-                           @input="listenToInput($event,'middle')"
-                           :editId="editId"
-                           :value="tableViewData"
-                           :amonutAlignRightFormat="secondLine">
-            </regular-table>
-          </div>
-        </div>
-        <hr>
-        <div class="col-sm-12 tabel-wrapper mb-1">
-          <div class="py-1">
-            <regular-table striped
-                           :showValidFeedBack="showValidFeedBack"
-                           :context="context"
-                           @input="listenToInput($event,'fees')"
-                           :headings="tableHeadingsPack.fees"
-                           :editId="editId"
-                           :value="tableViewData"
-                           :amonutAlignRightFormat="thirdLine">
-            </regular-table>
-          </div>
-        </div>
-        <hr>
-        <div class="col-sm-12 tabel-wrapper mb-1">
-          <div class="py-1">
-            <SingleFieldTable
-              :tableData="tableViewData"
-              filedName="kycClassifier"
-              @input="listenToInput($event,'kycClassifier')"
-              striped bordered
-              label="card_program.create.table_header.kyc_classifier"
-              :showValidFeedBack="showValidFeedBack"
-              :context="context"
-              :extraHeadings="1"
-              :editId="editId"
-              :headingObj="tableHeadingsPack.kycClassifier[0]"
-            >
-              <template v-if="this.context !== 'view'">
-                <td>
-                  <div class="cell">
-                    <AbaButton
-                      context="primary"
-                      @click="createNewField('kycClassifier')"
-                      tooltip="add new kyc"
-                    >
-                      <i class="fa  fa-plus"></i>
-                    </AbaButton>
-                  </div>
-                </td>
-              </template>
-            </SingleFieldTable>
-          </div>
-        </div>
-        <hr>
-        <div class="col-sm-12 tabel-wrapper">
-          <div class="py-1">
-            <SingleFieldTable
-              :tableData="tableViewData"
-              filedName="matrixPID"
-              :context="context"
-              label="card_program.create.table_header.matrix_pid"
-              @input="listenToInput($event,'matrixPID')"
-              striped bordered
-              :showValidFeedBack="showValidFeedBack"
-              :extraHeadings="1"
-              :editId="editId"
-              :headingObj="tableHeadingsPack.matrixPID[0]"
-            >
-              <template v-if="this.context !== 'view'">
-                <td>
-                  <div class="cell">
-                    <AbaButton
-                      context="primary"
-                      @click="createNewField('matrixPID')"
-                      tooltip="create new matrixPID"
-                    >
-                      <i class="fa  fa-plus"></i>
-                    </AbaButton>
-                  </div>
-                </td>
-              </template>
-            </SingleFieldTable>
-          </div>
-          <br>
-          <slide-y-down-transition>
-            <p v-if="edit || context ==='create'">
-              <span class="required-field-sympol">
-                <b>*</b>
-              </span> 
-              {{ $t('card_program.create.common.required_fields') }}
+
+		<div  class="bg-white">
+		  <div class="row mb-4">
+		    <div class="col-12">
+          <h4 class="card-title display-inline  text-capitalize">
+            {{ $t('card_program.create.title', { action: actionName }) }}
+          </h4>
+
+          <div v-if="!editMode">
+            <p class="card-info">
+              {{ $t('card_program.create.tips.create.line1') }}{{ $t('card_program.create.tips.create.line2') }}
+              <span class="pull-right"><span class="required-field-sympol pr-1">*</span>required</span>
             </p>
-          </slide-y-down-transition>
+            <ul class="card-info">
+              <li>{{ $t('card_program.create.tips.create.li1') }}</li>
+              <li>{{ $t('card_program.create.tips.create.li2') }}</li>
+            </ul>
+          </div>
+
         </div>
       </div>
     </div>
+
+		<!-- <template>
+			<div v-if="viewMode">
+				<p class="card-info">
+					{{ $t('card_program.create.tips.view.line1') }}
+				</p>
+				<ul class="card-info">
+					<li>{{ $t('card_program.create.tips.view.li1') }}</li>
+					<li>{{ $t('card_program.create.tips.view.li2') }}</li>
+				</ul>
+			</div>
+
+			<div v-else>
+				<p class="card-info">
+					{{ $t('card_program.create.tips.edit.line1') }}
+				</p>
+				<ul class="card-info">
+					<li>{{ $t('card_program.create.tips.edit.li1') }}</li>
+				</ul>
+			</div>
+		</template> -->
+
+		<!-- New style mock start-->
+		<div class="row">
+
+			<!-- col-1 -->
+			<div class="col-12 col-md-6 col-xl-4">
+				<div class="card ceevo__card-group">
+					<div class="card-content p-4">
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">PSF REF <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.psfRef }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.psfRef"
+												v-validate="'required|max:7'" maxlength="7"
+												name="psfRef"
+												type="text"
+												placeholder="psf Ref"
+												class="form-control form-control-danger">
+								</template>
+							</div>
+              <div v-if="errors.first('psfRef')" class="validation-error offset-xl-5 px-3">{{ errors.first('psfRef') }}</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">ISSUER INST <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.issuerInst }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.issuerInst"
+												v-validate="'required|length:5'" maxlength="5"
+												name="issuerInst"
+												data-vv-as="issuer inst"
+												type="text"
+												placeholder="Issuer inst"
+												class="form-control form-control-danger">
+								</template>
+							</div>
+              <div v-if="errors.first('issuerInst')" class="validation-error offset-xl-5 px-3">{{ errors.first('issuerInst') }}</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">PM INST <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.pmInst }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.pmInst"
+												v-validate="'required|length:5'" maxlength="5"
+												name="pmInst"
+												data-vv-as="PM inst"
+												type="text"
+												placeholder="PM inst"
+												class="form-control form-control-danger">
+								</template>
+							</div>
+              <div v-if="errors.first('pmInst')" class="validation-error offset-xl-5 px-3">{{ errors.first('pmInst') }}</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">PO INST <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.poInst }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.poInst"
+												v-validate="'required|length:5'" maxlength="5"
+												name="poInst"
+												data-vv-as="PO inst"
+												type="text"
+												placeholder="PO inst"
+												class="form-control form-control-danger">
+								</template>
+							</div>
+              <div v-if="errors.first('poInst')" class="validation-error offset-xl-5 px-3">{{ errors.first('poInst') }}</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label text-capitalize">Card Program Code <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardProgCode }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.cardProgCode"
+												v-validate="'required|length:5'" maxlength="5"
+												name="cardProgCode"
+												data-vv-as="card program code"
+												type="text"
+												placeholder="CPC"
+												class="form-control form-control-danger">
+								</template>
+							</div>
+              <div v-if="errors.first('cardProgCode')" class="validation-error offset-xl-5 px-3">{{ errors.first('cardProgCode') }}</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 d-flex align-items-center control-label">CARD PROGRAM DESCRIPTION <span class="required-field-sympol">＊</span></div>
+							<div class="col-12">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardProgDesc }}</div>
+								<template v-else>
+									<textarea v-model="cardProgramData.cardProgDesc"
+														v-validate="'required|max:40'" maxlength="40" rows="2"
+														name="cardProgDesc"
+														data-vv-as="card program description"
+														placeholder="Card Program Description"/>
+								</template>
+							</div>
+              <div v-if="errors.first('cardProgDesc')" class="validation-error px-3">{{ errors.first('cardProgDesc') }}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- col-2 -->
+			<div class="col-12 col-md-6 col-xl-5">
+				<div class="card ceevo__card-group">
+					<div class="card-content p-4">
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CARD PROGRAM IDENTIFIER<span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardProgramIdentifier }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.cardProgramIdentifier"
+												type="text"
+												maxlength="11"
+												v-validate="{ required: true, regex: /(^[1-9]([0-9]*)$|^[0-9]$)/, min_value: 1, max_value: 9999999999 }"
+												name="cardProgramIdentifier"
+												data-vv-as="card program identifier"
+												placeholder="card program identifier"
+												class="form-control  form-control-danger">
+								</template>
+							</div>
+							<div v-if="errors.first('cardProgramIdentifier')" class="validation-error offset-xl-5 px-3">{{ errors.first('cardProgramIdentifier') }}</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">BUREAU INST CODE <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardPrinterCode }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.cardPrinterCode"
+												v-validate="'required|length:5'" maxlength="5"
+												name="cardPrinterCode"
+												data-vv-as="bureau inst code"
+												type="text"
+												placeholder="bureau inst code"
+												class="form-control form-control-danger">
+								</template>
+							</div>
+              <div v-if="errors.first('cardPrinterCode')" class="validation-error offset-xl-5 px-3">{{ errors.first('cardPrinterCode') }}</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">DEFAULT CURRENCY <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.defaultCurrencyCode }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.defaultCurrencyCode"
+												v-validate="'required|currencyISO'"
+												name="defaultCurrencyCode"
+												data-vv-as="default currency"
+												type="text"
+												placeholder="default currency"
+												class="form-control form-control-danger">
+								</template>
+							</div>
+              <div v-if="errors.first('defaultCurrencyCode')" class="validation-error offset-xl-5 px-3">{{ errors.first('defaultCurrencyCode') }}</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">ALERT CONTACT E-MAIL <span class="required-field-sympol">＊</span></div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.alertContact }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.alertContact"
+												v-validate="'required|email'"
+												name="alertContact"
+												data-vv-as="alert contact email"
+												type="text"
+												placeholder="alert contact email"
+												class="form-control form-control-danger">
+								</template>
+							</div>
+              <div v-if="errors.first('alertContact')" class="validation-error offset-xl-5 px-3">{{ errors.first('alertContact') }}</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">LOAD FEE</div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFee }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.loadFee" type="text" placeholder="LOAD FEE" class="form-control  form-control-danger">
+								</template>
+							</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">LOAD FEE %</div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFeePct }}</div>
+								<template v-else>
+                  <div class="icon-fee">
+									  <input v-model="cardProgramData.loadFeePct" type="text" placeholder="LOAD FEE %" class="form-control  form-control-danger">
+                  </div>
+								</template>
+							</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
+							<div class="col-12 col-lg-12 col-xl-7 ceevo__select-auto">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFeebillMethod }}</div>
+								<template v-else>
+									<ChargedTo v-model="cardProgramData.loadFeebillMethod"/>
+								</template>
+							</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">APPLICATION FEE</div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.appFee }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.appFee" type="text" placeholder="Application Fee" class="form-control  form-control-danger">
+								</template>
+							</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
+							<div class="col-12 col-lg-12 col-xl-7 ceevo__select-auto">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.appFeeBillMethod }}</div>
+								<template v-else>
+									<ChargedTo v-model="cardProgramData.appFeeBillMethod"/>
+								</template>
+							</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">MONTHLY FEE</div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.monthlyFee }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.monthlyFee" type="text" placeholder="monthly Fee" class="form-control  form-control-danger">
+								</template>
+							</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
+							<div class="col-12 col-lg-12 col-xl-7 ceevo__select-auto">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.monthlyFeeBillMethod }}</div>
+								<template v-else>
+									<ChargedTo v-model="cardProgramData.monthlyFeeBillMethod"/>
+								</template>
+							</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">API FEE</div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.apiFee }}</div>
+								<template v-else>
+									<input v-model="cardProgramData.apiFee" type="text" placeholder="Api Fee" class="form-control  form-control-danger">
+								</template>
+							</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
+							<div class="col-12 col-lg-12 col-xl-7 ceevo__select-auto">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.apiFeeBillMethod }}</div>
+								<template v-else>
+									<ChargedTo v-model="cardProgramData.apiFeeBillMethod"/>
+								</template>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- col-3 -->
+			<div class="col-12 col-md-6 col-xl-3">
+				<div class="card ceevo__card-group">
+					<div class="card-content p-4 pb-5">
+						<!-- KYC Classes -->
+						<div v-for="(kyc, index) in cardProgramData.kycClassifier"
+								 :key="`kyc${index}`"
+								 class="row mb-0">
+							<div class="kyc-adding w-75">
+								<div class="col-12 d-flex align-items-center control-label">KYC CLASS {{ index + 1 }}<span class="required-field-sympol">＊</span></div>
+								<div class="col-12 mb-0">
+									<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.kycClassifier[index] }}</div>
+									<template v-else>
+                    <div class="kyc-group">
+                      <input v-model="cardProgramData.kycClassifier[index]"
+                            v-validate="'required|max:5'" maxlength="5"
+                            :name="`kyc${index}`"
+                            :data-vv-as="`kyc class ${index + 1}`"
+                            type="text"
+                            :placeholder="`KYC Class ${index + 1}`"
+                            class="form-control  form-control-danger"/>
+                      <template v-if="!viewMode">
+                        <button v-if="index > 0"
+                                class="el-tooltip aba__button delete"
+                                @click="cardProgramData.kycClassifier.splice(index, 1)">
+                          <i class="el-icon-error"></i>
+                        </button>
+
+                        <button v-else
+                                class="el-tooltip aba__button add"
+                                @click="addElement(cardProgramData.kycClassifier)">
+                          <i class="el-icon-plus"></i>
+                        </button>
+                      </template>
+                    </div>
+
+
+									</template>
+								</div>
+                <div v-if="errors.first(`kyc${index}`)" class="validation-error mt-1 px-3">{{ errors.first(`kyc${index}`) }}</div>
+							</div>
+
+
+						</div>
+
+						<hr class="mt-4 mb-1">
+
+						<div v-for="(matrix, index) in cardProgramData.matrixPID"
+								 :key="`matrix${index}`"
+								 class="row mb-0">
+							<div class="kyc-adding w-75">
+								<div class="col-12 d-flex align-items-center control-label">MARTIX PID {{ index + 1 }}</div>
+								<div class="col-12 mb-0">
+									<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.matrixPID[index] }}</div>
+									<template v-else>
+                    <div class="kyc-group">
+                      <input v-model="cardProgramData.matrixPID[index]"
+                            :name="`matrix${index}`"
+                            type="text"
+                            :placeholder="`Matrix PID ${index + 1}`"
+                            class="form-control  form-control-danger"/>
+                      <template v-if="!viewMode">
+                        <button v-if="index > 0"
+                                class="el-tooltip aba__button delete"
+                                @click="cardProgramData.matrixPID.splice(index, 1)">
+                          <i class="el-icon-error"></i>
+                        </button>
+
+                        <button v-else
+                                class="el-tooltip aba__button add"
+                                @click="addElement(cardProgramData.matrixPID)">
+                          <i class="el-icon-plus"></i>
+                        </button>
+                      </template>
+                      </div>
+
+									</template>
+
+                  </div>
+                  <div v-if="errors.first(`matrix${index}`)" class="validation-error mt-1 px-3">{{ errors.first(`matrix${index}`) }}</div>
+								</div>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- New style mock end-->
+
     <div class="row">
-      <div class="col-md-12  ">
-        <div class="pull-right ">
-          <p-button round type="primary" @click="handlePrimaryAction"
-                    :disabled="!(context ==='view' || (isValid && context!== 'view' && dirty ))"
-                    v-if="hasPermission(permission.CARD_PROGRAM_EDIT)"
-          >
+      <div class="col-md-12 mt-5">
+        <div class="text-center ceevo__btn-group">
+          <p-button round type="primary" @click="onSave"
+                    :disabled="!viewMode && errors.all().length > 0"
+                    v-if="hasPermission(permission.CARD_PROGRAM_EDIT)">
             <div class="d-flex align-items-center">
-              <loader v-if="loadingState ==='sending'"></loader>
-              {{ $t(this.context === 'view' ? 'card_program.create.button.edit' : 'card_program.create.button.save') }}
+              <!--<loader v-if="loadingState ==='sending'"></loader>-->
+              {{ $t(viewMode ? 'card_program.create.button.edit' : 'card_program.create.button.save') }}
             </div>
           </p-button>
-          <p-button round @click="secondaryAction"> {{ $t(context === 'view' ? 'card_program.create.button.back' : 'card_program.create.button.cancel') }} </p-button>
+          <p-button round @click="onCancel"> {{ $t(viewMode ? 'card_program.create.button.back' : 'card_program.create.button.cancel') }} </p-button>
         </div>
       </div>
     </div>
-    <template
-      v-if="loadingState ==='getting'"
-    >
-      <Spinner
-      ></Spinner>
-    </template>
+
+    <Spinner v-if="loading"/>
   </div>
 </template>
+
 <script>
-  import {Button} from 'src/components/UIComponents';
-  import swal from 'sweetalert2'
-  import SlideYDownTransition from "vue2-transitions/src/Slide/SlideYDownTransition";
-  import {mapActions, mapGetters} from 'vuex'
-  import {AbaModalEvents} from "../../../../main";
-  import {
-    ADD_CARD_PROGRAM,
-    EDIT_CARD_PROGRAM,
-    GET_CARD_PROGRAM_BYID,
-    GETTER_ACTIVE_CARD,
-    GETTER_LOADINGSTATE_CARD_PROGRAM, SET_MODAL_TYPE,
-    SHOW_TOAST_MESSAGE
-  } from '../../../../store/types';
-  import createNewRowFromHeadings from "../../../../utils/createNewRowFromHeadings";
-  import {breakInput, exactNumber, limitedCharNumber, mustBeAnEmail, mustBeAValidISOcurrency, shouldBeNumber, verifySpecialCharacter} from "../../../../utils/formValidations";
-  import {decimals} from "../../../../utils/inputMasks";
-  import AbaButton from "../../../UIComponents/ABAComponents/AbaButton";
-  import PButton from "../../../UIComponents/Button";
-  import RegularTable from '../../../UIComponents/CeevoTables/RegularTable/RegularTable'
-  import SingleFieldTable from "../../../UIComponents/CeevoTables/SingeFieldTable/SingleFieldTable";
-  import Loader from "../../../UIComponents/Loader";
-  import Spinner from "../../../UIComponents/Spinner";
-  import { permissionMixin } from '@/mixins/permission'
+import {Button} from 'src/components/UIComponents';
+import swal from 'sweetalert2'
+import SlideYDownTransition from "vue2-transitions/src/Slide/SlideYDownTransition";
+import {mapActions, mapGetters} from 'vuex'
+import {AbaModalEvents} from "../../../../main";
+import {
+	ADD_CARD_PROGRAM,
+	EDIT_CARD_PROGRAM,
+	GET_CARD_PROGRAM_BYID,
+	GETTER_ACTIVE_CARD,
+	GETTER_LOADINGSTATE_CARD_PROGRAM, SET_MODAL_TYPE,
+	SHOW_TOAST_MESSAGE
+} from '../../../../store/types';
+import createNewRowFromHeadings from "../../../../utils/createNewRowFromHeadings";
+import {breakInput, exactNumber, limitedCharNumber, mustBeAnEmail, mustBeAValidISOcurrency, shouldBeNumber, verifySpecialCharacter} from "../../../../utils/formValidations";
+import {decimals} from "../../../../utils/inputMasks";
+import AbaButton from "../../../UIComponents/ABAComponents/AbaButton";
+import PButton from "../../../UIComponents/Button";
+import RegularTable from '../../../UIComponents/CeevoTables/RegularTable/RegularTable'
+import SingleFieldTable from "../../../UIComponents/CeevoTables/SingeFieldTable/SingleFieldTable";
+import Loader from "../../../UIComponents/Loader";
+import Spinner from "../../../UIComponents/Spinner";
+import { permissionMixin } from '@/mixins/permission'
 
-  export default {
-    name: "Create",
-    mixins: [permissionMixin],
-    components: {
-      SlideYDownTransition,
-      AbaButton,
-      SingleFieldTable,
-      Spinner,
-      Loader,
-      PButton, RegularTable,
-      [Button.name]: Button
-    },
-    data() {
-      return {
-        secondLine: ['loadFee', 'loadFeePct', 'loadFeeCap'],
-        thirdLine: ['appFee', 'monthlyFee', 'apiFee'],
-        edit: false,
-        dirty: false,
-        tableHeadingsPack: {
-          main: [
-            {
-              label: 'psf Ref', 
-              name: 'psfRef', 
-              i18n: 'card_program.create.table_header.psf_ref',
-              required: true,
-              validator: [
-                verifySpecialCharacter,
-                exactNumber(7)
-              ],
-              brakeAt: breakInput(7)
+import ChargedTo from './ChargedTo'
 
-            },
-            {
-              label: 'issuer Inst', 
-              name: 'issuerInst', 
-              i18n: 'card_program.create.table_header.issuer_inst',
-              required: true,
-              validator: [
-                verifySpecialCharacter,
-                exactNumber(5)
-              ],
-              brakeAt: breakInput(5)
-            },
-            {
-              label: 'PM Inst', 
-              name: 'pmInst', 
-              i18n: 'card_program.create.table_header.pm_inst',
-              required: true,
-              validator: [
-                verifySpecialCharacter,
-                exactNumber(5)
-              ],
-              brakeAt: breakInput(5)
-            },
-            {
-              label: 'PO Inst', 
-              name: 'poInst', 
-              i18n: 'card_program.create.table_header.po_inst',
-              required: true,
-              validator: [
-                verifySpecialCharacter,
-                exactNumber(5)
-              ],
-              brakeAt: breakInput(5)
-            },
-            {
-              label: 'CPC', 
-              name: 'cardProgCode', 
-              i18n: 'card_program.create.table_header.card_prog_code',
-              required: true,
-              validator: [
-                verifySpecialCharacter,
-                exactNumber(5)
-              ],
-              brakeAt: breakInput(5)
-            },
-            {
-              label: 'card program description', 
-              name: 'cardProgDesc', 
-              i18n: 'card_program.create.table_header.card_prog_desc',
-              required: true,
-              validator: limitedCharNumber(0, 40),
-              brakeAt: breakInput(40)
-            },
-          ],
-          middle: [
-            {
-              label: 'Bureau inst code', 
-              name: 'cardPrinterCode', 
-              i18n: 'card_program.create.table_header.card_printer_code',
-              required: true,
-              validator: [
-                verifySpecialCharacter,
-                exactNumber(5)
-              ],
-              brakeAt: breakInput(5)
-            },
-            {
-              label: 'default currency', 
-              name: 'defaultCurrencyCode', 
-              i18n: 'card_program.create.table_header.def_currency',
-              required: true,
-              validator: [mustBeAValidISOcurrency],
-              brakeAt: breakInput(3)
-            },
-            {
-              label: 'alert contact e-mail', 
-              name: 'alertContact', 
-              i18n: 'card_program.create.table_header.alert_contact',
-              required: true,
-              validator: [mustBeAnEmail], $domAttri: {type: 'email'},
-              brakeAt: breakInput(64)
-            },
-            {
-              label: 'load fee', 
-              name: 'loadFee', 
-              i18n: 'card_program.create.table_header.load_fee', 
-              validator: shouldBeNumber,
-              mask: decimals(2),
-              $domAttri: {step: '0.01', type: 'number'},
-              brakeAt: breakInput(8)
-            },
-            {
-              label: 'load fee %', 
-              name: 'loadFeePct', 
-              i18n: 'card_program.create.table_header.load_fee_pct', 
-              addonRightIcon: 'fa-percent fa',
-              validator: shouldBeNumber,
-              mask: decimals(2),
-              $domAttri: {step: '0.01', type: 'number'},
-              brakeAt: breakInput(8),
-              i18n_placeholder: 'card_program.create.table_input_placeholder.load_fee_pct'
-            },
-            {
-              label: 'load fee roof', 
-              name: 'loadFeeCap', 
-              i18n: 'card_program.create.table_header.load_fee_cap',
-              validator: [shouldBeNumber],
-              mask: decimals(2),
-              $domAttri: {step: '0.01', type: 'number'},
-              brakeAt: breakInput(8)
-            },
-            {
-              label: 'Charged To', 
-              name: 'loadFeebillMethod', 
-              i18n: 'card_program.create.table_header.load_fee_bill_method',
-              input: 'select',
-              selectKeys: [
-                {name: '', value: null},
-                {name: 'ACCOUNT', value: 'ACCOUNT'},
-                {name: 'FLOAT', value: 'FLOAT'},
-                {name: 'INVOICE', value: 'INVOICE'},
-              ]
-            },
-          ],
-          fees: [{
-            label: 'application fee', 
-            name: 'appFee', 
-            i18n: 'card_program.create.table_header.app_fee', 
-            validator: shouldBeNumber,
-            mask: decimals(2),
-            $domAttri: {step: '0.01', type: 'number'},
-            brakeAt: breakInput(8)
-          },
-            //application fee bill method
-            {
-              label: 'Charged To', 
-              name: 'appFeeBillMethod', 
-              i18n: 'card_program.create.table_header.app_fee_bill_method', 
-              input: 'select',
-              selectKeys: [
-                {name: '', value: null},
-                {name: 'FLOAT', value: 'FLOAT'},
-                {name: 'ACCOUNT', value: 'ACCOUNT'},
+const emptyCardProgramData = {
+	//
+	psfRef: '',
+	issuerInst: '',
+	pmInst: '',
+	poInst: '',
+	cardProgCode: '',
+	cardProgDesc: '',
+	//
+	cardPrinterCode: '', // Bureau inst code
+	defaultCurrencyCode: '',
+	alertContact: '',
+	loadFee: '',
+	loadFeePct: '',
+	//loadFeeCap: '', // not in UI
+	loadFeebillMethod: '', // Charged To
+	//
+	appFee: '',
+	appFeeBillMethod: '', // fix in UI
+	monthlyFee: '',
+	monthlyFeeBillMethod: '',
+	apiFee: '',
+	apiFeeBillMethod: '',
+	//
+	kycClassifier: [''],
+	matrixPID: [''],
+	cardProgramIdentifier: '',
+}
 
-                {name: 'INVOICE', value: 'INVOICE'}]
-            },
-            {
-              label: 'monthly fee', 
-              name: 'monthlyFee', 
-              i18n: 'card_program.create.table_header.monthly_fee', 
-              validator: shouldBeNumber,
-              mask: decimals(2),
-              $domAttri: {step: '0.01', type: 'number'},
-              brakeAt: breakInput(8)
-            },
-            //monthly fee bill method
-            {
-              label: 'Charged To', 
-              name: 'monthlyFeeBillMethod', 
-              i18n: 'card_program.create.table_header.monthly_fee_bill_method', 
-              input: 'select',
-              selectKeys: [
-                {name: '', value: null},
-                {name: 'ACCOUNT', value: 'ACCOUNT'},
-                {name: 'FLOAT', value: 'FLOAT'},
-                {name: 'INVOICE', value: 'INVOICE'}]
-            },
-            {
-              label: 'api fee', 
-              name: 'apiFee', 
-              i18n: 'card_program.create.table_header.api_fee', 
-              validator: shouldBeNumber,
-              mask: decimals(2),
-              $domAttri: {step: '0.01', type: 'number'},
-              brakeAt: breakInput(8)
-            },
-            {
-              label: 'Charged To', 
-              name: 'apiFeeBillMethod', 
-              i18n: 'card_program.create.table_header.api_fee_bill_method', 
-              input: 'select',
-              selectKeys: [
-                {name: '', value: null},
-                {name: 'FLOAT', value: 'FLOAT'},
-                {name: 'INVOICE', value: 'INVOICE'}
-              ]
-            },
-          ],
-          kycClassifier: [
-            {
-              label: 'kyc classifier', 
-              name: 'kycClassifier', 
-              multiVal: true,
-              validator: exactNumber(3),
-              brakeAt: breakInput(3),
-              required: true,
-            },],
-          matrixPID: [{
-            label: 'matrix PID', 
-            name: 'matrixPID', 
-            multiVal: true,
-            validator: exactNumber(6),
-            brakeAt: breakInput(6),
-            required: true,
+export default {
+	name: "Create",
+	mixins: [permissionMixin],
+	components: {
+		SlideYDownTransition,
+		AbaButton,
+		SingleFieldTable,
+		Spinner,
+		Loader,
+		PButton, RegularTable,
+		[Button.name]: Button,
 
-          },]
+		ChargedTo
+	},
+	props: {
+		viewMode: {
+			type: Boolean,
+			default: false
+		}
+	},
+	data() {
+		return {
+			loading: true,
+			cardProgramData: Object.assign({}, emptyCardProgramData)
+		}
+	},
+	computed: {
+		editMode () {
+			return this.$route.params.id !== 'new'
+		},
+		actionName () {
+			return this.editMode
+				? this.viewMode
+					? 'View'
+					: 'Edit'
+				: 'Create'
+		}
+	},
+	watch: {
+		'$route': {
+			immediate: true,
+			handler () {
+				this.getData()
+			}
+		}
+	},
+	methods: {
+		async getData () {
+			this.loading = true
 
-        },
-        tableViewData: [],
-        showValidFeedBack: false,
-        editId: '',
-        valid: {
-          main: false,
-          middle: false,
-          fees: false,
-          matrixPID: false,
-          kycClassifier: false,
-        },
-        context: 'create' // create view edit
-      };
-    }, computed: {
-      ...mapGetters({
-        loadingState: GETTER_LOADINGSTATE_CARD_PROGRAM,
-        activeCard: GETTER_ACTIVE_CARD,
+			try {
+				if (this.editMode) {
+					let response = await this.$http.aba1.get(`/cardprograms/${this.$route.params.id}`)
 
-      }),
-      creationResponseState() { return this.$store.state.UiModule.responseState[ADD_CARD_PROGRAM]},
-      editionResponseState() { return this.$store.state.UiModule.responseState[EDIT_CARD_PROGRAM]},
-      isValid() {
-        return Object.keys(this.valid).reduce((acc, i) => acc && this.valid[i], true)
-      },
-    }, watch: {
-      activeCard(newVal) {
-        this.tableViewData = [newVal];
-      },
-      creationResponseState(newVal, oldVal) {
-        if (!oldVal) return this.sweetAlertHandler(newVal)
-        if (newVal.timeStamp === oldVal.timeStamp) return;
-        this.sweetAlertHandler(newVal)
-      },
-      editionResponseState(newVal, oldVal) {
-        if (!oldVal) return this.sweetAlertHandler(newVal)
-        if (newVal.timeStamp === oldVal.timeStamp) return;
-        this.sweetAlertHandler(newVal)
-      }, editId(newVal, oldVal) {
-        if (this.context === 'view' && newVal) {
-          this.context = 'edit'
-        }
-      }, $route(newVal, oldVal) {
-        const {id, read_only} = newVal.params;
-        if (!id) {
-          this.context = 'create';
-          this.tableViewData = [createNewRowFromHeadings([
-            ...this.tableHeadingsPack.main,
-            ...this.tableHeadingsPack.fees,
-            ...this.tableHeadingsPack.middle,
-            ...this.tableHeadingsPack.matrixPID,
-            ...this.tableHeadingsPack.kycClassifier,
-          ], 'card_program_new_row')]
-          this.editId = 'card_program_new_row';
-        }
+					this.cardProgramData = response.data
+					// Add at least one free item to each of lists
+					if (this.cardProgramData.kycClassifier.length === 0) {
+						this.cardProgramData.kycClassifier.push('')
+					}
 
+					if (this.cardProgramData.matrixPID.length === 0) {
+						this.cardProgramData.matrixPID.push('')
+					}
 
-      }
-    },
-    methods: {
-      ...mapActions({
-        createACardProgram: ADD_CARD_PROGRAM,
-        getActiveCard: GET_CARD_PROGRAM_BYID,
-        editSingleCard: EDIT_CARD_PROGRAM,
-        showModal: SET_MODAL_TYPE
-      }),
-      createNewField(filed) {
-        if (this.context === 'view') return;
-        this.tableViewData = this.tableViewData.map(i => ({
-          ...i,
-          [filed]: [...i[filed], '']
-        }))
-      },
-      sweetAlertHandler(newVal) {
-        if (newVal.state === true) {
-          const key = this.context + 'handleSecondaryAction' + 'cardPorgram';
+				} else {
+					// Set clean data for create
+					// no nested props so we can use Object.assign
+					this.cardProgramData = Object.assign({}, emptyCardProgramData)
+				}
 
-          this.showModal({
-            type: 'normal',
-            message: this.context === 'create' ? 'created new card program successfully' : 'The changes are updated. ',
-            copy: 'any changes will be discarded',
-            mainButton: 'Ok',
-            key
-          })
+				this.$nextTick(() => {
+					this.$validator.validateAll()
+				})
+			} catch (error) {
+				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('card_program.errors.get_card_program') + error.message, status: 'danger' })
+			}
 
-          AbaModalEvents.$on(key, response => {
-            if (response.ok) {
-              this.$router.push('/card-program/view')
+			this.loading = false
+		},
+		async onSave () {
+			if (this.viewMode) {
+				this.$router.push(`/card-program/card/${this.$route.params.id}`)
+			} else {
+				this.loading = true
 
-            } else {
-              this.dirty = false;
-            }
-            AbaModalEvents.$off(key)
-          })
-        }
+				try {
+					let data = Object.assign({}, this.cardProgramData)
 
-      },
-      secondaryAction() {
-        // edit or create ask before leaving
-        // view ->
-        if (this.context === 'view' || (this.context !== 'view' && !this.dirty)) {
-          this.$router.push({
-            path: '/card-program/view',
-            query: {
-              edit: false
-            }
-          })
+					// Filter lists
+					data.kycClassifier = data.kycClassifier.filter(item => item)
+					data.matrixPID = data.matrixPID.filter(item => item)
 
-        } else {
-          const key = this.context + 'handleSecondaryAction' + 'cardPorgram';
-          this.showModal({
-            type: 'normal',
-            message: `Are you sure you want to exit the card program ${this.context} function?`,
-            copy: 'any changes will be discarded',
-            mainButton: 'Yes',
-            secondaryButton: `No`,
-            key
-          })
-          AbaModalEvents.$on(key, response => {
-            if (response.ok) {
-              this.$router.push('/card-program/view')
+					let requestData = {}
+					for (const key in data) {
+						if (data[key] === '') {
+							requestData[key] = null
+						} else {
+							requestData[key] = data[key]
+						}
+					}
 
-            }
-            AbaModalEvents.$off(key)
-          })
-          //ask
+					if (this.cardProgramData.id) {
+						delete this.cardProgramData.id
+						await this.$http.aba1.put(`/cardprograms/${this.$route.params.id}`, requestData)
+					} else {
+						await this.$http.aba1.post(`/cardprograms/`, requestData)
+					}
 
-        }
+					this.onCancel()
+				} catch (error) {
+					this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('card_program.errors.save_card_program') + error.message, status: 'danger' })
+				}
 
-      },
-      listenToInput({value, valid, dirty}, tableName) {
-        this.tableViewData = value;
-        this.dirty = this.dirty || !!dirty
-        this.valid = {
-          ...this.valid,
-          [tableName]: valid
-        };
-      },
-      handlePrimaryAction() {
-        // on edit ?
-        if (this.context === 'view') {
-          this.editId = this.$route.params.id;
-          this.$router.push({
-            path: this.$route.path,
-            query: {
-              edit: true
-            }
-          })
-          this.edit = true;
-          return;
-        }
-        if (!this.valid) {
-          this.$store.dispatch(SHOW_TOAST_MESSAGE, {message: 'Please ensure you complete all fields correctly.', status: 'danger'})
-          return;
-        }
+				this.loading = false
+			}
+		},
+		onCancel () {
+			this.$router.push('/card-program/view')
+		},
+		addElement (arr) {
+			arr.push('')
+			// revalidate on nextTick because we need DOM update after inserting item into array
+			this.$nextTick(() => {
+				this.$validator.validateAll()
+			})
+		},
 
-        const key = this.context + 'handlePrimaryAction' + 'cardPorgram' +Date.now();
-        this.showModal({
-          type: 'normal',
-          message: `  ${this.context === 'create' ? 'Are you sure you will create new card program ' : 'Do you want to save the changes'} ?`,
-          copy: `${this.context === 'create' ? '' : 'You will not be able to recover the changes!'}`,
-          mainButton: `YES`,
-          secondaryButton: 'NO',
-          key
-        })
-        AbaModalEvents.$on(key, response => {
-          if (response.ok) {
-            if (this.editId !== '' && this.loadingState === 'ideal') {
-              // on edit for faiure creating new card
-              //massage data -> remove edit prop
-              const {id, edit, ...body} = this.tableViewData.find(i => i.id === this.editId);
-              if (this.editId === 'card_program_new_row') {
-                // create
-                this.createACardProgram({body}).then(isSuccess => {
-                  if (isSuccess) {
-                    this.$router.push({
-                      path: `/card-program/view`
-                    })
-                  }
-                });
-                return;
-              } else {
-                // this.editId = '';
-                //massage data -> remove edit prop
-                // edit single card
-                this.editSingleCard({body, id})
-              }
-            }
+		/*
+		...mapActions({
+			createACardProgram: ADD_CARD_PROGRAM,
+			getActiveCard: GET_CARD_PROGRAM_BYID,
+			editSingleCard: EDIT_CARD_PROGRAM,
+			showModal: SET_MODAL_TYPE
+		}),
+		createNewField(filed) {
+			if (this.context === 'view') return;
+			this.tableViewData = this.tableViewData.map(i => ({
+				...i,
+				[filed]: [...i[filed], '']
+			}))
+		},
+		sweetAlertHandler(newVal) {
+			if (newVal.state === true) {
+				const key = this.context + 'handleSecondaryAction' + 'cardPorgram';
 
-          }
-          AbaModalEvents.$off(key)
-        })
+				this.showModal({
+					type: 'normal',
+					message: this.context === 'create' ? 'created new card program successfully' : 'The changes are updated. ',
+					copy: 'any changes will be discarded',
+					mainButton: 'Ok',
+					key
+				})
 
-      }
-    }, mounted() {
-      try {
-        const {id} = this.$route.params;
-        const {edit} = this.$route.query
-        this.edit = !!edit;
-        console.log(id)
-        if (id) {
-          if (!edit) {
-            this.context = 'view';
-          } else {
-            this.context = 'edit';
-            this.editId = id;
-          }
-          // get the card Program by id
-          this.getActiveCard(id);
-        }
-        if (this.context === 'create') {
-          this.tableViewData.push(createNewRowFromHeadings([
-            ...this.tableHeadingsPack.main,
-            ...this.tableHeadingsPack.fees,
-            ...this.tableHeadingsPack.middle,
-            ...this.tableHeadingsPack.matrixPID,
-            ...this.tableHeadingsPack.kycClassifier,
-          ], 'card_program_new_row'));
-          this.editId = 'card_program_new_row';
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  };
+				AbaModalEvents.$on(key, response => {
+					if (response.ok) {
+						this.$router.push('/card-program/view')
+
+					} else {
+						this.dirty = false;
+					}
+					AbaModalEvents.$off(key)
+				})
+			}
+
+		},
+		secondaryAction() {
+			// edit or create ask before leaving
+			// view ->
+			if (this.context === 'view' || (this.context !== 'view' && !this.dirty)) {
+				this.$router.push({
+					path: '/card-program/view',
+					query: {
+						edit: false
+					}
+				})
+
+			} else {
+				const key = this.context + 'handleSecondaryAction' + 'cardPorgram';
+				this.showModal({
+					type: 'normal',
+					message: `Are you sure you want to exit the card program ${this.context} function?`,
+					copy: 'any changes will be discarded',
+					mainButton: 'Yes',
+					secondaryButton: `No`,
+					key
+				})
+				AbaModalEvents.$on(key, response => {
+					if (response.ok) {
+						this.$router.push('/card-program/view')
+
+					}
+					AbaModalEvents.$off(key)
+				})
+				//ask
+
+			}
+
+		},
+		listenToInput({value, valid, dirty}, tableName) {
+			this.tableViewData = value;
+			this.dirty = this.dirty || !!dirty
+			this.valid = {
+				...this.valid,
+				[tableName]: valid
+			};
+		},
+		handlePrimaryAction() {
+			// on edit ?
+			if (this.context === 'view') {
+				this.editId = this.$route.params.id;
+				this.$router.push({
+					path: this.$route.path,
+					query: {
+						edit: true
+					}
+				})
+				this.edit = true;
+				return;
+			}
+			if (!this.valid) {
+				this.$store.dispatch(SHOW_TOAST_MESSAGE, {message: 'Please ensure you complete all fields correctly.', status: 'danger'})
+				return;
+			}
+
+			const key = this.context + 'handlePrimaryAction' + 'cardPorgram' +Date.now();
+			this.showModal({
+				type: 'normal',
+				message: `  ${this.context === 'create' ? 'Are you sure you will create new card program ' : 'Do you want to save the changes'} ?`,
+				copy: `${this.context === 'create' ? '' : 'You will not be able to recover the changes!'}`,
+				mainButton: `YES`,
+				secondaryButton: 'NO',
+				key
+			})
+			AbaModalEvents.$on(key, response => {
+				if (response.ok) {
+					if (this.editId !== '' && this.loadingState === 'ideal') {
+						// on edit for faiure creating new card
+						//massage data -> remove edit prop
+						const {id, edit, ...body} = this.tableViewData.find(i => i.id === this.editId);
+						if (this.editId === 'card_program_new_row') {
+							// create
+							this.createACardProgram({body}).then(isSuccess => {
+								if (isSuccess) {
+									this.$router.push({
+										path: `/card-program/view`
+									})
+								}
+							});
+							return;
+						} else {
+							// this.editId = '';
+							//massage data -> remove edit prop
+							// edit single card
+							this.editSingleCard({body, id})
+						}
+					}
+
+				}
+				AbaModalEvents.$off(key)
+			})
+
+		}
+		*/
+	}
+}
 </script>
-<style scoped>
-  .section-header {
-    padding-bottom: .5rem;
-  }
 
-  .section-header h4 {
-    margin: 0;
-  }
+<style lang="scss" scoped>
+span.required-field-sympol{
+  vertical-align: sub;
+  font-size: 18px;
+}
+.control-label {
+  font-weight: bold;
+  text-transform: uppercase;
+}
 
-  .section-header button {
-    margin: 0;
-  }
+.section-header {
+	padding-bottom: .5rem;
+}
 
-  .card-content .tabel-wrapper {
-    margin: 10px 0;
-  }
+.section-header h4 {
+	margin: 0;
+}
 
-  .actionsWrapper button {
-    margin-left: 10px;
-  }
+.section-header button {
+	margin: 0;
+}
 
-  @media (max-width: 620px) {
-    .actionsWrapper {
-      padding-top: 1rem;
-      text-align: right;
-    }
-  }
+.card-content .tabel-wrapper {
+	margin: 10px 0;
+}
 
-  .refreshButton {
-    background-color: #d8d8d8;
-    color: #ffffff;
-    position: absolute;
-    right: 4rem;
-  }
+.actionsWrapper button {
+	margin-left: 10px;
+}
 
-  .refreshButton:hover {
-    background-color: #d3d3d3 !important;
-  }
+@media (max-width: 620px) {
+	.actionsWrapper {
+		padding-top: 1rem;
+		text-align: right;
+	}
+}
 
-  .required-field-sympol {
-    color: #ff4d57;
-  }
+.refreshButton {
+	background-color: #d8d8d8;
+	color: #ffffff;
+	position: absolute;
+	right: 4rem;
+}
+
+.refreshButton:hover {
+	background-color: #d3d3d3 !important;
+}
+
+.ceevo__card-group{
+	.aba__button,
+	.aba__button:hover{
+		background:transparent !important;
+		border:none;
+		cursor: pointer;
+
+		i{
+			color: #7039DA;
+			font-size: 28px;
+			font-weight: bold;
+			margin-top: 6px;
+		}
+	}
+}
+.view-mode-value {
+	height: 39px;
+	margin-bottom: 16px;
+	display: flex;
+	align-items: center;
+}
 </style>

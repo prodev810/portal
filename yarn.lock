@@ -3767,6 +3767,11 @@ flatten@^1.0.2:
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
   integrity sha1-2uRqnXj74lKSJYzB54CkHZXAN4I=
 
+flexmonster@^2.7.12:
+  version "2.7.15"
+  resolved "https://registry.yarnpkg.com/flexmonster/-/flexmonster-2.7.15.tgz#b0356967c47f43a24cd863ce75ce3a640861c3d8"
+  integrity sha512-1s0t1fLADjfGEmUWKncOOSi168p0CAnZOI0oOoAZM2Yrj0wLgOlW+KItOLrWA52M6OjfEixJGIpkxLtZSf/A9g==
+
 flush-write-stream@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/flush-write-stream/-/flush-write-stream-1.0.3.tgz#c5d586ef38af6097650b49bc41b55fabb19f35bd"

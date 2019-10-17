@@ -20,6 +20,7 @@ import ResellerCreateCorporateModule from '../components/Dashboard/pages/Resller
 import ResellerInvoice from '../components/Dashboard/pages/Resller/Invoice';
 import Invoicesdetails from "../components/Dashboard/pages/Resller/Invoicesdetails";
 import SearchInvoices from "../components/Dashboard/pages/Resller/SearchInvoices";
+import Flexmonster from "../components/Dashboard/pages/Flexmonster/Flexmonster";
 // Kyc
 import Kyc from "../components/Dashboard/pages/Kyc/Kyc";
 import KycDashboard from "../components/Dashboard/pages/Kyc/KycDashboard";
@@ -33,7 +34,7 @@ import PGEditPaymentMethod from '@/components/Dashboard/pages/PaymentGateway/Edi
 import PGMerchantWithTab from '@/components/Dashboard/pages/PaymentGateway/MerchantWithTab'
 
 import PGEditMerchant from '@/components/Dashboard/pages/PaymentGateway/EditMerchant'
-import ViewAcquirers from '@/components/Dashboard/pages/PaymentGateway/ViewAcquirers'
+import PGAquirerWithTab from '@/components/Dashboard/pages/PaymentGateway/AquirerWithTab'
 import EditAcquirer from '@/components/Dashboard/pages/PaymentGateway/EditAcquirer'
 
 // Reseller
@@ -65,25 +66,31 @@ let cardProgram = {
   },
   children: [
     {
-      path: 'Create',
-      name: 'Create card program',
-      component: Create,
-      meta: {
-        //permission: permission.CARD_PROGRAM_EDIT,
-        requiresAuth: true,
-        roles: ['*'],
-      }
-    },
-    {
       path: 'card/:id',
       name: 'Edit card program',
-      component: Create,
+			component: Create,
+			props: {
+				viewMode: false
+			},
       meta: {
         //permission: permission.CARD_PROGRAM_EDIT,
         requiresAuth: true,
         roles: ['*'],
       }
-    },
+		},
+    {
+      path: 'card/:id/view',
+      name: 'View card program',
+			component: Create,			
+			props: {
+				viewMode: true
+			},		
+      meta: {
+        //permission: permission.CARD_PROGRAM_EDIT,
+        requiresAuth: true,
+        roles: ['*'],
+      }
+    },		
     {
       path: 'view',
       name: 'View Card Programs',
@@ -173,6 +180,29 @@ let floatAccount = {
   ]
 };
 
+
+// Flexmonster IPG
+const flexmonster_ipg = {
+    path: '/ipg',
+    component: DashboardLayout,
+    meta: {
+        requiresAuth: true,
+        roles: ['*'],
+    },
+    children:[
+        {
+            path: '/ipg',
+            name: 'Flexmonster',
+            component: Flexmonster,
+            meta: {
+                //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+                requiresAuth: true,
+                roles: ['*'],
+            }
+        }]
+}
+
+
 // payment gateway routes
 
 // !!!
@@ -233,7 +263,7 @@ let payment_gateway = {
     {
       path: '/payment-gateway/acquirer',
       name: 'Payment gateway - Acquirers',
-      component: ViewAcquirers,
+      component: PGAquirerWithTab,
       meta: {
         //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
         requiresAuth: true,
@@ -744,6 +774,7 @@ const routes = [
     lockPage,
     floatAccount,
     client,
+    flexmonster_ipg,
     reseller,
     payment_gateway,
     kyc,

@@ -1,50 +1,51 @@
 <template>
   <div class="d-flex w-100 align-items-center flex-wrap">
-    <div class="mt-2 mb-2 d-flex mr-auto align-items-center w-100">
-      <div class="d-flex align-items-center span-blod">
-        <span class="px-2 nowrap">{{ $t('invoice.search_filter.label.card_program_code') }}</span>
-        <span class="span-margin-right">{{ cardProgCode }}</span>
-      </div>
-      &nbsp;&nbsp;&nbsp;
-      <div class="d-flex mr-2 align-items-center span-blod">
-        <span class="px-2">{{ $t('invoice.search_filter.label.reseller_code') }}</span>
-        <span class="span-margin-right">{{ resellerCode }}</span>
-      </div>
-    </div>
 
-    <div class="mt-2 mb-2 w-50 d-flex align-items-center justify-content-start w-100">
-      <div class="d-flex align-items-center span-blod">
-        <span class="px-2">{{ $t('invoice.search_filter.label.currency_code') }}</span>
-        <span class="span-margin-right">{{ currencyCode }}</span>
+    <div class="mt-2 mb-4 d-flex mr-auto align-items-center w-100">
+
+      <div class="span-blod mr-0 mr-sm-3">
+        <span>{{ $t('invoice.search_filter.label.card_program_code') }}</span>
+        <span>{{ cardProgCode }}</span>
       </div>
+
+      <div class="span-blod mr-0 mr-sm-3">
+        <span>{{ $t('invoice.search_filter.label.reseller_code') }}</span>
+        <span>{{ resellerCode }}</span>
+      </div>
+
+      <div class="span-blod mr-0 mr-sm-3">
+        <span>{{ $t('invoice.search_filter.label.currency_code') }}</span>
+        <span>{{ currencyCode }}</span>
+      </div>
+
     </div>
 
     <div class="mt-2 mb-2 d-flex mr-auto align-items-center">
       <div class="from-date">
-          <span class="px-2">{{ $t('invoice.search_filter.label.from') }}</span>
+          <span>{{ $t('invoice.search_filter.label.from') }}</span>
           <el-date-picker
             @input="handleFromDate"
             :value="fromDate"
             type="date"
-            placeholder="From Date"
+            placeholder="Pick Starting Date"
           >
           </el-date-picker>
       </div>
       <div class="to-date">
-        <span class="px-2">{{ $t('invoice.search_filter.label.to') }}</span>
+        <span>{{ $t('invoice.search_filter.label.to') }}</span>
         <el-date-picker
           @input="handleToDate"
           :value="toDate"
           type="date"
-          placeholder="To Date"
+          placeholder="Pick Ending Date"
         ></el-date-picker>
       </div>
     </div>
-    
+
     <!-- button -->
     <div class="d-flex ml-auto pr-2 align-items-center btn-invoices-content">
       <div>
-        <p-button @click="buttonClick" type="primary" :disabled="buttonDisabled">
+        <p-button round @click="buttonClick" type="primary" :disabled="buttonDisabled">
           {{ $t('invoice.search_filter.button.search') }}
         </p-button>
       </div>
@@ -94,7 +95,7 @@
     }
   }
 </script>
-<style scoped>
+<style scoped lang="scss">
 
   .el-select {
     width: 130px;
@@ -123,7 +124,19 @@
   }
 
   .span-blod{
-    border: 1px solid
+    border:1px solid #7039DA;
+    border-radius: 4px;
+    background-color:rgba(#7039DA,.05);
+    color:#7039DA;
+    font-weight: 600;
+    padding:8px 12px;
+    margin-bottom:10px;
+    span{
+      padding-right:5px;
+      &:last-child{
+        padding-right:0;
+      }
+    }
   }
   .span-margin-right{
     margin-right: 6px;

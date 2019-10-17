@@ -66,7 +66,10 @@ const create = {
     monthly_fee_bill_method: 'Charged To',
     api_fee: 'API Fee',
     api_fee_bill_method: 'Charged To',
-    country: 'Country'
+    virtual_card_fee: 'Virtual Card Fee',
+    virtual_card_bill_method: 'Charged To',
+    country: 'Country',
+    kycClassifier: 'KYC Classifier'
   },
   result_modal: {
     message: {

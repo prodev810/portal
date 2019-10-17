@@ -1,29 +1,28 @@
 <template>
   <div>
-    <div class="card-header bg-white">
+
+    <div  class="bg-white">
       <div class="row">
-        <div class="col-sm-12 col-md-6">
-          <h4 class="card-title display-inline">
+        <div class="col-12 mb-4">
+          <h4 class="card-title">
             {{ $t('card_program.listing.title') }}
           </h4>
-          <div class="pl-2">
-            <p>
+            <p class="card-info">
               {{ $t('card_program.listing.tips.line1') }}
               <br/>
               {{ $t('card_program.listing.tips.line2') }}
             </p>
-            <ul>
+            <ul class="card-info">
               <li>{{ $t('card_program.listing.tips.li1') }}</li>
               <li>{{ $t('card_program.listing.tips.li2') }}</li>
             </ul>
-          </div>
         </div>
       </div>
     </div>
 
-    <div class="card" v-if="hasPermission(permission.CARD_PROGRAM_LISTING)">
+    <div class="card flat" v-if="hasPermission(permission.CARD_PROGRAM_LISTING)">
       <div class="card-content row">
-        <div class="col-sm-12  tabel-wrapper">
+        <div class="col-sm-12  tabel-wrapper ceevo__table-flat ceevo__table-full-line">
           <div class="p-1">
             <regular-table striped
                            :headings="tableHeadings"
@@ -34,20 +33,24 @@
                            :uneditableFields="uneditableFields">
               <template slot-scope="index">
                 <th>
-                  <div class="cell">
+                  <div class="btn-group-border">
                     <p-button @click="editCardProgram(index)"
                               :key="index.index.index+index.index.id+'edit'"
                               type="primary"
                               link=""
                               v-if="hasPermission(permission.CARD_PROGRAM_EDIT)">
-                      {{ $t('card_program.listing.button.edit') }}
+                    <img class="" width= "17px" :src="changeIcon" alt="">
+                    {{ $t('card_program.listing.button.edit') }}
                     </p-button>
-                    <span class="px-1"></span>
+                  <!-- </div> -->
+                                    <!-- <div class="tableBtns"> -->
+                    <!-- <span class="px-1"></span> -->
                     <p-button @click="viewDetailedCardProgram(index)"
                               :key="index.index.index+index.index.id+'view'"
                               type="primary"
                               link=""
                               v-if="hasPermission(permission.CARD_PROGRAM_VIEW)">
+                      <img class="" width= "17px" :src="viewIcon" alt="">
                       {{ $t('card_program.listing.button.view') }}
                     </p-button>
                   </div>
@@ -99,6 +102,10 @@
   import Loader from "../../../UIComponents/Loader";
   import PPagination from "../../../UIComponents/Pagination";
   import Spinner from "../../../UIComponents/Spinner";
+  import changeIcon from '../../../../../public/static/img/dashboard_icons/ic_edit.svg';
+  import viewIcon from '../../../../../public/static/img/dashboard_icons/icon_glass_purple.svg';
+
+
 
   export default {
     name: 'CardPrograms',
@@ -110,10 +117,13 @@
       Loader,
       Spinner,
       PButton, RegularTable,
-      [Button.name]: Button
+      [Button.name]: Button,
+
     },
     data() {
       return {
+         viewIcon,
+         changeIcon,
         tableHeadings: [
           //main
           {label: 'psf Ref', name: 'psfRef', i18n: 'card_program.listing.table_header.psf_ref'},
@@ -181,17 +191,11 @@
       },
       editCardProgram(index) {
         this.$router.history.push({
-          path: `/card-program/card/${index.index.row.id}`,
-          query: {
-            edit: true
-          }
+          path: `/card-program/card/${index.index.row.id}`
         })
       }, viewDetailedCardProgram(index) {
         this.$router.history.push({
-          path: `/card-program/card/${index.index.row.id}`,
-          query: {
-            edit: false
-          }
+          path: `/card-program/card/${index.index.row.id}/view`
         })
       },
       handleEditAction() {
@@ -295,5 +299,10 @@
 
   .card-header {
     border: none !important;
+  }
+  .tableBtns{
+    border: 1px solid #7039DA;
+    background-color: #FFFFFF;
+    padding: 0;
   }
 </style>

@@ -99,10 +99,11 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import moment from 'moment'
 import {
-	SHOW_TOAST_MESSAGE
+  SHOW_TOAST_MESSAGE,
+  GETTER_PG_ENV
 } from '@/store/types'
 import Spinner from '@/components/UIComponents/Spinner'
 import PButton from "@/components/UIComponents/Button"
@@ -138,6 +139,9 @@ export default {
     ...mapState({
 
     }),
+    ...mapGetters({
+      env: GETTER_PG_ENV
+    }),
 		editMode () {
 			return this.$route.params.id !== 'new'
     }
@@ -153,7 +157,7 @@ export default {
 
 			try {
 				if (this.editMode) {
-					let response = await this.$http.acchttp.get(`/acquirer/${this.$route.params.id}`)
+					let response = await this.getHttpInstance(this.env).get(`/acquirer/${this.$route.params.id}`)
 					
 					this.acquirerData = response.data
 
@@ -179,8 +183,8 @@ export default {
 		async onSave() {
       try {
         let response = this.$route.params.id === 'new'
-          ? await this.$http.acchttp.post(`/acquirer`, this.acquirerData)          
-          : await this.$http.acchttp.put(`/acquirer/${this.$route.params.id}`, this.acquirerData)
+          ? await this.getHttpInstance(this.env).post(`/acquirer`, this.acquirerData)
+          : await this.getHttpInstance(this.env).put(`/acquirer/${this.$route.params.id}`, this.acquirerData)
 
         this.onCancel()
       } catch (error) {
@@ -193,7 +197,10 @@ export default {
 		},
 		onCancel() {
 				this.$router.push('/payment-gateway/acquirer');
-		}
+    },
+    getHttpInstance(env) {
+      return env === 'sandbox' ? this.$http.acchttp : this.$http.acchttpLive
+    }
 	},
 	created () {
 		this.getData()

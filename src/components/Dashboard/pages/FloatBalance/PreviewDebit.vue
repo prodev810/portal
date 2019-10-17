@@ -1,78 +1,99 @@
 <template>
   <div>
-    <div class="card-header border-0 bg-white">
-      <h4 class="card-title">
-        {{ $t('preview_debit.listing.title') }}
-      </h4>
-      <div class="pl-2">
-        <p>
-          {{ $t('preview_debit.listing.tips.line1') }}
-        </p>
-        <ul>
-          <li>{{ $t('preview_debit.listing.tips.li1') }}</li>
-        </ul>
-      </div>
-    </div>
-    <div class="w-100 d-flex">
-      <div class="d-flex align-items-center flex-wrap">
-        <div class="py-2">
-          <div>
-            <span class="px-2">{{ $t('preview_debit.listing.search_filter.from') }}</span>
-            <el-date-picker v-model="fromDate" type="date"
-                            placeholder="Pick Starting Date"
-                            :picker-options="pickerOptions1">
-            </el-date-picker>
-          </div>
-        </div>
-        <div class="py-2">
-          <div>
-            <span class="px-2">{{ $t('preview_debit.listing.search_filter.to') }}</span>
-            <el-date-picker
-              v-model="toDate" type="date" placeholder="Pick Ending Date"
-              :picker-options="pickerOptions1">
-            </el-date-picker>
-          </div>
-        </div>
-      </div>
-      <div class="ml-auto d-flex">
-        <div class="d-flex align-items-center align-content-center">
-          <span class="px-2">
-            <span class="required-field-sympol" style="">*</span>
-            {{ $t('preview_debit.listing.search_filter.card_program') }}
-          </span>
-          <el-select class="select-default"
-                     size="small"
-                     placeholder="selected a card program"
-                     v-model="cardProgramId"
-          >
-            <el-option v-for="card in cardPrograms "
-                       class="select-success"
-                       :value="card.id"
-                       :label="card.alias"
-                       :key="card.id">
-            </el-option>
-          </el-select>
-        </div>
-        <div class="d-flex align-items-center align-content-center" v-if="!$oAuth.isReseller()">
-          <span class="px-2">
-            {{ $t('preview_debit.listing.search_filter.reseller') }}
-          </span>
-          <el-select class="select-default"
-                     size="small"
-                     placeholder="selected a card program"
-                     v-model="resellerCode"
-          >
-            <el-option v-for="reseller in resellersMenu "
-                       class="select-success"
-                       :value="reseller.resellerCode"
-                       :label="reseller.resellerCode"
-                       :key="reseller.id"
-                       >
-            </el-option>
-          </el-select>
+
+    <div  class="bg-white">
+      <div class="row">
+        <div class="col-12">
+          <h4 class="card-title">
+            {{ $t('preview_debit.listing.title') }}
+          </h4>
+          <p>
+            {{ $t('preview_debit.listing.tips.line1') }}
+          </p>
+          <ul>
+            <!-- <li>{{ $t('preview_debit.listing.tips.li1') }}</li> -->
+            <li>Enter the correct dates and Card program (fields marked with <span class="required-field-sympol" style="">*</span> are Mandatory)</li>
+          </ul>
         </div>
       </div>
     </div>
+
+    <div class="row align-items-center px-3 mb-3">
+
+      <div class="mr-auto">
+        <div class="d-flex align-items-center flex-wrap">
+          <div class="py-2 from-date">
+            <div>
+              <span class="px-2">{{ $t('preview_debit.listing.search_filter.from') }}</span>
+              <el-date-picker v-model="fromDate" type="date"
+                              placeholder="Pick Starting Date"
+                              :picker-options="pickerOptions1">
+              </el-date-picker>
+            </div>
+          </div>
+          <div class="py-2 to-date">
+            <div>
+              <span class="px-2">{{ $t('preview_debit.listing.search_filter.to') }}</span>
+              <el-date-picker
+                v-model="toDate" type="date" placeholder="Pick Ending Date"
+                :picker-options="pickerOptions1">
+              </el-date-picker>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ml-0 ml-xl-auto">
+        <div class="d-flex align-items-center flex-wrap float-left float-xl-right">
+
+          <div class="py-2 ceevo__select-group">
+            <div class="d-flex align-items-center">
+              <span class="px-2">
+                {{ $t('preview_debit.listing.search_filter.card_program') }}
+                <span class="required-field-sympol" style="">*</span>
+              </span>
+              <el-select class="select-default ceevo__select-default w-220"
+                         size="small"
+                         placeholder="selected a card program"
+                         v-model="cardProgramId"
+              >
+                <el-option v-for="card in cardPrograms "
+                           class="select-success"
+                           :value="card.id"
+                           :label="card.alias"
+                           :key="card.id">
+                </el-option>
+              </el-select>
+            </div>
+          </div>
+
+
+          <div class="py-2 ceevo__select-group">
+            <div class="d-flex align-items-center" v-if="!$oAuth.isReseller()">
+              <span class="px-2">
+                {{ $t('preview_debit.listing.search_filter.reseller') }}
+              </span>
+              <el-select class="select-default ceevo__select-default"
+                         size="small"
+                         placeholder="selected a card program"
+                         v-model="resellerCode"
+              >
+                <el-option v-for="reseller in resellersMenu "
+                           class="select-success"
+                           :value="reseller.resellerCode"
+                           :label="reseller.resellerCode"
+                           :key="reseller.id"
+                           >
+                </el-option>
+              </el-select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
     <div class="card">
       <div class="card-content row">
         <div class="col-sm-12">
@@ -109,9 +130,9 @@
       <div class="row">
         <div class="col-md-12  ">
           <div class="pull-right ">
-            
-            <p-button round type="success" @click="download" :disabled="tableData.length < 1">
-              <div class="d-flex align-items-center">
+
+            <p-button round type="primary" @click="download" :disabled="tableData.length < 1">
+              <div class="d-flex align-items-center justify-content-center">
                 {{ $t('preview_debit.listing.button.download') }}
               </div>
             </p-button>
@@ -152,7 +173,7 @@
   import RegularTable from '../../../UIComponents/CeevoTables/RegularTable/RegularTable'
   import Spinner from "../../../UIComponents/Spinner";
   import {b64toBlob} from "../../../../utils/createCSVData";
-  
+
   export default {
     name: 'ApproveDebit',
     components: {
@@ -262,7 +283,7 @@
         this.softDocs = sofDocs || [];
         this.selectedFloatId = index.index.row.id;
         this.showSoftUploader = true;
-      }, 
+      },
       handleQuery({cardProgramId, currencyCode, resellerCode, fromDate, toDate, page, perPage} = {}) {
         if (!this) return;
         fromDate = (fromDate || this.fromDate) ? formatDate(fromDate || this.fromDate) : '';
@@ -410,6 +431,13 @@
   }
 </script>
 <style scoped lang="scss">
+  span.required-field-sympol{
+    vertical-align: sub;
+        font-size: 18px;
+  }
+  .w-220{
+    width:220px !important;
+  }
   .p-2 {
     padding: 1rem .5rem 2rem;
   }

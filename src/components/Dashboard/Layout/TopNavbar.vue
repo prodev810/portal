@@ -13,7 +13,7 @@
         <navbar-toggle-button @click.native="toggleSidebar"></navbar-toggle-button>
       </div>
       <span class="navbar-brand">{{mainMenuTitle}}</span>
-      <div class="search-field">
+      <div class="search-field justify-content-end">
         <fg-input placeholder="Search..." addon-right-icon="fa fa-search"></fg-input>
       </div>
     </div>
@@ -43,7 +43,11 @@
         } else if (this.$route.path.split('/').slice(-1)[0] == "search") {
           return "Search";
 
-        } else if (this.$route.path.split('/').slice(-1)[0] == "kyc-mainpage") {
+        }
+          else if (this.$route.path.split('/').slice(-1)[0] == "ipg") {
+            return "Reporting";
+        }
+        else if (this.$route.path.split('/').slice(-1)[0] == "kyc-mainpage") {
           return "KYC Main Page";
 
         } else if (this.$route.path.split('/').slice(-1)[0] === 'product-config') {
@@ -69,9 +73,11 @@
           return "Review and Edit Account Creation";
         } else if (this.$route.path.split('/')[2] === 'review-edit-card') {
           return "Review and Edit Card Creation";
+        } else if (this.$route.path === '/card-program/card/new') {
+          return 'Card program'
         } else {
-          return this.$route.path.split('/')[2].replace(/-/g, ' ');
-        }
+					return this.$route.path.split('/')[2].replace(/-/g, ' ');
+				}
       }
     },
     methods: {
@@ -109,38 +115,55 @@
     }
   };
 </script>
-<style>
-  .navbar .navbar-brand {
-    text-transform: capitalize !important;
-  }
+<style lang="scss">
 
+  .navbar{
+    .navbar-brand {
+      text-transform: capitalize !important;
+    }
+    &.navbar-transparent{
+     border-bottom: 0 !important;
+   }
+   .navbar-wrapper{
+     flex:0 0 100%;
+   }
+  }
   .navbar-brand {
     color: #2ed684;
-    font-family: 'Poppins', sans-serif;
     font-weight: bold;
     font-size: 40px !important;
     margin: 0;
-    margin-right: 57px;
+    margin-right: 32px;
   }
 
-  .search-field {
+  .search-field{
     width: 326px;
-  }
 
-  .search-field i {
-    color: #C2C7CE;
-  }
+    .input-group{
+      height:70px;
+      input{
+        font-size: 16px;
+        padding-left:1rem;
+      }
+    }
 
-  .search-field /deep/ .form-group .form-control {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-color: #8D8D8D !important;
-  }
-
-  .search-field /deep/ .input-group-append .input-group-text, .input-group-prepend .input-group-text {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-color: #8D8D8D !important;
+    i {
+      color: #C2C7CE;
+      &:before{
+        font-size: 20px;
+      }
+    }
+    .form-group .form-control {
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+      border-color: #8D8D8D !important;
+    }
+    .input-group-append .input-group-text, .input-group-prepend .input-group-text {
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      padding-right:1rem !important;
+      border-color: #8D8D8D !important;
+    }
   }
 
 </style>
