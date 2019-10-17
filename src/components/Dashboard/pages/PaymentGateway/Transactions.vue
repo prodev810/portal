@@ -69,8 +69,8 @@ export default {
 			this.loading = true
 
 			try {
-				//let response = await this.$http.acchttp.get('/charge')
-				console.log(response)
+				let response = await this.$http.acchttp.get('/charge/search?pageNumber=1')
+				console.log('Transactions', response)
 			} catch (error) {
 				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('payment_gateway.transactions.error_get_transactions') + error.message, status: 'danger' })
 			}
