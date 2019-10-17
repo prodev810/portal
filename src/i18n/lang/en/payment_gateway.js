@@ -102,7 +102,6 @@ export default {
 			merchant_id: 'Merchant',
 			method_code: 'Method',
 			payer_id: 'Client',
-			proc_processor: 'Processor',
 			status: 'Status',
 			sub_type: 'Type',
 			transaction_date: 'Date'
