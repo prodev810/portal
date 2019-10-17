@@ -84,6 +84,12 @@
 
 <script>
 import CollapseItemMixin from '@/components/Dashboard/pages/PaymentGateway/EditMerchantFragment/CollapseItemMixin'
+import {
+  ACTION_PG_GET_FLOAT_ACCOUNT_SEARCH_BY_MERCHANT_ID,
+  ACTION_PG_CREATE_FLOAT_ACCOUNT,
+  GETTER_PG_FLOAT_ACCOUNTS,
+} from '@/store/types'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'collapse-item-float-account',
@@ -98,6 +104,11 @@ export default {
       required: true,
     },
   },
+  computed: {
+    ...mapGetters({
+      listData: GETTER_PG_FLOAT_ACCOUNTS
+    })
+  },
   mounted() {
     this.getData();
   },
@@ -108,12 +119,16 @@ export default {
         { name: 'description', i18n: 'payment_gateway.merchant.edit_merchant.headerFloatAccount.name' },
         { name: 'balance', i18n: 'payment_gateway.merchant.edit_merchant.headerFloatAccount.balance' }
       ],
-      listData: [],
+      // listData: [],
       modalData: {},
       modalDataError: {}
     }
   },
   methods: {
+    ...mapActions({
+      loadApiData: ACTION_PG_GET_FLOAT_ACCOUNT_SEARCH_BY_MERCHANT_ID,
+      createData: ACTION_PG_CREATE_FLOAT_ACCOUNT
+    }),
     resetModalData() {
       this.modalData = {
         balance: 0,
@@ -186,7 +201,7 @@ export default {
       try {
         this.resetModalError();
         if (this.validate()) {
-          await this.$http.acchttp.post('/float-account', {
+          await this.createData({
             'balance': this.modalData.balance,
             'currency': {
               'code': this.modalData.currency,
@@ -196,22 +211,13 @@ export default {
             'merchant_id': this.merchantId
           })
           this.closeModal();
-          this.getData();
         }
       } catch (e) {
         console.error(e)
       }
     },
     async getData() {
-      try {
-        this.tableLoading = true;
-        const { data } = await this.$http.acchttp.get('/float-account/search', { merchantId: this.merchantId })
-        this.listData = data.content;
-        this.tableLoading = false;
-      } catch (e) {
-        console.error(e)
-        this.tableLoading = false;
-      }
+      await this.loadApiData(this.merchantId)
     }
   }
 }

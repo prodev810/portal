@@ -25,9 +25,13 @@ import Kyc from "../components/Dashboard/pages/Kyc/Kyc";
 import KycDashboard from "../components/Dashboard/pages/Kyc/KycDashboard";
 import Workflow from "../components/Dashboard/pages/Kyc/Workflow";
 // Payment gateway
-import PGSettings from '@/components/Dashboard/pages/PaymentGateway/Settings'
+// import PGSettings from '@/components/Dashboard/pages/PaymentGateway/Settings'
+import PGSettingWithTab from '@/components/Dashboard/pages/PaymentGateway/SettingWithTab.vue'
 import PGEditPaymentMethod from '@/components/Dashboard/pages/PaymentGateway/EditPaymentMethod'
-import PGMerchant from '@/components/Dashboard/pages/PaymentGateway/Merchant'
+
+// import PGMerchant from '@/components/Dashboard/pages/PaymentGateway/Merchant'
+import PGMerchantWithTab from '@/components/Dashboard/pages/PaymentGateway/MerchantWithTab'
+
 import PGEditMerchant from '@/components/Dashboard/pages/PaymentGateway/EditMerchant'
 import ViewAcquirers from '@/components/Dashboard/pages/PaymentGateway/ViewAcquirers'
 import EditAcquirer from '@/components/Dashboard/pages/PaymentGateway/EditAcquirer'
@@ -188,7 +192,8 @@ let payment_gateway = {
     {
       path: '/payment-gateway/settings',
       name: 'Payment gateway - Settings',
-      component: PGSettings,
+      // component: PGSettings,
+      component: PGSettingWithTab,
       meta: {
         //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
         requiresAuth: true,
@@ -208,7 +213,8 @@ let payment_gateway = {
     {
       path: '/payment-gateway/merchant',
       name: 'Payment gateway - Merchant',
-      component: PGMerchant,
+      // component: PGMerchant,
+      component: PGMerchantWithTab,
       meta: {
         //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
         requiresAuth: true,

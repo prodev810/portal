@@ -20,6 +20,12 @@ export default {
       OAUTH: '$oAuth' // same oAuth as main
     },
     {
+      BASE_URL: `${process.env.VUE_APP_API_BASE_PATH}/payment-mgmt-live`,
+      TIMEOUT: process.env.VUE_APP_API_CALL_TIMEOUT,
+      SHORTCUT: 'acchttpLive',
+      OAUTH: '$oAuth' // same oAuth as main
+    },
+    {
       BASE_URL: `${process.env.VUE_APP_API_BASE_PATH}/aba-api`,
       TIMEOUT: process.env.VUE_APP_API_CALL_TIMEOUT,
       SHORTCUT: 'abahttp',

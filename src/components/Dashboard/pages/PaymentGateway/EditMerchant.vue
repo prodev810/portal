@@ -358,7 +358,8 @@ import {
     SHOW_TOAST_MESSAGE,
     ACTION_PG_GET_MERCHANTS,
     ACTION_PG_GET_CURRENCIES,
-    ACTION_PG_GET_SINGLE_MERCHANT
+    ACTION_PG_GET_SINGLE_MERCHANT,
+    MUTATE_PG_ENV
 } from '@/store/types'
 import Collapse from '@/components/UIComponents/Collapse/Collapse'
 import Spinner from '@/components/UIComponents/Spinner'
@@ -476,6 +477,11 @@ export default {
         short_code: null,//state.paymentGateway.merchants.data.ext_merchant_id,
         merchant_name: null,
       }
+    }
+  },
+  mounted() {
+    if (this.$route.query && this.$route.query.env) {
+      this.$store.commit(MUTATE_PG_ENV, this.$route.query.env)
     }
   },
   computed: {
