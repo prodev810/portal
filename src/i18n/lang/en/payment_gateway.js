@@ -106,7 +106,10 @@ export default {
 			sub_type: 'Type',
 			transaction_date: 'Date'
 		},
-		error_get_transactions: 'Error while getting transactions: '
+		button_details: 'Details',
+		button_operations: 'Operations',
+		button_customer: 'Customer',
+		button_shipping_address: 'Shipping address'
 	},
   button_view: 'View',
   button_add: 'Add',

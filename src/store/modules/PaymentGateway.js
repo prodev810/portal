@@ -157,7 +157,7 @@ const actions = {
 				items: data._embedded.payments
 			})
     } catch (e) {
-      dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_set_float_account') + e.message, status: 'danger' })
+      dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_transactions') + e.message, status: 'danger' })
     }
   }	
 }

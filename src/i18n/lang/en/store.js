@@ -38,7 +38,8 @@ const paymentGateway = {
   error_get_merchants: 'Error while loading merchants: ',
   error_load_float_accounts: 'Error while loading float accounts: ',
   error_set_float_account: 'Error while saving float account: ',
-  success_add_float_account: 'Added float account successfully',
+	success_add_float_account: 'Added float account successfully',
+	error_get_transactions: 'Error while getting transactions: '
 }
 
 const countries = {
