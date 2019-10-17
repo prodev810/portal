@@ -20,9 +20,7 @@
               v-model="currentPage"
               :perPage="perPage"              
               :total="transactions.total"
-              
-              displayPerPage
-      ></p-pagination> <!-- @input="handleInput" -->
+      ></p-pagination>
     </div>
   </div>
 </template>
@@ -75,7 +73,10 @@ export default {
     }),
 		async loadData () {
 			this.loading = true
-			await this.getTransactions()
+			await this.getTransactions({
+				page: this.currentPage-1,
+				size: this.perPage
+			})
 			this.loading = false
 		}
 	},

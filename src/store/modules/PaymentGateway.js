@@ -150,7 +150,7 @@ const actions = {
 	},
   [ACTION_PG_GET_TRANSACTIONS]: async ({commit, dispatch}, params) => {
     try {
-			const { data } = await getHttpInstance(state.env).get(`/data/payments`)
+			const { data } = await getHttpInstance(state.env).get(`/data/payments?page=${params.page}&size=${params.size}`)
 
 			commit(MUTATE_PG_TRANSACTIONS, {
 				total: data.page.totalElements,
