@@ -24,19 +24,22 @@
     </div>
 
 		<DetailsModal v-model="modalDetailsVisible"
-									header="Payment details"
+									header="payment_gateway.transactions.modal_details.header"
 									:data="modalDetailsData"
-									:description="modalDetailsDescription"/>
+									:description="modalDetailsDescription"
+									i18base="payment_gateway.transactions.modal_details."/>
 
 		<DetailsModal v-model="modalCustomerVisible"
-									header="Customer details"
+									header="payment_gateway.transactions.modal_customer.header"
 									:data="modalCustomerData"
-									:description="modalCustomerDescription"/>
+									:description="modalCustomerDescription"
+									i18base="payment_gateway.transactions.modal_customer."/>
 
 		<DetailsModal v-model="modalShippingAddressVisible"
-									header="Shipping address"
+									header="payment_gateway.transactions.modal_shipping_address.header"
 									:data="modalShippingAddressData"
-									:description="modalShippingAddressDescription"/>
+									:description="modalShippingAddressDescription"
+									i18base="payment_gateway.transactions.modal_shipping_address."/>
   </div>
 </template>
 
@@ -85,43 +88,43 @@ export default {
 			modalCustomerData: {},
 			modalShippingAddressData: {},
 			modalDetailsDescription: [
-				{ key: 'account_token', label: 'Account token' },
-				{ key: 'amount', label: 'Amount' },
-				{ key: 'currency', label: 'Currency' },
-				{ key: 'is3_d', label: 'Is 3D', filter: 'boolean' },
-				{ key: 'merch_reference', label: 'Merchant reference' },
-				{ key: 'merchant_id', label: 'Merchant ID' },
-				{ key: 'method_code', label: 'Method code' },
-				{ key: 'modified_date', label: 'Modified ID', filter: 'dateTime' },
-				{ key: 'payer_id', label: 'Payer ID' },
-				{ key: 'session_id', label: 'Session ID' },
-				{ key: 'sett_amount', label: 'Sett amount' },
-				{ key: 'sett_currency', label: 'Sett currency' },
-				{ key: 'status', label: 'Status' },
-				{ key: 'sub_type', label: 'Sub type' },
-				{ key: 'transaction_date', label: 'Transaction date', filter: 'dateTime' },
-				{ key: 'value_date', label: 'Value date', filter: 'dateTime' }
+				{ key: 'account_token' },
+				{ key: 'amount' },
+				{ key: 'currency' },
+				{ key: 'is3_d', filter: 'boolean' },
+				{ key: 'merch_reference' },
+				{ key: 'merchant_id' },
+				{ key: 'method_code' },
+				{ key: 'modified_date', filter: 'dateTime' },
+				{ key: 'payer_id' },
+				{ key: 'session_id' },
+				{ key: 'sett_amount' },
+				{ key: 'sett_currency' },
+				{ key: 'status' },
+				{ key: 'sub_type' },
+				{ key: 'transaction_date', filter: 'dateTime' },
+				{ key: 'value_date', filter: 'dateTime' }
 			],
 			modalOperationsDescription: [
 			],
 			modalCustomerDescription: [
-				{ key: 'active', label: 'Active', filter: 'boolean' },
-				{ key: 'create_date', label: 'Create date', filter: 'dateTime' },
-				{ key: 'email', label: 'Email' },
-				{ key: 'first_name', label: 'First name' },
-				{ key: 'last_name', label: 'Last name' },
-				{ key: 'merchant_id', label: 'Merchant ID' },
-				{ key: 'mobile', label: 'Mobile' },
-				{ key: 'phone', label: 'Phone' },
-				{ key: 'sex', label: 'Sex' },
-				{ key: 'update_date', label: 'Update date', filter: 'dateTime' },
+				{ key: 'active', filter: 'boolean' },
+				{ key: 'create_date', filter: 'dateTime' },
+				{ key: 'email' },
+				{ key: 'first_name' },
+				{ key: 'last_name' },
+				{ key: 'merchant_id' },
+				{ key: 'mobile' },
+				{ key: 'phone' },
+				{ key: 'sex' },
+				{ key: 'update_date', filter: 'dateTime' },
 			],
 			modalShippingAddressDescription: [
-				{ key: 'city', label: 'City' },
-				{ key: 'country', label: 'Country' },
-				{ key: 'state', label: 'State' },
-				{ key: 'street', label: 'Street' },
-				{ key: 'zip', label: 'ZIP' }
+				{ key: 'city' },
+				{ key: 'country' },
+				{ key: 'state' },
+				{ key: 'street' },
+				{ key: 'zip' }
 			]
 		}
 	},
@@ -156,7 +159,6 @@ export default {
 				// assign data and make modal visible
 				this.modalDetailsData = response.data
 				this.modalDetailsVisible = true
-				console.log('this.modalDetailsData', this.modalDetailsData)
 			} catch (error) {
 				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: error.message, status: 'danger' })
 			}
@@ -167,7 +169,7 @@ export default {
 			this.loading = true
 
 			try {
-				let response = await this.$http.acchttp.get(row._links.operations.href)
+				let response = await getHttpInstance(this.env).get(this.processModalURL(row._links.operations.href))
 				// assign data and make modal visible
 				this.modalOperationsData = response.data
 				this.modalOperationsVisible = true

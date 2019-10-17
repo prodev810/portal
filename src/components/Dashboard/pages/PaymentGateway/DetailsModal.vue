@@ -3,14 +3,14 @@
 				 footerClasses="justify-content-center"
 				 type="notice"
 				 modalClasses="details-modal">
-		<h5 slot="header" class="modal-title">{{ header }}</h5>
+		<h5 slot="header" class="modal-title">{{ $t(header) }}</h5>
 
 		<div class="d-flex flex-column">
 			<div v-for="(item, index) in description"
 					:key="index"
 					class="d-flex flex-row align-items-center mb-1">
 				<div class="w-50">
-					<b>{{ item.label }}</b>
+					<b>{{ $t(i18base + item.key) }}</b>
 				</div>
 
 				<div class="w-50">
@@ -42,7 +42,8 @@ export default {
 		header: String,
 		value: Boolean,
 		data: Object,
-		description: Array
+		description: Array,
+		i18base: String
 	},
 	computed: {
 		visible: {
