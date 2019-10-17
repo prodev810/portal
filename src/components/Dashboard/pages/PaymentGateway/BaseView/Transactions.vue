@@ -22,6 +22,27 @@
               :total="transactions.total"
       ></p-pagination>
     </div>
+
+		<modal :show="modalDetailsVisible"
+           footerClasses="justify-content-center"
+           type="notice">
+			<h5 slot="header" class="modal-title">Payment details</h5>
+
+			XXX
+
+      <div slot="footer" class="w-100 d-flex justify-content-center">
+        <p-button type="default" 
+									@click.native="modalDetailsVisible = false" 
+									class="btn btn-round btn-default">
+					{{ $t('payment_gateway.button_close') }}
+				</p-button>
+      </div>
+		</modal>
+
+		<DetailsModal v-model="modalCustomerVisible"
+									header="Customer details"
+									:data="modalCustomerData"
+									:description="modalCustomerDescription"/>
   </div>
 </template>
 
@@ -31,6 +52,8 @@ import {
 	SHOW_TOAST_MESSAGE,
 	ACTION_PG_GET_TRANSACTIONS
 } from '@/store/types'
+import Modal from "@/components/UIComponents/Modal"
+import DetailsModal from "@/components/Dashboard/pages/PaymentGateway/DetailsModal"
 import Spinner from "@/components/UIComponents/Spinner"
 import RegularTable from '@/components/UIComponents/CeevoTables/RegularTable/RegularTable'
 import PPagination from "@/components/UIComponents/Pagination"
@@ -40,7 +63,9 @@ export default {
   components: { 
     Spinner, 
     RegularTable,
-    PPagination 
+		PPagination,
+		Modal,
+		DetailsModal
   },  
 	data () {
 		return {
@@ -62,7 +87,28 @@ export default {
 			modalDetailsData: {},
 			modalOperationsData: {},
 			modalCustomerData: {},
-			modalShippingAddressData: {}
+			modalShippingAddressData: {},
+			modalDetailsDescription: [
+				{ key: '', label: '' }
+			],
+			modalOperationsDescription: [
+
+			],
+			modalCustomerDescription: [
+				{ key: 'active', label: 'Active', filter: 'boolean' },
+				{ key: 'create_date', label: 'Create date', filter: 'dateTime' },
+				{ key: 'email', label: 'Email' },
+				{ key: 'first_name', label: 'First name' },
+				{ key: 'last_name', label: 'Last name' },
+				{ key: 'merchant_id', label: 'Merchant ID' },
+				{ key: 'mobile', label: 'Mobile' },
+				{ key: 'phone', label: 'Phone' },
+				{ key: 'sex', label: 'Sex' },
+				{ key: 'update_date', label: 'Update date', filter: 'dateTime' },
+			],
+			modalShippingAddressDescription: [
+				{ key: '', label: '' }
+			]
 		}
 	},
 	computed: {
