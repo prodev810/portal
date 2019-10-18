@@ -70,7 +70,7 @@ export default [
       },
       {
         name: 'Transaction',
-        path: '/payment-gateway/transaction',
+        path: '/payment-gateway/transactions',
         i18n: 'menu.payment_gateway.transaction',
         permission: permission.RESELLER_SUBSCRIPTION_VIEW
       }

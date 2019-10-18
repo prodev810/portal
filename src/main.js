@@ -54,6 +54,8 @@ import i18n from './i18n'
 import permission from '@/constants/permission'
 import VueAppInsights from 'vue-application-insights'
 
+import "@/utils/filters.js"
+
 // plugin setup
 Vue.use(VueRouter)
 Vue.use(GlobalDirectives)

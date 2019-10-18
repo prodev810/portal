@@ -15,8 +15,8 @@
 </template>
 
 <script>
+import { mapActions, mapState, mapGetters } from 'vuex'
 
-    import {mapActions, mapState, mapGetters} from 'vuex';
 import {
   ACTION_PG_GET_MERCHANTS,
   GETTER_PG_ENV
@@ -74,7 +74,7 @@ export default {
     },
     async loadData (env) {
       this.loading = true
-      await this.getMerchants();
+      await this.getMerchants()
       this.loading = false
     }
   }
