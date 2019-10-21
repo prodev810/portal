@@ -4,7 +4,7 @@
 
     <regular-table striped responsive condensed bordered
                    :headings="headers"
-                   :value="disputes.items">
+                   :value="disputesFormatted">
 
       <template slot-scope="row">   
         <td>
@@ -22,24 +22,10 @@
     </div>
 
 		<DetailsModal v-model="modalDetailsVisible"
-									header="payment_gateway.transactions.modal_details.header"
+									header="payment_gateway.disputes.modal_details.header"
 									:data="modalDetailsData"
 									:description="modalDetailsDescription"
-									i18base="payment_gateway.transactions.modal_details."/>
-
-    <!--
-		<DetailsModal v-model="modalCustomerVisible"
-									header="payment_gateway.transactions.modal_customer.header"
-									:data="modalCustomerData"
-									:description="modalCustomerDescription"
-									i18base="payment_gateway.transactions.modal_customer."/>
-
-		<DetailsModal v-model="modalShippingAddressVisible"
-									header="payment_gateway.transactions.modal_shipping_address.header"
-									:data="modalShippingAddressData"
-									:description="modalShippingAddressDescription"
-									i18base="payment_gateway.transactions.modal_shipping_address."/>
-    -->
+									i18base="payment_gateway.disputes.header."/>
   </div>
 </template>
 
@@ -74,19 +60,19 @@ export default {
         { name: 'amount', i18n: 'payment_gateway.disputes.header.amount' },
         { name: 'dispute_type', i18n: 'payment_gateway.disputes.header.dispute_type' },
         { name: 'description', i18n: 'payment_gateway.disputes.header.description' },
-				{ name: 'payment.transaction_date', i18n: 'payment_gateway.disputes.header.payment_transaction_date', dateTime: true },
+				{ name: 'payment_transaction_date', i18n: 'payment_gateway.disputes.header.payment_transaction_date', dateTime: true },
 				{ name: 'transaction_date', i18n: 'payment_gateway.disputes.header.transaction_date', dateTime: true }
       ],
       currentPage: 1,
 			perPage: 10,
 			modalDetailsVisible: false,
 			modalDetailsData: {},
-			modalCustomerDescription: [
+			modalDetailsDescription: [
 				{ key: 'cp_date', filter: 'dateTime' },
 				{ key: 'amount'  },
 				{ key: 'dispute_type' },
 				{ key: 'description' },
-				{ key: 'payment.transaction_date', filter: 'dateTime' },
+				{ key: 'payment_transaction_date', filter: 'dateTime' },
 				{ key: 'transaction_date', filter: 'dateTime' }
 			]
 		}
@@ -95,7 +81,30 @@ export default {
 		...mapState({
 			env: state => state.paymentGateway.env,
 			disputes: state => state.paymentGateway.disputes
-		})
+    }),
+    disputesFormatted () {
+      return [{
+        cp_date: '2012-04-23T18:25:43.511Z',
+        amount: `344 USD`,
+        dispute_type: 'Type A',
+        description: 'Dispute description',
+        payment_transaction_date: '2012-04-23T18:25:43.511Z',
+        transaction_date: '2012-04-23T18:25:43.511Z'
+      }]
+
+      /*
+      return this.disputes.items.map(d => {
+        return {
+          cp_date: d.cp_date,
+          amount: `${d.amount} ${d.currency}`,
+          dispute_type: d.dispute_type,
+          description: d.description,
+          payment_transaction_date: d.payment.transaction_date,
+          transaction_date: d.transaction_date
+        }
+      })
+      */
+    }
 	},
 	watch: {
 		currentPage () {
@@ -117,10 +126,19 @@ export default {
 		async onPaymentDetails (row) {
 			this.loading = true
 
+      console.log(row)
+
 			try {
-				let response = await getHttpInstance(this.env).get(this.processModalURL(row._links.payment.href))
+        // !!! Uncomment when API will be ready
+				//let response = await getHttpInstance(this.env).get(this.processModalURL(row._links.payment.href))
 				// assign data and make modal visible
-				this.modalDetailsData = response.data
+        //this.modalDetailsData = response.data
+
+        this.modalDetailsData = Object.keys(row).reduce((acc, value) => {
+          acc[value] = row[value].value
+          return acc
+        }, {})
+
 				this.modalDetailsVisible = true
 			} catch (error) {
 				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: error.message, status: 'danger' })

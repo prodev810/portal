@@ -158,6 +158,9 @@ export default {
       description: 'Description',
       payment_transaction_date: 'Transaction Date',
       transaction_date: 'Date'
+    },
+    modal_details: {
+      header: 'Dispute details'
     }
   },
   button_view: 'View',
