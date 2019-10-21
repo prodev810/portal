@@ -1,5 +1,5 @@
 <template>
-  <div class="card pg-merchant p-2">
+  <div class="card p-3">
     <Spinner v-if="loading"/>
 		<div class="d-flex flex-row justify-content-between align-items-center">
 			<p-button type="primary" @click="$router.push({path: '/payment-gateway/acquirer/new', query: { env }})" size="md" round>{{ $i18n.t('payment_gateway.acquirer.button_new') }}</p-button>

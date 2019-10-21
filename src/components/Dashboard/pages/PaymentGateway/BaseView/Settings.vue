@@ -2,7 +2,7 @@
   <div class="pgateway-settings">
     <el-row :gutter="20">
       <el-col :sm="24" :md="12">
-        <div class="card p-2">
+        <div class="card p-3">
           <Spinner v-if="loading"/>
           <regular-table width="100%"
             striped responsive condensed bordered
@@ -12,7 +12,7 @@
       </el-col>
 
       <el-col :sm="24" :md="12">
-        <div class="card p-2">
+        <div class="card p-3">
           <Spinner v-if="loading"/>
           <regular-table
             striped responsive condensed bordered
@@ -24,7 +24,7 @@
 
     <el-row :gutter="20">
       <el-col :sm="24">
-        <div class="card p-2">
+        <div class="card p-3">
           <Spinner v-if="loading"/>
           <regular-table
             striped responsive condensed bordered
