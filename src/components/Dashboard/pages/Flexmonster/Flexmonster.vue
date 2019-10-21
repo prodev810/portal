@@ -38,7 +38,7 @@ import 'flexmonster/flexmonster.min.css';
                     report: {
                         "dataSource": {
                             "dataSourceType": "elasticsearch",
-                            "node": "https://flexmon:mjjT63e@55396525c3a47458dbff3ff819b4724cc.eu-west-1.aws.found.io:9243/",
+                            "node": "https://flexmon:mjjT63e@5396525c3a47458dbff3ff819b4724cc.eu-west-1.aws.found.io:9243/",
                             // "index": "omnipay-bfc-mp*",
                             "index": "",
 
