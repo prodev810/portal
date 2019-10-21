@@ -149,7 +149,17 @@ export default {
 		button_operations: 'Operations',
 		button_customer: 'Customer',
 		button_shipping_address: 'Shipping address'
-	},
+  },
+  disputes: {
+    header: {
+      cp_date: 'CPD',
+      amount: 'Dispute Amount',
+      dispute_type: 'Type',
+      description: 'Description',
+      payment_transaction_date: 'Transaction Date',
+      transaction_date: 'Date'
+    }
+  },
   button_view: 'View',
   button_add: 'Add',
   button_history: 'History',

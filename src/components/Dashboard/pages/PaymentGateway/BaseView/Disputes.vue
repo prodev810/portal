@@ -72,8 +72,8 @@ export default {
       headers: [
         { name: 'cp_date', i18n: 'payment_gateway.disputes.header.cp_date', dateTime: true },
         { name: 'amount', i18n: 'payment_gateway.disputes.header.amount' },
-        { name: 'dispute_type', i18n: 'payment_gateway.disputes.header.payer_id' },
-        { name: 'description', i18n: 'payment_gateway.disputes.header.status' },
+        { name: 'dispute_type', i18n: 'payment_gateway.disputes.header.dispute_type' },
+        { name: 'description', i18n: 'payment_gateway.disputes.header.description' },
 				{ name: 'payment.transaction_date', i18n: 'payment_gateway.disputes.header.payment_transaction_date', dateTime: true },
 				{ name: 'transaction_date', i18n: 'payment_gateway.disputes.header.transaction_date', dateTime: true }
       ],
@@ -82,16 +82,12 @@ export default {
 			modalDetailsVisible: false,
 			modalDetailsData: {},
 			modalCustomerDescription: [
-				{ key: 'active', filter: 'boolean' },
-				{ key: 'create_date', filter: 'dateTime' },
-				{ key: 'email' },
-				{ key: 'first_name' },
-				{ key: 'last_name' },
-				{ key: 'merchant_id' },
-				{ key: 'mobile' },
-				{ key: 'phone' },
-				{ key: 'sex' },
-				{ key: 'update_date', filter: 'dateTime' },
+				{ key: 'cp_date', filter: 'dateTime' },
+				{ key: 'amount'  },
+				{ key: 'dispute_type' },
+				{ key: 'description' },
+				{ key: 'payment.transaction_date', filter: 'dateTime' },
+				{ key: 'transaction_date', filter: 'dateTime' }
 			]
 		}
 	},
