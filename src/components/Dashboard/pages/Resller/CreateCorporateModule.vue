@@ -3,19 +3,19 @@
     <div class="card">
       <div class="card-content">
         <el-row class="reseller-form-column" :gutter="24">
-          <el-col :md="11">
 
+          <!-- first column -->
+          <el-col :md="11">
+            <!-- switch -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong>{{$t('reseller.create.table_header.corporate_program')}}</strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{corporativeProgram | booleanToYesNoFormat}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
+                <div v-else class="w-100 d-flex align-items-center">
                   <strong class="mr-1">No</strong>
                   <label class="switch">
                     <input v-model="corporativeProgram" type="checkbox">
@@ -26,6 +26,7 @@
               </el-col>
             </el-row>
 
+            <!-- cardProgramCode -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.card_program_id')}}
@@ -33,20 +34,21 @@
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
-                  <strong>{{reseller.cardProgramCode}}</strong>
+                <div v-if="isView" class="w-100 d-flex align-items-center">
+                  <strong>{{ reseller.cardProgramID | cardProgramCode(cpcList) }}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.cardProgramID">
-                    <el-option v-for="item in cpcList"
-                               :key="item.value"
-                               :label="item.name"
-                               :value="item.value">{{item.name}}
+                <div v-else class="w-100 d-flex align-items-center">
+                  <el-select v-model="reseller.cardProgramID"
+                            name="cardProgramID"
+                            data-vv-as="card program id"
+                            v-validate="requiredField" >
+                    <el-option v-for="item in cpcList" :key="item.value" :label="item.name" :value="item.value">{{item.name}}
                     </el-option>
                   </el-select>
                 </div>
+                <p v-if="errors.has('cardProgramID')" class="invalid-feedback">
+                  {{ errors.first('cardProgramID') }}
+                </p>
               </el-col>
             </el-row>
 
@@ -62,14 +64,19 @@
                   <strong>{{ reseller.kycClassifier }}</strong>
                 </div>
                 <div v-else class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.kycClassifier">
+                  <el-select v-model="reseller.kycClassifier"
+                            name="kycClassifier" data-vv-as="kyc classifier" v-validate="requiredField">
                     <el-option v-for="data in getKycClassifier" :key="data.key" :label="data.key" :value="data.value">{{data.value}}
                     </el-option>
                   </el-select>
                 </div>
+                <p v-if="errors.has('kycClassifier')" class="invalid-feedback">
+                  {{ errors.first('kycClassifier') }}
+                </p>
               </el-col>
             </el-row>
 
+            <!-- resellerCode -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative  text-uppercase">{{$t('reseller.create.table_header.reseller_code')}}
@@ -77,25 +84,24 @@
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.resellerCode}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
+                <div v-else class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.resellerCode"
-                            :class="{'is-invalid': !isValidResellerCode}"
+                            name="resellerCode" data-vv-as="reseller code" v-validate="validateResellerCode"
+                            :class="{'is-invalid': errors.has('resellerCode')}"
                             :disabled="isEdit"
+                            :max-length="6"
                             :placeholder="$t('reseller.create.table_header.reseller_code')"></fg-input>
                 </div>
-                <p v-if="!isValidResellerCode" class="invalid-feedback">
-                  <!-- <span v-if="!reseller.resellerCode">{{$t('common.form_validations.required_field')}}</span> -->
-                  <span v-if="!verifySpace(reseller.resellerCode)">{{$t('common.form_validations.no_space')}}</span>
-                  <span v-if="!(reseller.resellerCode && reseller.resellerCode.length <= 6)">{{$t('common.form_validations.max_chars', {max: 6})}}</span>
+                <p v-if="errors.has('resellerCode')" class="invalid-feedback">
+                  {{ errors.first('resellerCode') }}
                 </p>
               </el-col>
             </el-row>
 
+            <!-- resellerName -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.reseller_name')}}
@@ -103,23 +109,23 @@
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.resellerName}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
-                  <fg-input v-model.trim="reseller.resellerName"
-                            :class="{'is-invalid': !isValidResellerName}"
-                            :placeholder="$t('reseller.create.table_header.reseller_name')"></fg-input>
+                <div v-else class="w-100 d-flex align-items-center">
+                  <fg-input v-model="reseller.resellerName"
+                            name="resellerName" data-vv-as="reseller name" v-validate="validateResellerName"
+                            :class="{'is-invalid': errors.has('resellerName')}"
+                            :placeholder="$t('reseller.create.table_header.reseller_name')"
+                            :max-length="30"></fg-input>
                 </div>
-                <p v-if="!isValidResellerName" class="invalid-feedback">
-                 <span v-if="!(reseller.resellerName.length <= 30)">{{$t('common.form_validations.max_chars', {max: 30})}}</span>
-                  <span v-if="!verifyName(reseller.resellerName)&&(reseller.resellerName!=='')">{{$t('common.form_validations.letters_only')}}</span>
+                <p v-if="errors.has('resellerName')" class="invalid-feedback">
+                  {{ errors.first('resellerName') }}
                 </p>
               </el-col>
             </el-row>
 
+            <!-- uniqueFloat -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.unique_float')}}
@@ -127,23 +133,23 @@
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong class="text-capitalize">{{reseller.uniqueFloat | booleanToYesNoFormat}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.uniqueFloat">
-                    <el-option v-for="item in uniqueFloatValues"
-                               :key="item.value"
-                               :label="item.name"
-                               :value="item.value">{{item.name}}
+                <div v-else class="w-100 d-flex align-items-center">
+                  <el-select v-model="reseller.uniqueFloat" 
+                            name="uniqueFloat" data-vv-as="unique float" v-validate="requiredField">
+                    <el-option v-for="item in options.uniqueFloatValues" :key="item.value" :label="item.name" :value="item.value">{{item.name}}
                     </el-option>
                   </el-select>
                 </div>
+                <p v-if="errors.has('uniqueFloat')" class="invalid-feedback">
+                  {{ errors.first('uniqueFloat') }}
+                </p>
               </el-col>
             </el-row>
 
+            <!-- alertContact -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.alert_contact')}}
@@ -151,20 +157,19 @@
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.alertContact}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
+                <div v-else class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.alertContact"
+                            name="alertContact" data-vv-as="alert contact" v-validate="validateAlertContact"
                             type="email"
-                            :class="{'is-invalid': !isValidAlertContact}"
+                            :max-length="35"
+                            :class="{'is-invalid': errors.has('alertContact')}"
                             :placeholder="$t('reseller.create.table_header.alert_contact')"></fg-input>
                 </div>
-                <p v-if="!isValidAlertContact" class="invalid-feedback">
-                  <!-- <span v-if="!reseller.alertContact">{{$t('common.form_validations.required_field')}}</span> -->
-                  <span v-if="!verifyEmail(reseller.alertContact)&&(reseller.alertContact!=='')">{{$t('common.form_validations.valid_email')}}</span>
+                <p v-if="errors.has('alertContact')" class="invalid-feedback">
+                  {{ errors.first('alertContact') }}
                 </p>
               </el-col>
             </el-row>
@@ -177,20 +182,19 @@
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.status}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.status">
-                    <el-option v-for="item in statusValues"
-                               :key="item.value"
-                               :label="item.value"
-                               :value="item.value">{{item.name}}
+                <div v-else class="w-100 d-flex align-items-center">
+                  <el-select v-model="reseller.status"
+                            name="status" data-vv-as="status" v-validate="requiredField">
+                    <el-option v-for="item in options.statusValues" :key="item.value" :label="item.value" :value="item.value">{{item.name}}
                     </el-option>
                   </el-select>
                 </div>
+                <p v-if="errors.has('status')" class="invalid-feedback">
+                  {{ errors.first('status') }}
+                </p>
               </el-col>
             </el-row>
 
@@ -202,581 +206,679 @@
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{ getCountryByCode(reseller.countryCode) }}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.countryCode">
-                    <el-option v-for="item in countries"
-                               :key="item.alpha2Code"
-                               :label="item.name"
-                               :value="item.alpha2Code">{{item.name}}
+                <div v-else class="w-100 d-flex align-items-center">
+                  <el-select v-model="reseller.countryCode"
+                            name="countryCode" data-vv-as="country code" v-validate="requiredField">
+                    <el-option v-for="item in countries" :key="item.alpha2Code" :label="item.name" :value="item.alpha2Code">{{item.name}}
                     </el-option>
                   </el-select>
                 </div>
+                <p v-if="errors.has('countryCode')" class="invalid-feedback">
+                  {{ errors.first('countryCode') }}
+                </p>
+              </el-col>
+            </el-row>
+
+            <!-- feeProfileId -->
+            <el-row class="w-100 d-flex align-items-center mb-3">
+              <el-col :md="7">
+                <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.feeProfileId')}}
+                  <span v-if="!isView" class="required-field-symbol">*</span>
+                </strong>
+              </el-col>
+              <el-col :md="17">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
+                  <strong>{{reseller.feeProfileId}}</strong>
+                </div>
+                <div v-else class="w-100 d-flex align-items-center">
+                  <fg-input v-model="reseller.feeProfileId"
+                            name="feeProfileId" data-vv-as="fee profile id" v-validate="validateFeeProfileId"
+                            :class="{'is-invalid': errors.has('feeProfileId')}"
+                            type="text"
+                            :placeholder="$t('reseller.create.table_header.feeProfileId')"></fg-input>
+                </div>
+                <p v-if="errors.has('feeProfileId')" class="invalid-feedback">
+                  {{ errors.first('feeProfileId') }}
+                </p>
+              </el-col>
+            </el-row>
+
+            <!-- address 1 -->
+            <el-row class="w-100 d-flex align-items-center mb-3">
+              <el-col :md="7">
+                <strong class="position-relative text-uppercase">{{ $t('reseller.create.table_header.address1') }}
+                </strong>
+              </el-col>
+              <el-col :md="17">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
+                  <strong>{{reseller.address1}}</strong>
+                </div>
+                <div v-else class="w-100 d-flex align-items-center">
+                  <fg-input v-model="reseller.address1"
+                            name="address1" data-vv-as="address1" v-validate="validateAddress"
+                            type="text"
+                            :class="{'is-invalid': errors.has('address1')}"
+                            :placeholder="$t('reseller.create.table_header.address1')"></fg-input>
+                </div>
+                <p v-if="errors.has('address1')" class="invalid-feedback">
+                  {{ errors.first('address1') }}
+                </p>
+              </el-col>
+            </el-row>
+
+            <!-- address 2 -->
+            <el-row class="w-100 d-flex align-items-center mb-3">
+              <el-col :md="7">
+                <strong class="position-relative text-uppercase">{{ $t('reseller.create.table_header.address2') }}
+                </strong>
+              </el-col>
+              <el-col :md="17">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
+                  <strong>{{reseller.address2}}</strong>
+                </div>
+                <div v-else class="w-100 d-flex align-items-center">
+                  <fg-input v-model="reseller.address2"
+                            name="address2" data-vv-as="address2" v-validate="validateAddress"
+                            type="text"
+                            :class="{'is-invalid': errors.has('address2')}"
+                            :placeholder="$t('reseller.create.table_header.address2')"></fg-input>
+                </div>
+                <p v-if="errors.has('address2')" class="invalid-feedback">
+                  {{ errors.first('address2') }}
+                </p>
+              </el-col>
+            </el-row>
+
+            <!-- address 3 -->
+            <el-row class="w-100 d-flex align-items-center mb-3">
+              <el-col :md="7">
+                <strong class="position-relative text-uppercase">{{ $t('reseller.create.table_header.address3') }}
+                </strong>
+              </el-col>
+              <el-col :md="17">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
+                  <strong>{{reseller.address3}}</strong>
+                </div>
+                <div v-else class="w-100 d-flex align-items-center">
+                  <fg-input v-model="reseller.address3"
+                            name="address3" data-vv-as="address3" v-validate="validateAddress"
+                            type="text"
+                            :class="{'is-invalid': errors.has('address3')}"
+                            :placeholder="$t('reseller.create.table_header.address3')"></fg-input>
+                </div>
+                <p v-if="errors.has('address3')" class="invalid-feedback">
+                  {{ errors.first('address3') }}
+                </p>
+              </el-col>
+            </el-row>
+
+            <!-- city -->
+            <el-row class="w-100 d-flex align-items-center mb-3">
+              <el-col :md="7">
+                <strong class="position-relative text-uppercase">{{ $t('reseller.create.table_header.city') }}
+                </strong>
+              </el-col>
+              <el-col :md="17">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
+                  <strong>{{reseller.city}}</strong>
+                </div>
+                <div v-else class="w-100 d-flex align-items-center">
+                  <fg-input v-model="reseller.city"
+                            name="city" data-vv-as="city" v-validate="validateCityOrCounty"
+                            type="text"
+                            :class="{'is-invalid': errors.has('city')}"
+                            :placeholder="$t('reseller.create.table_header.city')"></fg-input>
+                </div>
+                <p v-if="errors.has('city')" class="invalid-feedback">
+                  {{ errors.first('city') }}
+                </p>
+              </el-col>
+            </el-row>
+
+            <!-- countyOrState -->
+            <el-row class="w-100 d-flex align-items-center mb-3">
+              <el-col :md="7">
+                <strong class="position-relative text-uppercase">{{ $t('reseller.create.table_header.countyOrState') }}
+                </strong>
+              </el-col>
+              <el-col :md="17">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
+                  <strong>{{reseller.countyOrState}}</strong>
+                </div>
+                <div v-else class="w-100 d-flex align-items-center">
+                  <fg-input v-model="reseller.countyOrState"
+                            name="countyOrState" data-vv-as="county or state" v-validate="validateCityOrCounty"
+                            type="text"
+                            :class="{'is-invalid': errors.has('countyOrState')}"
+                            :placeholder="$t('reseller.create.table_header.countyOrState')"></fg-input>
+                </div>
+                <p v-if="errors.has('countyOrState')" class="invalid-feedback">
+                  {{ errors.first('countyOrState') }}
+                </p>
+              </el-col>
+            </el-row>
+
+            <!-- postcode -->
+            <el-row class="w-100 d-flex align-items-center mb-3">
+              <el-col :md="7">
+                <strong class="position-relative text-uppercase">{{ $t('reseller.create.table_header.postCode') }}
+                </strong>
+              </el-col>
+              <el-col :md="17">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
+                  <strong>{{reseller.postCode}}</strong>
+                </div>
+                <div v-else class="w-100 d-flex align-items-center">
+                  <fg-input v-model="reseller.postCode"
+                            name="postCode" data-vv-as="post code" v-validate="validatePostCode"
+                            type="text"
+                            :class="{'is-invalid': errors.has('postCode')}"
+                            :placeholder="$t('reseller.create.table_header.postCode')"></fg-input>
+                </div>
+                <p v-if="errors.has('postCode')" class="invalid-feedback">
+                  {{ errors.first('postCode') }}
+                </p>
+              </el-col>
+            </el-row>
+
+            <!-- cardName -->
+            <el-row class="w-100 d-flex align-items-center mb-3">
+              <el-col :md="7">
+                <strong class="position-relative text-uppercase">{{ $t('reseller.create.table_header.cardName') }}
+                </strong>
+              </el-col>
+              <el-col :md="17">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
+                  <strong>{{reseller.cardName}}</strong>
+                </div>
+                <div v-else class="w-100 d-flex align-items-center">
+                  <fg-input v-model="reseller.cardName"
+                            name="cardName" data-vv-as="card name" v-validate="validateCardName"
+                            type="text"
+                            :max-length="20"
+                            :class="{'is-invalid': errors.has('cardName')}"
+                            :placeholder="$t('reseller.create.table_header.cardName')"></fg-input>
+                </div>
+                <p v-if="errors.has('cardName')" class="invalid-feedback">
+                  {{ errors.first('cardName') }}
+                </p>
               </el-col>
             </el-row>
           </el-col>
+
+          <!-- second column -->
           <el-col :md="13">
 
+            <!-- loadFee -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.load_fee')}}
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.loadFee}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
+                <div v-else class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.loadFee"
-                            @blur="handleNumberInput('loadFee')"
-                            :class="{'is-invalid': !isValidLoadFee}"
-                            type="number"
-                            min="0"
+                            name="loadFee" data-vv-as="load fee" v-validate="validateLoadFeeInput"
+                            :class="{'is-invalid': !errors.has('loadFee')}"
+                            type="text"
                             :placeholder="$t('reseller.create.table_header.load_fee')"></fg-input>
                 </div>
-                <p v-if="!isValidLoadFee" class="invalid-feedback">
-                  <!-- <span v-if="!reseller.loadFee"> {{$t('common.form_validations.required_field')}}</span> -->
-                  <span v-if="reseller.loadFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                <p v-if="errors.has('loadFee')" class="invalid-feedback">
+                  {{ errors.first('loadFee') }}
                 </p>
               </el-col>
             </el-row>
 
+            <!-- loadFeePct -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.load_fee_pct')}}
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.loadFeePct}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
+                <div v-else class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.loadFeePct"
-                            @blur="handleNumberInput('loadFeePct')"
-                            :class="{'is-invalid': !isValidLoadFeePct}"
-                            type="number"
-                            min="0"
+                            name="loadFeePct" data-vv-as="load fee pct" v-validate="validateLoadFeeInput"
+                            :class="{'is-invalid': errors.has('loadFeePct')}"
+                            type="text"
                             :placeholder="$t('reseller.create.table_header.load_fee_pct')"></fg-input>
                 </div>
-                <p v-if="!isValidLoadFeePct" class="invalid-feedback">
-                  <!-- <span v-if="!reseller.loadFeePct"> {{$t('common.form_validations.required_field')}}</span> -->
-                  <span v-if="reseller.loadFeePct"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                <p v-if="errors.has('loadFeePct')" class="invalid-feedback">
+                  {{ errors.first('loadFeePct') }}
                 </p>
               </el-col>
             </el-row>
 
+            <!-- loadFeeCap -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.load_fee_cap')}}
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.loadFeeCap}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.loadFeeCap"
-                            @blur="handleNumberInput('loadFeeCap')"
-                            :class="{'is-invalid': !isValidLoadFeeCap}"
-                            type="number"
-                            min="0"
+                <div v-else class="w-100 d-flex align-items-center">
+                  <fg-input v-model="reseller.loadFeeCap" 
+                            name="loadFeeCap" data-vv-as="load fee cap" v-validate="validateLoadFeeInput"
+                            :class="{'is-invalid': errors.has('loadFeeCap')}"
+                            type="text"
                             :placeholder="$t('reseller.create.table_header.load_fee_cap')"></fg-input>
                 </div>
-                <p v-if="!isValidLoadFeeCap" class="invalid-feedback">
-                  <!-- <span v-if="!reseller.loadFeeCap"> {{$t('common.form_validations.required_field')}}</span> -->
-                  <span v-if="reseller.loadFeeCap"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                <p v-if="errors.has('loadFeeCap')" class="invalid-feedback">
+                  {{ errors.first('loadFeeCap') }}
                 </p>
               </el-col>
             </el-row>
 
+            <!-- loadFeebillMethod -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.load_fee_bill_method')}}
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.loadFeebillMethod}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.loadFeebillMethod">
-                    <el-option v-for="item in chargedToValues"
-                               :key="item.name"
-                               :label="item.value"
-                               :value="item.value">{{item.value}}
+                <div v-else class="w-100 d-flex align-items-center">
+                  <el-select v-model="reseller.loadFeebillMethod"
+                            name="loadFeebillMethod" data-vv-as="load fee bill method" v-validate="isLoadFeeGroupRequired">
+                    <el-option v-for="item in options.chargedToValues" :key="item.name" :label="item.value" :value="item.value">{{item.value}}
                     </el-option>
                   </el-select>
                 </div>
+                <p v-if="errors.has('loadFeebillMethod')" class="invalid-feedback">
+                  {{ errors.first('loadFeebillMethod') }}
+                </p>
               </el-col>
             </el-row>
 
+            <!-- appFee -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.app_fee')}}
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.appFee}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
+                <div v-else class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.appFee"
-                            @blur="handleNumberInput('appFee')"
-                            :class="{'is-invalid': !isValidAppFee}"
-                            type="number"
-                            min="0"
-                            :placeholder="$t('reseller.create.table_header.app_fee')"></fg-input>
+                            name="appFee" data-vv-as="app fee" v-validate="validateAppFeeInput"
+                            :class="{'is-invalid': errors.has('appFee')}"
+                            :placeholder="$t('reseller.create.table_header.app_fee')"
+                            type="text"></fg-input>
                 </div>
-                <p v-if="!isValidAppFee" class="invalid-feedback">
-                  <!-- <span v-if="!reseller.appFee"> {{$t('common.form_validations.required_field')}}</span> -->
-                  <span v-if="reseller.appFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                <p v-if="errors.has('appFee')" class="invalid-feedback">
+                  {{ errors.first('appFee') }}
                 </p>
               </el-col>
             </el-row>
 
+            <!-- appFeeBillMethod -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.app_fee_bill_method')}}
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.appFeeBillMethod}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.appFeeBillMethod">
-                    <el-option v-for="item in chargedToAppFee"
-                               :key="item.name"
-                               :label="item.value"
-                               :value="item.value">{{item.value}}
+                <div v-else class="w-100 d-flex align-items-center">
+                  <el-select v-model="reseller.appFeeBillMethod"
+                            name="appFeeBillMethod" data-vv-as="app fee bill method" v-validate="isAppFeeGroupRequired">
+                    <el-option v-for="item in options.chargedToAppFee" :key="item.name" :label="item.value" :value="item.value">{{item.value}}
                     </el-option>
                   </el-select>
                 </div>
+                <p v-if="errors.has('appFeeBillMethod')" class="invalid-feedback">
+                  {{ errors.first('appFeeBillMethod') }}
+                </p>
               </el-col>
             </el-row>
 
+            <!-- monthlyFee -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.monthly_fee')}}
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.monthlyFee}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
+                <div v-else class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.monthlyFee"
-                            @blur="handleNumberInput('monthlyFee')"
-                            :class="{'is-invalid': !isValidMonthlyFee}"
-                            type="number"
-                            min="0"
+                            name="monthlyFee" data-vv-as="monthly fee" v-validate="validateMonthlyFeeInput"
+                            :class="{'is-invalid': errors.has('monthlyFee')}"
+                            type="text"
                             :placeholder="$t('reseller.create.table_header.monthly_fee')"></fg-input>
                 </div>
-                <p v-if="!isValidMonthlyFee" class="invalid-feedback">
-                  <!-- <span v-if="!reseller.monthlyFee"> {{$t('common.form_validations.required_field')}}</span> -->
-                  <span v-if="reseller.monthlyFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                <p v-if="errors.has('monthlyFee')" class="invalid-feedback">
+                  {{ errors.first('monthlyFee') }}
                 </p>
               </el-col>
             </el-row>
 
+            <!-- monthlyFeeBillMethod -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.monthly_fee_bill_method')}}
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.monthlyFeeBillMethod}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.monthlyFeeBillMethod">
-                    <el-option v-for="item in chargedToValues"
-                               :key="item.name"
-                               :label="item.value"
-                               :value="item.value">{{item.value}}
+                <div v-else class="w-100 d-flex align-items-center">
+                  <el-select v-model="reseller.monthlyFeeBillMethod"
+                            name="monthlyFeeBillMethod" data-vv-as="monthly fee bill method" v-validate="isMonthlyFeeGroupRequired">
+                    <el-option v-for="item in options.chargedToValues" :key="item.name" :label="item.value" :value="item.value">{{item.value}}
                     </el-option>
                   </el-select>
                 </div>
+                <p v-if="errors.has('monthlyFeeBillMethod')" class="invalid-feedback">
+                  {{ errors.first('monthlyFeeBillMethod') }}
+                </p>
               </el-col>
             </el-row>
 
+            <!-- apiFee -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.api_fee')}}
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.apiFee}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
+                <div v-else class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.apiFee"
-                            @blur="handleNumberInput('apiFee')"
-                            :class="{'is-invalid': !isValidApiFee}"
-                            type="number"
-                            min="0"
+                            name="apiFee" data-vv-as="api fee" v-validate="validateApiFeeInput"
+                            :class="{'is-invalid': errors.has('apiFee')}"
+                            type="text"
                             :placeholder="$t('reseller.create.table_header.api_fee')"></fg-input>
                 </div>
-                <p v-if="!isValidApiFee" class="invalid-feedback">
-                  <!-- <span v-if="!reseller.apiFee"> {{$t('common.form_validations.required_field')}}</span> -->
-                  <span v-if="reseller.apiFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                <p v-if="errors.has('apiFee')" class="invalid-feedback">
+                  {{ errors.first('apiFee') }}
                 </p>
               </el-col>
             </el-row>
 
+            <!-- apiFeeBillMethod -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.api_fee_bill_method')}}
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.apiFeeBillMethod}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.apiFeeBillMethod">
-                    <el-option v-for="item in chargedToApiValues"
-                               :key="item.name"
-                               :label="item.value"
-                               :value="item.value">{{item.value}}
+                <div v-else class="w-100 d-flex align-items-center">
+                  <el-select v-model="reseller.apiFeeBillMethod"
+                            name="apiFeeBillMethod" data-vv-as="api fee bill method" v-validate="isApiFeeGroupRequired">
+                    <el-option v-for="item in options.chargedToApiValues" :key="item.name" :label="item.value" :value="item.value">{{item.value}}
                     </el-option>
                   </el-select>
                 </div>
+                <p v-if="errors.has('apiFeeBillMethod')" class="invalid-feedback">
+                  {{ errors.first('apiFeeBillMethod') }}
+                </p>
               </el-col>
             </el-row>
 
-            <!--Add Virtual Creation Fee field by will-->
+            <!-- virtualCardFee -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.virtual_card_fee')}}
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.virtualCardFee}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
+                <div v-else class="w-100 d-flex align-items-center">
                   <fg-input v-model="reseller.virtualCardFee"
-                            @blur="handleNumberInput('virtualCardFee')"
-                            :class="{'is-invalid': !isValidVirtualCardFee}"
-                            type="number"
-                            min="0"
+                            name="virtualCardFee" data-vv-as="virtual card fee" v-validate="validateVirtualCardFeeInput"
+                            :class="{'is-invalid': errors.has('virtualCardFee')}"
+                            type="text"
                             :placeholder="$t('reseller.create.table_header.virtual_card_fee')"></fg-input>
                 </div>
-                <p v-if="!isValidVirtualCardFee" class="invalid-feedback">
-                  <!-- <span v-if="!reseller.apiFee"> {{$t('common.form_validations.required_field')}}</span> -->
-                  <span v-if="reseller.virtualCardFee"> {{$t('common.form_validations.enter_a_positive_number')}}</span>
+                <p v-if="errors.has('virtualCardFee')" class="invalid-feedback">
+                  {{ errors.first('virtualCardFee') }}
                 </p>
               </el-col>
             </el-row>
 
+            <!-- virtualCardBillMethod -->
             <el-row class="w-100 d-flex align-items-center mb-3">
               <el-col :md="7">
                 <strong class="position-relative text-uppercase">{{$t('reseller.create.table_header.virtual_card_bill_method')}}
                 </strong>
               </el-col>
               <el-col :md="17">
-                <div v-if="isView"
-                     class="w-100 d-flex align-items-center">
+                <div v-if="isView" class="w-100 d-flex align-items-center">
                   <strong>{{reseller.virtualCardBillMethod}}</strong>
                 </div>
-                <div v-else
-                     class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.virtualCardBillMethod">
-                    <el-option v-for="item in chargedTovirtualCard"
-                               :key="item.name"
-                               :label="item.value"
-                               :value="item.value">{{item.value}}
+                <div v-else class="w-100 d-flex align-items-center">
+                  <el-select v-model="reseller.virtualCardBillMethod" 
+                            name="virtualCardBillMethod" data-vv-as="virtual card bill method" v-validate="isVirtualCardFeeGroupRequired">
+                    <el-option v-for="item in options.chargedTovirtualCard" :key="item.name" :label="item.value" :value="item.value">{{item.value}}
                     </el-option>
                   </el-select>
                 </div>
+                <p v-if="errors.has('virtualCardBillMethod')" class="invalid-feedback">
+                  {{ errors.first('virtualCardBillMethod') }}
+                </p>
               </el-col>
             </el-row>
+
           </el-col>
         </el-row>
-      </div>
-    </div>
 
-    <template v-if="isShowCorporativeBlock">
+        <!-- Corporate module -->
+        <template>
 
-      <div class="card reseller-dynamic-references" :class="{disabled:!corporativeProgram && !isView}">
-        <div class="card-content">
-          <div class="card-title">
-            <strong>Dynamic References</strong>
-          </div>
-
-          <el-row>
-            <el-col>
-              <strong>Customise reference fields</strong>
-              <p>Dynamic References are unique to you as a client. The dynamic reference will show up on the PDF that is
-                generated for each specific card as well as in the reporting from the activity on the system.</p>
-            </el-col>
-          </el-row>
-
-          <el-row :gutter="24" class="m-0">
-
-            <el-col :md="12">
-              <div class="form-group row">
-                <label for="ref1" class="col-form-label"><strong>Ref 1</strong></label>
-                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref1}}</strong>
-                <fg-input v-else
-                          v-model="resellerCorporate.dynamicReferences.ref1" id="ref1"
-                          :placeholder="'Ref 1'"></fg-input>
+          <!-- Dynamic References -->
+          <div class="card reseller-dynamic-references" :class="{disabled: isStandardMode}">
+            <div class="card-content">
+              <div class="card-title">
+                <strong>Dynamic References</strong>
               </div>
 
-              <div class="form-group row">
-                <label for="ref2" class="col-form-label"><strong>Ref 2</strong></label>
-                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref2}}</strong>
-                <fg-input v-else
-                          v-model="resellerCorporate.dynamicReferences.ref2" id="ref2"
-                          :placeholder="'Ref2'"></fg-input>
-              </div>
-
-              <div class="form-group row">
-                <label for="ref3" class="col-form-label"><strong>Ref 3</strong></label>
-                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref3}}</strong>
-                <fg-input v-else
-                          v-model="resellerCorporate.dynamicReferences.ref3" id="ref3"
-                          :placeholder="'Ref3'"></fg-input>
-              </div>
-
-              <div class="form-group row">
-                <label for="ref4" class="col-form-label"><strong>Ref 4</strong></label>
-                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref4}}</strong>
-                <fg-input v-else
-                          v-model="resellerCorporate.dynamicReferences.ref4" id="ref4"
-                          :placeholder="'Ref4'"></fg-input>
-              </div>
-            </el-col>
-
-            <el-col :md="12">
-              <div class="form-group row">
-                <label for="ref5" class="col-form-label"><strong>Ref 5</strong></label>
-                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref5}}</strong>
-                <fg-input v-else
-                          v-model="resellerCorporate.dynamicReferences.ref5" id="ref5"
-                          :placeholder="'Ref 5'"></fg-input>
-              </div>
-
-              <div class="form-group row">
-                <label for="ref6" class="col-form-label"><strong>Ref 6</strong></label>
-                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref6}}</strong>
-                <fg-input v-else
-                          v-model="resellerCorporate.dynamicReferences.ref6" id="ref6"
-                          :placeholder="'Ref6'"></fg-input>
-              </div>
-
-              <div class="form-group row">
-                <label for="ref7" class="col-form-label"><strong>Ref 7</strong></label>
-                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref7}}</strong>
-                <fg-input v-else
-                          v-model="resellerCorporate.dynamicReferences.ref7" id="ref7"
-                          :placeholder="'Ref7'"></fg-input>
-              </div>
-
-              <div class="form-group row">
-                <label for="ref8" class="col-form-label"><strong>Ref 8</strong></label>
-                <strong v-if="isView">{{resellerCorporate.dynamicReferences.ref8}}</strong>
-                <fg-input v-else
-                          v-model="resellerCorporate.dynamicReferences.ref8" id="ref8"
-                          :placeholder="'Ref8'"></fg-input>
-              </div>
-            </el-col>
-          </el-row>
-
-        </div>
-      </div>
-
-      <div class="card reseller-account-funding" :class="{disabled:!corporativeProgram && !isView}">
-        <div class="card-content">
-          <div class="card-title">
-            <strong>2 step validation - Account funding</strong>
-          </div>
-
-          <el-row>
-            <el-col>
-              <p>When allocating money to a specific account, you can choose between 1 or 2 step load approval process.
-                If
-                you want to have a 2 step process approval over a certain break amount, please specify the amount in the
-                “Break Value” field.</p>
-            </el-col>
-          </el-row>
-
-          <el-row>
-            <el-col :md="24" class="mb-4">
-              <label class="row-label"><strong>2 step validation</strong></label>
-              <strong v-if="isView">{{resellerCorporate.two_step_validation | booleanToYesNoFormat}}</strong>
-
-              <div v-else
-                   class="d-inline-flex">
-                <strong class="mr-1">No</strong>
-                <label class="switch">
-                  <input v-model="resellerCorporate.two_step_validation" type="checkbox">
-                  <span class="slider round"></span>
-                </label>
-                <strong class="ml-1">Yes</strong>
-              </div>
-            </el-col>
-
-            <el-col :md="24">
-              <label for="break-value" class="row-label"><strong>Break value 1</strong></label>
-              <strong v-if="isView">{{resellerCorporate.break_value}}</strong>
-              <fg-input v-else
-                        v-model="resellerCorporate.break_value"
-                        :placeholder="'Break value 1'"
-                        type="number"
-                        min="0"
-                        id="break-value"></fg-input>
-            </el-col>
-          </el-row>
-
-        </div>
-      </div>
-
-      <div class="card reseller-pdf-dynamic" :class="{disabled:!corporativeProgram && !isView}">
-        <div class="card-content">
-          <div class="card-title">
-            <strong>PDF Dynamic Text</strong>
-          </div>
-
-          <el-row>
-            <el-col>
-              <p>At the bottom of the Virtual Card PDF, you can create a pre-set instruction depending on your
-                requirements. You can setup multiple pre-sets if you need to customise depending on recipient.</p>
-            </el-col>
-          </el-row>
-
-          <el-row v-for="(preset, index) in dynamicPdf" :key="index">
-            <el-col :md="24" class="mb-4">
-              <div class="form-group">
-                <el-col :md="4">
-                  <label class="mb-2" for="preset1">
-                    <strong class="preset-title">Preset {{index + 1}}</strong>
-                  </label>
-                  <p v-if="isView">
-                    <span class="mr-2">Preset Name:</span>
-                    {{resellerCorporate.dynamic_pdf[index].name}}
-                  </p>
-                  <fg-input v-else
-                            v-model="resellerCorporate.dynamic_pdf[index].name"
-                            id="preset1"
-                            placeholder="Preset name"></fg-input>
+              <el-row>
+                <el-col>
+                  <strong>Customise reference fields</strong>
+                  <p>Dynamic References are unique to you as a client. The dynamic reference will show up on the PDF that is
+                    generated for each specific card as well as in the reporting from the activity on the system.</p>
                 </el-col>
+              </el-row>
+
+              <el-row :gutter="24" class="m-0">
+                <template v-if="reseller.virtualFields">
+                  <el-col :md="12">
+                    <div class="form-group row" v-for="(virtualField, key) in reseller.virtualFields.slice(0,Math.round(reseller.virtualFields.length / 2))" :key="key">
+                      <label :for="`ref${virtualField.fieldNumber}`" class="col-form-label">
+                        <strong>Ref {{ virtualField.fieldNumber }}</strong>
+                      </label>
+                      <strong v-if="isView">{{ virtualField.fieldName }}</strong>
+                      <fg-input v-else v-model="virtualField.fieldName" :id="`ref${virtualField.fieldNumber}`" :placeholder="`Ref ${virtualField.fieldNumber}`"></fg-input>
+                    </div>
+                  </el-col>
+
+                  <el-col :md="12">
+                    <div class="form-group row" v-for="(virtualField, key) in reseller.virtualFields.slice(Math.round(reseller.virtualFields.length / 2), reseller.virtualFields.length)" :key="key">
+                      <label :for="`ref${virtualField.fieldNumber}`" class="col-form-label">
+                        <strong>Ref {{ virtualField.fieldNumber }}</strong>
+                      </label>
+                      <strong v-if="isView">{{ virtualField.fieldName }}</strong>
+                      <fg-input v-else v-model="virtualField.fieldName" :id="`ref${virtualField.fieldNumber}`" :placeholder="`Ref ${virtualField.fieldNumber}`"></fg-input>
+                    </div>
+                  </el-col>
+                </template>
+              </el-row>
+            </div>
+          </div>
+
+          <!-- 2 step validation - Account funding -->
+          <div class="card reseller-account-funding" :class="{disabled: isStandardMode}">
+            <div class="card-content">
+              <div class="card-title">
+                <strong>2 step validation - Account funding</strong>
+              </div>
+
+              <el-row>
+                <el-col>
+                  <p>When allocating money to a specific account, you can choose between 1 or 2 step load approval process.
+                    If
+                    you want to have a 2 step process approval over a certain break amount, please specify the amount in the
+                    “Break Value” field.</p>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :md="24" class="mb-4">
+                  <label class="row-label"><strong>2 step validation</strong></label>
+                  <strong v-if="isView">{{reseller.twoStepValidateRequired | booleanToYesNoFormat}}</strong>
+
+                  <div v-else
+                      class="d-inline-flex">
+                    <strong class="mr-1">No</strong>
+                    <label class="switch">
+                      <input v-model="reseller.twoStepValidateRequired" type="checkbox">
+                      <span class="slider round"></span>
+                    </label>
+                    <strong class="ml-1">Yes</strong>
+                  </div>
+                </el-col>
+
                 <el-col :md="24">
-                  <el-input type="textarea" :disabled="isView"
-                            :rows="6" placeholder="Please input"
-                            v-model="resellerCorporate.dynamic_pdf[index].preset">
-                  </el-input>
+                  <label for="break-value" class="row-label"><strong>Break value 1</strong></label>
+                  <strong v-if="isView">{{reseller.breakValue}}</strong>
+                  <fg-input v-else
+                            v-model="reseller.breakValue"
+                            :placeholder="'Break value 1'"
+                            type="text"
+                            id="break-value"></fg-input>
                 </el-col>
+              </el-row>
+
+            </div>
+          </div>
+
+          <!-- PDF Dynamic Text -->
+          <div class="card reseller-pdf-dynamic" :class="{disabled: isStandardMode}">
+            <div class="card-content">
+              <div class="card-title">
+                <strong>PDF Dynamic Text</strong>
               </div>
-            </el-col>
-          </el-row>
 
-          <el-row>
-            <el-col>
-              <p-button v-if="!isView" round @click="handleAddPreset">
-                <img :src="addIcon" alt="icon">
-                Add another preset
+              <el-row>
+                <el-col>
+                  <p>At the bottom of the Virtual Card PDF, you can create a pre-set instruction depending on your
+                    requirements. You can setup multiple pre-sets if you need to customise depending on recipient.</p>
+                </el-col>
+              </el-row>
+
+              <el-row v-for="(preset, index) in reseller.virtualPresets" :key="index">
+                <el-col :md="24" class="mb-4">
+                  <div class="form-group">
+                    <el-col :md="4">
+                      <label class="mb-2" for="preset1">
+                        <strong class="preset-title">Preset {{index + 1}}</strong>
+                      </label>
+                      <p v-if="isView">
+                        <span class="mr-2">Preset Name:</span>
+                        {{preset.presetName}}
+                      </p>
+                      <fg-input v-else
+                                v-model="preset.presetName"
+                                id="preset1"
+                                placeholder="Preset name"></fg-input>
+                    </el-col>
+                    <el-col :md="24">
+                      <el-input type="textarea" :disabled="isView"
+                                :rows="6" placeholder="Please input"
+                                v-model="preset.content">
+                      </el-input>
+                    </el-col>
+                  </div>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col>
+                  <p-button v-if="!isView" round @click="handleAddPreset">
+                    <img :src="ui.addIcon" alt="icon">
+                    Add another preset
+                  </p-button>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </template>
+
+        <!-- button -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="reseller-footer d-flex justify-content-center">
+              <p-button round type="primary" class="mr-3" @click="handleAction('submit')" :class="{ 'disabled': !isView && (!isComplete || errors.any()) }">
+                {{ $t(submitActionButtonName) }}
               </p-button>
-            </el-col>
-          </el-row>
 
+              <p-button round @click="handleAction('cancel')">
+                {{ $t(cancelActionButtonName) }}
+              </p-button>
+            </div>
+          </div>
         </div>
-      </div>
-    </template>
 
-    <div class="row">
-      <div class="col-md-12">
-        <div class="reseller-footer d-flex justify-content-center">
-          <!--
-          <p-button round type="primary" class="mr-3"
-                    @click="handleAction()"
-                    :class="{ 'disabled': !validateClientForm || !hasPermission([permission.RESELLER_SUBSCRIPTION_EDIT, permission.RESELLER_SUBSCRIPTION_CREATE])}">
-            {{ $t(context === 'view' ? 'reseller.create.button.edit' : 'reseller.create.button.save') }}
-          </p-button>
-          -->
-
-          <p-button round type="primary" class="mr-3"
-                    @click="handleAction()"
-                    :class="{ 'disabled': !validateClientForm }">
-            {{ $t(context === 'view' ? 'reseller.create.button.edit' : 'reseller.create.button.save') }}
-          </p-button>
-
-          <p-button round @click="handleCancelAction()">{{ $t('reseller.create.button.cancel') }}</p-button>
-        </div>
       </div>
     </div>
 
-    <modal :show.sync="modals.visible"
-           footer-classes="justify-content-center"
-           type="notice">
-      <h5 slot="header" class="modal-title">{{handleModalTitle}}</h5>
+    <!-- confirm modal -->
+    <modal :show.sync="modals.visible" footer-classes="justify-content-center" type="notice">
+      <h5 slot="header" class="modal-title">{{ modalTitle }}</h5>
       <template>
-        <strong v-if="actionBtn === 'save'">Are you sure you want to save Reseller Corporate Program</strong>
+        <strong v-if="isCreate">Are you sure you want to save Reseller Corporate Program</strong>
       </template>
       <div slot="footer" class="w-50 d-flex justify-content-between">
-        <p-button round type="success"
-                  @click.native="handleModalAction()">Yes
+        <p-button round type="success" @click.native="handleModalAction('submit')">
+          Yes
         </p-button>
-        <p-button round type="default"
-                  @click.native="modals.visible = false">Cancel
+        <p-button round type="default" @click.native="handleModalAction('cancel')">
+          Cancel
         </p-button>
       </div>
     </modal>
 
-    <Spinner v-if="isLoading"></Spinner>
+    <!-- loading -->
+    <Spinner v-if="ui.isLoading"></Spinner>
   </div>
 </template>
-<script>
-const resellerCorporateTemplate = {
-  two_step_validation: 0,  
-  break_value: '',
-  dynamicReferences: {
-    ref1: '',
-    ref2: '',
-    ref3: '',
-    ref4: '',
-    ref5: '',
-    ref6: '',
-    ref7: '',
-    ref8: '',
-  },
-  dynamic_pdf: [
-    {name: '', preset: ''},
-    {name: '', preset: ''},
-  ]
-}
 
-import { permissionMixin } from '@/mixins/permission'
-import SlideYDownTransition from "vue2-transitions/src/Slide/SlideYDownTransition";
+<script>
+import addIcon from '../../../../../public/static/img/dashboard_icons/ic_add.svg'
+import Button from "../../../UIComponents/Button";
+import PButton from "../../../UIComponents/Button";
+import {Modal} from 'src/components/UIComponents'
+import Spinner from "../../../UIComponents/Spinner";
 import { mapActions, mapGetters, mapState } from "vuex"
-import {AbaModalEvents} from "../../../../main";
 import {
   ADD_RESELLER_SUBSCRIPTION,
   EDIT_RESELLER_SUBSCRTION_BY_ID,
@@ -795,621 +897,345 @@ import {
   GETTER_GET_KYC_CLASSIFIER,
   ACTION_GET_KYC_CLASSIFIER
 } from "@/store/types"
-import i18n from '@/i18n'
-import LOADING_STATE from '../../../../utils/loadingState'
 
-import createNewRowFromHeadings from "../../../../utils/createNewRowFromHeadings";
-import {
-  breakInput,
-  exactNumber,
-  limitedCharNumber,
-  mustBeAnEmail,
-  shouldBeNumber,
-  verifySpecialCharacter,
-} from "../../../../utils/formValidations";
-import {decimals} from "../../../../utils/inputMasks";
-import {
-  toNumber,
-  validateNumber
-} from "../../../../utils/numberInput";
-import Button from "../../../UIComponents/Button";
-import PButton from "../../../UIComponents/Button";
-import RegularTable from "../../../UIComponents/CeevoTables/RegularTable/RegularTable";
-import Loader from "../../../UIComponents/Loader";
-import Spinner from "../../../UIComponents/Spinner";
-import PRadio from "../../../UIComponents/Inputs/Radio";
-import {Modal} from 'src/components/UIComponents'
-import addIcon from '../../../../../public/static/img/dashboard_icons/ic_add.svg'
-import NAMED_ROUTES from '../../../../routes/nameRoutes'
-import cardProgram from '../../../../store/modules/CardProgram';
+const RESELLER_TYPE = {
+  STANDARD: 'STANDARD',
+  CORPORATE: 'CORPORATE',
+}
+
+const VIEW_OPERATION_TYPE = {
+  VIEW: 'VIEW',
+  CREATE: 'CREATE',
+  EDIT: 'EDIT'
+}
+
+const BUTTON_ACTION_TYPE = {
+  CANCEL: 'CANCEL',
+  SUBMIT: 'SUBMIT'
+}
+
+const VIRTUAL_FIELDS_LENGTH = 8
+const VIRTUAL_PRESETS_LENGTH = 2
+
+const options = {
+  uniqueFloatValues: [
+    {name: 'Yes', value: true},
+    {name: 'No', value: false},
+  ],
+  statusValues: [
+    {name: 'Active', value: 'ACTIVE'},
+    {name: 'Closed', value: 'CLOSED'},
+    {name: 'Pending Approval', value: 'PENDING'}
+  ],
+  chargedTovirtualCard: [
+    {name: 'FLOAT', value: 'FLOAT'},
+    {name: 'INVOICE', value: 'INVOICE'}
+  ],
+  chargedToApiValues: [
+    {name: 'FLOAT', value: 'FLOAT'},
+    {name: 'INVOICE', value: 'INVOICE'}
+  ],
+  chargedToValues: [
+    {name: 'ACCOUNT', value: 'ACCOUNT'},
+    {name: 'FLOAT', value: 'FLOAT'},
+    {name: 'INVOICE', value: 'INVOICE'}
+  ],
+  chargedToAppFee:[
+  {name: 'FLOAT', value: 'FLOAT'},
+  {name: 'INVOICE', value: 'INVOICE'}
+  ],
+}
+
+function defaultResllerField() {
+  return {
+    cardProgramID: '', // required
+    kycClassifier: '', // required
+    resellerCode: '', // required
+    resellerName: '', // required
+    uniqueFloat: '', // required
+    alertContact: '', // required
+    status: '', // required [PENDING, ACTIVE or CLOSED]
+    countryCode: '', // required
+
+    loadFee: '', // load fee group
+    loadFeePct: '', // load fee group
+    loadFeeCap: '', // load fee group
+    loadFeebillMethod: '', // load fee group [FLOAT, ACCOUNT or INVOICE]
+
+    appFee: '', // app fee group
+    appFeeBillMethod: '', // app fee group [FLOAT, ACCOUNT or INVOICE]
+
+    monthlyFee: '', // monthly fee group
+    monthlyFeeBillMethod: '', // monthly fee group
+
+    apiFee: '', // api fee group
+    apiFeeBillMethod: '', // api fee group
+
+    virtualCardFee: '', // virtual card fee group
+    virtualCardBillMethod: '', // virtual card fee group [FLOAT, ACCOUNT or INVOICE]
+
+    address1: '', // address fields
+    address2: '', // address fields
+    address3: '', // address fields
+    city: '', // address fields
+    countyOrState: '', // address fields
+    postCode: '', // address fields
+
+    resellerType: RESELLER_TYPE.STANDARD, // [STANDARD or CORPORATE]
+
+    virtualFields: [],
+    virtualPresets: [],
+
+    twoStepValidateRequired: false,
+    breakValue: '',
+    cardName: '',
+    feeProfileId: ''
+  }
+}
+
+function handleVirtualPresetsForRequestData(virtualPresets) {
+  let arr = []
+  for (const obj of virtualPresets) {
+    if (obj.content !== '' || obj.presetName !== '') {
+      arr.push(obj)
+    }
+  }
+  return arr
+}
 
 export default {
-  name: "CreateCorparateModule",
-  props: ['context'],
-  mixins: [permissionMixin],
+  name: 'create-corporate-module',
   components: {
-    SlideYDownTransition,
-    Spinner,
-    Loader,
-    PButton, RegularTable,
     [Button.name]: Button,
-    PRadio,
-    Modal,
+    PButton,
+    Spinner,
+    Modal
   },
   data() {
     return {
-      addIcon,
-      id: '',
-      isCancel: false,
-      //editRoute: `/reseller/edit/`,
-      corporativeProgram: 0,
-      reseller: {
-        resellerName: '',
-        resellerCode: '',
-        alertContact: '',
-        uniqueFloat: '',
-        cardProgramCode: '',
-        status:'',
-        countryCode: '',
-        cardProgramID:'',
-        kycClassifier: ''
+      options,
+      viewOperationType: '',
+      buttonActionType: '',
+      corporativeProgram: false,
+      ui: {
+        addIcon,
+        isLoading: false
       },
-      resellerCorporate: JSON.parse(JSON.stringify(resellerCorporateTemplate)),
-      resellerRequestPropDelete: [
-        'cardProgramCode',
-        'defCurrency',
-        'resellerId',
-        'id',
-      ],
-      resellerRequestPropModify: [
-        {name: 'apiFee', type: 'number'},
-        {name: 'appFee', type: 'number'},
-        {name: 'loadFee', type: 'number'},
-        {name: 'loadFeeCap', type: 'number'},
-        {name: 'loadFeePct', type: 'number'},
-        {name: 'monthlyFee', type: 'number'},
-        {name: 'uniqueFloat', type: 'boolean'},
-        {name: 'virtualCardFee', type: 'number'},
-      ],
       modals: {
-        visible: false,
+        visible: false
       },
-      secondLine: ['loadFee', 'loadFeePct', 'loadFeeCap', 'appFee'],
-      thirdLine: ['monthlyFee', 'apiFee'],
-      edit: false,
-      dirty: false,
-      tableHeadingsPack: {
-        main: [
-          {
-            label: 'CPC',
-            name: 'cardProgramID',
-            i18n: 'reseller.create.table_header.card_program_id',
-            input: 'select',
-            mapViewData: 'cardProgramCode',
-            required: true,
-            selectKeys: [
-              {name: '', value: null}
-            ],
-          },
-          {
-            label: 'RC',
-            name: 'resellerCode',
-            i18n: 'reseller.create.table_header.reseller_code',
-            required: true,
-            validator: [
-              verifySpecialCharacter,
-              exactNumber(5)
-            ],
-            brakeAt: breakInput(5)
-          },
-          {
-            label: 'Reseller Name',
-            name: 'resellerName',
-            i18n: 'reseller.create.table_header.reseller_name',
-            required: true,
-            validator: [
-              verifySpecialCharacter,
-              limitedCharNumber(0, 20)
-            ],
-            brakeAt: breakInput(20)
-          },
-          {
-            label: 'Unique Float',
-            name: 'uniqueFloat',
-            i18n: 'reseller.create.table_header.unique_float',
-            required: true,
-            input: 'select',
-            selectKeys: [{name: 'yes', value: true}]
-          },
-          {
-            label: 'alert Contact',
-            name: 'alertContact',
-            i18n: 'reseller.create.table_header.alert_contact',
-            required: true,
-            validator: [mustBeAnEmail],
-            brakeAt: breakInput(64)
-          },
-
-          {
-            label: 'Status',
-            name: 'status',
-            i18n: 'reseller.create.table_header.status',
-            required: true,
-            input: 'select',
-            selectKeys: [
-              //  {name: '', value: null},
-              {name: 'Active', value: 'ACTIVE'},
-              {name: 'Closed', value: 'CLOSED'},
-              {name: 'Pending Approval', value: 'PENDING'}
-            ]
-          },
-        ],
-        secondary: [
-          {
-            label: 'load Fee',
-            name: 'loadFee',
-            i18n: 'reseller.create.table_header.load_fee',
-            mask: decimals(2),
-            validator: [shouldBeNumber],
-            $domAttri: {step: '0.01', type: 'number'},
-            brakeAt: breakInput(8)
-          },
-          {
-            label: 'load fee percentage',
-            name: 'loadFeePct',
-            i18n: 'reseller.create.table_header.load_fee_pct',
-            mask: decimals(2), validator: [shouldBeNumber],
-            $domAttri: {step: '0.01', type: 'number'},
-            brakeAt: breakInput(8),
-            required: false,
-          },
-          {
-            label: 'load fee roof',
-            name: 'loadFeeCap',
-            i18n: 'reseller.create.table_header.load_fee_cap',
-            mask: decimals(2), validator: [shouldBeNumber],
-            $domAttri: {step: '0.01', type: 'number'},
-            brakeAt: breakInput(8)
-          },
-          {
-            label: 'Charged To',
-            name: 'loadFeebillMethod',
-            i18n: 'reseller.create.table_header.load_fee_bill_method',
-            input: 'select',
-            selectKeys: [
-              {name: '', value: null},
-              {name: 'ACCOUNT', value: 'ACCOUNT'},
-              {name: 'FLOAT', value: 'FLOAT'},
-              {name: 'INVOICE', value: 'INVOICE'}]
-          },
-          /*application*/
-          {
-            label: 'application fee',
-            name: 'appFee',
-            i18n: 'reseller.create.table_header.app_fee',
-            mask: decimals(2),
-            validator: [shouldBeNumber],
-            $domAttri: {step: '0.01', type: 'number'},
-            brakeAt: breakInput(8)
-
-          },
-          //application fee bill method
-          {
-            label: 'Charged To',
-            name: 'appFeeBillMethod',
-            i18n: 'reseller.create.table_header.app_fee_bill_method',
-            input: 'select',
-            selectKeys: [
-              {name: '', value: null},
-              {name: 'FLOAT', value: 'FLOAT'},
-              {name: 'ACCOUNT', value: 'ACCOUNT'},
-              {name: 'INVOICE', value: 'INVOICE'}]
-          },
-        {
-            label: 'Virtual Card Fee',
-            name: 'virtualCardFee',
-            i18n: 'reseller.create.table_header.virtual_card_fee',
-            mask: decimals(2),
-            validator: [shouldBeNumber],
-            $domAttri: {step: '0.01', type: 'number'},
-            brakeAt: breakInput(8)
-
-          },
-          //application fee bill method
-          {
-            label: 'Charged To',
-            name: 'virtualCardBillMethod',
-            i18n: 'reseller.create.table_header.virtual_card_bill_method',
-            input: 'select',
-            selectKeys: [
-              {name: '', value: null},
-              {name: 'FLOAT', value: 'FLOAT'},
-              {name: 'CARD', value: 'CARD'},
-              {name: 'INVOICE', value: 'INVOICE'}]
-          },
-          /*monthly fees*/
-        ],
-        third: [
-          {
-            label: 'monthly fee',
-            name: 'monthlyFee',
-            i18n: 'reseller.create.table_header.monthly_fee',
-            mask: decimals(2),
-            validator: [shouldBeNumber],
-            $domAttri: {step: '0.01', type: 'number'},
-            brakeAt: breakInput(8)
-
-          },
-          //monthly fee bill method
-          {
-            label: 'Charged To',
-            name: 'monthlyFeeBillMethod',
-            i18n: 'reseller.create.table_header.monthly_fee_bill_method',
-            input: 'select',
-            selectKeys: [
-              {name: '', value: null},
-              {name: 'ACCOUNT', value: 'ACCOUNT'},
-              {name: 'FLOAT', value: 'FLOAT'},
-              {name: 'INVOICE', value: 'INVOICE'}]
-          },
-          /*api fees*/
-          {
-            label: 'api fee',
-            name: 'apiFee',
-            i18n: 'reseller.create.table_header.api_fee',
-            mask: decimals(2),
-            validator: [shouldBeNumber],
-            $domAttri: {step: '0.01', type: 'number'},
-            brakeAt: breakInput(8)
-          },
-
-          {
-            label: 'Charged To',
-            name: 'apiFeeBillMethod',
-            i18n: 'reseller.create.table_header.api_fee_bill_method',
-            input: 'select',
-            selectKeys: [
-              {name: '', value: null},
-              {name: 'FLOAT', value: 'FLOAT'},
-              {name: 'INVOICE', value: 'INVOICE'}
-            ]
-          },
-        ]
-      },
-      editAll: false,
-      editId: '',
-      cardReseller: [],
-      resellerId: '',
-      //context: 'edit',
-      valid: {
-        main: false,
-        secondary: false,
-        third: false,
-      },
-      cpcValues: [
-        {name: '', value: 1}
-      ],
-      statusValues: [
-        {name: 'Active', value: 'ACTIVE'},
-        {name: 'Closed', value: 'CLOSED'},
-        {name: 'Pending Approval', value: 'PENDING'}
-      ],
-      chargedToValues: [
-        {name: 'ACCOUNT', value: 'ACCOUNT'},
-        {name: 'FLOAT', value: 'FLOAT'},
-        {name: 'INVOICE', value: 'INVOICE'}
-      ],
-      chargedToAppFee:[
-        {name: 'FLOAT', value: 'FLOAT'},
-        {name: 'INVOICE', value: 'INVOICE'}
-      ],
-      chargedToApiValues: [
-        {name: 'FLOAT', value: 'FLOAT'},
-        {name: 'INVOICE', value: 'INVOICE'}
-      ],
-      chargedTovirtualCard: [
-        {name: 'FLOAT', value: 'FLOAT'},
-        {name: 'INVOICE', value: 'INVOICE'}
-      ],
-      uniqueFloatValues: [
-        {name: 'Yes', value: 1},
-        {name: 'No', value: 0},
-      ],
-      dynamicRef1: [
-        {name: 'Ref 1', model: 'ref1'},
-        {name: 'Ref 2', model: 're2'},
-        {name: 'Ref 3', model: 're3'},
-        {name: 'Ref 4', model: 'ref4'},
-      ],
-      actionBtn: 'save',
-      validationList: [
-        // 'apiFee',
-        // 'apiFeeBillMethod',
-        // 'appFee',
-        // 'appFeeBillMethod',
-        'cardProgramID',
-        'cardProgramCode',
-        'resellerCode',
-        'resellerName',
-        'uniqueFloat',
-        'alertContact',
-        'status',
-        'countryCode',
-        'kycClassifier',
-        ''
-        // 'loadFee',
-        // 'loadFeeCap',
-        // 'loadFeePct',
-        // 'loadFeebillMethod',
-        // 'monthlyFee',
-        // 'monthlyFeeBillMethod',
-    
-      ],
-      validateArray: {
-        resellerName: true,
-        resellerCode: true,
-        alertContact: true,
-        uniqueFloat: true,
-        cardProgramCode: true,
-        status:true,
-        countryCode: true,
-        kycClassifier: true
-      },
-    };
+      reseller: {},
+    }
+  },
+  watch: {
+    cpcList: function (val) {
+      console.log(val)
+    },
+    '$route': function() {
+      this.init()
+    },
+    'reseller.cardProgramID': function(val) {
+      if (val && val.trim() !== '') {
+        this.loadKycClassifierByCardProgramId(val)
+      }
+    },
+    getKycClassifier: function(data) {
+      if (this.isCreate) {
+        if (data && data.length === 1) {
+        this.reseller.kycClassifier = data[0].key
+        } else {
+          this.reseller.kycClassifier = ''
+        }
+      }
+    },
+    corporativeProgram: function (val) {
+      this.reseller.resellerType = val === true ? RESELLER_TYPE.CORPORATE : RESELLER_TYPE.STANDARD
+    },
+    resellerSubscription: function(data) {
+      this.reseller = data
+      this.corporativeProgram = this.reseller.resellerType === RESELLER_TYPE.CORPORATE
+      this.reseller.virtualFields = this.handleVirtualFields(this.reseller.virtualFields)
+      if (this.isEdit && (!this.reseller.virtualPresets || this.reseller.virtualPresets.length === 0)) {
+        for (let i = 0; i < VIRTUAL_PRESETS_LENGTH; i++) {
+          this.handleAddPreset()
+        }
+      }
+    }
+  },
+  mounted() {
+    this.init()
+  },
+  destroyed() {
+    this.reseller = {}
   },
   computed: {
     ...mapState({
       countries: state => state.countries.countries
     }),
     ...mapGetters({
-      cardData: GETTER_ALL_CARDS,
-      loadingState: GETTER_LOADINGSTATE_RESELLER,
       cpcList: GETTER_ALL_CARD_PROGRAM_CODE,
-      resellerSubscription: GETTER_RESELLER_SUBSCRIPTIONS,
       getCountryByCode: GETTER_GET_COUNTRY_BY_CODE,
-      getKycClassifier: GETTER_GET_KYC_CLASSIFIER
-
+      getKycClassifier: GETTER_GET_KYC_CLASSIFIER,
+      resellerSubscription: GETTER_RESELLER_SUBSCRIPTION,
     }),
-    resellerData() {
-      const resellerSub = this.$store.state.reseller.resellerSubscription;
-      if (!resellerSub) return void 0;
-      return !this.$route.params.id ? resellerSub : {
-        ...resellerSub,
-        ['cardProgramCode']: (this.$store.state.cardProgram.allCardPrograms.find(cardProgram => cardProgram.id === resellerSub.cardProgramID) ||
-          {cardProgramCode: null}).cardProgramCode
+    isStandardMode() {
+      return this.reseller.resellerType === RESELLER_TYPE.STANDARD
+    },
+    modalTitle() {
+      if (this.isEdit && this.buttonActionType === BUTTON_ACTION_TYPE.CANCEL) {
+        return 'Discard changes?'
+      }
+      return 'Save Reseller Corporate Program'
+    },
+    isComplete() {
+      return this.reseller.cardProgramID !== '' && this.reseller.kycClassifier !== ''
+              && this.reseller.resellerCode !== '' && this.reseller.resellerName !== ''
+              && this.reseller.uniqueFloat !== '' && this.reseller.alertContact !== ''
+              && this.reseller.status !== '' && this.reseller.countryCode !== ''
+    },
+    submitActionButtonName() {
+      if (this.isView) {
+        return 'reseller.create.button.edit'
+      } else {
+        return 'reseller.create.button.save'
       }
     },
-    creationResponseState() {
-      return this.$store.state.UiModule.responseState[ADD_RESELLER_SUBSCRIPTION]
-    },
-    editionResponseState() {
-      return this.$store.state.UiModule.responseState[EDIT_RESELLER_SUBSCRTION_BY_ID]
-    },
-    isValid() {
-      return Object.keys(this.valid).reduce((acc, i) => acc && this.valid[i], true)
-    },
-    dynamicPdf() {
-      return this.resellerCorporate.dynamic_pdf
+    cancelActionButtonName() {
+      if (this.isView) {
+        return 'reseller.create.button.back'
+      } else if (this.isEdit) {
+        return 'reseller.create.button.cancel'
+      } else {
+        return 'reseller.create.button.gotoList'
+      }
     },
     isView() {
-      return this.context === 'view'
-    },
-    isCreate() {
-      return this.context === 'create'
+      return this.viewOperationType === VIEW_OPERATION_TYPE.VIEW
     },
     isEdit() {
-      return this.context === 'edit'
+      return this.viewOperationType === VIEW_OPERATION_TYPE.EDIT
     },
-    isLoading() {
-      return this.loadingState !== LOADING_STATE.IDEAL
+    isCreate() {
+      return this.viewOperationType === VIEW_OPERATION_TYPE.CREATE
     },
-    handleModalTitle() {
-      if (this.actionBtn === 'save') {
-        return 'Save Reseller Corporate Program'
-      }
-      return 'Discard changes?'
-    },
-    isShowCorporativeBlock() {
-      if (this.isView) {
-        return this.corporativeProgram
-      }
-      return true
-    },
-    validateClientForm() {
-      let isValid = false
-      if (!this.isViewMode && Object.keys(this.reseller).length !== 0) {
-        this.validationList.forEach(item => {
-          const field = this.reseller[`${item}`]
-          if (typeof (field) === 'undefined' || field === '' || field === 0) {
-            isValid = false
-          }
-          switch (item) {
-            case'alertContact':
-              this.validateArray.alertContact = this.isValidAlertContact
-              break
-            case'resellerName':
-              this.validateArray.resellerName = this.isValidResellerName
-              break
-            case'resellerCode':
-              this.validateArray.resellerCode = this.isValidResellerCode
-              break
-            case'uniqueFloat':
-              this.validateArray.uniqueFloat = this.isValidUniqueFloat
-              break
-            case'status':
-              this.validateArray.status = this.isValidStatus
-              break
-            case'countryCode':
-              this.validateArray.countryCode = this.isValidCountryCode
-              break
-            case'cardProgramCode':
-              this.validateArray.cardProgramCode = this.isValidCardProgramCode
-              break
-            case 'kycClassifier':
-              this.validateArray.kycClassifier = this.isValidKycClassifier
-          }
-        })
-
-        if (typeof this.validateArray !== 'undefined') {
-          isValid = true
-          Object.keys(this.validateArray).forEach(item => {
-            if (!this.validateArray[item]) {
-              return isValid = false
-            }
-          })
-        }
-      }
-
-      return isValid
-    },
-    isValidStatus(){
-      return this.reseller.status !== ''
-    },
-    isValidCountryCode(){
-      return this.reseller.countryCode !== ''
-    },
-    isValidKycClassifier() {
-      return this.reseller.kycClassifier !== ''
-    },
-    isValidCardProgramCode(){
-
-    return this.reseller.cardProgramID !== ''
-    },
-    isValidResellerName() {
-      return this.reseller.resellerName !== '' && this.verifyName(this.reseller.resellerName)
-    },
-    isValidResellerCode() {
-      return (this.verifyContactRef(this.reseller.resellerCode))
-    },
-    isValidUniqueFloat() {
-      return (this.reseller.uniqueFloat !== '')
-    },
-    isValidAlertContact() {
-      return (this.reseller.alertContact !== '' && this.verifyEmail(this.reseller.alertContact))
-    },
-    isValidLoadFee() {
-      return validateNumber(this.reseller.loadFee)
-    },
-    isValidLoadFeeCap() {
-      return validateNumber(this.reseller.loadFeeCap)
-    },
-    isValidLoadFeePct() {
-      return validateNumber(this.reseller.loadFeePct)
-    },
-    isValidApiFee() {
-      return validateNumber(this.reseller.apiFee)
-    },
-    isValidAppFee() {
-      return validateNumber(this.reseller.appFee)
-    },
-    isValidMonthlyFee() {
-      return validateNumber(this.reseller.monthlyFee)
-    },
-    isValidVirtualCardFee() {
-      return validateNumber(this.reseller.virtualCardFee)
-    },
-  },
-  watch: {
-    'reseller.cardProgramID': function(val) {
-      if (val && val !== '') {
-        this.reseller.kycClassifier = ''
-        this.loadKycClassifierByCardProgramId(val)
+    commonFeeValidateRules() {
+      return {
+        regex: /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/,
+        min_value: 0.00,
+        max_value: 999999.99,
+        notAllowCharactersAtLast: ['.']
       }
     },
-    getKycClassifier: function (data) {
-      if (data && data.length === 1) {
-        this.reseller.kycClassifier = data[0].key
+    requiredField() {
+      return {
+        required: true
       }
     },
-    reseller(newVal){
-      this.isStartEdit = true
+    validateResellerCode() {
+      return Object.assign({}, this.requiredField, {
+        max: 6,
+        alpha_num: true,
+      })
     },
-    cardData(newVal) {
-      this.chagneCardProgramOptions(newVal);
+    validateResellerName() {
+      return Object.assign({}, this.requiredField, {
+        max: 30,
+        regex: /^[a-zA-Z0-9\-&.,\/\s]+$/,
+        notAllowCharactersAtFirst: [' '],
+        notAllowCharactersAtLast: [' ']
+      })
     },
-    creationResponseState(newVal, oldVal) {
-      if (!oldVal) return this.sweetAlertHandler(newVal)
-      if (newVal.timeStamp === oldVal.timeStamp) return;
-      this.sweetAlertHandler(newVal)
+    validateAlertContact() {
+      return Object.assign({}, this.requiredField, {
+        email: true,
+        max: 35,
+      })
     },
-    editionResponseState(newVal, oldVal) {
-      if (newVal.timeStamp === oldVal.timeStamp) return;
-      this.sweetAlertHandler(newVal)
-    },
-    resellerData(newVal) {
-      if (!newVal) return;
-
-      this.cardReseller = [newVal]
-      this.reseller = this.modResellerModel(newVal)
-      // Set corporate flag
-      this.corporativeProgram = this.reseller.resellerType === 'CORPORATE'
-      // extract corp data back
-
-      if (this.corporativeProgram) {
-        this.resellerCorporate.two_step_validation = this.reseller.twoStepValidateRequired
-        this.resellerCorporate.break_value = this.reseller.breakValue
-        // virtual presets
-        this.resellerCorporate.dynamic_pdf = []
-
-        this.reseller.virtualPresets.forEach(item => {
-          this.resellerCorporate.dynamic_pdf.push({
-            name: item.presetName,
-            preset: item.content
-          })    
-        })
-
-        // push empty one if none was returned
-        if (this.reseller.virtualPresets.length === 0) {
-          this.resellerCorporate.dynamic_pdf.push({
-            name: '',
-            preset: ''
-          })    
-        }
-
-        // virtual fields
-        this.resellerCorporate.dynamicReferences = {
-          ref1: '',
-          ref2: '',
-          ref3: '',
-          ref4: '',
-          ref5: '',
-          ref6: '',
-          ref7: '',
-          ref8: ''
-        }
-
-        this.reseller.virtualFields.forEach((item, index) => {
-          this.resellerCorporate.dynamicReferences['ref' + item.fieldNumber] = item.fieldName
-        })
+    validateAddress() {
+      return {
+        regex: /^[a-zA-Z0-9\-\+()#&:.,\/\'\s]+$/,
+        max: 30,
+        notAllowCharactersAtFirst: [' '],
+        notAllowCharactersAtLast: [' ']
       }
     },
-    editId(newVal, oldVal) {
-      if (this.context === 'view' && newVal) {
-        //this.context = 'edit'
+    validateCityOrCounty() {
+      return {
+        regex: /^[a-zA-Z0-9\-\s]+$/,
+        max: 30,
+        notAllowCharactersAtFirst: [' '],
+        notAllowCharactersAtLast: [' ']
       }
     },
-    context(newVal) {
-      if (newVal === 'create') {
-        // Clear all data for a new one
-        this.corporativeProgram = false
-        this.reseller = {}
-        this.resellerCorporate = JSON.parse(JSON.stringify(resellerCorporateTemplate))
+    validatePostCode() {
+      return {
+        regex: /^[a-zA-Z0-9\-\s]+$/,
+        max: 15,
+        notAllowCharactersAtFirst: [' '],
+        notAllowCharactersAtLast: [' ']
       }
-      this.getAllResellerSubscription()
     },
-    $route(newVal, oldVal) {
-      const {id} = newVal.params;
-      
-      if (!id) {        
-        this.cardReseller = [createNewRowFromHeadings([
-            ...this.tableHeadingsPack.main,
-            ...this.tableHeadingsPack.secondary, ...this.tableHeadingsPack.third],
-          'Reseller_new_row')];
-        this.editId = 'Reseller_new_row';
-      } else {
-        // Update data
-        this.loadData()
+    validateCardName() {
+      return {
+        regex: /^[a-zA-Z0-9\s]+$/,
+        max: 20,
+        notAllowCharactersAtFirst: [' '],
+        notAllowCharactersAtLast: [' ']
       }
+    },
+    isAppFeeGroupRequired() {
+      return {
+        required: (this.reseller.appFeeBillMethod !== null && this.reseller.appFeeBillMethod !== '')
+        || (this.reseller.appFee !== null && this.reseller.appFee !== '')
+      }
+    },
+    validateAppFeeInput() {
+      return Object.assign({}, this.commonFeeValidateRules, this.isAppFeeGroupRequired)
+    },
+    isApiFeeGroupRequired() {
+      return {
+        required: (this.reseller.apiFee !== null && this.reseller.apiFee !== '')
+        || (this.reseller.apiFeeBillMethod !== null && this.reseller.apiFeeBillMethod !== '')
+      }
+    },
+    validateApiFeeInput() {
+      return Object.assign({}, this.commonFeeValidateRules, this.isApiFeeGroupRequired)
+    },
+    isLoadFeeGroupRequired() {
+      return {
+        required: (this.reseller.loadFee !== null && this.reseller.loadFee !== '')
+        || (this.reseller.loadFeePct !== null && this.reseller.loadFeePct !== '')
+        || (this.reseller.loadFeeCap !== null && this.reseller.loadFeeCap !== '')
+        || (this.reseller.loadFeebillMethod !== null && this.reseller.loadFeebillMethod !== '')
+      }
+    },
+    validateLoadFeeInput() {
+      return Object.assign({}, this.commonFeeValidateRules, this.isLoadFeeGroupRequired)
+    },
+    isVirtualCardFeeGroupRequired() {
+      return {
+        required: (this.reseller.virtualCardFee !== null && this.reseller.virtualCardFee !== '')
+        || (this.reseller.virtualCardBillMethod !== null && this.reseller.virtualCardBillMethod !== '')
+      }
+    },
+    validateVirtualCardFeeInput() {
+      return Object.assign({}, this.commonFeeValidateRules, this.isVirtualCardFeeGroupRequired)
+    },
+    isMonthlyFeeGroupRequired() {
+      return {
+        required: (this.reseller.monthlyFee !== null && this.reseller.monthlyFee !== '')
+        || (this.reseller.monthlyFeeBillMethod !== null && this.reseller.monthlyFeeBillMethod !== '')
+      }
+    },
+    validateMonthlyFeeInput() {
+      return Object.assign({}, this.commonFeeValidateRules, this.isMonthlyFeeGroupRequired)
+    },
+    validateFeeProfileId() {
+      return Object.assign({}, this.requiredField, {
+        regex: /^([0]|[1-9][0-9]*)$/,
+        min_value: 1,
+        max_value: 99
+      })
     }
   },
   methods: {
@@ -1419,234 +1245,164 @@ export default {
       editReseller: EDIT_RESELLER_SUBSCRTION_BY_ID,
       getResellerSubscripiton: GET_RESELLER_SUBSCRTION_BY_ID,
       getAllResellerSubscription: GET_ALL_RESELLER_SUBSCRIPTIONS,
-      showModal: SET_MODAL_TYPE,
       getCountries: ACTION_GET_COUNTRIES,
       loadKycClassifierByCardProgramId: ACTION_GET_KYC_CLASSIFIER
     }),
-    modResellerModel(reseller) {
-      reseller.uniqueFloat = Number(reseller.uniqueFloat)
-      return reseller
-    },
-    modResellerRequest(reseller) {
-      this.resellerRequestPropModify
-        .forEach(property => {
-          if (typeof reseller[property.name] !== 'undefined') {
-            reseller[property.name] = this.checkModResellerType(property.type, reseller[property.name], property.name)
-          }
-        })
-
-      return reseller
-    },
-    checkModResellerType(type, value, propertyName) {
-      // console.log(propertyName, value)
-      const fieldList = ['apiFee', 'appFee', 'loadFee', 'loadFeeCap', 'loadFeePct', 'monthlyFee', 'uniqueFloat', 'virtualCardFee']
-      switch (type) {
-        case'number':
-          if (fieldList.indexOf(propertyName) !== -1 && (!value || value.toString().trim() === '')) {
-            return null
-          }
-          return Number(value)
-        case'boolean':
-          return !!value
-      }
-    },
-    chagneCardProgramOptions(cardPrograms = []) {
-      this.tableHeadingsPack.main = this.tableHeadingsPack.main.map(i => {
-        if (i.name === 'cardProgramID') {
-          return {
-            ...i,
-            selectKeys: cardPrograms.map(cardProgram => ({name: cardProgram.cardProgramCode, value: cardProgram.id}))
-          }
-        } else {
-          return i;
-        }
-      })
-    },
-    sweetAlertHandler(newVal) {
-      if (newVal.state === true) {
-        const key = this.context + 'handleSecondaryAction' + 'reseller';
-
-        this.showModal({
-          type: 'normal',
-          message: this.context === 'create' ? this.$t('reseller.create.result_modal.message.create') : this.$t('reseller.create.result_modal.message.edit'),
-          copy: this.$t('reseller.create.result_modal.copy'),
-          mainButton: this.$t('reseller.create.result_modal.main_button'),
-          key
-        })
-
-        AbaModalEvents.$on(key, response => {
-          if (response.ok) {
-            //this.$router.push('/reseller/view')
-          } else {
-            this.dirty = false;
-          }
-          AbaModalEvents.$off(key)
-        })
-      }
-    },
-    listenToInput({value, valid, dirty}, table) {
-      this.cardReseller = value;
-      //console.log('value', value);
-      this.dirty = this.dirty || !!dirty;
-      this.valid = {
-        ...this.valid,
-        [table]: valid
-      };
-    },
     handleAddPreset() {
-      // console.log('add another preset')
-      this.resellerCorporate.dynamic_pdf.push({name: '', preset: ''})
-    },
-    handleCancelAction() {
-      this.isCancel = true
-      this.actionBtn = 'cancel'
-      this.modals.visible = true
-    },
-    handleAction() {
-      this.isCancel = false
-
-      if (this.isView) {
-        this.$router.push(this.editRoute)
-      } else {
-        this.isCancel = false
-        this.modals.visible = true
-        this.actionBtn = 'save'
-      }
-    },
-    async handleModalAction() {
-      this.modals.visible = false
-
-      if (this.isCancel) {
-        if (this.isView) {
-          // We need to do this next tick because otherwise we encounter page scrollbar disappear
-          // Looks like some conflict with modal
-          this.$nextTick(() => {
-            this.$router.push('/reseller/view')
-          })            
-        } else {
-          if (this.resellerId) {
-            this.$router.push(`/reseller/view/${this.resellerId}`)
-          }
-        }
-        return
-      }
-
-      let reseller = this.reseller
-
-      reseller.resellerType = this.corporativeProgram ? 'CORPORATE' : 'STANDARD'
-
-      // Merge corporate data if needed
-      if (this.corporativeProgram) {
-        reseller.twoStepValidateRequired = this.resellerCorporate.two_step_validation
-        reseller.breakValue = this.resellerCorporate.break_value
-        // Presets
-        reseller.virtualPresets = []
-
-        this.resellerCorporate.dynamic_pdf.forEach(item => {
-          if (item.name) {
-            reseller.virtualPresets.push({
-              presetName: item.name,
-              content: item.preset,
-              format: 'TEXT'
-            })
-          }
-        })
-        // Fields
-        reseller.virtualFields = []
-
-        Object.keys(this.resellerCorporate.dynamicReferences).forEach((item, index) => {
-          if (this.resellerCorporate.dynamicReferences[item]) {
-            reseller.virtualFields.push({
-              fieldNumber: item.match(/\d+/g)[0], // extract number
-              fieldName: this.resellerCorporate.dynamicReferences[item]
-            })
-          }
-        })
-      }
-
-      const body = this.handleResellerRequestBody(reseller)
-      //console.log('Body:', body)
-
-      if (this.isEdit) {
-        // console.log(body)
-        await this.editReseller({body, id: this.resellerId})
-          .then(data => {
-            if (data.status) {
-              this.$router.push(`/reseller/view/${this.resellerId}`)
-            }
-          })
-      }
-      if (this.isCreate) {
-        await this.addReseller(body)
-          .then(data => {
-            if (data && data.data && data.data.id) {
-              this.$router.push(`/reseller/view/${data.data.id}`)
-            }
-          })
-      }
-    },
-    handleResellerRequestBody(resellerData) {
-      let reseller = JSON.parse(JSON.stringify(resellerData))
-      this.resellerRequestPropDelete.forEach(name => {
-        delete reseller[name]
+      this.reseller.virtualPresets.push({
+        presetName: '',
+        content: '',
+        format: 'TEXT'
       })
-      reseller = this.modResellerRequest(reseller)
-      return reseller
     },
-    handleNumberInput(name) {
-      // this.reseller[`${name}`] = toNumber(event.target.value)
-      this.$set(this.reseller, name, event.target.value)
-    },
-    verifyEmail(email) {
-      const emailCheck = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i;
-      return emailCheck.test(email);
-    },
-    verifyName(name) {
-      const nameCheck = /^[a-zA-Z ]{1,30}$/
-      return nameCheck.test(name)
-    },
-    verifyContactRef(ref) {
-      return ref && ref.length <= 6 && this.verifySpace(ref)
-    },
-    verifySpace(string) {
-      const refCheck = /\s/
-      return !refCheck.test(string)
-    },
-    loadData () {
-      this.getAllCardPrograms()
-
-      const { id } = this.$route.params
-
-      if (id) {
-        this.resellerId = id
-        this.editRoute = `/reseller/edit/${this.resellerId}`
-        // get the reseller subscription by id
-        if (!this.isCreate) {
-          this.getResellerSubscripiton(id)
-
+    async handleAction(type) {
+      if (type === 'submit') {
+        if (this.isView) {
+          this.$router.push({ name: 'Reseller Edit', param: { id: this.$route.params.id } })
+        } else {
+          const isValid = await this.$validator.validateAll()
+          if (!isValid) {
+            console.error('fields does not valid.')
+            return;
+          }
+          this.modals.visible = true
+        }
+        this.buttonActionType = BUTTON_ACTION_TYPE.SUBMIT
+      } else {
+        this.buttonActionType = BUTTON_ACTION_TYPE.CANCEL
+        if (this.isView) {
+          this.$router.push({ name: 'Resellers View' })
+        } else if (this.isEdit) {
+          this.modals.visible = true
+        } else {
+          this.$router.push({ name: 'Resellers View' })
         }
       }
-      if (this.isCreate) {
-        this.cardReseller = [createNewRowFromHeadings([...this.tableHeadingsPack.main,
-          ...this.tableHeadingsPack.secondary, ...this.tableHeadingsPack.third], 'Reseller_new_row')];
-        this.editId = 'Reseller_new_row';
-        this.chagneCardProgramOptions(this.cardData)
+    },
+    async handleModalAction(type) {
+
+      if (type === 'cancel') {
+        this.modals.visible = false
+        return;
       }
+
+      if (type === 'submit' && this.buttonActionType === BUTTON_ACTION_TYPE.CANCEL) {
+        this.modals.visible = false
+        this.$router.push({ name: 'Reseller View', params: { id: this.$route.params.id } })
+        return;
+      }
+
+      const isValid = await this.$validator.validateAll()
+      if (!isValid) {
+        console.error('fields does not valid.')
+        return;
+      }
+
+      if (type === 'submit' && this.buttonActionType === BUTTON_ACTION_TYPE.SUBMIT) {
+        let id = ''
+        try {
+          this.ui.isLoading = true
+          if (this.isEdit) {
+            const ignoreFields = ['id', 'resellerId', 'defCurrency']
+            let requestData = {}
+            for (const key in this.reseller) {
+              if (key === 'virtualPresets') {
+                requestData[key] = handleVirtualPresetsForRequestData(this.reseller[key])
+              } else if (ignoreFields.indexOf(key) === -1) {
+                requestData[key] = this.reseller[key]
+              }
+            }
+            await this.editReseller({id: this.reseller.id, body: requestData})
+            id = this.$route.params.id
+          } else {
+            let requestData = {}
+            for (const key in this.reseller) {
+              if (key === 'virtualPresets') {
+                requestData[key] = handleVirtualPresetsForRequestData(this.reseller[key])
+              } else {
+                requestData[key] = this.reseller[key]
+              }
+            }
+
+            const data = await this.addReseller(requestData)
+            id = data.data.id
+          }
+          this.modals.visible = false
+          this.$router.push({ name: 'Reseller View', params: { id } })
+          this.ui.isLoading = false
+        } catch(e) {
+          this.ui.isLoading = false
+          console.error(e)
+        }
+      }
+    },
+    handleVirtualFields(data) {
+      const arr = []
+      for(let i = 0; i < VIRTUAL_FIELDS_LENGTH; i++) {
+        const fieldNumber = i + 1
+        let fieldObj = {
+          fieldName: '',
+          fieldNumber: fieldNumber
+        }
+
+        if (data && data.length > 0) {
+          for(const field of data) {
+            if (field.fieldNumber === fieldNumber) {
+              fieldObj = field
+            }
+          }
+        }
+        arr.push(fieldObj)
+      }
+      return arr
+    },
+    async init() {
+      this.ui.isLoading = true
+
+      let requestList = []
+      requestList.push(this.getCountries())
+      requestList.push(this.getAllCardPrograms())
+
+      if (this.$route.name === 'Reseller Create') {
+        this.corporativeProgram = false
+        this.viewOperationType = VIEW_OPERATION_TYPE.CREATE
+        this.reseller = defaultResllerField()
+        this.reseller.virtualFields = this.handleVirtualFields(null)
+
+        for (let i = 0; i < VIRTUAL_PRESETS_LENGTH; i++) {
+          this.handleAddPreset()
+        }
+        this.$validator.reset()
+      }
+
+      if (this.$route.name === 'Reseller Edit' || this.$route.name === 'Reseller View') {
+        requestList.push(this.getResellerSubscripiton(this.$route.params.id))
+        if (this.$route.name === 'Reseller View') {
+          this.viewOperationType = VIEW_OPERATION_TYPE.VIEW
+        } else {
+          this.viewOperationType = VIEW_OPERATION_TYPE.EDIT
+        }
+      }
+
+      await Promise.all(requestList)
+      this.ui.isLoading = false
     }
-  },
-  created () {
-    // Request countries if they not loaded yet
-    this.getCountries()
-  },
-  mounted () {
-    this.loadData()
   },
   filters: {
     booleanToYesNoFormat: (value) => {
       return value ? 'Yes' : 'No'
     },
+    cardProgramCode: (id, list) => {
+      const cpc = list.find(data => {
+        return data.value = id
+      })
+      if (cpc) {
+        return cpc.name
+      }
+      return ''
+    }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
