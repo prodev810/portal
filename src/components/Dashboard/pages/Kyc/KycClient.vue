@@ -300,7 +300,7 @@
         </el-col>
         <el-col :sm="11">
           <p class="kyc-client-row__text kyc-client-row__name"
-             v-if="client && client.applicationFee && isViewMode">{{ client.applicationFee |
+             v-if="client && isViewMode">{{ client.applicationFee |
             numberMoneyFormat }}</p>
           <el-input v-model="client.applicationFee" step="0.01"
                     @blur="handleNumberInput('applicationFee')"
@@ -308,8 +308,8 @@
                     type="number" min="0"
                     v-else></el-input>
           <p v-if="!isValidApplicationFee" class="invalid-feedback">
-            <span v-if="!client.applicationFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
-            <span v-if="parseFloat(client.applicationFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
+            <span v-if="client.applicationFee === ''">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
+            <span v-if="parseFloat(client.applicationFee) < 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
             <span v-if="!checkFee(client.applicationFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
             <span v-if="!checkMax(client.applicationFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.maxFee}}</span>
           </p>
@@ -323,15 +323,15 @@
         </el-col>
         <el-col :sm="11">
           <p class="kyc-client-row__text kyc-client-row__name"
-             v-if="client && client.idCheckFee && isViewMode">{{ client.idCheckFee | numberMoneyFormat }}</p>
+             v-if="client && isViewMode">{{ client.idCheckFee | numberMoneyFormat }}</p>
           <el-input v-model="client.idCheckFee" step="0.01"
                     @blur="handleNumberInput('idCheckFee')"
                     :class="{'is_invalid': !isValidIdCheckFee}"
                     type="number" min="0"
                     v-else></el-input>
           <p v-if="!isValidIdCheckFee" class="invalid-feedback">
-            <span v-if="!client.idCheckFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
-            <span v-if="parseFloat(client.idCheckFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
+            <span v-if="client.idCheckFee === ''">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
+            <span v-if="parseFloat(client.idCheckFee) < 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
             <span v-if="!checkFee(client.idCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
             <span v-if="!checkMax(client.idCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.maxFee}}</span>
           </p>
@@ -345,15 +345,15 @@
         </el-col>
         <el-col :sm="11">
           <p class="kyc-client-row__text kyc-client-row__name"
-             v-if="client && client.poaCheckFee  && isViewMode">{{ client.poaCheckFee | numberMoneyFormat }}</p>
+             v-if="client && isViewMode">{{ client.poaCheckFee | numberMoneyFormat }}</p>
           <el-input v-model="client.poaCheckFee" step="0.01"
                     @blur="handleNumberInput('poaCheckFee')"
                     type="number" min="0"
                     :class="{'is_invalid': !isValidPoaCheckFee}"
                     v-else></el-input>
           <p v-if="!isValidPoaCheckFee" class="invalid-feedback">
-            <span v-if="!client.poaCheckFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
-            <span v-if="parseFloat(client.poaCheckFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
+            <span v-if="client.poaCheckFee === ''">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
+            <span v-if="parseFloat(client.poaCheckFee) < 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
             <span v-if="!checkFee(client.poaCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
             <span v-if="!checkMax(client.poaCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.maxFee}}</span>
           </p>
@@ -368,7 +368,7 @@
         </el-col>
         <el-col :sm="11">
           <p class="kyc-client-row__text kyc-client-row__name"
-             v-if="client && client.sanctionCheckFee && isViewMode">
+             v-if="client && isViewMode">
             {{ client.sanctionCheckFee | numberMoneyFormat}}</p>
           <el-input v-model="client.sanctionCheckFee" step="0.01"
                     @blur="handleNumberInput('sanctionCheckFee')"
@@ -376,8 +376,8 @@
                     type="number" min="0"
                     v-else></el-input>
           <p v-if="!isValidSanctionCheckFee" class="invalid-feedback">
-            <span v-if="!client.sanctionCheckFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
-            <span v-if="parseFloat(client.sanctionCheckFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
+            <span v-if="client.sanctionCheckFee === ''">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
+            <span v-if="parseFloat(client.sanctionCheckFee) < 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
             <span v-if="!checkFee(client.sanctionCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
             <span v-if="!checkMax(client.sanctionCheckFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.maxFee}}</span>
           </p>
@@ -391,15 +391,15 @@
         </el-col>
         <el-col :sm="11">
           <p class="kyc-client-row__text kyc-client-row__name"
-             v-if="client && client.smsFee && isViewMode">{{ client.smsFee | numberMoneyFormat}}</p>
+             v-if="client && isViewMode">{{ client.smsFee | numberMoneyFormat}}</p>
           <el-input v-model="client.smsFee" step="0.01"
                     @blur="handleNumberInput('smsFee')"
                     :class="{'is_invalid': !isValidSmsFee}"
                     type="number" min="0"
                     v-else></el-input>
           <p v-if="!isValidSmsFee" class="invalid-feedback">
-            <span v-if="!client.smsFee">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
-            <span v-if="parseFloat(client.smsFee) <= 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
+            <span v-if="client.smsFee === ''">{{KYC_CLIENT_VALIDATION_MESSAGES.required}}</span>
+            <span v-if="parseFloat(client.smsFee) < 0">{{KYC_CLIENT_VALIDATION_MESSAGES.number}}</span>
             <span v-if="!checkFee(client.smsFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.fee}}</span>
             <span v-if="!checkMax(client.smsFee)">{{KYC_CLIENT_VALIDATION_MESSAGES.maxFee}}</span>
           </p>
@@ -524,7 +524,7 @@
       return {
         KYC_CLIENT_VALIDATION_MESSAGES: {
           required: 'This field is required. ',
-          number: 'This field must be greater that 0. ',
+          number: 'This field must be 0 or greater that 0. ',
           email: 'This field must be valid email address. ',
           max6: 'This field must be no more than 6 characters. ',
           max12: 'This field must be no more than 12 characters. ',
@@ -609,7 +609,7 @@
         return value ? 'Yes' : 'No'
       },
       numberMoneyFormat: (d) => {
-        if (!d) return ''
+        if (typeof d === 'undefined') return '0'
         if (d < 1) return Number(d).toFixed(2)
         return moneyFormat(d)
       },
@@ -674,7 +674,8 @@
         let isValid = true
         if (!this.isViewMode) {
           this.validationList.forEach(item => {
-            if (typeof (this.client[`${item}`]) === 'undefined' || this.client[`${item}`] === '' || this.client[`${item}`] === 0) {
+            // if (typeof (this.client[`${item}`]) === 'undefined' || this.client[`${item}`] === '' || this.client[`${item}`] === 0) {
+            if (typeof (this.client[`${item}`]) === 'undefined' || this.client[`${item}`] === '') {
               isValid = false
             }
             switch (item) {
@@ -731,10 +732,10 @@
         return (typeof (this.client.clientReference) === 'undefined' || (this.verifyAlphaNumeric(this.client.clientReference) && this.checkLength(this.client.clientReference, 12)) ) 
       },
       isValidSanctionCheckFee() {
-        return (typeof (this.client.sanctionCheckFee) === 'undefined' || (this.client.sanctionCheckFee !== '' && this.client.sanctionCheckFee > 0 && this.checkFee(this.client.sanctionCheckFee) && this.checkMax(this.client.sanctionCheckFee)))
+        return (typeof (this.client.sanctionCheckFee) === 'undefined' || (this.client.sanctionCheckFee !== '' && this.client.sanctionCheckFee >= 0 && this.checkFee(this.client.sanctionCheckFee) && this.checkMax(this.client.sanctionCheckFee)))
       },
       isValidApplicationFee() {
-        return (typeof (this.client.applicationFee) === 'undefined' || (this.client.applicationFee !== '' && this.client.applicationFee > 0 && this.checkFee(this.client.applicationFee)  && this.checkMax(this.client.applicationFee)))
+        return (typeof (this.client.applicationFee) === 'undefined' || (this.client.applicationFee !== '' && this.client.applicationFee >= 0 && this.checkFee(this.client.applicationFee)  && this.checkMax(this.client.applicationFee)))
       },
       isValidContactEmail() {
         return (typeof (this.client.contactEmail) === 'undefined' || (this.client.contactEmail !== '' && this.verifyEmail(this.client.contactEmail) && this.checkLength(this.client.contactEmail, 64)))
@@ -743,13 +744,14 @@
         return (typeof (this.client.contactName) === 'undefined' ||  (this.client.contactName !== '' && this.verifyName(this.client.contactName) && this.checkLength(this.client.contactName, 50) && this.checkLastCharIsNotSpace(this.client.contactName)))
       },
       isValidPoaCheckFee() {
-        return (typeof (this.client.poaCheckFee) === 'undefined' || (this.client.poaCheckFee !== '' && this.client.poaCheckFee > 0 && this.checkFee(this.client.poaCheckFee) && this.checkMax(this.client.poaCheckFee)))
+        return (typeof (this.client.poaCheckFee) === 'undefined' || (this.client.poaCheckFee !== '' && this.client.poaCheckFee >= 0 && this.checkFee(this.client.poaCheckFee) && this.checkMax(this.client.poaCheckFee)))
       },
       isValidIdCheckFee() {
-        return (typeof (this.client.idCheckFee) === 'undefined' || (this.client.idCheckFee !== '' && this.client.idCheckFee > 0 && this.checkFee(this.client.idCheckFee) && this.checkMax(this.client.idCheckFee)))
+        return (typeof (this.client.idCheckFee) === 'undefined' || (this.client.idCheckFee !== '' && this.client.idCheckFee >= 0 && this.checkFee(this.client.idCheckFee) && this.checkMax(this.client.idCheckFee)))
       },
       isValidSmsFee() {
-        return (typeof (this.client.smsFee) === 'undefined' || (this.client.smsFee !== '' && this.client.smsFee > 0 && this.checkFee(this.client.smsFee) && this.checkMax(this.client.smsFee)))
+        // console.log(this.checkFee(this.client.smsFee))
+        return (typeof (this.client.smsFee) === 'undefined' || (this.client.smsFee !== '' && this.client.smsFee >= 0 && this.checkFee(this.client.smsFee) && this.checkMax(this.client.smsFee)))
       },
     },
     methods: {

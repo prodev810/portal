@@ -3,7 +3,8 @@ import Vue from 'vue'
 import './pollyfills'
 import VueRouter from 'vue-router'
 import VueNotify from 'vue-notifyjs'
-import VeeValidate from 'vee-validate'
+import VeeValidate, { Validator } from 'vee-validate'
+import customValidate from 'src/customValidate'
 import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
 import App from './App.vue'
@@ -63,6 +64,7 @@ Vue.use(GlobalComponents)
 Vue.use(VueNotify)
 Vue.use(SideBar, {sidebarLinks: sidebarLinks})
 Vue.use(VeeValidate)
+customValidate(Validator)
 
 import '@/utils/VeeCustomValidators.js'
 

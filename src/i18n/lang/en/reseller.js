@@ -46,7 +46,9 @@ const create = {
   button: {
     edit: 'Edit',
     save: 'Save',
-    cancel: 'Cancel'
+    cancel: 'Cancel',
+    back: 'Back',
+    gotoList: 'Back To View Resellers'
   },
   table_header: {
     corporate_program:'Corporate Program',
@@ -69,7 +71,15 @@ const create = {
     virtual_card_fee: 'Virtual Card Fee',
     virtual_card_bill_method: 'Charged To',
     country: 'Country',
-    kycClassifier: 'KYC Classifier'
+    kycClassifier: 'KYC Classifier',
+    address1: 'Address 1',
+    address2: 'Address 2',
+    address3: 'Address 3',
+    city: 'City',
+    countyOrState: 'County Or State',
+    postCode: 'Post Code',
+    cardName: 'Card Name',
+    feeProfileId: 'Fee Profile Id'
   },
   result_modal: {
     message: {
