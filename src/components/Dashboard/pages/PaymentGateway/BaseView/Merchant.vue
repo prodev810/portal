@@ -1,5 +1,5 @@
 <template>
-  <div class="card pg-merchant p-2">
+  <div class="card p-3">
     <Spinner v-if="loading"/>
     <regular-table
       striped responsive condensed bordered

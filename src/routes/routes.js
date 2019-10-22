@@ -37,6 +37,7 @@ import PGEditMerchant from '@/components/Dashboard/pages/PaymentGateway/EditMerc
 import PGAquirerWithTab from '@/components/Dashboard/pages/PaymentGateway/AquirerWithTab'
 import EditAcquirer from '@/components/Dashboard/pages/PaymentGateway/EditAcquirer'
 import TransactionsWithTab from '@/components/Dashboard/pages/PaymentGateway/TransactionsWithTab'
+import DisputesWithTab from '@/components/Dashboard/pages/PaymentGateway/DisputesWithTab'
 
 // Reseller
 import ResellerView from '../components/Dashboard/pages/Resller/View';
@@ -290,7 +291,17 @@ let payment_gateway = {
         requiresAuth: true,
         roles: ['*'],
       }
-    }		
+    },
+    {
+      path: '/payment-gateway/disputes',
+      name: 'Payment gateway - Disputes',
+      component: DisputesWithTab,
+      meta: {
+        //permission: permission.RESELLER_SUBSCRIPTION_VIEW,
+        requiresAuth: true,
+        roles: ['*'],
+      }
+    }
   ]
 };
 

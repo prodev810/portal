@@ -25,6 +25,8 @@ import {
 		ACTION_PG_GET_TRANSACTIONS,
     ACTION_PG_GET_ACQUIRERS,
     MUTATE_PG_ACQUIRERS,
+    MUTATE_PG_DISPUTES,
+    ACTION_PG_GET_DISPUTES
     // ACTION_PG_GET_MERCHANT_PROCESSING_PROFILE
 } from '../types';
 
@@ -41,7 +43,11 @@ const state = {
 	transactions: {
 		total: 0,
 		items: []
-	},
+  },
+  disputes: {
+    total: 0,
+    items: []
+  },
   acquirers: [],
   env: window.sessionStorage.getItem(PORTAL_PG_ENV) || 'sandbox',
 }
@@ -75,10 +81,15 @@ const mutations = {
     state.floatAccounts = data.content || []
 	},
 	[MUTATE_PG_TRANSACTIONS]: (state, data) => {
-    state.transactions = data || []
+    state.transactions = data || { total: 0, items: [] }
   },
   [MUTATE_PG_ACQUIRERS]: (state, data) => {
     state.acquirers = data.data || []
+  },
+  [MUTATE_PG_DISPUTES]: (state, data) => {
+    state.disputes = data || { total: 0, items: [] }
+
+    console.log(state.disputes)
   }
 }
 
@@ -191,6 +202,18 @@ const actions = {
 			})
     } catch (e) {
       dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_transactions') + e.message, status: 'danger' })
+    }
+  },
+  [ACTION_PG_GET_DISPUTES]: async ({commit, dispatch}, params) => {
+    try {
+			const { data } = await getHttpInstance(state.env).get(`/data/disputeRecords?page=${params.page}&size=${params.size}`)
+
+			commit(MUTATE_PG_DISPUTES, {
+				total: data.page.totalElements,
+				items: data._embedded.disputeRecords
+			})
+    } catch (e) {
+      dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_dispute_records') + e.message, status: 'danger' })
     }
   },
   [ACTION_PG_GET_ACQUIRERS]:  async ({commit, dispatch}, id) => {

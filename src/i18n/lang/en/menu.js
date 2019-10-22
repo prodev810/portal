@@ -24,7 +24,8 @@ export default {
     settings: 'Settings',
     merchant: 'Merchant',
     processor: 'Acquirer',
-    transaction: 'Transaction'
+    transaction: 'Transaction',
+    disputes: 'Disputes'
   },
   kyc_kyc_mainpage: `KYC Main Page`,
   kyc_product_config: `Product Config`,

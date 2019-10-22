@@ -73,6 +73,12 @@ export default [
         path: '/payment-gateway/transactions',
         i18n: 'menu.payment_gateway.transaction',
         permission: permission.RESELLER_SUBSCRIPTION_VIEW
+      },
+      {
+        name: 'Disputes',
+        path: '/payment-gateway/disputes',
+        i18n: 'menu.payment_gateway.disputes',
+        permission: permission.RESELLER_SUBSCRIPTION_VIEW
       }
     ]
 	},

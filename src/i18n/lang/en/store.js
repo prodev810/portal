@@ -39,7 +39,8 @@ const paymentGateway = {
   error_load_float_accounts: 'Error while loading float accounts: ',
   error_set_float_account: 'Error while saving float account: ',
 	success_add_float_account: 'Added float account successfully',
-	error_get_transactions: 'Error while getting transactions: ',
+  error_get_transactions: 'Error while getting transactions: ',
+	error_get_dispute_records: 'Error while getting dispute records: ',  
   error_load_aquirers: 'Error while getting aсquirers: ',
   error_load_kyc_classifier: 'Error while loading kyc classifier: '
 }
