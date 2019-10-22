@@ -26,7 +26,7 @@
         </el-col>
 
         <el-col :xs="24" :lg="14" :xl="16">
-          <collapse class="pg-merchant-collapse" style="margin-top: -20px">
+          <collapse class="pg-merchant-collapse">
             <!-- new -->
             <collapse-item-float-account :merchantId="$route.params.id" :currencies="currencies" :collapseItem="1"></collapse-item-float-account>
             <collapse-item-processing-profile :merchantId="$route.params.id" :currencies="currencies" :collapseItem="2"></collapse-item-processing-profile>
