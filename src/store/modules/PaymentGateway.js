@@ -88,6 +88,8 @@ const mutations = {
   },
   [MUTATE_PG_DISPUTES]: (state, data) => {
     state.disputes = data || { total: 0, items: [] }
+
+    console.log(state.disputes)
   }
 }
 

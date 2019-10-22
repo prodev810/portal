@@ -157,7 +157,7 @@ export default {
       dispute_type: 'Type',
       description: 'Description',
       payment_transaction_date: 'Transaction Date',
-      transaction_date: 'Date'
+      record_date: 'Date'
     },
     modal_details: {
       header: 'Dispute details'

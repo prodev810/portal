@@ -60,8 +60,8 @@ export default {
         { name: 'amount', i18n: 'payment_gateway.disputes.header.amount' },
         { name: 'dispute_type', i18n: 'payment_gateway.disputes.header.dispute_type' },
         { name: 'description', i18n: 'payment_gateway.disputes.header.description' },
-				{ name: 'payment_transaction_date', i18n: 'payment_gateway.disputes.header.payment_transaction_date', dateTime: true },
-				{ name: 'transaction_date', i18n: 'payment_gateway.disputes.header.transaction_date', dateTime: true }
+				//{ name: 'payment_transaction_date', i18n: 'payment_gateway.disputes.header.payment_transaction_date', dateTime: true },
+				{ name: 'record_date', i18n: 'payment_gateway.disputes.header.record_date', dateTime: true }
       ],
       currentPage: 1,
 			perPage: 10,
@@ -72,8 +72,8 @@ export default {
 				{ key: 'amount'  },
 				{ key: 'dispute_type' },
 				{ key: 'description' },
-				{ key: 'payment_transaction_date', filter: 'dateTime' },
-				{ key: 'transaction_date', filter: 'dateTime' }
+				//{ key: 'payment_transaction_date', filter: 'dateTime' },
+				{ key: 'record_date', filter: 'dateTime' }
 			]
 		}
 	},
@@ -83,27 +83,16 @@ export default {
 			disputes: state => state.paymentGateway.disputes
     }),
     disputesFormatted () {
-      /*
-      return [{
-        cp_date: '2012-04-23T18:25:43.511Z',
-        amount: `344 USD`,
-        dispute_type: 'Type A',
-        description: 'Dispute description',
-        payment_transaction_date: '2012-04-23T18:25:43.511Z',
-        transaction_date: '2012-04-23T18:25:43.511Z'
-      }]
-      */
-
-      return this.disputes.items.map(d => {
-        return {
+      return this.disputes.items.map(d => ({
           cp_date: d.cp_date,
           amount: `${d.amount} ${d.currency}`,
           dispute_type: d.dispute_type,
           description: d.description,
-          payment_transaction_date: d.payment.transaction_date,
-          transaction_date: d.transaction_date
-        }
-      })
+          //payment_transaction_date: d.payment.transaction_date,
+          record_date: d.record_date,
+          _links: d._links
+        })
+      )
     }
 	},
 	watch: {
@@ -116,31 +105,22 @@ export default {
         getDisputes: ACTION_PG_GET_DISPUTES
     }),
 		async loadData () {
-			this.loading = true
+      this.loading = true
+      
 			await this.getDisputes({
 				page: this.currentPage-1,
 				size: this.perPage
-			})
+      })
+      
 			this.loading = false
 		},
 		async onPaymentDetails (row) {
 			this.loading = true
 
-      console.log(row)
-
 			try {
-        // !!! Uncomment when API will be ready
-				let response = await getHttpInstance(this.env).get(this.processModalURL(row._links.payment.href))
+				let response = await getHttpInstance(this.env).get(this.processModalURL(row._links.disputeRecord.href))
 				// assign data and make modal visible
         this.modalDetailsData = response.data
-
-        /*
-        this.modalDetailsData = Object.keys(row).reduce((acc, value) => {
-          acc[value] = row[value].value
-          return acc
-        }, {})
-        */
-
 				this.modalDetailsVisible = true
 			} catch (error) {
 				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: error.message, status: 'danger' })
