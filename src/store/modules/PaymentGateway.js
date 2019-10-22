@@ -208,7 +208,7 @@ const actions = {
 
 			commit(MUTATE_PG_DISPUTES, {
 				total: data.page.totalElements,
-				items: data._embedded.payments
+				items: data._embedded.disputeRecords
 			})
     } catch (e) {
       dispatch(SHOW_TOAST_MESSAGE, { message: i18n.t('store.paymentGateway.error_get_dispute_records') + e.message, status: 'danger' })

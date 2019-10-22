@@ -83,6 +83,7 @@ export default {
 			disputes: state => state.paymentGateway.disputes
     }),
     disputesFormatted () {
+      /*
       return [{
         cp_date: '2012-04-23T18:25:43.511Z',
         amount: `344 USD`,
@@ -91,8 +92,8 @@ export default {
         payment_transaction_date: '2012-04-23T18:25:43.511Z',
         transaction_date: '2012-04-23T18:25:43.511Z'
       }]
+      */
 
-      /*
       return this.disputes.items.map(d => {
         return {
           cp_date: d.cp_date,
@@ -103,7 +104,6 @@ export default {
           transaction_date: d.transaction_date
         }
       })
-      */
     }
 	},
 	watch: {
@@ -130,14 +130,16 @@ export default {
 
 			try {
         // !!! Uncomment when API will be ready
-				//let response = await getHttpInstance(this.env).get(this.processModalURL(row._links.payment.href))
+				let response = await getHttpInstance(this.env).get(this.processModalURL(row._links.payment.href))
 				// assign data and make modal visible
-        //this.modalDetailsData = response.data
+        this.modalDetailsData = response.data
 
+        /*
         this.modalDetailsData = Object.keys(row).reduce((acc, value) => {
           acc[value] = row[value].value
           return acc
         }, {})
+        */
 
 				this.modalDetailsVisible = true
 			} catch (error) {
