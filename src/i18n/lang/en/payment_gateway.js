@@ -78,7 +78,17 @@ export default {
       },
 
       add_reserve: 'Add Reserve Profile',
-      add_settlement_profile: 'Add Settlement Profile'
+      add_settlement_profile: 'Add Settlement Profile',
+
+      btn_3d_secure_settings: '3DSecure Setting',
+      btn_fraud_settings: 'Fraud Setting',
+
+      modal_3d_secure: {
+        header: ''
+      },
+      modal_fraud: {
+        header: ''
+      }
     }
   },
   acquirer: {

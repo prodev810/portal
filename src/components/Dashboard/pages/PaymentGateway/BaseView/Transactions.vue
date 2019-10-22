@@ -173,7 +173,6 @@ export default {
 				// assign data and make modal visible
 				this.modalOperationsData = response.data
 				this.modalOperationsVisible = true
-				console.log('this.modalOperationsData', this.modalOperationsData)
 			} catch (error) {
 				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: error.message, status: 'danger' })
 			}

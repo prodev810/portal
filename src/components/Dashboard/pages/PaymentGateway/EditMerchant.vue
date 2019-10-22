@@ -25,6 +25,11 @@
           </div>
         </el-col>
 
+        <el-col :cols="24" class="mt-0 mb-2">
+          <p-button type="primary" round wide size="sm" @click="on3DSecureSetting" class="mr-2">{{ $i18n.t('payment_gateway.merchant.edit_merchant.btn_3d_secure_settings') }}</p-button>
+          <p-button type="primary" round wide size="sm" @click="onFraudSetting" class="mr-2">{{ $i18n.t('payment_gateway.merchant.edit_merchant.btn_fraud_settings') }}</p-button>          
+        </el-col>
+
         <el-col :xs="24" :lg="14" :xl="16">
           <collapse class="pg-merchant-collapse">
             <!-- new -->
@@ -346,13 +351,27 @@
     </div>
 
     <div class="buttons">
-      <p-button type="primary" round wide size="sm" @click="onSave" class="mr-2">{{ $i18n.t(viewMode ? 'edit_payment_method.btn_edit' : 'edit_payment_method.btn_save') }}</p-button>      
+      <p-button type="primary" round wide size="sm" @click="onSave" class="mr-2">{{ $i18n.t(viewMode ? 'edit_payment_method.btn_edit' : 'edit_payment_method.btn_save') }}</p-button>
       <p-button type="black" round wide size="sm" @click="onCancel">{{ $i18n.t('edit_payment_method.btn_cancel') }}</p-button>
     </div>
+
+		<DetailsModal v-model="modal3DSecureSettingVisible"
+									header="payment_gateway.merchant.modal_details.edit_merchant.modal_3d_secure.header"
+									:data="modal3DSecureSettingData"
+									:description="modal3DSecureSettingDescription"
+									i18base="payment_gateway.merchant.modal_details.edit_merchant.modal_3d_secure."/>
+
+		<DetailsModal v-model="modalFraudSettingVisible"
+									header="payment_gateway.merchant.modal_details.edit_merchant.modal_fraud.header"
+									:data="modalFraudSettingData"
+									:description="modalFraudSettingDescription"
+									i18base="payment_gateway.merchant.modal_details.edit_merchant.modal_fraud."/>
   </div>
 </template>
 
 <script>
+import getHttpInstance from '@/store/modules/PGInstance.js' 
+
 import {mapActions, mapState} from 'vuex';
 import {
     SHOW_TOAST_MESSAGE,
@@ -381,6 +400,8 @@ import CollapseItemReserve from '@/components/Dashboard/pages/PaymentGateway/Edi
 import CollapseItemSettlementProfile from '@/components/Dashboard/pages/PaymentGateway/EditMerchantFragment/CollapseItemSettlementProfile'
 import CollapseItemSettlementBankAccount from '@/components/Dashboard/pages/PaymentGateway/EditMerchantFragment/CollapseItemSettlementBankAccount'
 
+import DetailsModal from '@/components/Dashboard/pages/PaymentGateway/DetailsModal'
+
 export default {
   name: 'EditMerchant',
   components: {
@@ -388,6 +409,7 @@ export default {
     Spinner,
     PButton,
     PGRow,
+    DetailsModal,    
     // CollapseItem,
     // Modal,
     // CheckBox,
@@ -400,7 +422,7 @@ export default {
     [CollapseItemProcessingProfile.name]: CollapseItemProcessingProfile,
     [CollapseItemReserve.name]: CollapseItemReserve,
     [CollapseItemSettlementProfile.name]: CollapseItemSettlementProfile,
-    [CollapseItemSettlementBankAccount.name]: CollapseItemSettlementBankAccount,
+    [CollapseItemSettlementBankAccount.name]: CollapseItemSettlementBankAccount
   },
   data () {
     return {
@@ -477,7 +499,18 @@ export default {
         merchant_id:null,
         short_code: null,//state.paymentGateway.merchants.data.ext_merchant_id,
         merchant_name: null,
-      }
+      },
+
+      modal3DSecureSettingVisible: false,
+      modalFraudSettingVisible: false,
+      modal3DSecureSettingData: {},
+      modalFraudSettingData: {},
+      modal3DSecureSettingDescription: [
+
+      ],
+      modalFraudSettingDescription: [
+
+      ]
     }
   },
   mounted() {
@@ -487,6 +520,7 @@ export default {
   },
   computed: {
     ...mapState({
+			env: state => state.paymentGateway.env,      
       currencies:(state) => {
         if( state.paymentGateway.currencies ){
           let curr = JSON.parse( JSON.stringify( state.paymentGateway.currencies ) );
@@ -548,6 +582,38 @@ export default {
         this.viewMode = true
       }
     },
+    async on3DSecureSetting () {
+			this.loading = true
+
+			try {
+        let response = await getHttpInstance(this.env).get(`/data/merchant3DSProfiles/search/findByMerchantId?merchantId=${this.merchantData.merchant_id}`)
+
+        console.log(response.data)
+				// assign data and make modal visible
+				this.modal3DSecureSettingData = response.data
+				this.modal3DSecureSettingVisible = true
+			} catch (error) {
+				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: error.message, status: 'danger' })
+			}
+
+			this.loading = false
+    },
+    async onFraudSetting () {
+			this.loading = true
+
+			try {
+        let response = await getHttpInstance(this.env).get(`/data/merchantFDSProfiles/search/findByMerchantId?merchantId=${this.merchantData.merchant_id}`)
+        
+        console.log(response.data)
+				// assign data and make modal visible
+				this.modalFraudSettingData = response.data
+				this.modalFraudSettingVisible = true
+			} catch (error) {
+				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: error.message, status: 'danger' })
+			}
+
+			this.loading = false
+    }
       // floatAccountEdit(){
       //     this.modalAddFloatAccount = false;
       //     console.log( 'newFloatAccountData',this.newFloatAccountData );
