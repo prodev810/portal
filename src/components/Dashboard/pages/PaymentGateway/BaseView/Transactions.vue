@@ -56,6 +56,7 @@ import DetailsModal from "@/components/Dashboard/pages/PaymentGateway/DetailsMod
 import Spinner from "@/components/UIComponents/Spinner"
 import RegularTable from '@/components/UIComponents/CeevoTables/RegularTable/RegularTable'
 import PPagination from "@/components/UIComponents/Pagination"
+import ProcessURLMixin from '@/components/Dashboard/pages/PaymentGateway/ProcessURLMixin.js'
 
 export default {
 	name: 'Transactions',
@@ -65,7 +66,10 @@ export default {
 		PPagination,
 		Modal,
 		DetailsModal
-  },  
+  },
+  mixins: [
+    ProcessURLMixin
+  ],
 	data () {
 		return {
 			loading: false,
@@ -206,14 +210,6 @@ export default {
 			}
 
 			this.loading = false
-		},
-		processModalURL(value) {
-			let url = value.split('/')
-			let idx = url.findIndex(s => s === 'payment-mgmt')
-
-			return idx >= 0 
-				? '/' + url.slice(idx + 1).join('/') 
-				: value			
 		}
 	},
 	mounted () {

@@ -84,10 +84,15 @@ export default {
       btn_fraud_settings: 'Fraud Setting',
 
       modal_3d_secure: {
-        header: ''
+        header: '3DSecure settings',
+        tds_merchant_id: 'Client ID',
+        tds_merchant_password: 'Client password',
+        encryption_key: 'Encryption key',
+        hash_key: 'Hash key',
+        merchant_id: 'Merchant ID'
       },
       modal_fraud: {
-        header: ''
+        header: 'Fraud settings'
       }
     }
   },
@@ -173,6 +178,7 @@ export default {
       header: 'Dispute details'
     }
   },
+  button_create: 'Create',
   button_view: 'View',
   button_add: 'Add',
   button_history: 'History',
