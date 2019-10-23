@@ -712,7 +712,13 @@ export default {
           console.log(response)
 
         } else {
-          console.log(this.processModalURL(this.modal3DSecureSettingData._links.self.href))
+          let data = {}
+          Object.assign(data, this.modal3DSecureSettingData)
+          
+          delete data.merchant_id
+          delete data._links
+
+          console.log('DATA', data)
 
           let response = await getHttpInstance(this.env).patch(this.processModalURL(this.modal3DSecureSettingData._links.self.href), this.modal3DSecureSettingData)
           console.log(response)
