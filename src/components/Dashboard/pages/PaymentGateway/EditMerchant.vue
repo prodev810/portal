@@ -26,8 +26,8 @@
         </el-col>
 
         <el-col :cols="24" class="mt-0 mb-2">
-          <p-button type="primary" round wide size="sm" @click="on3DSecureSetting" class="mr-2">{{ $i18n.t('payment_gateway.merchant.edit_merchant.btn_3d_secure_settings') }}</p-button>
-          <p-button type="primary" round wide size="sm" @click="onFraudSetting" class="mr-2">{{ $i18n.t('payment_gateway.merchant.edit_merchant.btn_fraud_settings') }}</p-button>          
+          <p-button type="primary" round wide size="sm" @click="on3DSecureSetting()" class="mr-2">{{ $i18n.t('payment_gateway.merchant.edit_merchant.btn_3d_secure_settings') }}</p-button>
+          <p-button type="primary" round wide size="sm" @click="onFraudSetting()" class="mr-2">{{ $i18n.t('payment_gateway.merchant.edit_merchant.btn_fraud_settings') }}</p-button>          
         </el-col>
 
         <el-col :xs="24" :lg="14" :xl="16">
@@ -685,7 +685,7 @@ export default {
             this.modal3DSecureSettingData = {
               encryption_key: '',
               hash_key: '',
-              merchant_id: '',
+              merchant_id: this.merchantData.merchant_id,
               tds_merchant_id: '',
               tds_merchant_password: ''
             }
@@ -705,16 +705,19 @@ export default {
     },
     async onSave3DSecureSettingVisible () {
       try {
+        this.modal3DSecureSettingVisible = false
+
         if (this.modal3DSecureSettingCreate) {
-          
-          //let response = await getHttpInstance(this.env).patch(`/data/merchant3DSProfiles/search/findTopByMerchantId?merchantId=${this.merchantData.merchant_id}`)
+          let response = await getHttpInstance(this.env).post('/data/merchant3DSProfiles', this.modal3DSecureSettingData)
+          console.log(response)
+
         } else {
           console.log(this.processModalURL(this.modal3DSecureSettingData._links.self.href))
 
-          let response = await getHttpInstance(this.env).patch(this.processModalURL(this.modal3DSecureSettingData._links.self.href))
+          let response = await getHttpInstance(this.env).patch(this.processModalURL(this.modal3DSecureSettingData._links.self.href), this.modal3DSecureSettingData)
           console.log(response)
 
-          this.modal3DSecureSettingVisible = false
+          
         }
       } catch (error) {
         this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: error.message, status: 'danger' })
