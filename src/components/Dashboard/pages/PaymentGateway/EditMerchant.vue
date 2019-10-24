@@ -420,7 +420,7 @@
 
       <div slot="footer" class="w-100 d-flex justify-content-center">
         <p-button type="default" 
-                  @click="onSave3DSecureSettingVisible()"
+                  @click="onSave3DSecureSetting()"
                   :disabled="errors.any('3dssettings')"
                   class="btn btn-round mr-2">
           {{ $t(this.modal3DSecureSettingCreate ? 'payment_gateway.button_create' : 'payment_gateway.button_save') }}
@@ -434,11 +434,73 @@
       </div>
 	  </modal>
 
+  	<modal :show="modalFraudSettingVisible"
+           footerClasses="justify-content-center"
+           type="notice"
+           modalClasses="details-modal">
+      <h5 slot="header" class="modal-title">{{ $t('payment_gateway.merchant.edit_merchant.modal_fraud.header') }}</h5>
+
+      <div class="d-flex flex-column edit-modal-column">
+        <PGRow labeli18n="payment_gateway.merchant.edit_merchant.modal_fraud.account_id" :viewMode="false" required>
+          <template slot="edit">
+            <input class="form-control"
+                       v-model="modalFraudSettingData.account_id"
+                       v-validate.initial="'required'"
+                       name="account_id"
+                       data-vv-as="account ID"
+                       data-vv-scope="fdssettings"/>
+            <div class="validation-error">{{ errors.first('account_id', 'fdssettings') }}</div>
+          </template>
+        </PGRow>
+
+        <PGRow labeli18n="payment_gateway.merchant.edit_merchant.modal_fraud.device_fingerprint_key" :viewMode="false" required>
+          <template slot="edit">
+            <input class="form-control"
+                   v-model="modalFraudSettingData.device_fingerprint_key"
+                   v-validate.initial="'required'"
+                   name="device_fingerprint_key"
+                   data-vv-as="fingerprint key"
+                   data-vv-scope="fdssettings"/>
+            <div class="validation-error">{{ errors.first('device_fingerprint_key', 'fdssettings') }}</div>
+          </template>
+        </PGRow>
+
+        <PGRow labeli18n="payment_gateway.merchant.edit_merchant.modal_fraud.secret" :viewMode="false" required>
+          <template slot="edit">
+            <input class="form-control"
+                   v-model="modalFraudSettingData.secret"
+                   v-validate.initial="'required'"
+                   name="secret"
+                   data-vv-as="secret"
+                   data-vv-scope="fdssettings"/>
+            <div class="validation-error">{{ errors.first('secret', 'fdssettings') }}</div>
+          </template>
+        </PGRow>
+      </div>
+
+      <div slot="footer" class="w-100 d-flex justify-content-center">
+        <p-button type="default" 
+                  @click="onSaveFraudSetting()"
+                  :disabled="errors.any('fdssettings')"
+                  class="btn btn-round mr-2">
+          {{ $t(this.modal3DSecureSettingCreate ? 'payment_gateway.button_create' : 'payment_gateway.button_save') }}
+        </p-button>
+
+        <p-button type="default" 
+                  @click="modalFraudSettingVisible = false" 
+                  class="btn btn-round btn-default">
+          {{ $t('payment_gateway.button_close') }}
+        </p-button>
+      </div>
+	  </modal>
+
+    <!--
 		<DetailsModal v-model="modalFraudSettingVisible"
 									header="payment_gateway.merchant.edit_merchant.modal_fraud.header"
 									:data="modalFraudSettingData"
 									:description="modalFraudSettingDescription"
 									i18base="payment_gateway.merchant.modal_details.edit_merchant.modal_fraud."/>
+    -->        
   </div>
 </template>
 
@@ -591,8 +653,13 @@ export default {
       modal3DSecureSettingCreate: false,
 
       modalFraudSettingVisible: false,
-      modalFraudSettingData: {},
-      modalFraudSettingDescription: []
+      modalFraudSettingData: {
+        account_id: '',
+        device_fingerprint_key: '',
+        secret: ''
+      },
+      modalFraudSettingDescription: [],
+      modalFraudSettingCreate: false,
     }
   },
   mounted() {
@@ -631,22 +698,20 @@ export default {
     // formatDate (date) {
     //   return moment(date).format('YYYY-MM-DD hh:mm:ss')
     // },
-    getData () {
-      if( !this.$route.params.id ) return false;
+    async getData () {
+      if ( !this.$route.params.id ) return false;
 
-      this.getMerchant(this.$route.params.id).then(data=>{
-        this.merchantData.merchant_id = data.merchant_id;
-        this.merchantData.short_code  = data.ext_merchant_id;
-        this.merchantData.merchant_name = data.merchant_name;
-      }).catch(e => {
-        this.merchantData.merchant_id = '';
-        this.merchantData.short_code  = '';
-        this.merchantData.merchant_name = '';
-      });
+      try {
+        let data = await this.getMerchant(this.$route.params.id)
 
-      // this.getMerchantProcessing(this.$route.params.id).then( data =>{
-      //     console.log( 'PROCESS', data );
-      // });
+        this.merchantData.merchant_id = data.merchant_id
+        this.merchantData.short_code  = data.ext_merchant_id
+        this.merchantData.merchant_name = data.merchant_name
+      } catch (error) {
+        this.merchantData.merchant_id = ''
+        this.merchantData.short_code  = ''
+        this.merchantData.merchant_name = ''
+      }
     },
     onSave () {
       if (this.viewMode) {
@@ -672,8 +737,6 @@ export default {
 
         try {
           let response = await getHttpInstance(this.env).get(`/data/merchant3DSProfiles/search/findTopByMerchantId?merchantId=${this.merchantData.merchant_id}`)
-
-          console.log(response.data)
 
           // assign data and make modal visible
           this.modal3DSecureSettingData = response.data
@@ -703,27 +766,14 @@ export default {
 
 			this.loading = false
     },
-    async onSave3DSecureSettingVisible () {
+    async onSave3DSecureSetting () {
       try {
         this.modal3DSecureSettingVisible = false
 
         if (this.modal3DSecureSettingCreate) {
           let response = await getHttpInstance(this.env).post('/data/merchant3DSProfiles', this.modal3DSecureSettingData)
-          console.log(response)
-
         } else {
-          let data = {}
-          Object.assign(data, this.modal3DSecureSettingData)
-          
-          delete data.merchant_id
-          delete data._links
-
-          console.log('DATA', data)
-
           let response = await getHttpInstance(this.env).patch(this.processModalURL(this.modal3DSecureSettingData._links.self.href), this.modal3DSecureSettingData)
-          console.log(response)
-
-          
         }
       } catch (error) {
         this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: error.message, status: 'danger' })
@@ -732,19 +782,50 @@ export default {
     async onFraudSetting () {
 			this.loading = true
 
-			try {
-        let response = await getHttpInstance(this.env).get(`/data/merchantFDSProfiles/search/findTopByMerchantId?merchantId=${this.merchantData.merchant_id}`)
-        
-        console.log(response.data)
-				// assign data and make modal visible
-				this.modalFraudSettingData = response.data
-				this.modalFraudSettingVisible = true
-			} catch (error) {
+      try {
+        try {
+          this.modalFraudSettingCreate = false
+
+          let response = await getHttpInstance(this.env).get(`/data/merchantFDSProfiles/search/findTopByMerchantId?merchantId=${this.merchantData.merchant_id}`)
+          
+          // assign data and make modal visible
+          this.modalFraudSettingData = response.data
+          this.modalFraudSettingVisible = true
+        } catch (error) {
+          if (error.response.status === 404) {
+            // Create new
+            this.modalFraudSettingData = {
+              merchant_id: this.merchantData.merchant_id,
+              account_id: '',
+              device_fingerprint_key: '',
+              secret: ''
+            }
+
+            this.modalFraudSettingCreate = true
+            this.modalFraudSettingVisible = true
+          } else {
+            throw error
+          }
+        }
+      } catch (error) {
 				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: error.message, status: 'danger' })
 			}
 
 			this.loading = false
-    }
+    },
+    async onSaveFraudSetting () {
+      try {
+        this.modalFraudSettingVisible = false
+
+        if (this.modalFraudSettingCreate) {
+          let response = await getHttpInstance(this.env).post('/data/merchantFDSProfiles', this.modalFraudSettingData)
+        } else {
+          let response = await getHttpInstance(this.env).patch(this.processModalURL(this.modalFraudSettingData._links.self.href), this.modalFraudSettingData)
+        }
+      } catch (error) {
+        this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: error.message, status: 'danger' })
+      }
+    }    
       // floatAccountEdit(){
       //     this.modalAddFloatAccount = false;
       //     console.log( 'newFloatAccountData',this.newFloatAccountData );

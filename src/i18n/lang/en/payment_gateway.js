@@ -92,7 +92,10 @@ export default {
         merchant_id: 'Merchant ID'
       },
       modal_fraud: {
-        header: 'Fraud settings'
+        header: 'Fraud settings',
+        account_id: 'Account ID',
+        device_fingerprint_key: 'FingerPrint Key',
+        secret: 'Secret'
       }
     }
   },
