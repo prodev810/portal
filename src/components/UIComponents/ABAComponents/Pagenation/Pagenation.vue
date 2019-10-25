@@ -41,10 +41,10 @@
         type: Number,
         default: 0
       },
-      // value: {
-      //   type: [Number, String],
-      //   default: 0
-      // },
+      value: {
+        type: [Number, String],
+        default: 0
+      },
       perPage: {
         type: [Number, String],
         default: 10
@@ -120,7 +120,7 @@
 
   .page-sizer {
     position: absolute;
-    right: 3rem;
+    right: .5rem;
     top: 1rem;
   }
 

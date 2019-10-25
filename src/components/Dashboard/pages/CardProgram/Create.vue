@@ -23,27 +23,6 @@
       </div>
     </div>
 
-		<!-- <template>
-			<div v-if="viewMode">
-				<p class="card-info">
-					{{ $t('card_program.create.tips.view.line1') }}
-				</p>
-				<ul class="card-info">
-					<li>{{ $t('card_program.create.tips.view.li1') }}</li>
-					<li>{{ $t('card_program.create.tips.view.li2') }}</li>
-				</ul>
-			</div>
-
-			<div v-else>
-				<p class="card-info">
-					{{ $t('card_program.create.tips.edit.line1') }}
-				</p>
-				<ul class="card-info">
-					<li>{{ $t('card_program.create.tips.edit.li1') }}</li>
-				</ul>
-			</div>
-		</template> -->
-
 		<!-- New style mock start-->
 		<div class="row">
 
@@ -57,14 +36,14 @@
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.psfRef }}</div>
 								<template v-else>
 									<input v-model="cardProgramData.psfRef"
-												v-validate="'required|max:7'" maxlength="7"
+												v-validate="validatePsfRef" maxlength="7"
 												name="psfRef"
 												type="text"
 												placeholder="psf Ref"
 												class="form-control form-control-danger">
 								</template>
 							</div>
-              <div v-if="errors.first('psfRef')" class="validation-error offset-xl-5 px-3">{{ errors.first('psfRef') }}</div>
+              <div v-if="errors.has('psfRef')" class="validation-error offset-xl-5 px-3">{{ errors.first('psfRef') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">ISSUER INST <span class="required-field-sympol">＊</span></div>
@@ -72,7 +51,7 @@
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.issuerInst }}</div>
 								<template v-else>
 									<input v-model="cardProgramData.issuerInst"
-												v-validate="'required|length:5'" maxlength="5"
+												v-validate="validateIssuerInst" maxlength="5"
 												name="issuerInst"
 												data-vv-as="issuer inst"
 												type="text"
@@ -80,7 +59,7 @@
 												class="form-control form-control-danger">
 								</template>
 							</div>
-              <div v-if="errors.first('issuerInst')" class="validation-error offset-xl-5 px-3">{{ errors.first('issuerInst') }}</div>
+              <div v-if="errors.has('issuerInst')" class="validation-error offset-xl-5 px-3">{{ errors.first('issuerInst') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">PM INST <span class="required-field-sympol">＊</span></div>
@@ -88,7 +67,7 @@
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.pmInst }}</div>
 								<template v-else>
 									<input v-model="cardProgramData.pmInst"
-												v-validate="'required|length:5'" maxlength="5"
+												v-validate="validatePmInst" maxlength="5"
 												name="pmInst"
 												data-vv-as="PM inst"
 												type="text"
@@ -96,7 +75,7 @@
 												class="form-control form-control-danger">
 								</template>
 							</div>
-              <div v-if="errors.first('pmInst')" class="validation-error offset-xl-5 px-3">{{ errors.first('pmInst') }}</div>
+              <div v-if="errors.has('pmInst')" class="validation-error offset-xl-5 px-3">{{ errors.first('pmInst') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">PO INST <span class="required-field-sympol">＊</span></div>
@@ -104,7 +83,7 @@
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.poInst }}</div>
 								<template v-else>
 									<input v-model="cardProgramData.poInst"
-												v-validate="'required|length:5'" maxlength="5"
+												v-validate="validatePoInst" maxlength="5"
 												name="poInst"
 												data-vv-as="PO inst"
 												type="text"
@@ -112,7 +91,7 @@
 												class="form-control form-control-danger">
 								</template>
 							</div>
-              <div v-if="errors.first('poInst')" class="validation-error offset-xl-5 px-3">{{ errors.first('poInst') }}</div>
+              <div v-if="errors.has('poInst')" class="validation-error offset-xl-5 px-3">{{ errors.first('poInst') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label text-capitalize">Card Program Code <span class="required-field-sympol">＊</span></div>
@@ -120,7 +99,7 @@
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardProgCode }}</div>
 								<template v-else>
 									<input v-model="cardProgramData.cardProgCode"
-												v-validate="'required|length:5'" maxlength="5"
+												v-validate="validateCardProgCode" maxlength="5"
 												name="cardProgCode"
 												data-vv-as="card program code"
 												type="text"
@@ -128,7 +107,7 @@
 												class="form-control form-control-danger">
 								</template>
 							</div>
-              <div v-if="errors.first('cardProgCode')" class="validation-error offset-xl-5 px-3">{{ errors.first('cardProgCode') }}</div>
+              <div v-if="errors.has('cardProgCode')" class="validation-error offset-xl-5 px-3">{{ errors.first('cardProgCode') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 d-flex align-items-center control-label">CARD PROGRAM DESCRIPTION <span class="required-field-sympol">＊</span></div>
@@ -136,13 +115,13 @@
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardProgDesc }}</div>
 								<template v-else>
 									<textarea v-model="cardProgramData.cardProgDesc"
-														v-validate="'required|max:40'" maxlength="40" rows="2"
+														v-validate="validateCardProgDesc" maxlength="40" rows="2"
 														name="cardProgDesc"
 														data-vv-as="card program description"
 														placeholder="Card Program Description"/>
 								</template>
 							</div>
-              <div v-if="errors.first('cardProgDesc')" class="validation-error px-3">{{ errors.first('cardProgDesc') }}</div>
+              <div v-if="errors.has('cardProgDesc')" class="validation-error px-3">{{ errors.first('cardProgDesc') }}</div>
 						</div>
 					</div>
 				</div>
@@ -160,14 +139,14 @@
 									<input v-model="cardProgramData.cardProgramIdentifier"
 												type="text"
 												maxlength="11"
-												v-validate="{ required: true, regex: /(^[1-9]([0-9]*)$|^[0-9]$)/, min_value: 1, max_value: 9999999999 }"
+												v-validate="validateCardProgramIdentifier"
 												name="cardProgramIdentifier"
 												data-vv-as="card program identifier"
 												placeholder="card program identifier"
 												class="form-control  form-control-danger">
 								</template>
 							</div>
-							<div v-if="errors.first('cardProgramIdentifier')" class="validation-error offset-xl-5 px-3">{{ errors.first('cardProgramIdentifier') }}</div>
+							<div v-if="errors.has('cardProgramIdentifier')" class="validation-error offset-xl-5 px-3">{{ errors.first('cardProgramIdentifier') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">BUREAU INST CODE <span class="required-field-sympol">＊</span></div>
@@ -175,7 +154,7 @@
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.cardPrinterCode }}</div>
 								<template v-else>
 									<input v-model="cardProgramData.cardPrinterCode"
-												v-validate="'required|length:5'" maxlength="5"
+												v-validate="validateCardPrinterCode" maxlength="5"
 												name="cardPrinterCode"
 												data-vv-as="bureau inst code"
 												type="text"
@@ -183,7 +162,7 @@
 												class="form-control form-control-danger">
 								</template>
 							</div>
-              <div v-if="errors.first('cardPrinterCode')" class="validation-error offset-xl-5 px-3">{{ errors.first('cardPrinterCode') }}</div>
+              <div v-if="errors.has('cardPrinterCode')" class="validation-error offset-xl-5 px-3">{{ errors.first('cardPrinterCode') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">DEFAULT CURRENCY <span class="required-field-sympol">＊</span></div>
@@ -191,7 +170,7 @@
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.defaultCurrencyCode }}</div>
 								<template v-else>
 									<input v-model="cardProgramData.defaultCurrencyCode"
-												v-validate="'required|currencyISO'"
+												v-validate="validateDefaultCurrencyCode"
 												name="defaultCurrencyCode"
 												data-vv-as="default currency"
 												type="text"
@@ -199,7 +178,7 @@
 												class="form-control form-control-danger">
 								</template>
 							</div>
-              <div v-if="errors.first('defaultCurrencyCode')" class="validation-error offset-xl-5 px-3">{{ errors.first('defaultCurrencyCode') }}</div>
+              <div v-if="errors.has('defaultCurrencyCode')" class="validation-error offset-xl-5 px-3">{{ errors.first('defaultCurrencyCode') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">ALERT CONTACT E-MAIL <span class="required-field-sympol">＊</span></div>
@@ -207,7 +186,7 @@
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.alertContact }}</div>
 								<template v-else>
 									<input v-model="cardProgramData.alertContact"
-												v-validate="'required|email'"
+												v-validate="validateAlertContact"
 												name="alertContact"
 												data-vv-as="alert contact email"
 												type="text"
@@ -215,16 +194,21 @@
 												class="form-control form-control-danger">
 								</template>
 							</div>
-              <div v-if="errors.first('alertContact')" class="validation-error offset-xl-5 px-3">{{ errors.first('alertContact') }}</div>
+              <div v-if="errors.has('alertContact')" class="validation-error offset-xl-5 px-3">{{ errors.first('alertContact') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">LOAD FEE</div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFee }}</div>
 								<template v-else>
-									<input v-model="cardProgramData.loadFee" type="text" placeholder="LOAD FEE" class="form-control  form-control-danger">
+									<input v-model="cardProgramData.loadFee" @input="refreshLoadFeeValidate"
+												v-validate="validateLoadFeeInput"
+												name="loadFee"
+												data-vv-as="load fee"
+												type="text" placeholder="LOAD FEE" class="form-control  form-control-danger">
 								</template>
 							</div>
+							<div v-if="errors.has('loadFee')" class="validation-error offset-xl-5 px-3">{{ errors.first('loadFee') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">LOAD FEE %</div>
@@ -232,73 +216,125 @@
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFeePct }}</div>
 								<template v-else>
                   <div class="icon-fee">
-									  <input v-model="cardProgramData.loadFeePct" type="text" placeholder="LOAD FEE %" class="form-control  form-control-danger">
+									  <input v-model="cardProgramData.loadFeePct" @input="refreshLoadFeeValidate"
+													v-validate="validateLoadFeeInput"
+													name="loadFeePct"
+													data-vv-as="load fee pct"
+													type="text" placeholder="LOAD FEE %" class="form-control  form-control-danger">
                   </div>
 								</template>
 							</div>
+							<div v-if="errors.has('loadFeePct')" class="validation-error offset-xl-5 px-3">{{ errors.first('loadFeePct') }}</div>
+						</div>
+						<div class="row mb-xl-3">
+							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">LOAD FEE ROOF</div>
+							<div class="col-12 col-lg-12 col-xl-7">
+								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFeeCap }}</div>
+								<template v-else>
+                  <div>
+									  <input v-model="cardProgramData.loadFeeCap" @input="refreshLoadFeeValidate"
+													v-validate="validateLoadFeeInput"
+													name="loadFeeCap"
+													data-vv-as="load fee cap"
+													type="text" placeholder="LOAD FEE ROOF" class="form-control  form-control-danger">
+                  </div>
+								</template>
+							</div>
+							<div v-if="errors.has('loadFeeCap')" class="validation-error offset-xl-5 px-3">{{ errors.first('loadFeeCap') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
 							<div class="col-12 col-lg-12 col-xl-7 ceevo__select-auto">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.loadFeebillMethod }}</div>
 								<template v-else>
-									<ChargedTo v-model="cardProgramData.loadFeebillMethod"/>
+									<ChargedTo v-model="cardProgramData.loadFeebillMethod" @input="refreshLoadFeeValidate"
+														v-validate="isLoadFeeGroupRequired"
+														name="loadFeebillMethod"
+														data-vv-as="load fee bill method"/>
 								</template>
 							</div>
+							<div v-if="errors.has('loadFeebillMethod')" class="validation-error offset-xl-5 px-3">{{ errors.first('loadFeebillMethod') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">APPLICATION FEE</div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.appFee }}</div>
 								<template v-else>
-									<input v-model="cardProgramData.appFee" type="text" placeholder="Application Fee" class="form-control  form-control-danger">
+									<input v-model="cardProgramData.appFee" @input="refreshAppFeeValidate"
+													v-validate="validateAppFeeInput"
+													name="appFee"
+													data-vv-as="app fee"
+												type="text" placeholder="Application Fee" class="form-control  form-control-danger">
 								</template>
 							</div>
+							<div v-if="errors.has('appFee')" class="validation-error offset-xl-5 px-3">{{ errors.first('appFee') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
 							<div class="col-12 col-lg-12 col-xl-7 ceevo__select-auto">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.appFeeBillMethod }}</div>
 								<template v-else>
-									<ChargedTo v-model="cardProgramData.appFeeBillMethod"/>
+									<ChargedTo v-model="cardProgramData.appFeeBillMethod" @input="refreshAppFeeValidate"
+														v-validate="isAppFeeGroupRequired"
+														name="appFeeBillMethod"
+														data-vv-as="app fee bill method"/>
 								</template>
 							</div>
+							<div v-if="errors.has('appFeeBillMethod')" class="validation-error offset-xl-5 px-3">{{ errors.first('appFeeBillMethod') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">MONTHLY FEE</div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.monthlyFee }}</div>
 								<template v-else>
-									<input v-model="cardProgramData.monthlyFee" type="text" placeholder="monthly Fee" class="form-control  form-control-danger">
+									<input v-model="cardProgramData.monthlyFee" @input="refreshMonthlyFeeValidate"
+												v-validate="validateMonthlyFeeInput"
+												name="monthlyFee"
+												data-vv-as="monthly fee"
+												type="text" placeholder="monthly Fee" class="form-control  form-control-danger">
 								</template>
 							</div>
+							<div v-if="errors.has('monthlyFee')" class="validation-error offset-xl-5 px-3">{{ errors.first('monthlyFee') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
 							<div class="col-12 col-lg-12 col-xl-7 ceevo__select-auto">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.monthlyFeeBillMethod }}</div>
 								<template v-else>
-									<ChargedTo v-model="cardProgramData.monthlyFeeBillMethod"/>
+									<ChargedTo v-model="cardProgramData.monthlyFeeBillMethod" @input="refreshMonthlyFeeValidate"
+														v-validate="isMonthlyFeeGroupRequired"
+														name="monthlyFeeBillMethod"
+														data-vv-as="monthly fee bill method"/>
 								</template>
 							</div>
+							<div v-if="errors.has('monthlyFeeBillMethod')" class="validation-error offset-xl-5 px-3">{{ errors.first('monthlyFeeBillMethod') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">API FEE</div>
 							<div class="col-12 col-lg-12 col-xl-7">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.apiFee }}</div>
 								<template v-else>
-									<input v-model="cardProgramData.apiFee" type="text" placeholder="Api Fee" class="form-control  form-control-danger">
+									<input v-model="cardProgramData.apiFee" @input="refreshApiFeeValidate"
+													v-validate="validateApiFeeInput"
+													name="apiFee"
+													data-vv-as="api fee"
+												type="text" placeholder="Api Fee" class="form-control  form-control-danger">
 								</template>
 							</div>
+							<div v-if="errors.has('apiFee')" class="validation-error offset-xl-5 px-3">{{ errors.first('apiFee') }}</div>
 						</div>
 						<div class="row mb-xl-3">
 							<div class="col-12 col-lg-12 col-xl-5 d-flex align-items-center control-label">CHARGED TO</div>
 							<div class="col-12 col-lg-12 col-xl-7 ceevo__select-auto">
 								<div v-if="viewMode" class="view-mode-value">{{ cardProgramData.apiFeeBillMethod }}</div>
 								<template v-else>
-									<ChargedTo v-model="cardProgramData.apiFeeBillMethod"/>
+									<ChargedTo v-model="cardProgramData.apiFeeBillMethod" @input="refreshApiFeeValidate"
+														v-validate="isApiFeeGroupRequired"
+														name="apiFeeBillMethod"
+														data-vv-as="api fee bill Method"/>
 								</template>
 							</div>
+							<div v-if="errors.has('apiFeeBillMethod')" class="validation-error offset-xl-5 px-3">{{ errors.first('apiFeeBillMethod') }}</div>
 						</div>
 					</div>
 				</div>
@@ -319,7 +355,7 @@
 									<template v-else>
                     <div class="kyc-group">
                       <input v-model="cardProgramData.kycClassifier[index]"
-                            v-validate="'required|max:5'" maxlength="5"
+                            v-validate="validateKycClassifier" maxlength="5"
                             :name="`kyc${index}`"
                             :data-vv-as="`kyc class ${index + 1}`"
                             type="text"
@@ -396,7 +432,7 @@
       <div class="col-md-12 mt-5">
         <div class="text-center ceevo__btn-group">
           <p-button round type="primary" @click="onSave"
-                    :disabled="!viewMode && errors.all().length > 0"
+                    :disabled="!viewMode && (!isComplete || errors.all().length > 0)"
                     v-if="hasPermission(permission.CARD_PROGRAM_EDIT)">
             <div class="d-flex align-items-center">
               <!--<loader v-if="loadingState ==='sending'"></loader>-->
@@ -453,7 +489,7 @@ const emptyCardProgramData = {
 	alertContact: '',
 	loadFee: '',
 	loadFeePct: '',
-	//loadFeeCap: '', // not in UI
+	loadFeeCap: '',
 	loadFeebillMethod: '', // Charged To
 	//
 	appFee: '',
@@ -495,6 +531,13 @@ export default {
 		}
 	},
 	computed: {
+		isComplete() {
+      return this.cardProgramData.psfRef !== '' && this.cardProgramData.issuerInst !== ''
+              && this.cardProgramData.pmInst !== '' && this.cardProgramData.poInst !== ''
+              && this.cardProgramData.cardProgCode !== '' && this.cardProgramData.cardProgDesc !== ''
+							&& this.cardProgramData.cardPrinterCode !== '' && this.cardProgramData.defaultCurrencyCode !== ''
+							&& this.cardProgramData.alertContact !== '' && this.cardProgramData.cardProgramIdentifier !== ''
+    },
 		editMode () {
 			return this.$route.params.id !== 'new'
 		},
@@ -504,7 +547,128 @@ export default {
 					? 'View'
 					: 'Edit'
 				: 'Create'
-		}
+		},
+		validatePsfRef() {
+			return {
+				required: true,
+				max: 7,
+				regex: /^[a-zA-Z0-9\s]+$/,
+				notAllowCharactersAtFirst: [' '],
+        notAllowCharactersAtLast: [' ']
+			}
+		},
+		validateIssuerInst() {
+			return {
+				required: true,
+				length: 5,
+				alpha_num: true,
+			}
+		},
+		validatePmInst() {
+			return {
+				required: true,
+				length: 5,
+				alpha_num: true,
+			}
+		},
+		validatePoInst() {
+			return {
+				required: true,
+				length: 5,
+				alpha_num: true,
+			}
+		},
+		validateCardProgCode() {
+			return {
+				required: true,
+				length: 5,
+				alpha_num: true,
+			}
+		},
+		validateCardProgDesc() {
+			return {
+				required: true,
+				max: 40
+			}
+		},
+		validateCardProgramIdentifier() {
+			return { required: true, regex: /(^[1-9]([0-9]*)$|^[0-9]$)/, min_value: 1, max_value: 9999999999 }
+		},
+		validateCardPrinterCode() {
+			return {
+				required: true,
+				length: 5,
+				alpha_num: true,
+			}
+		},
+		validateDefaultCurrencyCode() {
+			return {
+				required: true,
+				currencyISO: true
+			}
+		},
+		validateAlertContact() {
+			return {
+				required: true,
+				email: true,
+				max: 35
+			}
+		},
+		validateKycClassifier() {
+			return {
+				required: true,
+				max: 5,
+				regex: /^[a-zA-Z0-9\s]+$/,
+				notAllowCharactersAtFirst: [' '],
+        notAllowCharactersAtLast: [' ']
+			}
+		},
+		commonFeeValidateRules() {
+      return {
+        regex: /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/,
+        min_value: 0.00,
+        max_value: 999999.99,
+        notAllowCharactersAtLast: ['.']
+      }
+    },
+		isLoadFeeGroupRequired() {
+      return {
+        required: (this.cardProgramData.loadFee !== null && this.cardProgramData.loadFee !== '')
+        || (this.cardProgramData.loadFeePct !== null && this.cardProgramData.loadFeePct !== '')
+        || (this.cardProgramData.loadFeeCap !== null && this.cardProgramData.loadFeeCap !== '')
+        || (this.cardProgramData.loadFeebillMethod !== null && this.cardProgramData.loadFeebillMethod !== '')
+      }
+    },
+    validateLoadFeeInput() {
+      return Object.assign({}, this.commonFeeValidateRules, this.isLoadFeeGroupRequired)
+		},
+		isAppFeeGroupRequired() {
+      return {
+        required: (this.cardProgramData.appFeeBillMethod !== null && this.cardProgramData.appFeeBillMethod !== '')
+        || (this.cardProgramData.appFee !== null && this.cardProgramData.appFee !== '')
+      }
+    },
+    validateAppFeeInput() {
+      return Object.assign({}, this.commonFeeValidateRules, this.isAppFeeGroupRequired)
+		},
+		isMonthlyFeeGroupRequired() {
+      return {
+        required: (this.cardProgramData.monthlyFee !== null && this.cardProgramData.monthlyFee !== '')
+        || (this.cardProgramData.monthlyFeeBillMethod !== null && this.cardProgramData.monthlyFeeBillMethod !== '')
+      }
+    },
+    validateMonthlyFeeInput() {
+      return Object.assign({}, this.commonFeeValidateRules, this.isMonthlyFeeGroupRequired)
+		},
+		isApiFeeGroupRequired() {
+      return {
+        required: (this.cardProgramData.apiFee !== null && this.cardProgramData.apiFee !== '')
+        || (this.cardProgramData.apiFeeBillMethod !== null && this.cardProgramData.apiFeeBillMethod !== '')
+      }
+    },
+    validateApiFeeInput() {
+      return Object.assign({}, this.commonFeeValidateRules, this.isApiFeeGroupRequired)
+    },
 	},
 	watch: {
 		'$route': {
@@ -538,9 +702,9 @@ export default {
 					this.cardProgramData = Object.assign({}, emptyCardProgramData)
 				}
 
-				this.$nextTick(() => {
-					this.$validator.validateAll()
-				})
+				// this.$nextTick(() => {
+				// 	this.$validator.validateAll()
+				// })
 			} catch (error) {
 				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('card_program.errors.get_card_program') + error.message, status: 'danger' })
 			}
@@ -551,37 +715,42 @@ export default {
 			if (this.viewMode) {
 				this.$router.push(`/card-program/card/${this.$route.params.id}`)
 			} else {
-				this.loading = true
 
-				try {
-					let data = Object.assign({}, this.cardProgramData)
+				const isValid = await this.$validator.validateAll()
+				if (isValid) {
+					this.loading = true
 
-					// Filter lists
-					data.kycClassifier = data.kycClassifier.filter(item => item)
-					data.matrixPID = data.matrixPID.filter(item => item)
+					try {
+						let data = Object.assign({}, this.cardProgramData)
 
-					let requestData = {}
-					for (const key in data) {
-						if (data[key] === '') {
-							requestData[key] = null
-						} else {
-							requestData[key] = data[key]
+						// Filter lists
+						data.kycClassifier = data.kycClassifier.filter(item => item)
+						data.matrixPID = data.matrixPID.filter(item => item)
+
+						let requestData = {}
+						for (const key in data) {
+							if (data[key] === '') {
+								requestData[key] = null
+							} else if (key !== 'id') {
+								requestData[key] = data[key]
+							} else {
+								// console.log('ignore id')
+							}
 						}
+
+						if (this.cardProgramData.id) {
+							await this.$http.aba1.put(`/cardprograms/${this.$route.params.id}`, requestData)
+						} else {
+							await this.$http.aba1.post(`/cardprograms/`, requestData)
+						}
+
+						this.onCancel()
+					} catch (error) {
+						this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('card_program.errors.save_card_program') + error.message, status: 'danger' })
 					}
 
-					if (this.cardProgramData.id) {
-						delete this.cardProgramData.id
-						await this.$http.aba1.put(`/cardprograms/${this.$route.params.id}`, requestData)
-					} else {
-						await this.$http.aba1.post(`/cardprograms/`, requestData)
-					}
-
-					this.onCancel()
-				} catch (error) {
-					this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: this.$t('card_program.errors.save_card_program') + error.message, status: 'danger' })
+					this.loading = false
 				}
-
-				this.loading = false
 			}
 		},
 		onCancel () {
@@ -594,143 +763,23 @@ export default {
 				this.$validator.validateAll()
 			})
 		},
-
-		/*
-		...mapActions({
-			createACardProgram: ADD_CARD_PROGRAM,
-			getActiveCard: GET_CARD_PROGRAM_BYID,
-			editSingleCard: EDIT_CARD_PROGRAM,
-			showModal: SET_MODAL_TYPE
-		}),
-		createNewField(filed) {
-			if (this.context === 'view') return;
-			this.tableViewData = this.tableViewData.map(i => ({
-				...i,
-				[filed]: [...i[filed], '']
-			}))
+		refreshLoadFeeValidate() {
+			this.commonRefreshValidate(['loadFee', 'loadFeePct', 'loadFeeCap', 'loadFeebillMethod'])
 		},
-		sweetAlertHandler(newVal) {
-			if (newVal.state === true) {
-				const key = this.context + 'handleSecondaryAction' + 'cardPorgram';
-
-				this.showModal({
-					type: 'normal',
-					message: this.context === 'create' ? 'created new card program successfully' : 'The changes are updated. ',
-					copy: 'any changes will be discarded',
-					mainButton: 'Ok',
-					key
-				})
-
-				AbaModalEvents.$on(key, response => {
-					if (response.ok) {
-						this.$router.push('/card-program/view')
-
-					} else {
-						this.dirty = false;
-					}
-					AbaModalEvents.$off(key)
-				})
-			}
-
+		refreshAppFeeValidate() {
+			this.commonRefreshValidate(['appFee', 'appFeeBillMethod'])
 		},
-		secondaryAction() {
-			// edit or create ask before leaving
-			// view ->
-			if (this.context === 'view' || (this.context !== 'view' && !this.dirty)) {
-				this.$router.push({
-					path: '/card-program/view',
-					query: {
-						edit: false
-					}
-				})
-
-			} else {
-				const key = this.context + 'handleSecondaryAction' + 'cardPorgram';
-				this.showModal({
-					type: 'normal',
-					message: `Are you sure you want to exit the card program ${this.context} function?`,
-					copy: 'any changes will be discarded',
-					mainButton: 'Yes',
-					secondaryButton: `No`,
-					key
-				})
-				AbaModalEvents.$on(key, response => {
-					if (response.ok) {
-						this.$router.push('/card-program/view')
-
-					}
-					AbaModalEvents.$off(key)
-				})
-				//ask
-
-			}
-
+		refreshMonthlyFeeValidate() {
+			this.commonRefreshValidate(['monthlyFee', 'monthlyFeeBillMethod'])
 		},
-		listenToInput({value, valid, dirty}, tableName) {
-			this.tableViewData = value;
-			this.dirty = this.dirty || !!dirty
-			this.valid = {
-				...this.valid,
-				[tableName]: valid
-			};
+		refreshApiFeeValidate() {
+			this.commonRefreshValidate(['apiFee', 'apiFeeBillMethod'])
 		},
-		handlePrimaryAction() {
-			// on edit ?
-			if (this.context === 'view') {
-				this.editId = this.$route.params.id;
-				this.$router.push({
-					path: this.$route.path,
-					query: {
-						edit: true
-					}
-				})
-				this.edit = true;
-				return;
-			}
-			if (!this.valid) {
-				this.$store.dispatch(SHOW_TOAST_MESSAGE, {message: 'Please ensure you complete all fields correctly.', status: 'danger'})
-				return;
-			}
-
-			const key = this.context + 'handlePrimaryAction' + 'cardPorgram' +Date.now();
-			this.showModal({
-				type: 'normal',
-				message: `  ${this.context === 'create' ? 'Are you sure you will create new card program ' : 'Do you want to save the changes'} ?`,
-				copy: `${this.context === 'create' ? '' : 'You will not be able to recover the changes!'}`,
-				mainButton: `YES`,
-				secondaryButton: 'NO',
-				key
+		commonRefreshValidate(fields) {
+			this.$nextTick(() => {
+				this.$validator.validateAll(fields)
 			})
-			AbaModalEvents.$on(key, response => {
-				if (response.ok) {
-					if (this.editId !== '' && this.loadingState === 'ideal') {
-						// on edit for faiure creating new card
-						//massage data -> remove edit prop
-						const {id, edit, ...body} = this.tableViewData.find(i => i.id === this.editId);
-						if (this.editId === 'card_program_new_row') {
-							// create
-							this.createACardProgram({body}).then(isSuccess => {
-								if (isSuccess) {
-									this.$router.push({
-										path: `/card-program/view`
-									})
-								}
-							});
-							return;
-						} else {
-							// this.editId = '';
-							//massage data -> remove edit prop
-							// edit single card
-							this.editSingleCard({body, id})
-						}
-					}
-
-				}
-				AbaModalEvents.$off(key)
-			})
-
 		}
-		*/
 	}
 }
 </script>

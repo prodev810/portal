@@ -31,7 +31,8 @@
           @currencyCodeChange="handleCurrencyChange"
           :currencies="supportedCurrencies"
           :currencyCode="currencyCode"
-          @buttonClick="getInvoices">
+          @buttonClick="getInvoices"
+          :dateRangeError="dateRangeError">
         </in-voice-toolbar>
       </div>
     </div>
@@ -139,7 +140,8 @@
         fromDate: '',
         toDate: '',
         sum: '',
-        query: {}
+        query: {},
+        dateRangeError: ''
       }
     },
     computed: {
@@ -177,12 +179,22 @@
         getAllCardPrograms: GET_ALL_CARD_PROGRAM
       }),
       handleToDate(toDate) {
-        this.toDate = toDate;
-        this.handleQuery({toDate})
+        this.dateRangeError = ''
+        if (this.fromDate <= toDate) {
+          this.toDate = toDate;
+          this.handleQuery({toDate})
+        } else {
+          this.dateRangeError = 'Failed to change to date, The from date cannot be greater than the to date.'
+        }
       },
       handleFromDate(fromDate) {
-        this.fromDate = fromDate;
-        this.handleQuery({fromDate})
+        this.dateRangeError = ''
+        if (this.toDate >= fromDate) {
+          this.fromDate = fromDate;
+          this.handleQuery({fromDate})
+        } else {
+          this.dateRangeError = 'Failed to change from date, The from date cannot be greater than the to date.'
+        }
 
       },
       listenToInput(value) {
@@ -199,7 +211,8 @@
         this.cardProgramCode = cardProgramCode
         this.handleQuery({cardProgramCode})
 
-      }, handleQuery({cardProgramCode, currencyCode, resellerCode, fromDate, toDate, page, perPage} = {}) {
+      },
+      handleQuery({cardProgramCode, currencyCode, resellerCode, fromDate, toDate, page, perPage} = {}) {
         fromDate = (fromDate || this.fromDate) ? formatDate(fromDate || this.fromDate) : '';
         toDate = (toDate || this.toDate) ? formatDate(toDate || this.toDate) : '';
         this.query = {
@@ -217,6 +230,7 @@
       },
       getInvoices() {
         if (this.resellerCode && this.fromDate && this.toDate) {
+          this.dateRangeError = ''
           this.getAllInvoiceDataBYResellerId({
             resellerCode: this.resellerCode,
             cardProgramCode: this.cardProgramCode,
@@ -244,14 +258,20 @@
         this.handleQuery({page})
       },
       allInvoicesData(newVal) {
-        this.allInvoices = ([...newVal.invoiceItems] || []).map(invoice => ({
-          ...invoice,
-          timestamp:simpleFormatAPIDate(invoice.timestamp,true),
-          itemAmount:moneyFormatAppendCurrency(invoice.itemAmount, this.currencyCode)
-        }));
-        this.sum = moneyFormatAppendCurrency(newVal.sum, this.currencyCode);
-        if (!newVal.pageMeta) return;
-        this.totalPages = newVal.pageMeta.totalPages || 0;
+        if (newVal && newVal.invoiceItems) {
+          this.allInvoices = ([...newVal.invoiceItems] || []).map(invoice => ({
+            ...invoice,
+            timestamp:simpleFormatAPIDate(invoice.timestamp,true),
+            itemAmount:moneyFormatAppendCurrency(invoice.itemAmount, this.currencyCode)
+          }));
+          this.sum = moneyFormatAppendCurrency(newVal.sum, this.currencyCode);
+          if (!newVal.pageMeta) return;
+          this.totalPages = newVal.pageMeta.totalPages || 0;
+        } else {
+          this.allInvoices = []
+          this.sum = 0
+          this.totalPages = 0
+        }
       },
       query(newQuery) {
         this.$router.push({
@@ -278,6 +298,11 @@
 
       }
     }, mounted() {
+      this.toDate = new Date();
+      const date = new Date();
+      const beforeDate = date.setTime(date.getTime() - 3600 * 1000 * 24 * 30);
+      this.fromDate = beforeDate
+
       const {
         card_program_code,
         reseller_code,
@@ -285,6 +310,7 @@
         to_date,
         per_page,
         page,
+        currency_code,
       } = this.$route.query;
       this.getAllResellerSubscription();
       this.getAllCardPrograms();
@@ -294,6 +320,7 @@
       this.toDate = to_date || this.toDate;
       this.page = page || this.page;
       this.perPage = per_page || this.perPage;
+      this.currencyCode = currency_code || this.currencyCode
       this.handleQuery()
     }
   };

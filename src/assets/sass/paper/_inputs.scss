@@ -539,3 +539,38 @@ textarea.form-control{
     }
   }
 }
+
+.ceevo__date-picker{
+  input,
+  input.el-input__inner,
+  .el-input__inner{
+    border-radius: 7px;
+    height:35px;
+    line-height: 35px;
+  }
+  i,
+  i.el-input__icon,
+  .el-input__icon{
+    line-height: 35px;
+  }
+}
+
+.el-select{
+  .el-input--suffix{
+    .el-input__inner{
+      &:hover{
+        color:initial;
+      }
+    }
+  }
+}
+
+//min-width 1-15rem
+@for $i from 1 through 15 {
+  .maxw-#{$i} { max-width: 1rem * $i !important; }
+  .minw-#{$i} { min-width: 1rem * $i !important; }
+}
+//font-weight 300~900
+@for $i from 3 through 9 {
+  .font-weight-#{$i}00 { font-weight: 100 *  $i !important; }
+}

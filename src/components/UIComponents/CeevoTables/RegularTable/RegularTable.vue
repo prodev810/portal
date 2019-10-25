@@ -19,6 +19,7 @@
       >
         <thead>
           <tr>
+            <th class="empty"></th>
             <th :key="heading.name" v-for="heading in renderHeadings">
               <div class="ceevo__heading-label"
                   :class="{'sortable':heading.sortable}"
@@ -40,6 +41,7 @@
           <slot name="balance"></slot>
           <!--  row is an object [{row ,row }]<- table data-->
           <tr v-for="(row,index) in allData" :key="row.id">
+            <td class="empty"></td>
             <td scope="row" v-for="heading in renderHeadings"
                 :key="(row.id ||JSON.stringify(row))+heading.name"
                 :class="[
@@ -585,6 +587,12 @@ import getNested from '@/utils/nestedObjects.js'
   }
 </script>
 <style lang="scss">
+  table{
+    .empty{
+      display: none !important;
+      border: none !important;
+    }
+  }
   .table__wrapper {
     &::-webkit-scrollbar {
       width: 28px;
@@ -817,7 +825,7 @@ import getNested from '@/utils/nestedObjects.js'
   .bg-orange {
       background-color: #FF6A6A !important;
   }
-  
+
  .no-data{
    font-weight: 500;
    font-size: 20px;

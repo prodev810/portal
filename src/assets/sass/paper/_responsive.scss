@@ -1,3 +1,13 @@
+@media screen and (max-width: 1200px){
+  .ceevo__table-flat{
+    table.table{
+      .empty{
+          display: none !important;
+          border: none !important;
+        }
+    }
+  }
+}
 @media screen and (max-width: 991px){
 
   .navbar {

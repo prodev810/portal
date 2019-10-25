@@ -28,7 +28,7 @@
         <div class="kyc__buttons">
           <router-link to="/kyc/workflow"
                        v-if="hasPermission(permission.KYC_DASHBOARD_WORKFLOW)">
-            <p-button round class="kyc-button--queue">
+            <p-button round class="kyc-button--queue w-auto minw-15">
               <span class="kyc-button__title">
                 <kyc-button-icons name="svg-queue"/>
                 Work Queue
@@ -37,7 +37,7 @@
           </router-link>
           <router-link to="/kyc/search"
                        v-if="hasPermission(permission.KYC_DASHBOARD_WORKFLOW)">
-            <p-button round class="kyc-button--glass">
+            <p-button round class="kyc-button--glass w-auto minw-15">
               <span class="kyc-button__title">
               <kyc-button-icons name="svg-glass"/>
               Application Search
@@ -52,7 +52,7 @@
           <div>
             <p-button @click="handleShowInvoices()"
                       v-if="hasPermission(permission.KYC_DASHBOARD_ALL_INVOICES)"
-                      round class="kyc-button--invoice">
+                      round class="kyc-button--invoice w-auto minw-15">
             <span class="kyc-button__title">
               <kyc-button-icons name="svg-invoice"/>
               Invoices
@@ -64,7 +64,7 @@
                v-if="hasPermission(permission.KYC_DASHBOARD_WORKFLOW)">
             <span>ISSUING ONLY</span><br/>
             <router-link to="/kyc/approved-emoney-account">
-              <p-button round class="kyc-button--mobile">
+              <p-button round class="kyc-button--mobile w-auto minw-15">
                 <div class="kyc-button__title">
                   <kyc-button-icons name="svg-mobile"/>
                   E-money Accounts

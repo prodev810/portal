@@ -372,7 +372,7 @@ let client = {
         },
         {
           path: '/clients/business-type/:id',
-          name: 'Business types',
+          name: 'Business types view',
           component: EditBusinessType,
           meta: {
               //permission: permission.RESELLER_SUBSCRIPTION_VIEW,

@@ -22,7 +22,7 @@
 
       <div class="mr-auto">
         <div class="d-flex align-items-center flex-wrap">
-          <div class="py-2 from-date">
+          <div class="py-2 ceevo__date-picker from-date">
             <div>
               <span class="px-2">{{ $t('preview_debit.listing.search_filter.from') }}</span>
               <el-date-picker v-model="fromDate" type="date"
@@ -31,7 +31,7 @@
               </el-date-picker>
             </div>
           </div>
-          <div class="py-2 to-date">
+          <div class="py-2 ceevo__date-picker to-date">
             <div>
               <span class="px-2">{{ $t('preview_debit.listing.search_filter.to') }}</span>
               <el-date-picker
@@ -94,10 +94,10 @@
 
     </div>
 
-    <div class="card">
+    <div class="card flat">
       <div class="card-content row">
         <div class="col-sm-12">
-          <div class="p-3">
+          <div class="py-2 ceevo__table-flat">
             <regular-table
               striped
               :headings="tableHeadings"

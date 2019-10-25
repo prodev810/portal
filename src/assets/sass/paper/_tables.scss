@@ -316,8 +316,9 @@ $table-border-color:$gray-input-outline;
   overflow: auto;
 }
 
-.ceevo__table-flat{
 
+.ceevo__table-flat{
+  table,
   table.table{
     tbody > tr:nth-of-type(2n){
       background:rgba(#2ED684,.05);
@@ -325,9 +326,16 @@ $table-border-color:$gray-input-outline;
     tbody > tr:nth-of-type(2n+1){
       background:#FFFFFF;
     }
+    .empty{
+        display: table-cell !important;
+        border-right: 1px solid #dee2e6 !important;
+        width: 60px !important;
+        min-width: 40px !important;
+     }
     thead{
       .ceevo__heading-label{
         font-weight: 600;
+        font-size: 16px;
         text-transform: uppercase;
       }
       th,td{
@@ -339,24 +347,32 @@ $table-border-color:$gray-input-outline;
         .cell{
           font-weight: 500;
         }
-        &.bg-danger,
-        &.bg-success,
-        &.bg-green,
-        &.bg-active,
-        &.bg-closed,
-        &.bg-pending{
+        &[class*="bg-"],
+        &[class^=bg-]{
           height:40px;
+          color:#FFFFFF;
+          text-transform: capitalize;
+          &.status{
+            color:#252422;
+          }
         }
-        &.bg-danger{
+        &.bg-white,&.white{
+          background-color:#FFFFFF !important;
+          color:#2c2c2c;
+        }
+        &.bg-danger,&.danger{
           background-color:#FF6A6A !important;
         }
-        &.bg-active{
-          background-color:rgba(#2ED684,0.25) !important;
+        &.bg-active,&.acctive{
+          background-color:#c4f5e1 !important;
         }
-        &.bg-closed{
+        &.bg-success,&.success{
+          background-color:#3ED683 !important;
+        }
+        &.bg-closed,&.closed{
           background-color:#8d8d8d !important;
         }
-        &.bg-pending{
+        &.bg-pending,&.pending{
           background-color:#ffc107 !important;
         }
       }
@@ -394,7 +410,8 @@ $table-border-color:$gray-input-outline;
     padding:0;
   }
 
-  button[class*=" btn-icon-"], button[class^=btn-icon-]{
+  button[class*="btn-icon-"], button[class^=btn-icon-],
+  [class*="btn-icon-"],[class^=btn-icon-]{
     background:#FFFFFF !important;
     color:#7039DA !important;
     padding:6px 12px;
@@ -410,6 +427,7 @@ $table-border-color:$gray-input-outline;
     &:active:focus{
       background:#FFFFFF !important;
       color:rgba(#7039DA,0.7) !important;
+      text-decoration: none;
     }
 
     img{

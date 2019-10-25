@@ -26,7 +26,7 @@
       <div class="card flat" v-if="hasPermission(permission.RESELLER_SUBSCRIPTION_LISTING)">
         <div class="card-content row">
           <div class="col-sm-12 tabel-wrapper ceevo__table-flat ceevo__table-full-line">
-            <div class="p-1">
+            <div class="py-2">
               <regular-table
                 striped
                 :headings="tableHeadings"
@@ -308,12 +308,13 @@
         fileDownlaodFromEncodedURI(encodedUri, 'reseller_sub');
       },
       goToInvoice({index: {row:id}}) {
-        const {resellerCode, cardProgCode} = this.resellerData.resellerSubscriptionList.find(reseller => reseller.id === id.id);
+        const {resellerCode, cardProgCode, defCurrency} = this.resellerData.resellerSubscriptionList.find(reseller => reseller.id === id.id);
         this.$router.push({
           path: '/reseller/invoice',
           query: {
             reseller_code: resellerCode,
-            card_program_code: cardProgCode
+            card_program_code: cardProgCode,
+            currency_code: defCurrency
           }
         })
       },
@@ -400,7 +401,7 @@
   }
 
   .card-content .tabel-wrapper {
-    margin-top: 10px;
+    margin-top: 0px;
   }
 
   .actionsWrapper {

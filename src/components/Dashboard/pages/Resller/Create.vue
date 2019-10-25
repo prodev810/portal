@@ -534,9 +534,9 @@
   .card-header {
     padding-bottom: 2rem;
   }
-
+  
   .card-content .tabel-wrapper {
-    margin-top: 10px;
+    margin-top: 0px;
   }
 
   .actionsWrapper {

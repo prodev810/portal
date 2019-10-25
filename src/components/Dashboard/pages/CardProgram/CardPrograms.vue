@@ -23,7 +23,7 @@
     <div class="card flat" v-if="hasPermission(permission.CARD_PROGRAM_LISTING)">
       <div class="card-content row">
         <div class="col-sm-12  tabel-wrapper ceevo__table-flat ceevo__table-full-line">
-          <div class="p-1">
+          <div class="py-2">
             <regular-table striped
                            :headings="tableHeadings"
                            :value="allCardPrograms"
@@ -37,6 +37,7 @@
                     <p-button @click="editCardProgram(index)"
                               :key="index.index.index+index.index.id+'edit'"
                               type="primary"
+                              class="border-right"
                               link=""
                               v-if="hasPermission(permission.CARD_PROGRAM_EDIT)">
                     <img class="" width= "17px" :src="changeIcon" alt="">
@@ -48,6 +49,7 @@
                     <p-button @click="viewDetailedCardProgram(index)"
                               :key="index.index.index+index.index.id+'view'"
                               type="primary"
+                              class="border-none"
                               link=""
                               v-if="hasPermission(permission.CARD_PROGRAM_VIEW)">
                       <img class="" width= "17px" :src="viewIcon" alt="">
@@ -282,7 +284,7 @@
   }
 
   .card-content .tabel-wrapper {
-    margin-top: 10px;
+    margin-top: 0px;
   }
 
   .actionsWrapper {

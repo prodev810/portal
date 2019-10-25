@@ -41,8 +41,8 @@
                   <el-select v-model="reseller.cardProgramID"
                             name="cardProgramID"
                             data-vv-as="card program id"
-                            v-validate="requiredField" >
-                    <el-option v-for="item in cpcList" :key="item.value" :label="item.name" :value="item.value">{{item.name}}
+                            v-validate="requiredField" @change="cardProgramChange" >
+                    <el-option v-for="(item, index) in cpcList" :key="index" :label="item.name" :value="item.value">
                     </el-option>
                   </el-select>
                 </div>
@@ -66,7 +66,7 @@
                 <div v-else class="w-100 d-flex align-items-center">
                   <el-select v-model="reseller.kycClassifier"
                             name="kycClassifier" data-vv-as="kyc classifier" v-validate="requiredField">
-                    <el-option v-for="data in getKycClassifier" :key="data.key" :label="data.key" :value="data.value">{{data.value}}
+                    <el-option v-for="(data, index) in getKycClassifier" :key="index" :label="data.key" :value="data.value">
                     </el-option>
                   </el-select>
                 </div>
@@ -423,7 +423,7 @@
                   <strong>{{reseller.loadFee}}</strong>
                 </div>
                 <div v-else class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.loadFee"
+                  <fg-input v-model="reseller.loadFee" @input="refreshLoadFeeValidate"
                             name="loadFee" data-vv-as="load fee" v-validate="validateLoadFeeInput"
                             :class="{'is-invalid': !errors.has('loadFee')}"
                             type="text"
@@ -446,7 +446,7 @@
                   <strong>{{reseller.loadFeePct}}</strong>
                 </div>
                 <div v-else class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.loadFeePct"
+                  <fg-input v-model="reseller.loadFeePct" @input="refreshLoadFeeValidate"
                             name="loadFeePct" data-vv-as="load fee pct" v-validate="validateLoadFeeInput"
                             :class="{'is-invalid': errors.has('loadFeePct')}"
                             type="text"
@@ -469,7 +469,7 @@
                   <strong>{{reseller.loadFeeCap}}</strong>
                 </div>
                 <div v-else class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.loadFeeCap" 
+                  <fg-input v-model="reseller.loadFeeCap" @input="refreshLoadFeeValidate"
                             name="loadFeeCap" data-vv-as="load fee cap" v-validate="validateLoadFeeInput"
                             :class="{'is-invalid': errors.has('loadFeeCap')}"
                             type="text"
@@ -492,7 +492,7 @@
                   <strong>{{reseller.loadFeebillMethod}}</strong>
                 </div>
                 <div v-else class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.loadFeebillMethod"
+                  <el-select v-model="reseller.loadFeebillMethod" @change="refreshLoadFeeValidate"
                             name="loadFeebillMethod" data-vv-as="load fee bill method" v-validate="isLoadFeeGroupRequired">
                     <el-option v-for="item in options.chargedToValues" :key="item.name" :label="item.value" :value="item.value">{{item.value}}
                     </el-option>
@@ -515,7 +515,7 @@
                   <strong>{{reseller.appFee}}</strong>
                 </div>
                 <div v-else class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.appFee"
+                  <fg-input v-model="reseller.appFee" @input="refreshAppFeeValidate"
                             name="appFee" data-vv-as="app fee" v-validate="validateAppFeeInput"
                             :class="{'is-invalid': errors.has('appFee')}"
                             :placeholder="$t('reseller.create.table_header.app_fee')"
@@ -538,7 +538,7 @@
                   <strong>{{reseller.appFeeBillMethod}}</strong>
                 </div>
                 <div v-else class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.appFeeBillMethod"
+                  <el-select v-model="reseller.appFeeBillMethod" @change="refreshAppFeeValidate"
                             name="appFeeBillMethod" data-vv-as="app fee bill method" v-validate="isAppFeeGroupRequired">
                     <el-option v-for="item in options.chargedToAppFee" :key="item.name" :label="item.value" :value="item.value">{{item.value}}
                     </el-option>
@@ -561,7 +561,7 @@
                   <strong>{{reseller.monthlyFee}}</strong>
                 </div>
                 <div v-else class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.monthlyFee"
+                  <fg-input v-model="reseller.monthlyFee" @input="refreshMonthlyFeeValidate"
                             name="monthlyFee" data-vv-as="monthly fee" v-validate="validateMonthlyFeeInput"
                             :class="{'is-invalid': errors.has('monthlyFee')}"
                             type="text"
@@ -584,7 +584,7 @@
                   <strong>{{reseller.monthlyFeeBillMethod}}</strong>
                 </div>
                 <div v-else class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.monthlyFeeBillMethod"
+                  <el-select v-model="reseller.monthlyFeeBillMethod" @change="refreshMonthlyFeeValidate"
                             name="monthlyFeeBillMethod" data-vv-as="monthly fee bill method" v-validate="isMonthlyFeeGroupRequired">
                     <el-option v-for="item in options.chargedToValues" :key="item.name" :label="item.value" :value="item.value">{{item.value}}
                     </el-option>
@@ -607,7 +607,7 @@
                   <strong>{{reseller.apiFee}}</strong>
                 </div>
                 <div v-else class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.apiFee"
+                  <fg-input v-model="reseller.apiFee" @input="refreshApiFeeValidate"
                             name="apiFee" data-vv-as="api fee" v-validate="validateApiFeeInput"
                             :class="{'is-invalid': errors.has('apiFee')}"
                             type="text"
@@ -630,7 +630,7 @@
                   <strong>{{reseller.apiFeeBillMethod}}</strong>
                 </div>
                 <div v-else class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.apiFeeBillMethod"
+                  <el-select v-model="reseller.apiFeeBillMethod" @change="refreshApiFeeValidate"
                             name="apiFeeBillMethod" data-vv-as="api fee bill method" v-validate="isApiFeeGroupRequired">
                     <el-option v-for="item in options.chargedToApiValues" :key="item.name" :label="item.value" :value="item.value">{{item.value}}
                     </el-option>
@@ -653,7 +653,7 @@
                   <strong>{{reseller.virtualCardFee}}</strong>
                 </div>
                 <div v-else class="w-100 d-flex align-items-center">
-                  <fg-input v-model="reseller.virtualCardFee"
+                  <fg-input v-model="reseller.virtualCardFee" @input="refreshVirtualCardFeeValidate"
                             name="virtualCardFee" data-vv-as="virtual card fee" v-validate="validateVirtualCardFeeInput"
                             :class="{'is-invalid': errors.has('virtualCardFee')}"
                             type="text"
@@ -676,7 +676,7 @@
                   <strong>{{reseller.virtualCardBillMethod}}</strong>
                 </div>
                 <div v-else class="w-100 d-flex align-items-center">
-                  <el-select v-model="reseller.virtualCardBillMethod" 
+                  <el-select v-model="reseller.virtualCardBillMethod" @change="refreshVirtualCardFeeValidate"
                             name="virtualCardBillMethod" data-vv-as="virtual card bill method" v-validate="isVirtualCardFeeGroupRequired">
                     <el-option v-for="item in options.chargedTovirtualCard" :key="item.name" :label="item.value" :value="item.value">{{item.value}}
                     </el-option>
@@ -837,7 +837,11 @@
         <div class="row">
           <div class="col-md-12">
             <div class="reseller-footer d-flex justify-content-center">
-              <p-button round type="primary" class="mr-3" @click="handleAction('submit')" :class="{ 'disabled': !isView && (!isComplete || errors.any()) }">
+              <p-button round
+                        type="primary"
+                        class="mr-3"
+                        @click="handleAction('submit')"
+                        :class="{ 'disabled': !hasPermission(getSubmitPermission) || (!isView && (!isComplete || errors.any())) }">
                 {{ $t(submitActionButtonName) }}
               </p-button>
 
@@ -878,6 +882,7 @@ import Button from "../../../UIComponents/Button";
 import PButton from "../../../UIComponents/Button";
 import {Modal} from 'src/components/UIComponents'
 import Spinner from "../../../UIComponents/Spinner";
+import { permissionMixin } from '@/mixins/permission'
 import { mapActions, mapGetters, mapState } from "vuex"
 import {
   ADD_RESELLER_SUBSCRIPTION,
@@ -1011,6 +1016,9 @@ export default {
     Spinner,
     Modal
   },
+  mixins: [
+    permissionMixin
+  ],
   data() {
     return {
       options,
@@ -1028,9 +1036,6 @@ export default {
     }
   },
   watch: {
-    cpcList: function (val) {
-      console.log(val)
-    },
     '$route': function() {
       this.init()
     },
@@ -1040,12 +1045,8 @@ export default {
       }
     },
     getKycClassifier: function(data) {
-      if (this.isCreate) {
-        if (data && data.length === 1) {
+      if (data && data.length === 1) {
         this.reseller.kycClassifier = data[0].key
-        } else {
-          this.reseller.kycClassifier = ''
-        }
       }
     },
     corporativeProgram: function (val) {
@@ -1236,6 +1237,13 @@ export default {
         min_value: 1,
         max_value: 99
       })
+    },
+    getSubmitPermission () {
+      if (this.isEdit || this.isView) {
+        return this.permission.RESELLER_SUBSCRIPTION_EDIT
+      } else {
+        return this.permission.RESELLER_SUBSCRIPTION_CREATE
+      }
     }
   },
   methods: {
@@ -1362,6 +1370,7 @@ export default {
       let requestList = []
       requestList.push(this.getCountries())
       requestList.push(this.getAllCardPrograms())
+      await Promise.all(requestList)
 
       if (this.$route.name === 'Reseller Create') {
         this.corporativeProgram = false
@@ -1376,17 +1385,40 @@ export default {
       }
 
       if (this.$route.name === 'Reseller Edit' || this.$route.name === 'Reseller View') {
-        requestList.push(this.getResellerSubscripiton(this.$route.params.id))
         if (this.$route.name === 'Reseller View') {
           this.viewOperationType = VIEW_OPERATION_TYPE.VIEW
         } else {
           this.viewOperationType = VIEW_OPERATION_TYPE.EDIT
         }
+        await this.getResellerSubscripiton(this.$route.params.id)
       }
 
-      await Promise.all(requestList)
       this.ui.isLoading = false
-    }
+    },
+    cardProgramChange(value) {
+      console.log('cardProgramChange', value)
+      this.reseller.kycClassifier = ''
+    },
+    refreshLoadFeeValidate() {
+			this.commonRefreshValidate(['loadFee', 'loadFeePct', 'loadFeeCap', 'loadFeebillMethod'])
+		},
+		refreshAppFeeValidate() {
+			this.commonRefreshValidate(['appFee', 'appFeeBillMethod'])
+		},
+		refreshMonthlyFeeValidate() {
+			this.commonRefreshValidate(['monthlyFee', 'monthlyFeeBillMethod'])
+		},
+		refreshApiFeeValidate() {
+			this.commonRefreshValidate(['apiFee', 'apiFeeBillMethod'])
+    },
+    refreshVirtualCardFeeValidate() {
+			this.commonRefreshValidate(['virtualCardFee', 'virtualCardBillMethod'])
+		},
+		commonRefreshValidate(fields) {
+			this.$nextTick(() => {
+				this.$validator.validateAll(fields)
+			})
+		}
   },
   filters: {
     booleanToYesNoFormat: (value) => {
@@ -1394,7 +1426,7 @@ export default {
     },
     cardProgramCode: (id, list) => {
       const cpc = list.find(data => {
-        return data.value = id
+        return data.value === id
       })
       if (cpc) {
         return cpc.name
@@ -1502,7 +1534,7 @@ export default {
   }
 
   .card-content .tabel-wrapper {
-    margin-top: 10px;
+    margin-top: 0px;
   }
 
   .actionsWrapper {

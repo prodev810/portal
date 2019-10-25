@@ -129,7 +129,7 @@
 
   .aba__model-body {
     width: 350px;
-    height: 220px;
+    min-height: 220px;
     background-color: #fff;
     border-radius: .4rem;
     box-shadow: 0px 10px 40px rgba(0, 0, 0, .5);

@@ -19,7 +19,9 @@
       </div>
 
     </div>
-
+    <div class="mt-2 mb-4 d-flex mr-auto align-items-center w-100">
+      <el-alert v-if="dateRangeError !== ''" :title="dateRangeError" type="error" center show-icon :closable="false"></el-alert>
+    </div>
     <div class="mt-2 mb-2 d-flex mr-auto align-items-center">
       <div class="from-date">
           <span>{{ $t('invoice.search_filter.label.from') }}</span>
@@ -28,6 +30,10 @@
             :value="fromDate"
             type="date"
             placeholder="Pick Starting Date"
+            :picker-options="fromDatePickerOptions"
+            :clearable="false"
+            :editable="false"
+            value-format="timestamp"
           >
           </el-date-picker>
       </div>
@@ -38,6 +44,10 @@
           :value="toDate"
           type="date"
           placeholder="Pick Ending Date"
+          :picker-options="toDatePickerOptions"
+          :clearable="false"
+          :editable="false"
+          value-format="timestamp"
         ></el-date-picker>
       </div>
     </div>
@@ -54,7 +64,7 @@
   </div>
 </template>
 <script>
-  import {Button, DatePicker, Input, Option, Select} from 'element-ui';
+  import {Button, DatePicker, Input, Option, Select, Alert} from 'element-ui';
   import PButton from "../../../UIComponents/Button";
   import RegularTable from "../../../UIComponents/CeevoTables/RegularTable/RegularTable";
   import Modal from "../../../UIComponents/Modal";
@@ -72,15 +82,36 @@
       [Option.name]: Option,
       [Select.name]: Select,
       [DatePicker.name]: DatePicker,
+      [Alert.name]: Alert,
 
     },
-    props: ['toDate','currencies' ,'currencyCode','fromDate', 'resellerCode', 'resellers', 'cardProgramData', 'cardProgCode', 'buttonDisabled'],
+    data() {
+      return {
+      }
+    },
+    computed: {
+      toDatePickerOptions() {
+        return {
+          disabledDate: (time) => {
+            return time.getTime() > Date.now()
+          }
+        }
+      },
+      fromDatePickerOptions() {
+        return {
+          disabledDate: (time) => {
+            return time.getTime() > Date.now()
+          }
+        }
+      }
+    },
+    props: ['toDate','currencies' ,'currencyCode','fromDate', 'resellerCode', 'resellers', 'cardProgramData', 'cardProgCode', 'buttonDisabled', 'dateRangeError'],
     methods: {
       handleToDate($event) {
-        this.$emit('toDateChange', $event.toISOString())
+        this.$emit('toDateChange', $event)
       },
       handleFromDate($event) {
-        this.$emit('fromDateChange', $event.toISOString())
+        this.$emit('fromDateChange', $event)
       },handleCurrency($event){
         this.$emit('currencyCodeChange', $event)
       },

@@ -1746,7 +1746,7 @@ export default {
   }
 
   .card-content .tabel-wrapper {
-    margin-top: 10px;
+    margin-top: 0px;
   }
 
   .actionsWrapper {

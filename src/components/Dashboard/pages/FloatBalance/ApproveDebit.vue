@@ -13,8 +13,8 @@
     <div class="w-100 d-flex">
       <div class="ml-auto mb-3">
         <div class="d-flex align-items-center align-content-center">
-          <span class="px-2">{{ $t('approve_debit.listing.search_filter.card_program') }}</span>
-          <el-select class="select-default ceevo__select-default"
+          <span class="px-2 font-weight-500">{{ $t('approve_debit.listing.search_filter.card_program') }}</span>
+          <el-select class="select-default ceevo__select-default minw-9"
                      size="small"
                      placeholder="selected a card program"
                      v-model="cardProgramId"
@@ -32,7 +32,7 @@
     <div class="card flat">
       <div class="card-content row">
         <div class="col-sm-12">
-          <div class="p-3">
+          <div class="py-2">
             <regular-table
               class="ceevo__table-flat"
               :headings="tableHeadings"

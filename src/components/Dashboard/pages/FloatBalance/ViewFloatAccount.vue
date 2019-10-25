@@ -120,7 +120,7 @@
       <div class="card flat"
            v-if="hasPermission(permission.FLOAT_ACCOUNT_LISTING)">
         <div class="card-content row">
-          <div class="col-sm-12">
+          <div class="col-sm-12 py-2">
             <regular-table
               class="ceevo__table-flat"
               striped
@@ -131,9 +131,9 @@
             >
               <template slot-scope="index">
                 <td :class="{
-                  'bg-active':getResellerStatus(index) === 'Active',
-                  'bg-closed':getResellerStatus(index) === 'Closed',
-                  'bg-pending':getResellerStatus(index) === 'Pending Approval',
+                  'status bg-active':getResellerStatus(index) === 'Active',
+                  'status bg-closed':getResellerStatus(index) === 'Closed',
+                  'status bg-pending':getResellerStatus(index) === 'Pending Approval',
                   }">
                   <div class="cell" >
                     {{getResellerStatus(index)}}

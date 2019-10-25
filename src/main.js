@@ -114,6 +114,14 @@ window.addEventListener("keypress", ()=>{Vue.prototype.$oAuth.setLockTimeout(oAu
 // config lang
 locale.use(lang)
 
+
+// FIXME Temporary solution for "NavigationDuplicated {_name: "NavigationDuplicated", name: "NavigationDuplicated"}",
+// FIXME cause some router call itself again. eg: getCardList() in src/components/Dashboard/pages/CardProgram/CardPrograms.vue
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err);
+}
+
 // configure router
 const router = new VueRouter({
   routes,

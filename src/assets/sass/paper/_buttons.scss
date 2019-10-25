@@ -115,7 +115,8 @@
   @include btn-styles($primary-color, $primary-states-color);
   &.disabled,
   &[disabled]{
-    color:#7039DA - 60%;
+    background:#d1b9f0;
+    color:#b791e7;
   }
 
 }
@@ -312,10 +313,13 @@
       &:active:focus{
         background:#FFFFFF !important;
       }
+      &.border-none{
+        border:none !important;
+      }
     }
     .btn-success{
       color:#2ED684;
-      border-right:1px solid #2ED684 !important;
+      border:1px solid #2ED684 !important;
 
       &:hover,
       &:focus,
@@ -323,16 +327,24 @@
       &:active:focus{
         color:rgba(#2ED684,0.7) !important;
       }
+      &.border-right{
+        border:none !important;
+        border-right:1px solid #2ED684 !important;
+      }
     }
     .btn-primary{
       color:#5823bd;
-      border-right:1px solid #5823bd !important;
+      border:1px solid #5823bd !important;
 
       &:hover,
       &:focus,
       &:active,
       &:active:focus{
         color:rgba(#5823bd,0.7) !important;
+      }
+      &.border-right{
+        border:none !important;
+        border-right:1px solid #5823bd !important;
       }
     }
     .sofBtn{

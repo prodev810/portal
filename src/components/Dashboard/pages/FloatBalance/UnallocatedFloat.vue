@@ -19,11 +19,11 @@
 
         <div class="mr-auto">
           <div class="d-flex align-items-center flex-wrap">
-            <div class="py-2 from-date">
+            <div class="py-2 ceevo__date-picker from-date">
               <div>
                 <span class="px-2">{{ $t('unallocated_float.listing.search_filter.target_date') }}</span>
                 <el-date-picker v-model="unallocatedFloatDate" type="date"
-                                placeholder="Please Pick A date">
+                                placeholder="Please Pick A Date">
                 </el-date-picker>
               </div>
             </div>
@@ -104,9 +104,9 @@
 
       </div>
     </div>
-    <div class="card p-2">
+    <div class="card flat py-2">
       <div class="card-content row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 ceevo__table-flat">
           <regular-table
             striped
             :headings="tableHeadings"

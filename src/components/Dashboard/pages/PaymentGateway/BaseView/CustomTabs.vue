@@ -1,5 +1,5 @@
 <template>
-  <el-tabs v-model="activeName" tab-position="top" type="card" class="ceevo__tabs pt-4">
+  <el-tabs v-model="activeName" tab-position="top" type="card" class="ceevo__tabs">
     <el-tab-pane label="Sandbox" name="sandbox">
       <slot name="sandbox"></slot>
     </el-tab-pane>
