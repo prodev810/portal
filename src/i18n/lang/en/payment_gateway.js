@@ -78,7 +78,25 @@ export default {
       },
 
       add_reserve: 'Add Reserve Profile',
-      add_settlement_profile: 'Add Settlement Profile'
+      add_settlement_profile: 'Add Settlement Profile',
+
+      btn_3d_secure_settings: '3DSecure Setting',
+      btn_fraud_settings: 'Fraud Setting',
+
+      modal_3d_secure: {
+        header: '3DSecure settings',
+        tds_merchant_id: 'Client ID',
+        tds_merchant_password: 'Client password',
+        encryption_key: 'Encryption key',
+        hash_key: 'Hash key',
+        merchant_id: 'Merchant ID'
+      },
+      modal_fraud: {
+        header: 'Fraud settings',
+        account_id: 'Account ID',
+        device_fingerprint_key: 'FingerPrint Key',
+        secret: 'Secret'
+      }
     }
   },
   acquirer: {
@@ -163,6 +181,7 @@ export default {
       header: 'Dispute details'
     }
   },
+  button_create: 'Create',
   button_view: 'View',
   button_add: 'Add',
   button_history: 'History',

@@ -1,5 +1,5 @@
 <template>
-  <div class="pg-edit-merchant">
+  <div class="pg-edit-acquirer">
     <div class="card p-4">
 
       <Spinner v-if="loading"/>
@@ -211,7 +211,7 @@ export default {
 <style lang="scss">
 $labelMargin: 16px;
 
-.pg-edit-merchant {
+.pg-edit-acquirer {
 	& .pg-row-container {
 		margin-bottom: 0;		
 
@@ -253,17 +253,17 @@ $labelMargin: 16px;
 .pg-merchant-collapse div.card-body {
   padding: 0 !important;
 }
-div.pg-edit-merchant th {
+div.pg-edit-acquirer th {
   text-transform: capitalize;
 }
-div.pg-edit-merchant h4 {
+div.pg-edit-acquirer h4 {
   text-transform: capitalize;
 }
-div.pg-edit-merchant .el-select,
-div.pg-edit-merchant .el-date-editor {
+div.pg-edit-acquirer .el-select,
+div.pg-edit-acquirer .el-date-editor {
   width: 100%;
 }
-div.pg-edit-merchant div#accordion div.card-header i.nc-icon {
+div.pg-edit-acquirer div#accordion div.card-header i.nc-icon {
   color: #8d8d8d;
 }
 </style>
