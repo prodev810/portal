@@ -40,6 +40,26 @@
 									:data="modalShippingAddressData"
 									:description="modalShippingAddressDescription"
 									i18base="payment_gateway.transactions.modal_shipping_address."/>
+
+    <modal :show="modalOperationsVisible"
+           footerClasses="justify-content-center"
+           type="notice"
+           modalClasses="operations-modal">
+      <h5 slot="header" class="modal-title">{{ $t('payment_gateway.transactions.modal_operations.header') }}</h5>
+
+      <regular-table responsive condensed
+                     :headings="modalOperationsHeader" 
+                     :value="modalOperationsData"/>
+
+      <div slot="footer" class="w-100 d-flex justify-content-center">
+        <p-button type="default" 
+                  @click="modalOperationsVisible = false" 
+                  class="btn btn-round btn-default">
+          {{ $t('payment_gateway.button_close') }}
+        </p-button>
+      </div>
+    </modal>	
+
   </div>
 </template>
 
@@ -88,7 +108,7 @@ export default {
 			modalCustomerVisible: false,
 			modalShippingAddressVisible: false,
 			modalDetailsData: {},
-			modalOperationsData: {},
+			modalOperationsData: [],
 			modalCustomerData: {},
 			modalShippingAddressData: {},
 			modalDetailsDescription: [
@@ -109,8 +129,6 @@ export default {
 				{ key: 'transaction_date', filter: 'dateTime' },
 				{ key: 'value_date', filter: 'dateTime' }
 			],
-			modalOperationsDescription: [
-			],
 			modalCustomerDescription: [
 				{ key: 'active', filter: 'boolean' },
 				{ key: 'create_date', filter: 'dateTime' },
@@ -129,7 +147,18 @@ export default {
 				{ key: 'state' },
 				{ key: 'street' },
 				{ key: 'zip' }
-			]
+      ],
+      modalOperationsHeader: [
+        { name: 'start_date', i18n: 'payment_gateway.transactions.modal_operations.start_date', dateTime: true },        
+        { name: 'end_date', i18n: 'payment_gateway.transactions.modal_operations.end_date', dateTime: true },
+        { name: 'operation_type', i18n: 'payment_gateway.transactions.modal_operations.operation_type' },
+        { name: 'processing_account', i18n: 'payment_gateway.transactions.modal_operations.processing_account' },
+        { name: 'processor_code', i18n: 'payment_gateway.transactions.modal_operations.processor_code' },
+        { name: 'response_code', i18n: 'payment_gateway.transactions.modal_operations.response_code' },
+        { name: 'response_message', i18n: 'payment_gateway.transactions.modal_operations.response_message' },
+        { name: 'transactional', i18n: 'payment_gateway.transactions.modal_operations.transactional' },
+        { name: 'upstream_id', i18n: 'payment_gateway.transactions.modal_operations.upstream_id' }
+      ]
 		}
 	},
 	computed: {
@@ -173,9 +202,9 @@ export default {
 			this.loading = true
 
 			try {
-				let response = await getHttpInstance(this.env).get(this.processModalURL(row._links.operations.href))
-				// assign data and make modal visible
-				this.modalOperationsData = response.data
+        let response = await getHttpInstance(this.env).get(this.processModalURL(row._links.operations.href))
+        // assign data and make modal visible
+        this.modalOperationsData = response.data._embedded.operationMessages
 				this.modalOperationsVisible = true
 			} catch (error) {
 				this.$store.dispatch(SHOW_TOAST_MESSAGE, { message: error.message, status: 'danger' })
@@ -217,3 +246,9 @@ export default {
 	}
 }
 </script>
+
+<style lang="scss">
+.operations-modal {
+  max-width: 80% !important;
+}
+</style>

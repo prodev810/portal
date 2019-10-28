@@ -162,7 +162,19 @@ export default {
 			state: 'State',
 			street: 'Street',
 			zip: 'ZIP'
-		},
+    },
+    modal_operations: {
+      header: 'Operations',
+      end_date: 'End date',
+      operation_type: 'Operation type',
+      processing_account: 'Processing account',
+      processor_code: 'Processor code',
+      response_code: 'Response code',
+      response_message: 'Reponse message',
+      start_date: 'Start date',
+      transactional: 'Transactional',
+      upstream_id: 'Upstream ID'
+    },
 		button_details: 'Details',
 		button_operations: 'Operations',
 		button_customer: 'Customer',
