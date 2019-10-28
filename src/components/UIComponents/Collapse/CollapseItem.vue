@@ -1,6 +1,6 @@
 <template>
-  <div class="card card-plain">
-    <div role="tab" id="headingOne" class="card-header">
+  <div class="card card-plain collapse-item">
+    <div role="tab" id="headingOne" class="card-header text-right">
       <a data-toggle="collapse"
          data-parent="#accordion"
          :href="`#${itemId}`"
@@ -10,7 +10,7 @@
         <slot name="title">
           {{title}}
         </slot>
-        <i class="nc-icon nc-minimal-down"></i>
+        <i class="nc-icon nc-minimal-down ml-4"></i>
       </a>
     </div>
     <collapse-transition :duration="animationDuration">
@@ -89,5 +89,9 @@
     }
   }
 </script>
-<style>
+
+<style lang="scss">
+.collapse-item {
+  border: 0;
+}
 </style>
