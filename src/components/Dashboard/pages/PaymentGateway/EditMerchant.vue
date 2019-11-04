@@ -22,12 +22,10 @@
               <span slot="view">{{ merchantData.merchant_id }}</span>
               <fg-input slot="edit" v-model="merchantData.merchant_id" required :maxLength="255"/>
             </PGRow>
-          </div>
-        </el-col>
 
-        <el-col :cols="24" class="mt-0 mb-2">
-          <p-button type="primary" round wide size="sm" @click="on3DSecureSetting()" class="mr-2">{{ $i18n.t('payment_gateway.merchant.edit_merchant.btn_3d_secure_settings') }}</p-button>
-          <p-button type="primary" round wide size="sm" @click="onFraudSetting()" class="mr-2">{{ $i18n.t('payment_gateway.merchant.edit_merchant.btn_fraud_settings') }}</p-button>          
+            <p-button type="primary" round wide size="sm" @click="on3DSecureSetting()" class="mr-2">{{ $i18n.t('payment_gateway.merchant.edit_merchant.btn_3d_secure_settings') }}</p-button>
+            <p-button type="primary" round wide size="sm" @click="onFraudSetting()" class="mr-2">{{ $i18n.t('payment_gateway.merchant.edit_merchant.btn_fraud_settings') }}</p-button>          
+          </div>
         </el-col>
 
         <el-col :xs="24" :lg="14" :xl="16">

@@ -1,6 +1,6 @@
 <template>
   <div class="card card-plain collapse-item">
-    <div role="tab" id="headingOne" class="card-header text-right">
+    <div role="tab" id="headingOne" class="card-header text-left">
       <a data-toggle="collapse"
          data-parent="#accordion"
          :href="`#${itemId}`"
